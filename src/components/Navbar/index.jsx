@@ -1,33 +1,28 @@
-import React, { useState, useLayoutEffect, useCallback, useContext } from 'react'
+import React, { useState, useLayoutEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { Typography, makeStyles, IconButton } from '@material-ui/core'
 import { sections } from '../../utils/routes'
 import Spinner from '../Loaders/Spinner'
 import ExitToAppRoundedIcon from '@material-ui/icons/ExitToAppRounded'
-import { typographyGrey as typographyGreyDark } from '../../../darkTheme'
-import { typographyGrey as typographyGreyLight } from '../../../lightTheme'
 import { useRouter } from 'next/router'
 import { asyncTimeout } from '../../utils/helpers'
 import { apiInstance } from '../../SDK'
-import { GlobalContextProvider } from '../../pages/_app'
 import ThemeSwitch from '../ThemeModeSwitch'
+import { FutBobPalette } from '../../../palette'
+import { useConfigStore } from '../../zustand/stores'
 
 const useStyles = makeStyles(theme => ({
   themeSwitchColor: {
     backgroundColor: theme.type === 'dark'
       ? 'rgb(17, 17, 17) !important'
       : '#fafafa !important',
-    color: theme.type === 'dark'
-      ? `${typographyGreyDark} !important`
-      : `${typographyGreyLight} !important`
+    color: `${FutBobPalette.typographyGrey} !important`
   },
   themeSwitchColorInvert: {
     backgroundColor: theme.type === 'light'
       ? 'rgb(17, 17, 17) !important'
       : '#fafafa !important',
-    color: theme.type === 'light'
-      ? `${typographyGreyDark} !important`
-      : `${typographyGreyLight} !important`
+    color: `${FutBobPalette.typographyGrey} !important`
   },
   menuItemBorderFix: {
     borderBottom: theme.type === 'dark'
@@ -40,9 +35,7 @@ const useStyles = makeStyles(theme => ({
       : '18px 18px 30px rgba(0,0,0,.05), -18px -18px 30px rgba(0,0,0,.05)'
   },
   themeSwitchColorInvertNoBg: {
-    color: theme.type === 'light'
-      ? `${typographyGreyDark} !important`
-      : `${typographyGreyLight} !important`
+    color: `${FutBobPalette.typographyGrey} !important`
   }
 }))
 
@@ -67,7 +60,7 @@ const Navbar = props => {
   const { isLoading = false } = props
   const { themeSwitchColor, themeSwitchColorInvert, headerBoxShadowFix } = useStyles()
   const router = useRouter()
-  const { setIsLogged } = useContext(GlobalContextProvider)
+  const setIsLogged = useConfigStore(state => state.setIsLogged)
   const [open, setOpen] = useState(false)
 
   useLayoutEffect(() => {

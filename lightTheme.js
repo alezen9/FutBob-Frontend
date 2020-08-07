@@ -1,5 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles'
-
+import { FutBobPalette } from './palette'
 export const _green = '#2BD4B5'
 export const _darkGreen = '#005959'
 export const typographyGrey = '#717171'
@@ -16,25 +16,19 @@ export const pinkDark = 'rgb(255,55,95)'
 export const indigoLight = 'rgb(88,86,214)'
 const indigoDark = 'rgb(94,92,230)'
 
-export const redLight = 'rgb(255,59,48)'
-const redDark = 'rgb(255,69,58)'
-
 export const azureVeryLight = '#1DA1F2'
 export const azureLight = 'rgb(0,122,255)'
 const azureDark = 'rgb(10,132,255)'
 const blue = 'rgba(0,64,221)'
 
-export const greenLight = 'rgba(52,199,89)'
-export const green = 'rgba(48,209,88)'
-
 const lightTheme = createMuiTheme({
   type: 'light',
-  activeColor: greenLight,
+  activeColor: FutBobPalette.lightGreen,
   palette: {
     primary: {
       light: pinkLight,
-      main: greenLight,
-      dark: greenLight,
+      main: FutBobPalette.lightGreen,
+      dark: FutBobPalette.lightGreen,
       contrastText: '#fff'
     },
     secondary: {
@@ -44,9 +38,9 @@ const lightTheme = createMuiTheme({
       contrastText: '#fff'
     },
     error: {
-      light: redLight,
-      main: redDark,
-      dark: redDark,
+      light: FutBobPalette.lightRed,
+      main: FutBobPalette.darkRed,
+      dark: FutBobPalette.darkRed,
       contrastText: '#fff'
     }
   },
@@ -56,50 +50,50 @@ const lightTheme = createMuiTheme({
     h1: {
       padding: 0,
       fontSize: '25pt',
-      color: typographyGrey
+      color: FutBobPalette.typographyGrey
     },
     h2: {
       padding: 0,
       fontSize: '23pt',
-      color: typographyGrey
+      color: FutBobPalette.typographyGrey
     },
     h3: {
       padding: 0,
       fontSize: '21pt',
-      color: typographyGrey
+      color: FutBobPalette.typographyGrey
     },
     h4: {
       padding: 0,
       fontSize: '15pt',
-      color: typographyGrey,
+      color: FutBobPalette.typographyGrey,
       fontWeight: 'semi-bold'
     },
     h5: {
       padding: 0,
       fontSize: '13pt',
-      color: typographyGrey
+      color: FutBobPalette.typographyGrey
     },
     h6: {
       padding: 0,
       fontSize: '13pt',
       fontWeight: 'bold',
-      color: typographyGrey
+      color: FutBobPalette.typographyGrey
     },
     body1: {
       padding: 0,
       fontSize: '12pt',
-      color: typographyGrey
+      color: FutBobPalette.typographyGrey
     },
     body2: {
       padding: 0,
       fontSize: '12pt',
       fontWeight: 'semi-bold',
-      color: typographyGrey
+      color: FutBobPalette.typographyGrey
     },
     caption: {
       padding: 0,
       fontSize: '10pt',
-      color: typographyGrey
+      color: FutBobPalette.typographyGrey
     }
 
   },
@@ -124,7 +118,7 @@ const lightTheme = createMuiTheme({
     },
     MuiInputBase: {
       root: {
-        color: typographyGrey,
+        color: FutBobPalette.typographyGrey,
         '&$disabled': {
           color: lightGrey,
           opacity: 0.7
@@ -145,7 +139,7 @@ const lightTheme = createMuiTheme({
     },
     MuiInput: {
       root: {
-        color: typographyGrey,
+        color: FutBobPalette.typographyGrey,
         '&$disabled': {
           color: lightGrey
         }
@@ -153,7 +147,7 @@ const lightTheme = createMuiTheme({
       inputMultiline: {
         boxSizing: 'border-box',
         borderRadius: 0,
-        border: `1px solid ${greenLight}`,
+        border: `1px solid ${FutBobPalette.lightGreen}`,
         background: 'transparent',
         backgroundColor: 'transparent',
         height: 'auto',
@@ -178,7 +172,7 @@ const lightTheme = createMuiTheme({
     },
     MuiInputLabel: {
       root: {
-        color: typographyGrey,
+        color: FutBobPalette.typographyGrey,
         opacity: '.6'
       }
     },
@@ -200,7 +194,7 @@ const lightTheme = createMuiTheme({
         }
       },
       outlined: {
-        color: typographyGrey,
+        color: FutBobPalette.typographyGrey,
         borderRadius,
         fontSize: 14,
         borderColor: lightGrey
@@ -208,12 +202,12 @@ const lightTheme = createMuiTheme({
     },
     MuiAvatar: {
       root: {
-        backgroundColor: `${greenLight} !important`
+        backgroundColor: `${FutBobPalette.lightGreen} !important`
       }
     },
     MuiIconButton: {
       root: {
-        color: greenLight
+        color: FutBobPalette.lightGreen
       }
     },
     MuiDialog: {
@@ -245,7 +239,7 @@ const lightTheme = createMuiTheme({
       // warning, scritta piccola (ad esempio in fondo ad una card)
       caption: {
         fontSize: 13,
-        color: typographyGrey,
+        color: FutBobPalette.typographyGrey,
         width: '80%'
       }
     },
@@ -290,7 +284,7 @@ const lightTheme = createMuiTheme({
         },
         '&$selected': {
           '&>p': {
-            color: greenLight
+            color: FutBobPalette.lightGreen
           }
         }
       }

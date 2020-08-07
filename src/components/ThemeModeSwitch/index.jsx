@@ -1,6 +1,6 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { makeStyles, Switch } from '@material-ui/core'
-import { GlobalContextProvider } from '../../pages/_app'
+import { useConfigStore } from '../../zustand/stores'
 
 const useStyles = makeStyles(theme => ({
   toggleThumb: {
@@ -24,7 +24,10 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const ThemeSwitch = props => {
-  const { setTheme, themeType } = useContext(GlobalContextProvider)
+  const { setTheme, themeType } = useConfigStore(state => ({
+    themeType: state.themeType,
+    setTheme: state.setTheme
+  }))
   const classes = useStyles()
   return (
     <Switch

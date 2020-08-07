@@ -1,7 +1,6 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import DashboardWidget from '../../../components/DashboardWidget'
 import { Grid, Typography, makeStyles, Tooltip, IconButton } from '@material-ui/core'
-import { GlobalContextProvider } from '../../../pages/_app'
 import PeopleAltRoundedIcon from '@material-ui/icons/PeopleAltRounded'
 import BuildRoundedIcon from '@material-ui/icons/BuildRounded'
 import FaceRoundedIcon from '@material-ui/icons/FaceRounded'
@@ -86,7 +85,7 @@ const RenderExports = React.memo(props => {
 })
 
 const EsportazioniContent = React.memo(props => {
-  const { exports } = useContext(GlobalContextProvider)
+  const { exports = {} } = {}
   return (
     <Grid container style={{ minHeight: 100 }}>
       {isEmpty(exports)

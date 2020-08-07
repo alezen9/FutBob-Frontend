@@ -1,15 +1,14 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Button, Typography, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useFormik } from 'formik'
-import { GlobalContextProvider } from './_app'
 import FormikInput from '../components/FomrikInput'
 import { apiInstance } from '../SDK'
-import { CondexoLogo } from '../assets/CustomIcon'
+import { FutBobLogo } from '../assets/CustomIcon'
 import { useRouter } from 'next/router'
-import AnimatedCondexoLogo from '../assets/AnimatedCondexoLogo'
 import ThemeSwitch from '../components/ThemeModeSwitch'
-import { get } from 'lodash'
+import { ServerMessage } from '../utils/serverMessages'
+import { useConfigStore } from '../zustand/stores'
 
 const Copyright = props => {
   return (
@@ -59,12 +58,16 @@ const useStyles = makeStyles(theme => ({
 
 const SignIn = props => {
   const classes = useStyles()
-  const { openSnackbar, setIsLogged, themeType } = useContext(GlobalContextProvider)
+  const { openSnackbar, setIsLogged, themeType } = useConfigStore(state => ({
+    openSnackbar: state.openSnackbar,
+    setIsLoading: state.setIsLoading,
+    themeType: state.themeType
+  }))
   const router = useRouter()
 
-  const onSubmit = async (values, { setSubmitting }) => {
+  const onSubmit = async (values, { setSubmitting, setErrors }) => {
+    setSubmitting(true)
     try {
-      setSubmitting(true)
       const { token } = await apiInstance.user_login(values, `{ token }`)
       if (token) {
         window.localStorage.setItem('token', token)
@@ -73,12 +76,12 @@ const SignIn = props => {
         router.push('/')
       } else throw new Error('Username o password errati')
     } catch (error) {
-      setSubmitting(false)
       openSnackbar({
         variant: 'error',
-        message: get(error, 'message', null) || 'Username o password errati'
+        message: ServerMessage[error] || 'Username o password errati'
       })
     }
+    setSubmitting(false)
   }
 
   const formik = useFormik({
@@ -91,9 +94,9 @@ const SignIn = props => {
       <div className={classes.themeToggleClass}>
         <ThemeSwitch />
       </div>
-      {/* <CondexoLogo className={classes.logo} /> */}
+      <FutBobLogo className={classes.logo} />
       <Grid container direction='column' alignItems='center' item xs={12} sm={6} style={{ marginTop: '10vh' }}>
-        {/* <AnimatedCondexoLogo themeType={themeType} style={{ height: 80 }} svgStyle={{ width: 'auto', height: '100%' }} /> */}
+        <FutBobLogo style={{ fontSize: '4em' }} />
         <form className={classes.form} onSubmit={formik.handleSubmit}>
           <FormikInput
             name='username'

@@ -3,8 +3,9 @@ import dynamic from 'next/dynamic'
 const MuiPhoneNumber = dynamic(() => import('material-ui-phone-number'),{ssr:false})
 import { makeStyles, FormHelperText } from '@material-ui/core'
 import { uniqueId, get, isEmpty } from 'lodash'
-import { inputBorderColorDark, typographyGrey as typographyGreyDark } from '../../../darkTheme'
-import { inputBorderColorLight, typographyGrey as typographyGreyLight } from '../../../lightTheme'
+import { inputBorderColorDark } from '../../../darkTheme'
+import { inputBorderColorLight } from '../../../lightTheme'
+import { FutBobPalette } from '../../../palette'
 
 const useStyles = makeStyles(theme => ({
   textField: {
@@ -20,9 +21,7 @@ const useStyles = makeStyles(theme => ({
     '& label': {
       color: ({ error }) => error
         ? '#ff443a'
-        : theme.type === 'dark'
-          ? typographyGreyDark
-          : typographyGreyLight
+        : FutBobPalette.typographyGrey
     }
   }
 }))

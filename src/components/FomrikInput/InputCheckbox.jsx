@@ -1,7 +1,6 @@
 import React from 'react'
 import { Checkbox, makeStyles } from '@material-ui/core'
-import { typographyGrey as typographyGreyDark } from '../../../darkTheme'
-import { typographyGrey as typographyGreyLight } from '../../../lightTheme'
+import { FutBobPalette } from '../../../palette'
 
 const useStyles = makeStyles(theme => ({
   wrapper: {
@@ -9,9 +8,7 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center'
   },
   rootCheckbox: {
-    color: theme.type === 'dark'
-      ? typographyGreyDark
-      : typographyGreyLight
+    color: FutBobPalette.typographyGrey
   }
 }))
 

@@ -1,10 +1,10 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { makeStyles, IconButton } from '@material-ui/core'
 import NavList from './NavList'
 import MenuRoundedIcon from '@material-ui/icons/MenuRounded'
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded'
-import { GlobalContextProvider } from '../../pages/_app'
 import ThemeSwitch from '../ThemeModeSwitch'
+import { useConfigStore } from '../../zustand/stores'
 
 const useStyles = makeStyles(theme => ({
   relativeWrapper: {
@@ -63,7 +63,10 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Menu = () => {
-  const { menuOpen, toggleMenu } = useContext(GlobalContextProvider)
+  const { menuOpen, toggleMenu } = useConfigStore(state => ({
+    menuOpen: state.menuOpen,
+    toggleMenu: state.toggleMenu
+  }))
   const classes = useStyles({ menuOpen })
 
   return (

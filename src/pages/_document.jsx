@@ -11,32 +11,31 @@ export default class MyDocument extends Document {
           <meta httpEquiv='X-UA-Compatible' content='IE=edge' />
           <meta httpEquiv='X-UA-Compatible' content='IE=edge' />
 
-          <meta name='description' content='Backoffice di Condexo S.R.L.' />
+          <meta name='description' content='J.A.R.V.I.S.' />
           <meta name='keywords' content='Keywords' />
           <meta name='mobile-web-app-capable' content='yes' />
-          <meta name='apple-mobile-web-app-title' content='CX Backoffice' />
+          <meta name='apple-mobile-web-app-title' content='FutBob' />
           <meta name='apple-mobile-web-app-capable' content='yes' />
           <meta name='apple-mobile-web-app-status-bar-style' content='black-translucent' />
-          <meta name='application-name' content='CX Backoffice' />
-          <meta name='msapplication-tooltip' content='Condexo Backoffice' />
+          <meta name='application-name' content='FutBob' />
+          <meta name='msapplication-tooltip' content='FutBob' />
           <meta name='msapplication-starturl' content='/' />
           <meta name='msapplication-tap-highlight' content='no' />
 
           <link rel='manifest' href='/manifest.json' />
 
-          <link rel='apple-touch-icon' href='/images/apple/dark/apple-touch-icon-iphone-60x60.png' />
-          <link rel='apple-touch-icon' sizes='60x60' href='/images/apple/dark/apple-touch-icon-ipad-76x76.png' />
-          <link rel='apple-touch-icon' sizes='114x114' href='/images/apple/dark/apple-touch-icon-iphone-retina-120x120.png' />
-          <link rel='apple-touch-icon' sizes='144x144' href='/images/apple/dark/apple-touch-icon-ipad-retina-152x152.png' />
-
-          <link rel='icon' type='image/png' sizes='192x192' href='/android-icon-192x192.png' />
+          <link rel='apple-touch-icon' sizes='180x180' href='/apple-touch-icon.png' />
           <link rel='icon' type='image/png' sizes='32x32' href='/favicon-32x32.png' />
-          <link rel='icon' type='image/png' sizes='96x96' href='/favicon-96x96.png' />
           <link rel='icon' type='image/png' sizes='16x16' href='/favicon-16x16.png' />
+          <link rel='manifest' href='/site.webmanifest' />
+          <link rel='mask-icon' href='/safari-pinned-tab.svg' color='#5bbad5' />
+          <meta name='apple-mobile-web-app-title' content='FutBob' />
+          <meta name='application-name' content='FutBob' />
+          <meta name='msapplication-TileColor' content='#00aba9' />
+          <meta name='theme-color' content='#ffffff' />
 
           <link rel='shortcut icon' href='/favicon.ico' type='image/x-icon' />
           <link rel='icon' href='/favicon.ico' type='image/x-icon' />
-          <meta name='theme-color' content='#ff375f' />
 
           <link
             rel='stylesheet'

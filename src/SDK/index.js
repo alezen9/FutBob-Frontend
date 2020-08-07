@@ -25,6 +25,14 @@ class FutBobServer {
         throw get(error, 'response.data.errors[0].message', error)
       }
     )
+    this._self.interceptors.request.use(config => {
+      if (process.browser && !config.headers.common['Authorization'] && window.localStorage.getItem(this.localStorageToken)) {
+        const authorization = `Bearer ${window.localStorage.getItem(this.localStorageToken)}`
+        config.headers.common['Authorization'] = authorization
+      }
+      return config
+    },
+    err => Promise.reject(err))
   }
 
   async API ({ query, name }) {
@@ -42,6 +50,7 @@ class FutBobServer {
     if (token !== _token) {
       this._self.defaults.headers.common['Authorization'] = `Bearer ${token}`
     }
+    window.localStorage.setItem(this.localStorageToken, token)
   }
 
   async user_signUp (signupInput, fields) {

@@ -10,10 +10,11 @@ import { get, isEqual, uniqueId, isEmpty } from 'lodash'
 import FomrikInput from '.'
 import RoomRoundedIcon from '@material-ui/icons/RoomRounded'
 import InfoRoundedIcon from '@material-ui/icons/InfoRounded'
-import { typographyGrey as typographyGreyLight, inputBorderColorLight } from '../../../lightTheme'
-import { typographyGrey as typographyGreyDark, inputBorderColorDark } from '../../../darkTheme'
+import { inputBorderColorLight } from '../../../lightTheme'
+import { inputBorderColorDark } from '../../../darkTheme'
 import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
 import ExpandLessRoundedIcon from '@material-ui/icons/ExpandLessRounded'
+import { FutBobPalette } from '../../../palette'
 
 /**
  * ADDRESS
@@ -90,9 +91,7 @@ const useStyles = makeStyles(theme => ({
   popoverClass: {
     width: 250,
     padding: 16,
-    color: theme.type === 'dark'
-      ? typographyGreyLight
-      : typographyGreyDark
+    color: FutBobPalette.typographyGrey
   }
 }))
 
@@ -143,9 +142,7 @@ const useStylesAutocomplete = makeStyles(theme => ({
       : '#111'
   },
   noOptions: {
-    color: theme.type === 'dark'
-      ? typographyGreyLight
-      : typographyGreyDark
+    color: FutBobPalette.typographyGrey
   },
   inputRoot: {
     '& > fieldset': {

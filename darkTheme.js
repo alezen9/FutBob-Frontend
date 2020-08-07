@@ -1,4 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles'
+import { FutBobPalette } from './palette'
 
 export const _green = '#2BD4B5'
 export const _darkGreen = '#005959'
@@ -16,24 +17,21 @@ const pinkDark = 'rgb(255,55,95)'
 const indigoLight = 'rgb(88,86,214)'
 const indigoDark = 'rgb(94,92,230)'
 
-const redLight = 'rgb(255,59,48)'
-const redDark = 'rgb(255,69,58)'
-
 const azureLight = 'rgb(0,122,255)'
 const azureDark = 'rgb(10,132,255)'
 const blue = 'rgba(0,64,221)'
 
-export const greenLight = 'rgba(52,199,89)'
+// export const greenLight = 'rgba(52,199,89)'
 export const green = 'rgba(48,209,88)'
 
 const darkTheme = createMuiTheme({
   type: 'dark',
-  activeColor: greenLight,
+  activeColor: FutBobPalette.lightGreen,
   palette: {
     primary: {
       light: pinkLight,
-      main: greenLight,
-      dark: greenLight,
+      main: FutBobPalette.lightGreen,
+      dark: FutBobPalette.lightGreen,
       contrastText: '#fff'
     },
     secondary: {
@@ -43,9 +41,9 @@ const darkTheme = createMuiTheme({
       contrastText: '#fff'
     },
     error: {
-      light: redLight,
-      main: redDark,
-      dark: redDark,
+      light: FutBobPalette.lightRed,
+      main: FutBobPalette.darkRed,
+      dark: FutBobPalette.darkRed,
       contrastText: '#fff'
     }
   },
@@ -55,50 +53,50 @@ const darkTheme = createMuiTheme({
     h1: {
       padding: 0,
       fontSize: '25pt',
-      color: typographyGrey
+      color: FutBobPalette.typographyGrey
     },
     h2: {
       padding: 0,
       fontSize: '23pt',
-      color: typographyGrey
+      color: FutBobPalette.typographyGrey
     },
     h3: {
       padding: 0,
       fontSize: '21pt',
-      color: typographyGrey
+      color: FutBobPalette.typographyGrey
     },
     h4: {
       padding: 0,
       fontSize: '15pt',
-      color: typographyGrey,
+      color: FutBobPalette.typographyGrey,
       fontWeight: 'semi-bold'
     },
     h5: {
       padding: 0,
       fontSize: '13pt',
-      color: typographyGrey
+      color: FutBobPalette.typographyGrey
     },
     h6: {
       padding: 0,
       fontSize: '13pt',
       fontWeight: 'bold',
-      color: typographyGrey
+      color: FutBobPalette.typographyGrey
     },
     body1: {
       padding: 0,
       fontSize: '12pt',
-      color: typographyGrey
+      color: FutBobPalette.typographyGrey
     },
     body2: {
       padding: 0,
       fontSize: '12pt',
       fontWeight: 'semi-bold',
-      color: typographyGrey
+      color: FutBobPalette.typographyGrey
     },
     caption: {
       padding: 0,
       fontSize: '10pt',
-      color: typographyGrey
+      color: FutBobPalette.typographyGrey
     }
 
   },
@@ -122,7 +120,7 @@ const darkTheme = createMuiTheme({
     },
     MuiInputBase: {
       root: {
-        color: typographyGrey,
+        color: FutBobPalette.typographyGrey,
         '&$disabled': {
           color: lightGrey
         }
@@ -141,7 +139,7 @@ const darkTheme = createMuiTheme({
     },
     MuiInput: {
       root: {
-        color: typographyGrey,
+        color: FutBobPalette.typographyGrey,
         '&$disabled': {
           color: lightGrey
         }
@@ -149,7 +147,7 @@ const darkTheme = createMuiTheme({
       inputMultiline: {
         boxSizing: 'border-box',
         borderRadius: 0,
-        border: `1px solid ${greenLight}`,
+        border: `1px solid ${FutBobPalette.lightGreen}`,
         background: 'transparent',
         backgroundColor: 'transparent',
         height: 'auto',
@@ -175,7 +173,7 @@ const darkTheme = createMuiTheme({
         fontSize: '.9em'
       },
       notchedOutline: {
-        borderColor: typographyGrey,
+        borderColor: FutBobPalette.typographyGrey,
         '&:hover': {
           borderColor: 'rgba(255,255,255,.7)'
         }
@@ -183,7 +181,7 @@ const darkTheme = createMuiTheme({
     },
     MuiInputLabel: {
       root: {
-        color: typographyGrey,
+        color: FutBobPalette.typographyGrey,
         opacity: '.6',
         '&$disabled': {
           color: 'rgba(255,255,255,.3)'
@@ -224,7 +222,7 @@ const darkTheme = createMuiTheme({
         }
       },
       outlined: {
-        color: typographyGrey,
+        color: FutBobPalette.typographyGrey,
         borderRadius,
         fontSize: 14,
         borderColor: lightGrey
@@ -232,12 +230,12 @@ const darkTheme = createMuiTheme({
     },
     MuiAvatar: {
       root: {
-        backgroundColor: `${greenLight} !important`
+        backgroundColor: `${FutBobPalette.lightGreen} !important`
       }
     },
     MuiIconButton: {
       root: {
-        color: greenLight
+        color: FutBobPalette.lightGreen
       }
     },
     MuiDialog: {
@@ -271,7 +269,7 @@ const darkTheme = createMuiTheme({
         height: 'none'
       },
       iconOutlined: {
-        color: typographyGrey
+        color: FutBobPalette.typographyGrey
       }
     },
     MuiTable: {
@@ -295,7 +293,7 @@ const darkTheme = createMuiTheme({
     MuiTableCell: {
       head: {
         fontWeight: 600,
-        color: typographyGrey,
+        color: FutBobPalette.typographyGrey,
         borderBottom: 'none',
         minWidth: 100
       },
@@ -307,9 +305,9 @@ const darkTheme = createMuiTheme({
     },
     MuiPaginationItem: {
       root: {
-        color: typographyGrey,
+        color: FutBobPalette.typographyGrey,
         '&$disabled': {
-          color: typographyGrey
+          color: FutBobPalette.typographyGrey
         }
       }
     },
@@ -337,7 +335,7 @@ const darkTheme = createMuiTheme({
             backgroundColor: '#444'
           },
           '&>p': {
-            color: greenLight
+            color: FutBobPalette.lightGreen
           }
         }
       }

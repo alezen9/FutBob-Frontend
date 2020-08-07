@@ -3,8 +3,9 @@ import TextField from '@material-ui/core/TextField'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import { sortBy, get } from 'lodash'
 import { makeStyles, FormHelperText } from '@material-ui/core'
-import { typographyGrey as typographyGreyLight, inputBorderColorLight } from '../../../lightTheme'
-import { typographyGrey as typographyGreyDark, inputBorderColorDark } from '../../../darkTheme'
+import { inputBorderColorLight } from '../../../lightTheme'
+import { inputBorderColorDark } from '../../../darkTheme'
+import { FutBobPalette } from '../../../palette'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -44,9 +45,7 @@ const useStyles = makeStyles(theme => ({
       : '#111'
   },
   noOptions: {
-    color: theme.type === 'dark'
-      ? typographyGreyLight
-      : typographyGreyDark
+    color: FutBobPalette.typographyGrey
   },
   inputRoot: {
     '& > fieldset': {

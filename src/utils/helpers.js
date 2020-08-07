@@ -4,9 +4,9 @@ import BlockRoundedIcon from '@material-ui/icons/BlockRounded'
 import AccessTimeRoundedIcon from '@material-ui/icons/AccessTimeRounded'
 import RemoveCircleOutlineRoundedIcon from '@material-ui/icons/RemoveCircleOutlineRounded'
 import { Tooltip, IconButton } from '@material-ui/core'
-import { typographyGrey } from '../../lightTheme'
 import { sections } from './routes'
 import { find, isObject } from 'lodash'
+import { FutBobPalette } from '../../palette'
 
 export const getTitleFromPathname = pathname => {
   const routeInfo = find(sections, ['path', pathname])
@@ -34,7 +34,7 @@ const defaultStyleIcons = {
 const defaultStyleIconsTooltips = {
   fontSize: '0',
   transform: 'scale(.7)',
-  color: typographyGrey
+  color: FutBobPalette.typographyGrey
 }
 
 export const paramsToString = params => {

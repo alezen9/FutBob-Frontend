@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useCallback, useReducer } from 'react'
+import React, { useState, useEffect } from 'react'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { ThemeProvider, Snackbar, makeStyles, useTheme, useMediaQuery } from '@material-ui/core'
 import MuiAlert from '@material-ui/lab/Alert'
@@ -12,11 +12,12 @@ import { getTitleFromPathname } from '../utils/helpers'
 import ProgressBar from '../components/ProgressBar'
 import lightTheme from '../../lightTheme'
 import darkTheme from '../../darkTheme'
-import AnimatedCondexoLogo from '../assets/AnimatedCondexoLogo'
-import ExportsReducer from '../utils/reducers/exports'
 import Navbar from '../components/Navbar'
 // css
 import '../components/Navbar/Navbar.css'
+import { FutBobLogo } from '../assets/CustomIcon'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useConfigStore } from '../zustand/stores'
 
 const useStyles = makeStyles(theme => ({
   snackbar: {
@@ -78,37 +79,50 @@ const Alert = props => {
   />
 }
 
-export const GlobalContextProvider = createContext()
+const SplashScreen = React.memo(props => {
+  return <AnimatePresence>
+    <motion.div
+      transi
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100vw', height: '100vh' }}
+    >
+      <FutBobLogo style={{ fontSize: '6em' }} />
+    </motion.div>
+  </AnimatePresence>
+})
 
 const MyApp = props => {
   const { Component, pageProps } = props
+  const {
+    themeType,
+    isLogged,
+    menuOpen,
+    isLoading,
+    snackbar,
+    closeSnackbar,
+    setTheme,
+    setIsLogged,
+    setIsLoading
+  } = useConfigStore()
   const router = useRouter()
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    variant: 'success',
-    message: 'Tutto bene'
-  })
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [isLogged, setIsLogged] = useState(false)
+
   const [isFirstRun, setFirstRun] = useState(true)
-  const [isLoading, setIsLoading] = useState(false)
-  const [themeType, setThemeType] = useState('light')
-  const [exports, dispatchExport] = useReducer(ExportsReducer, {})
 
   const classes = useStyles({ menuOpen, isLogged })
   const _theme = useTheme()
   const isSmallScreen = useMediaQuery(_theme.breakpoints.down('sm'))
 
-  const toggleMenu = () => setMenuOpen(state => !state)
-
   const handleClose = (e, reason) => {
     if (reason === 'clickaway') return
-    setSnackbar(state => ({ ...state, open: false }))
+    closeSnackbar()
   }
 
   useEffect(() => {
     router.prefetch('/login')
     router.prefetch('/')
+    router.prefetch('/profile')
     router.prefetch('/players')
     router.prefetch('/matches')
     const jssStyles = document.querySelector('#jss-server-side')
@@ -116,13 +130,13 @@ const MyApp = props => {
       jssStyles.parentElement.removeChild(jssStyles)
     }
     const isLogged = window && window.localStorage
-      ? window.localStorage.getItem('token')
+      ? window.localStorage.getItem('FutBobToken')
       : false
     const themeType = window && window.localStorage
       ? window.localStorage.getItem('FutBobTheme')
       : 'light'
     setIsLogged(!!isLogged)
-    setThemeType(themeType || 'light')
+    setTheme(themeType || 'light', true)
     window.localStorage.setItem('FutBobTheme', themeType || 'light')
     const path = isLogged ? router.pathname || '/' : '/login'
     router.push(path)
@@ -154,16 +168,6 @@ const MyApp = props => {
     }
   }, [themeType])
 
-  const setTheme = useCallback(
-    type => {
-      if (['light', 'dark'].includes(type)) {
-        setThemeType(type)
-        window.localStorage.setItem('FutBobTheme', type)
-      }
-    }, [])
-
-  const openSnackbar = useCallback(data => setSnackbar({ ...data, open: true }), [])
-
   return <>
     <Head>
       <meta name='viewport' content='width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no' />
@@ -171,30 +175,17 @@ const MyApp = props => {
     </Head>
     <ThemeProvider theme={themeType === 'light' ? lightTheme : darkTheme}>
       <Online>
-        <GlobalContextProvider.Provider
-          value={{
-            openSnackbar,
-            setIsLogged,
-            toggleMenu,
-            menuOpen,
-            setTheme,
-            themeType,
-            setIsLoading,
-            exports,
-            dispatchExport
-          }}>
-          <CssBaseline />
-          {isFirstRun
-            ? <AnimatedCondexoLogo />
-            : <div className={classes.wrapper}>
-              {isLogged && isLoading && !isSmallScreen && <ProgressBar />}
-              {isLogged && <>{isSmallScreen ? <Navbar isLoading={isLoading} /> : <Menu />}</>}
-              <div {...isLogged && { className: classes.content }}>
-                {isLogged && <Title>{getTitleFromPathname(router.pathname)}</Title>}
-                <Component {...pageProps} />
-              </div>
-            </div>}
-        </GlobalContextProvider.Provider>
+        <CssBaseline />
+        {isFirstRun
+          ? <SplashScreen />
+          : <div className={classes.wrapper}>
+            {isLogged && isLoading && !isSmallScreen && <ProgressBar />}
+            {isLogged && <>{isSmallScreen ? <Navbar isLoading={isLoading} /> : <Menu />}</>}
+            <div {...isLogged && { className: classes.content }}>
+              {isLogged && <Title>{getTitleFromPathname(router.pathname)}</Title>}
+              <Component {...pageProps} />
+            </div>
+          </div>}
         <Snackbar
           className={classes.snackbar}
           anchorOrigin={{

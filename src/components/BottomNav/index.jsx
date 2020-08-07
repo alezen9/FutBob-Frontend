@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
-import { typographyGrey } from '../../../lightTheme'
 import { sections } from '../../utils/routes'
 import { useRouter } from 'next/router'
 import ExitToAppRoundedIcon from '@material-ui/icons/ExitToAppRounded'
-import { GlobalContextProvider } from '../../pages/_app'
 import { apiInstance } from '../../SDK'
+import { FutBobPalette } from '../../../palette'
+import { useConfigStore } from '../../zustand/stores'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
     '@media (max-width:350px)': {
       minWidth: 'unset'
     },
-    color: typographyGrey,
+    color: FutBobPalette.typographyGrey,
     '& svg': {
       fontSize: '1.7rem',
       '@media (max-width:350px)': {
@@ -60,7 +60,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const BottomNavbar = props => {
-  const { setIsLogged } = useContext(GlobalContextProvider)
+  const setIsLogged = useConfigStore(state => state.setIsLogged)
   const classes = useStyles()
   const [value, setValue] = useState(0)
   const router = useRouter()

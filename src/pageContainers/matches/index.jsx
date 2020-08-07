@@ -25,7 +25,7 @@ const MatchesContainer = props => {
 
   return (
     <div>
-      players
+      matches
     </div>
   )
 }

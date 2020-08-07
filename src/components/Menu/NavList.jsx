@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { makeStyles, List, ListItemIcon, ListItem, ListItemText, Collapse } from '@material-ui/core'
 import ArrowDropDownRoundedIcon from '@material-ui/icons/ArrowDropDownRounded'
 import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded'
@@ -7,8 +7,9 @@ import { compact, take } from 'lodash'
 import { useRouter } from 'next/router'
 import { sections } from '../../utils/routes'
 import ExitToAppRoundedIcon from '@material-ui/icons/ExitToAppRounded'
-import { GlobalContextProvider } from '../../pages/_app'
 import { apiInstance } from '../../SDK'
+import { FutBobPalette } from '../../../palette'
+import { useConfigStore } from '../../zustand/stores'
 
 const useStyles = makeStyles({
   list: {
@@ -47,12 +48,14 @@ const buildSubPath = (mainPath, subPath) => {
     .join('/')
 }
 const SingleItemList = props => {
-  const { handleRoute, icon, title, path } = props
+  const { handleRoute, icon, title, path, iconStaticProps = {}, ignoreActiveProps = false } = props
   const router = useRouter()
-  const activeProps = { ...router.pathname === path && { color: 'primary' } }
+  const activeProps = ignoreActiveProps
+    ? {}
+    : { ...router.pathname === path && { color: 'primary' } }
   const classes = useStyles()
   return <ListItem className={classes.listItem} button onClick={handleRoute(path)}>
-    <ListItemIcon>
+    <ListItemIcon {...iconStaticProps}>
       {React.cloneElement(icon, activeProps)}
     </ListItemIcon>
     <ListItemText primaryTypographyProps={{ ...activeProps }} primary={title} />
@@ -94,7 +97,7 @@ const ExpandableItemList = props => {
 
 const NavList = props => {
   const router = useRouter()
-  const { setIsLogged } = useContext(GlobalContextProvider)
+  const setIsLogged = useConfigStore(state => state.setIsLogged)
   const classes = useStyles()
 
   useEffect(() => {
@@ -134,6 +137,8 @@ const NavList = props => {
           path='/login'
           icon={<ExitToAppRoundedIcon />}
           title='Logout'
+          iconStaticProps={{ style: { color: FutBobPalette.lightRed, opacity: 0.7 } }}
+          ignoreActiveProps
         />
       </div>
         </>
