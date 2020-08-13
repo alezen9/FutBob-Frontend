@@ -3,8 +3,6 @@ import TextField from '@material-ui/core/TextField'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import { sortBy, get } from 'lodash'
 import { makeStyles, FormHelperText } from '@material-ui/core'
-import { inputBorderColorLight } from '../../../lightTheme'
-import { inputBorderColorDark } from '../../../darkTheme'
 import { FutBobPalette } from '../../../palette'
 
 const useStyles = makeStyles(theme => ({
@@ -51,19 +49,19 @@ const useStyles = makeStyles(theme => ({
     '& > fieldset': {
       borderColor: ({ error }) => error
         ? '#ff443a'
-        : theme.type === 'dark'
-          ? inputBorderColorDark
-          : inputBorderColorLight
+        : FutBobPalette.borderColor
     }
   }
 }))
 
-const InputAutocompleteMultiple = ({ options = [], grouped, label, id, name, required, handleChange, values, disabled, errors, helperText, onChange, variant }) => {
+const InputAutocompleteMultiple = ({ options = [], grouped, label, id, name, required, handleChange, values, disabled, errors, helperText, onChange, variant, sortByLabel = true }) => {
   const classes = useStyles({ error: !!get(errors, name, false) })
   const optionsRef = useRef(options)
   const optionsToRender = useMemo(() => {
     const valuesKeys = (values[name] || []).map(({ value }) => value)
-    return sortBy(optionsRef.current.filter(({ value }) => !valuesKeys.includes(value)), ['label'])
+    return sortByLabel
+      ? sortBy(optionsRef.current.filter(({ value }) => !valuesKeys.includes(value)), ['label'])
+      : optionsRef.current.filter(({ value }) => !valuesKeys.includes(value))
   }, [values[name]])
 
   return (

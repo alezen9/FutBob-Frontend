@@ -16,6 +16,7 @@ import InputAsyncAutocomplete from './InputAsyncAutocomplete'
 import InputSwitch from './InputSwitch'
 import moment from 'moment'
 import InputAutocomplete from './InputAutocomplete'
+import InputSlider from './InputSlider'
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -78,6 +79,13 @@ const FormikInput = props => {
   let inputProps = {}
 
   switch (type) {
+    case 'slider':
+      const onSliderChange = (e, d) => props.setFieldValue(name, d, true)
+      return (
+        <GridWrapper {...props} container spacing={2} style={{ margin: '0 0 10px 0', padding: 0 }}>
+          <InputSlider {...defaultProps} onChange={onSliderChange} />
+        </GridWrapper>
+      )
     case 'address':
       const onAddressChange = v => props.setFieldValue(name, v, true)
       return (

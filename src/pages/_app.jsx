@@ -18,6 +18,7 @@ import '../components/Navbar/Navbar.css'
 import { FutBobLogo } from '../assets/CustomIcon'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useConfigStore } from '../zustand/stores'
+import { FutBobPalette } from '../../palette'
 
 const useStyles = makeStyles(theme => ({
   snackbar: {
@@ -132,12 +133,12 @@ const MyApp = props => {
     const isLogged = window && window.localStorage
       ? window.localStorage.getItem('FutBobToken')
       : false
-    const themeType = window && window.localStorage
+    const _themeType = window && window.localStorage
       ? window.localStorage.getItem('FutBobTheme')
       : 'light'
     setIsLogged(!!isLogged)
-    setTheme(themeType || 'light', true)
-    window.localStorage.setItem('FutBobTheme', themeType || 'light')
+    setTheme(_themeType || 'light')
+    window.localStorage.setItem('FutBobTheme', _themeType || 'light')
     const path = isLogged ? router.pathname || '/' : '/login'
     router.push(path)
       .then(() => setFirstRun(false))

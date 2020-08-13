@@ -1,10 +1,9 @@
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import TextField from '@material-ui/core/TextField'
 import Autocomplete from '@material-ui/lab/Autocomplete'
-import { sortBy, get } from 'lodash'
+import { get } from 'lodash'
 import { makeStyles, FormHelperText, InputAdornment, CircularProgress } from '@material-ui/core'
-import { typographyGrey as typographyGreyLight, inputBorderColorLight } from '../../../lightTheme'
-import { typographyGrey as typographyGreyDark, inputBorderColorDark } from '../../../darkTheme'
+import { FutBobPalette } from '../../../palette'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -44,17 +43,13 @@ const useStyles = makeStyles(theme => ({
       : '#111'
   },
   noOptions: {
-    color: theme.type === 'dark'
-      ? typographyGreyLight
-      : typographyGreyDark
+    color: FutBobPalette.typographyGrey
   },
   inputRoot: {
     '& > fieldset': {
       borderColor: ({ error }) => error
         ? '#ff443a'
-        : theme.type === 'dark'
-          ? inputBorderColorDark
-          : inputBorderColorLight
+        : FutBobPalette.borderColor
     }
   }
 }))

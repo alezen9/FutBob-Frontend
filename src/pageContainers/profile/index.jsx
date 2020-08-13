@@ -5,6 +5,7 @@ import { get, isEmpty } from 'lodash'
 import FutBobTabs, { FutBobTab } from '../../components/Tabs'
 import General from './1_General'
 import Private from './2_Private'
+import Player from './3_Player'
 
 const userFields = `{
     _id,
@@ -15,13 +16,18 @@ const userFields = `{
     futsalPlayer {
       _id,
       positions,
-      state
-    },
-    footballPlayer {
-      _id,
-      positions,
-      state
-    },
+      state,
+      type,
+      radar {
+        speed,
+        stamina,
+        defence,
+        balance,
+        ballControl,
+        passing,
+        finishing
+      }
+    }
     avatar,
     username,
     email,
@@ -79,7 +85,7 @@ const ProfileContainer = props => {
         <FutBobTab
           title='Player'
           noBox
-          component={<>aleks</>}
+          component={<Player {...tabProps} />}
         />
       </FutBobTabs>
     </div>

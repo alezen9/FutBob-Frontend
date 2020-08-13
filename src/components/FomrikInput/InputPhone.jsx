@@ -14,9 +14,7 @@ const useStyles = makeStyles(theme => ({
     '& fieldset': {
       borderColor: ({ error }) => error
         ? '#ff443a'
-        : theme.type === 'dark'
-          ? inputBorderColorDark
-          : inputBorderColorLight
+        : FutBobPalette.borderColor
     },
     '& label': {
       color: ({ error }) => error

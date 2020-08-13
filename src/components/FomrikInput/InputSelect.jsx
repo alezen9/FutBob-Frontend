@@ -2,8 +2,7 @@ import React, { useRef } from 'react'
 import { get, sortBy } from 'lodash'
 import { Select, MenuItem, InputLabel, FormHelperText, FilledInput, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { inputBorderColorDark } from '../../../darkTheme'
-import { inputBorderColorLight } from '../../../lightTheme'
+import { FutBobPalette } from '../../../palette'
 
 const useStyles = makeStyles(theme => ({
   menuItem: {
@@ -18,17 +17,13 @@ const useStyles = makeStyles(theme => ({
     '& fieldset': {
       borderColor: ({ error }) => error
         ? '#ff443a'
-        : theme.type === 'dark'
-          ? inputBorderColorDark
-          : inputBorderColorLight
+        : FutBobPalette.borderColor
     }
   },
   labelClass: {
     color: ({ error }) => error
       ? '#ff443a'
-      : theme.type === 'dark'
-        ? inputBorderColorDark
-        : inputBorderColorLight
+      : FutBobPalette.typographyGrey
   }
 }))
 
@@ -67,17 +62,19 @@ export const measureText = (pText, pFontSize, pStyle) => {
   return lResult
 }
 
-const InputSelect = ({ options = null, label, id, name, required, handleChange, values, disabled, errors, helperText, onChange, variant }) => {
+const InputSelect = ({ options = null, label, id, name, required, handleChange, values, disabled, errors, helperText, onChange, variant, sortByLabel = true }) => {
   const { menuItem, inputRoot, labelClass } = useStyles({ error: !!get(errors, name, false) })
   const labelRef = useRef(null)
   const labelWidth = labelRef.current ? labelRef.current.offsetWidth : measureText(label).width
 
   const Options = options => options && promoteItem({
-    arr: sortBy(options, ['label']),
+    arr: sortByLabel
+      ? sortBy(options, ['label'])
+      : options,
     value: -1
   }).map((opt, i) =>
     <MenuItem className={menuItem} key={i} value={opt.value}>
-      <Typography>{opt.label}</Typography>
+      <Typography>{get(opt, 'component', opt.label)}</Typography>
     </MenuItem>)
 
   const input = variant === 'filled' ? { input: <FilledInput name={name} /> } : {}
@@ -93,8 +90,8 @@ const InputSelect = ({ options = null, label, id, name, required, handleChange, 
         onChange={onChange}
         variant={variant}
         renderValue={val => {
-          const v = options.find(({ value }) => val === value).label
-          return <Typography style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>{v}</Typography>
+          const v = options.find(({ value }) => val === value)
+          return <Typography style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>{get(v, 'component', v.label)}</Typography>
         }}
         {...input}
         inputProps={{ id }}

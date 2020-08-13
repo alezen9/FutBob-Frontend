@@ -6,6 +6,7 @@
     "@material-ui/core": "latest",
     "@material-ui/icons": "latest",
     "@material-ui/lab": "latest",
+    "@nivo/radar": "^0.62.0",
     "axios": "latest",
     "clean-deep": "latest",
     "formik": "latest",
@@ -28,10 +29,10 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "next start --port=9001",
+    "start": "next start --port=3000",
     "start-test": "NODE_ENV=production ENV=test next start",
-    "build-test": "NODE_ENV=production ENV=test PORT=9001 next build",
-    "build-production": "NODE_ENV=production ENV=production PORT=9001 next build",
+    "build-test": "NODE_ENV=production ENV=test PORT=3000 next build",
+    "build-production": "NODE_ENV=production ENV=production PORT=3000 next build",
     "dev": "NODE_ENV=test ENV=test next"
   }
 }

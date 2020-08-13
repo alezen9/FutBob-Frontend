@@ -59,13 +59,19 @@ export const [useConfigStore, apiConfig] = create(_immer((set, get, api) => ({
 
 export const [useUserStore, apiUser] = create(_immer((set, get, api) => ({
   item: {},
-  setItem: (item = {}) => set(state => {
-    state.item = {
-      ...state.item,
-      ...cleanDeep(item)
-    }
-  }),
-  reset: () => set({ item: {} }),
+  setItem: (fields = {}) => {
+    set(state => {
+      state.item = {
+        ...state.item,
+        ...cleanDeep(fields)
+      }
+    })
+  },
+  reset: () => {
+    set(state => {
+      state.item = {}
+    })
+  },
   refreshItem: async () => {
     const userFields = `{
       _id,
@@ -76,12 +82,16 @@ export const [useUserStore, apiUser] = create(_immer((set, get, api) => ({
       futsalPlayer {
         _id,
         positions,
-        state
-      },
-      footballPlayer {
-        _id,
-        positions,
-        state
+        state,
+        radar {
+          speed,
+          stamina,
+          defence,
+          balance,
+          ballControl,
+          passing,
+          finishing
+        }
       },
       avatar,
       username,

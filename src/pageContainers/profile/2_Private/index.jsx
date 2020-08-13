@@ -1,10 +1,11 @@
 import React, { useCallback } from 'react'
-import { Grid, Button, Hidden } from '@material-ui/core'
+import { Grid, Button } from '@material-ui/core'
 import FormikInput from '../../../components/FomrikInput'
-import { get } from 'lodash'
 import { useFormik } from 'formik'
 import { apiInstance } from '../../../SDK'
 import { ServerMessage } from '../../../utils/serverMessages'
+import { privateInfoSchema } from '../validations'
+import { get } from 'lodash'
 
 const Private = props => {
   const {
@@ -15,7 +16,7 @@ const Private = props => {
   } = props
 
   const onSubmit = useCallback(
-    async (values, { setSubmitting }) => {
+    async (values, { setSubmitting, setFieldValue }) => {
       setSubmitting(true)
       setIsLoading(true)
       try {
@@ -31,8 +32,10 @@ const Private = props => {
           setItem({ username })
           openSnackbar({
             variant: 'success',
-            message: 'Edit successful!'
+            message: 'Info updated successfully!'
           })
+          setFieldValue('oldPassword', '', false)
+          setFieldValue('newPassword', '', false)
         }
       } catch (error) {
         openSnackbar({
@@ -47,7 +50,8 @@ const Private = props => {
   const formik = useFormik({
     initialValues: { username },
     enableReinitialize: true,
-    onSubmit
+    onSubmit,
+    validationSchema: privateInfoSchema
   })
 
   return (
@@ -65,7 +69,7 @@ const Private = props => {
           name='oldPassword'
           label='Old password'
           type='password'
-          required
+          required={!!get(formik, 'values.oldPassword', null) || !!get(formik, 'values.newPassword', null)}
           {...formik}
         />
         <FormikInput
@@ -73,15 +77,17 @@ const Private = props => {
           name='newPassword'
           label='New password'
           type='password'
-          required
+          required={!!get(formik, 'values.newPassword', null) || !!get(formik, 'values.oldPassword', null)}
           {...formik}
         />
         <Grid item xs={12} align='right'>
           <Button
+            style={{ minWidth: 150 }}
+            disabled={formik.isSubmitting}
             onClick={formik.handleSubmit}
             variant='contained'
             color='primary'>
-                Submit
+                Update
           </Button>
         </Grid>
       </Grid>

@@ -5,6 +5,7 @@ import { isEqual, isEmpty } from 'lodash'
 import { useFormik } from 'formik'
 import { apiInstance } from '../../../SDK'
 import { ServerMessage } from '../../../utils/serverMessages'
+import { generalInfoSchema } from '../validations'
 
 const General = props => {
   const {
@@ -25,7 +26,7 @@ const General = props => {
             setItem(values)
             openSnackbar({
               variant: 'success',
-              message: 'Edit successful!'
+              message: 'Info updated successfully!'
             })
           }
         }
@@ -42,7 +43,8 @@ const General = props => {
   const formik = useFormik({
     initialValues: rest,
     enableReinitialize: true,
-    onSubmit
+    onSubmit,
+    validationSchema: generalInfoSchema
   })
 
   return (
@@ -96,11 +98,12 @@ const General = props => {
           />
           <Grid item xs={12} align='right'>
             <Button
+              style={{ minWidth: 150 }}
               disabled={formik.isSubmitting}
               onClick={formik.handleSubmit}
               variant='contained'
               color='primary'>
-                Submit
+                Update
             </Button>
           </Grid>
         </Grid>

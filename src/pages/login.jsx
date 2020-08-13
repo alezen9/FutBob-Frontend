@@ -60,7 +60,7 @@ const SignIn = props => {
   const classes = useStyles()
   const { openSnackbar, setIsLogged, themeType } = useConfigStore(state => ({
     openSnackbar: state.openSnackbar,
-    setIsLoading: state.setIsLoading,
+    setIsLogged: state.setIsLogged,
     themeType: state.themeType
   }))
   const router = useRouter()
@@ -70,7 +70,7 @@ const SignIn = props => {
     try {
       const { token } = await apiInstance.user_login(values, `{ token }`)
       if (token) {
-        window.localStorage.setItem('token', token)
+        // window.localStorage.setItem('FutBobToken', token)
         apiInstance.setToken(token)
         setIsLogged(true)
         router.push('/')

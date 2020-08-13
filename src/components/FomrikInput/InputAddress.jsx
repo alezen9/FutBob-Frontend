@@ -10,8 +10,6 @@ import { get, isEqual, uniqueId, isEmpty } from 'lodash'
 import FomrikInput from '.'
 import RoomRoundedIcon from '@material-ui/icons/RoomRounded'
 import InfoRoundedIcon from '@material-ui/icons/InfoRounded'
-import { inputBorderColorLight } from '../../../lightTheme'
-import { inputBorderColorDark } from '../../../darkTheme'
 import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
 import ExpandLessRoundedIcon from '@material-ui/icons/ExpandLessRounded'
 import { FutBobPalette } from '../../../palette'
@@ -100,9 +98,7 @@ const useStylesAutocomplete = makeStyles(theme => ({
     '& > div > label': {
       color: ({ error }) => error
         ? '#ff443a'
-        : theme.type === 'dark'
-          ? inputBorderColorDark
-          : inputBorderColorLight
+        : FutBobPalette.borderColor
     }
   },
   paper: {
@@ -148,9 +144,7 @@ const useStylesAutocomplete = makeStyles(theme => ({
     '& > fieldset': {
       borderColor: ({ error }) => error
         ? '#ff443a'
-        : theme.type === 'dark'
-          ? inputBorderColorDark
-          : inputBorderColorLight
+        : FutBobPalette.borderColor
     }
   }
 }))
