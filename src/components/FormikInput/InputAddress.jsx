@@ -7,7 +7,7 @@ import PlacesAutocomplete, {
 import { TextField, Grid, makeStyles, IconButton, Popover, Typography, Divider, FormHelperText, Collapse } from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import { get, isEqual, uniqueId, isEmpty } from 'lodash'
-import FomrikInput from '.'
+import FormikInput from '.'
 import RoomRoundedIcon from '@material-ui/icons/RoomRounded'
 import InfoRoundedIcon from '@material-ui/icons/InfoRounded'
 import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
@@ -339,7 +339,7 @@ const InputAddressAutoComplete = ({
       </Grid>
       <Collapse in={showAllFields} timeout='auto' unmountOnExit style={{ width: '100%' }}>
         <Grid item container xs={12} spacing={2} style={{ margin: 0 }}>
-          <FomrikInput
+          <FormikInput
             name='CAP'
             label='CAP'
             values={localFormik}
@@ -347,7 +347,7 @@ const InputAddressAutoComplete = ({
             style={{ marginTop: 0 }}
             {...get(inputGridProps, 'CAP', {})}
           />
-          <FomrikInput
+          <FormikInput
             name='via'
             label='Via'
             values={localFormik}
@@ -355,7 +355,7 @@ const InputAddressAutoComplete = ({
             style={{ marginTop: 0 }}
             {...get(inputGridProps, 'via', {})}
           />
-          <FomrikInput
+          <FormikInput
             name='civico'
             label='Civico'
             values={localFormik}
@@ -363,7 +363,7 @@ const InputAddressAutoComplete = ({
             style={{ marginTop: 0 }}
             {...get(inputGridProps, 'civico', {})}
           />
-          <FomrikInput
+          <FormikInput
             name='comune'
             label='Comune'
             values={localFormik}

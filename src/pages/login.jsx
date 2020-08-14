@@ -2,13 +2,13 @@ import React from 'react'
 import { Button, Typography, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useFormik } from 'formik'
-import FormikInput from '../components/FomrikInput'
+import FormikInput from '../components/FormikInput'
 import { apiInstance } from '../SDK'
 import { FutBobLogo } from '../assets/CustomIcon'
 import { useRouter } from 'next/router'
 import ThemeSwitch from '../components/ThemeModeSwitch'
 import { ServerMessage } from '../utils/serverMessages'
-import { useConfigStore } from '../zustand/stores'
+import { useConfigStore } from '../zustand/configStore'
 
 const Copyright = props => {
   return (

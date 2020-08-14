@@ -125,7 +125,7 @@ export const OverallScore = props => {
     if (!autoColor) return FutBobPalette.typographyGrey
     if (value < 40) return 'crimson'
     if (value < 65) return 'orange'
-    if (value < 85) return 'limegreen'
+    if (value < 85) return FutBobPalette.darkGreen
     if (value <= 100) return '#B29600'
     return FutBobPalette.typographyGrey
   }, [value, autoColor])

@@ -1,6 +1,6 @@
 import React from 'react'
 import { makeStyles, Switch } from '@material-ui/core'
-import { useConfigStore } from '../../zustand/stores'
+import { useConfigStore } from '../../zustand/configStore'
 
 const useStyles = makeStyles(theme => ({
   toggleThumb: {

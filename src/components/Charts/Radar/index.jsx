@@ -11,7 +11,9 @@ const useStyles = makeStyles(theme => ({
       '& + div': {
         '& > div': {
           color: `${FutBobPalette.typographyGrey} !important`,
-          backgroundColor: `${FutBobPalette.backgroundColor} !important`,
+          backgroundColor: theme.type === 'dark'
+            ? '#222 !important'
+            : `${FutBobPalette.backgroundColor} !important`,
           borderRadius: '10px !important',
           boxShadow: `0 10px 15px rgba(0,0,0,.2) !important`
         }
@@ -41,7 +43,7 @@ const RadarChart = ({ data = [] }) => {
         borderColor={{ from: 'color' }}
         gridLevels={5}
         gridShape='circular'
-        gridLabelOffset={36}
+        gridLabelOffset={20}
         enableDots
         dotSize={10}
         dotColor={{ theme: 'background' }}

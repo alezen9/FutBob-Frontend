@@ -6,7 +6,7 @@ import AccessTimeRoundedIcon from '@material-ui/icons/AccessTimeRounded'
 import RemoveCircleOutlineRoundedIcon from '@material-ui/icons/RemoveCircleOutlineRounded'
 import { Tooltip, IconButton } from '@material-ui/core'
 import { sections } from './routes'
-import { find, isObject, uniqueId } from 'lodash'
+import { find, isObject, uniqueId, reduce } from 'lodash'
 import { FutBobPalette } from '../../palette'
 import { TopFormIcon, InjuredIcon, RecoveryIcon } from '../assets/CustomIcon'
 import ExpandLessRoundedIcon from '@material-ui/icons/ExpandLessRounded'
@@ -222,14 +222,14 @@ export const playerPhysicalStateOptions = [
   }
 ]
 
-export const getLabelsByValues = ({ values = [], options = [], list = false }) => {
+export const getLabelsByValues = ({ values = [], options = [], list = false, separator = ', ' }) => {
   const labels = options.reduce((acc, { value, label }) => {
     if (values.includes(value)) return [...acc, label]
     return acc
   }, [])
   return list
     ? labels.map(label => <div key={uniqueId()}>• {label}</div>)
-    : labels.join(', ')
+    : labels.join(separator)
 }
 
 export const decamelize = (str, separator) => {
@@ -239,4 +239,24 @@ export const decamelize = (str, separator) => {
     .replace(/([a-z\d])([A-Z])/g, '$1' + separator + '$2')
     .replace(/([A-Z]+)([A-Z][a-z\d]+)/g, '$1' + separator + '$2')
     .toLowerCase())
+}
+
+export const initialRadarValues = {
+  speed: 0,
+  stamina: 0,
+  defence: 0,
+  balance: 0,
+  ballControl: 0,
+  passing: 0,
+  finishing: 0
+}
+
+export const cleanQueryParams = query => {
+  return reduce(query, (acc, value, key) => {
+    if (/^\[+[a-zA-Z0-9]+\]/gmi.test(value)) return acc
+    return {
+      ...acc,
+      [key]: value
+    }
+  }, {})
 }

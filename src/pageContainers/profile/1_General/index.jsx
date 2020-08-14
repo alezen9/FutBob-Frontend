@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { Grid, Button } from '@material-ui/core'
-import FormikInput from '../../../components/FomrikInput'
+import FormikInput from '../../../components/FormikInput'
 import { isEqual, isEmpty } from 'lodash'
 import { useFormik } from 'formik'
 import { apiInstance } from '../../../SDK'
@@ -99,7 +99,7 @@ const General = props => {
           <Grid item xs={12} align='right'>
             <Button
               style={{ minWidth: 150 }}
-              disabled={formik.isSubmitting}
+              disabled={formik.isSubmitting || isEmpty(formik.touched)}
               onClick={formik.handleSubmit}
               variant='contained'
               color='primary'>

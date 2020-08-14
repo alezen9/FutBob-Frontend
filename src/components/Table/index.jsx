@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const CondexoTable = React.memo(props => {
+const FutBobTable = React.memo(props => {
   const { headers = [], data = [], withActions = false, pagination, forceMobile = false } = props
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'))
@@ -131,10 +131,10 @@ const WrapperTable = props => {
       ? <ContentLoader />
       : <>
         <CondexoLoadingMask isLoading={isFetching}>
-          <CondexoTable {...props} />
+          <FutBobTable {...props} />
         </CondexoLoadingMask>
       </>
-    : <CondexoTable {...props} />
+    : <FutBobTable {...props} />
 }
 
 export default React.memo(WrapperTable)

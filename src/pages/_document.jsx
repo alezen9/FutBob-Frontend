@@ -84,6 +84,9 @@ export default class MyDocument extends Document {
               border-radius: 10px;
               background: rgba(158, 158, 158, 0.5);
             }
+            ::-webkit-calendar-picker-indicator {
+                filter: invert(50%);
+            }
             @media all and (display-mode: standalone) {
               body::after {
                 position: fixed;

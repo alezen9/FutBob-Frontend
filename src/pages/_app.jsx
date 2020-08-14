@@ -8,7 +8,6 @@ import Head from 'next/head'
 import Menu from '../components/Menu'
 import Router, { useRouter } from 'next/router'
 import Title from '../components/Title'
-import { getTitleFromPathname } from '../utils/helpers'
 import ProgressBar from '../components/ProgressBar'
 import lightTheme from '../../lightTheme'
 import darkTheme from '../../darkTheme'
@@ -17,8 +16,15 @@ import Navbar from '../components/Navbar'
 import '../components/Navbar/Navbar.css'
 import { FutBobLogo } from '../assets/CustomIcon'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useConfigStore } from '../zustand/stores'
-import { FutBobPalette } from '../../palette'
+import { useConfigStore } from '../zustand/configStore'
+
+import { isEmpty } from 'lodash'
+import cleanDeep from 'clean-deep'
+import { cleanQueryParams } from '../utils/helpers'
+
+const AS_PATH = 'FutBobLastPath' // eslint-disable-line
+
+const rawParams = /\/+\[+[a-zA-Z0-9]+\]+\/?/gmi
 
 const useStyles = makeStyles(theme => ({
   snackbar: {
@@ -121,6 +127,12 @@ const MyApp = props => {
   }
 
   useEffect(() => {
+    if (!isEmpty(cleanQueryParams(router.query))) {
+      window.localStorage.setItem(AS_PATH, router.asPath)
+    }
+  }, [router.query])
+
+  useEffect(() => {
     router.prefetch('/login')
     router.prefetch('/')
     router.prefetch('/profile')
@@ -140,8 +152,14 @@ const MyApp = props => {
     setTheme(_themeType || 'light')
     window.localStorage.setItem('FutBobTheme', _themeType || 'light')
     const path = isLogged ? router.pathname || '/' : '/login'
-    router.push(path)
-      .then(() => setFirstRun(false))
+    const asPath = isLogged ? window.localStorage.getItem(AS_PATH) : null
+    if (asPath && rawParams.test(router.pathname)) {
+      router.replace(path, asPath)
+        .then(() => setFirstRun(false))
+    } else {
+      router.replace(path)
+        .then(() => setFirstRun(false))
+    }
   }, [])
 
   useEffect(() => {
@@ -183,7 +201,7 @@ const MyApp = props => {
             {isLogged && isLoading && !isSmallScreen && <ProgressBar />}
             {isLogged && <>{isSmallScreen ? <Navbar isLoading={isLoading} /> : <Menu />}</>}
             <div {...isLogged && { className: classes.content }}>
-              {isLogged && <Title>{getTitleFromPathname(router.pathname)}</Title>}
+              {isLogged && <Title />}
               <Component {...pageProps} />
             </div>
           </div>}

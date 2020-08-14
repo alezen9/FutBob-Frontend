@@ -44,6 +44,10 @@ class FutBobServer {
       })
   }
 
+  /**
+   *
+   * @param {string} token
+   */
   setToken (token) {
     const tokenSet = get(this._self, 'defaults.headers.common.Authorization', undefined)
     let _token = tokenSet ? tokenSet.split(' ')[1] : undefined
@@ -53,6 +57,19 @@ class FutBobServer {
     window.localStorage.setItem(this.localStorageToken, token)
   }
 
+  /**
+   *
+   * @param {any} signupInput
+   * @param {string} signupInput.name
+   * @param {string} signupInput.surname
+   * @param {string} signupInput.dateOfBirth
+   * @param {string} signupInput.phone
+   * @param {string?} signupInput.email
+   * @param {number?} signupInput.sex
+   * @param {string} signupInput.username
+   * @param {string} signupInput.password
+   */
+  // eslint-disable-next-line
   async user_signUp (signupInput, fields) {
     const query = `
     mutation {
@@ -61,7 +78,16 @@ class FutBobServer {
     return this.API({ query, name: 'signup' })
   }
 
-  async user_login (signinInput, fields) {
+  /**
+   *
+   * @param {any} signinInput
+   * @param {string} signinInput.username
+   * @param {string} signinInput.password
+   * @param {any} fields
+   * @param {string?} fields.token
+   * @param {string?} fields.expiresIn
+   */
+  async user_login (signinInput, fields) { // eslint-disable-line
     const query = `
     query {
         login(signinInput: ${paramsToString(signinInput)})${fields}
@@ -69,12 +95,36 @@ class FutBobServer {
     return this.API({ query, name: 'login' })
   }
 
-  user_logout (_logout) {
+  /**
+   *
+   * @param {function?} _logout
+   */
+  user_logout (_logout) { // eslint-disable-line
     window.localStorage.removeItem(this.localStorageToken)
     if (_logout) _logout()
   }
 
-  async user_getUserConnected (fields) {
+  /**
+   *
+   * @param {any} fields
+   * @param {string?} fields._id
+   * @param {string?} fields.name
+   * @param {string?} fields.surname
+   * @param {string?} fields.dateOfBirth
+   * @param {string?} fields.phone
+   * @param {string?} fields.email
+   * @param {string?} fields.sex
+   * @param {string?} fields.username
+   * @param {any?} fields.futsalPlayer
+   * @param {string?} fields.futsalPlayer._id
+   * @param {number[]?} fields.futsalPlayer.positions
+   * @param {number?} fields.futsalPlayer.type
+   * @param {number?} fields.futsalPlayer.state
+   * @param {any?} fields.futsalPlayer.user
+   * @param {any?} fields.futsalPlayer.radar
+   * @param {any?} fields.futsalPlayer.matches
+   */
+  async user_getUserConnected (fields) { // eslint-disable-line
     const query = `
     query {
         getUserConnected ${fields}
@@ -82,7 +132,11 @@ class FutBobServer {
     return this.API({ query, name: 'getUserConnected' })
   }
 
-  async user_changeUsername (newUsername) {
+  /**
+   *
+   * @param {string} newUsername
+   */
+  async user_changeUsername (newUsername) { // eslint-disable-line
     const query = `
     mutation {
         changeUsername(newUsername: "${newUsername}")
@@ -90,7 +144,12 @@ class FutBobServer {
     return this.API({ query, name: 'changeUsername' })
   }
 
-  async user_changePassword (oldPassword, newPassword) {
+  /**
+   *
+   * @param {string} oldPassword
+   * @param {string} newPassword
+   */
+  async user_changePassword (oldPassword, newPassword) { // eslint-disable-line
     const query = `
     mutation {
         changePassword(oldPassword: "${oldPassword}", newPassword: "${newPassword}")
@@ -98,7 +157,18 @@ class FutBobServer {
     return this.API({ query, name: 'changePassword' })
   }
 
-  async user_updateUserConnected (userInput) {
+  /**
+   *
+   * @param {any} userInput
+   * @param {string} userInput._id
+   * @param {string?} userInput.name
+   * @param {string?} userInput.surname
+   * @param {string?} userInput.dateOfBirth
+   * @param {string?} userInput.phone
+   * @param {string?} userInput.email
+   * @param {number?} userInput.sex
+   */
+  async user_updateUserConnected (userInput) { // eslint-disable-line
     const query = `
     mutation {
         updateUserConnected(userInput: ${paramsToString(userInput)})
@@ -106,7 +176,18 @@ class FutBobServer {
     return this.API({ query, name: 'updateUserConnected' })
   }
 
-  async user_updateUser (userInput) {
+  /**
+   *
+   * @param {any} userInput
+   * @param {string} userInput._id
+   * @param {string?} userInput.name
+   * @param {string?} userInput.surname
+   * @param {string?} userInput.dateOfBirth
+   * @param {string?} userInput.phone
+   * @param {string?} userInput.email
+   * @param {number?} userInput.sex
+   */
+  async user_updateUser (userInput) { // eslint-disable-line
     const query = `
     mutation {
         updateUser(userInput: ${paramsToString(userInput)})
@@ -114,7 +195,24 @@ class FutBobServer {
     return this.API({ query, name: 'updateUser' })
   }
 
-  async player_createPlayer (createPlayerInput) {
+  /**
+   *
+   * @param {any} createPlayerInput
+   * @param {string?} createPlayerInput.userId
+   * @param {any?} createPlayerInput.userData
+   * @param {string} createPlayerInput.userData.name
+   * @param {string} createPlayerInput.userData.surname
+   * @param {string} createPlayerInput.userData.dateOfBirth
+   * @param {string} createPlayerInput.userData.phone
+   * @param {string?} createPlayerInput.userData.email
+   * @param {number} createPlayerInput.userData.sex
+   * @param {any} createPlayerInput.playerData
+   * @param {number[]} createPlayerInput.playerData.positions
+   * @param {number?} createPlayerInput.playerData.state
+   * @param {number} createPlayerInput.playerData.type
+   * @param {any} createPlayerInput.playerData.radarData
+   */
+  async player_createPlayer (createPlayerInput) { // eslint-disable-line
     const query = `
     mutation {
         createPlayer(createPlayerInput: ${paramsToString(createPlayerInput)})
@@ -122,7 +220,15 @@ class FutBobServer {
     return this.API({ query, name: 'createPlayer' })
   }
 
-  async player_updatePlayer (updatePlayerInput) {
+  /**
+   *
+   * @param {any} updatePlayerInput
+   * @param {string} updatePlayerInput._id
+   * @param {number[]?} updatePlayerInput.positions
+   * @param {number?} updatePlayerInput.state
+   * @param {any?} updatePlayerInput.radarData
+   */
+  async player_updatePlayer (updatePlayerInput) { // eslint-disable-line
     const query = `
     mutation {
         updatePlayer(updatePlayerInput: ${paramsToString(updatePlayerInput)})
@@ -130,7 +236,14 @@ class FutBobServer {
     return this.API({ query, name: 'updatePlayer' })
   }
 
-  async player_deletePlayer (deletePlayerInput) {
+  /**
+   *
+   * @param {any} deletePlayerInput
+   * @param {string} deletePlayerInput._id
+   * @param {string} deletePlayerInput.idUser
+   * @param {number} deletePlayerInput.type
+   */
+  async player_deletePlayer (deletePlayerInput) { // eslint-disable-line
     const query = `
     mutation {
         deletePlayer(deletePlayerInput: ${paramsToString(deletePlayerInput)})
@@ -138,7 +251,19 @@ class FutBobServer {
     return this.API({ query, name: 'deletePlayer' })
   }
 
-  async player_getPlayers (playerFilters, fields) {
+  /**
+   *
+   * @param {any} playerFilters
+   * @param {any} fields
+   * @param {string?} fields._id
+   * @param {number[]?} fields.positions
+   * @param {number?} fields.type
+   * @param {number?} fields.state
+   * @param {any?} fields.radar
+   * @param {any?} fields.matches
+   * @param {any?} fields.user
+   */
+  async player_getPlayers (playerFilters, fields) { // eslint-disable-line
     const query = `
     query {
         getPlayers(playerFilters: ${paramsToString(playerFilters)}) ${fields}

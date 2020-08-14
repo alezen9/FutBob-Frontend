@@ -4,7 +4,7 @@ import NavList from './NavList'
 import MenuRoundedIcon from '@material-ui/icons/MenuRounded'
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded'
 import ThemeSwitch from '../ThemeModeSwitch'
-import { useConfigStore } from '../../zustand/stores'
+import { useConfigStore } from '../../zustand/configStore'
 
 const useStyles = makeStyles(theme => ({
   relativeWrapper: {

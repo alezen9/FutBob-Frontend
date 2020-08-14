@@ -141,7 +141,7 @@ const useStyles = makeStyles(theme => {
 })
 
 const FutsalField = props => {
-  const { positions = [], onPositionClick, name, values, setFieldValue, type = 'outdoor' } = props
+  const { positions = [], onPositionClick, name, values, setFieldValue, setFieldTouched, type = 'outdoor' } = props
   const [outDoor, setOutDoor] = useState(true)
   const { wrapper, typeSwitch, fieldWrapper, field, lines1, lines2, trackClass } = useStyles({ indoor: !outDoor })
 
@@ -149,8 +149,11 @@ const FutsalField = props => {
 
   const setVal = useCallback(
     val => {
-      if (setFieldValue && name) setFieldValue(name, val, false)
-    }, [setFieldValue, name, onPositionClick])
+      if (setFieldValue && setFieldTouched && name) {
+        setFieldTouched(name, true, false)
+        setFieldValue(name, val, false)
+      }
+    }, [setFieldValue, setFieldTouched, name, onPositionClick])
 
   const onPositionClickFormik = useCallback(
     pos => {

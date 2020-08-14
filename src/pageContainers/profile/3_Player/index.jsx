@@ -1,24 +1,14 @@
 import React, { useCallback, useMemo } from 'react'
 import { Grid, Button } from '@material-ui/core'
-import { get, meanBy } from 'lodash'
+import { get, meanBy, isEmpty } from 'lodash'
 import FutsalField from '../../../components/FutsalField'
 import { useFormik } from 'formik'
-import FomrikInput from '../../../components/FomrikInput'
-import { playerPhysicalStateOptions, decamelize } from '../../../utils/helpers'
+import FormikInput from '../../../components/FormikInput'
+import { playerPhysicalStateOptions, decamelize, initialRadarValues } from '../../../utils/helpers'
 import { apiInstance } from '../../../SDK'
 import { ServerMessage } from '../../../utils/serverMessages'
 import RadarChart from '../../../components/Charts/Radar'
 import { OverallScore } from '../../../assets/CustomIcon'
-
-const initialRadarValues = {
-  speed: 0,
-  stamina: 0,
-  defence: 0,
-  balance: 0,
-  ballControl: 0,
-  passing: 0,
-  finishing: 0
-}
 
 const Player = props => {
   const { item: { _id: userId, futsalPlayer }, setIsLoading, setItem, openSnackbar } = props
@@ -31,7 +21,7 @@ const Player = props => {
         let done = false
         let idPlayer
         const { _id, positions, state, radar } = values
-        if (!positions.length || [null, undefined].includes(state)) {
+        if (!positions || !positions.length || [null, undefined].includes(state)) {
           const err = 'player_fields_required'
           throw err
         }
@@ -102,11 +92,12 @@ const Player = props => {
     <Grid container spacing={3}>
       <OverallScore style={{ margin: 'auto' }} value={parseInt(meanBy(radarData, 'value'))} />
       <Grid item container xs={12} justify='center'>
-        <FomrikInput
+        <FormikInput
           sm={4}
           type='select'
           options={playerPhysicalStateOptions}
           name='state'
+          required
           label='Physical state'
           sortByLabel={false}
           {...formik}
@@ -116,43 +107,43 @@ const Player = props => {
         <RadarChart data={radarData} />
       </Grid>
       <Grid item container xs={12} sm={5} justify='center'>
-        <FomrikInput
+        <FormikInput
           type='slider'
           name='radar.speed'
           label='Speed'
           {...formik}
         />
-        <FomrikInput
+        <FormikInput
           type='slider'
           name='radar.stamina'
           label='Stamina'
           {...formik}
         />
-        <FomrikInput
+        <FormikInput
           type='slider'
           name='radar.defence'
           label='Defence'
           {...formik}
         />
-        <FomrikInput
+        <FormikInput
           type='slider'
           name='radar.balance'
           label='Balance'
           {...formik}
         />
-        <FomrikInput
+        <FormikInput
           type='slider'
           name='radar.ballControl'
           label='Ball control'
           {...formik}
         />
-        <FomrikInput
+        <FormikInput
           type='slider'
           name='radar.passing'
           label='Passing'
           {...formik}
         />
-        <FomrikInput
+        <FormikInput
           type='slider'
           name='radar.finishing'
           label='Finishing'
@@ -168,7 +159,7 @@ const Player = props => {
       <Grid item xs={12} align='right'>
         <Button
           style={{ minWidth: 150 }}
-          disabled={formik.isSubmitting}
+          disabled={formik.isSubmitting || isEmpty(formik.touched)}
           onClick={formik.handleSubmit}
           variant='contained'
           color='primary'>

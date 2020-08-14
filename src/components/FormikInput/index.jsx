@@ -54,6 +54,7 @@ const FormikInput = props => {
     rows = 10,
     grouped = false,
     required = false,
+    supplementaryOnChange,
     style = {}
   } = props
 
@@ -80,14 +81,20 @@ const FormikInput = props => {
 
   switch (type) {
     case 'slider':
-      const onSliderChange = (e, d) => props.setFieldValue(name, d, true)
+      const onSliderChange = (e, d) => {
+        props.setFieldTouched(name, true, false)
+        props.setFieldValue(name, d, true)
+      }
       return (
         <GridWrapper {...props} container spacing={2} style={{ margin: '0 0 10px 0', padding: 0 }}>
           <InputSlider {...defaultProps} onChange={onSliderChange} />
         </GridWrapper>
       )
     case 'address':
-      const onAddressChange = v => props.setFieldValue(name, v, true)
+      const onAddressChange = v => {
+        props.setFieldTouched(name, true, false)
+        props.setFieldValue(name, v, true)
+      }
       return (
         <GridWrapper {...props} container spacing={2} style={{ margin: '0 0 10px 0', padding: 0 }}>
           <InputAddress {...defaultProps} onChange={onAddressChange} />
@@ -100,7 +107,10 @@ const FormikInput = props => {
       }
       break
     case 'phone':
-      const onChangePhone = v => props.setFieldValue(name, v, true)
+      const onChangePhone = v => {
+        props.setFieldTouched(name, true, false)
+        props.setFieldValue(name, v, true)
+      }
       return (
         <GridWrapper {...props}>
           <FormControl variant={variant} className={formControl} {...{ style }} >
@@ -109,7 +119,10 @@ const FormikInput = props => {
         </GridWrapper>
       )
     case 'checkbox':
-      const onChangeCheckbox = e => props.setFieldValue(name, e.target.checked, true)
+      const onChangeCheckbox = e => {
+        props.setFieldTouched(name, true, false)
+        props.setFieldValue(name, e.target.checked, true)
+      }
       return (
         <GridWrapper {...props}>
           <FormControlLabel
@@ -124,7 +137,10 @@ const FormikInput = props => {
         </GridWrapper>
       )
     case 'switch':
-      const onChangeSwitch = e => props.setFieldValue(name, e.target.checked, true)
+      const onChangeSwitch = e => {
+        props.setFieldTouched(name, true, false)
+        props.setFieldValue(name, e.target.checked, true)
+      }
       return (
         <GridWrapper {...props}>
           <FormControlLabel
@@ -139,7 +155,10 @@ const FormikInput = props => {
         </GridWrapper>
       )
     case 'select':
-      const onChangeSelect = (e, d) => props.setFieldValue(name, e.target.value, true)
+      const onChangeSelect = (e, d) => {
+        props.setFieldTouched(name, true, false)
+        props.setFieldValue(name, e.target.value, true)
+      }
       return (
         <GridWrapper {...props}>
           <FormControl variant={variant} className={formControl} style={{ marginTop: 16, ...style }}>
@@ -150,14 +169,20 @@ const FormikInput = props => {
     case 'selectMultiple':
       const onChangeSelectMultiple = (e, d) => {
         const _v = { value: d.props.value, label: d.props.name }
-        if (_v.value === -1) props.setFieldValue(name, [_v])
-        else if (_v.value !== null) {
+        if (_v.value === -1) {
+          props.setFieldTouched(name, true, false)
+          props.setFieldValue(name, [_v])
+        } else if (_v.value !== null) {
           const newValues = [...new Set([...get(values, name, []), _v])]
+          props.setFieldTouched(name, true, false)
           props.setFieldValue(name, newValues.filter(({ value }) => value !== -1))
         }
       }
 
-      const handleChipDelete = (v) => () => props.setFieldValue(name, [...get(values, name, []).filter(val => val.value !== v)])
+      const handleChipDelete = (v) => () => {
+        props.setFieldTouched(name, true, false)
+        props.setFieldValue(name, [...get(values, name, []).filter(val => val.value !== v)])
+      }
 
       const renderChips = () => get(values, name, []).map((chip, i) => {
         return chip.value === -1
@@ -181,8 +206,13 @@ const FormikInput = props => {
     case 'autocomplete':
       const onChangeAutocomplete = (e, d) => {
         const _v = e.target.value
-        if (_v === 0) props.setFieldValue(name, d)
-        else if (!_v) props.setFieldValue(name, null)
+        if (_v === 0) {
+          props.setFieldTouched(name, true, false)
+          props.setFieldValue(name, d)
+        } else if (!_v) {
+          props.setFieldTouched(name, true, false)
+          props.setFieldValue(name, null)
+        }
       }
 
       return (
@@ -195,11 +225,19 @@ const FormikInput = props => {
     case 'autocompleteMultiple':
       const onChangeAutocompleteMultiple = (e, d) => {
         const _v = e.target.value
-        if (_v === 0) props.setFieldValue(name, d)
-        else if (!_v) props.setFieldValue(name, [])
+        if (_v === 0) {
+          props.setFieldTouched(name, true, false)
+          props.setFieldValue(name, d)
+        } else if (!_v) {
+          props.setFieldTouched(name, true, false)
+          props.setFieldValue(name, [])
+        }
       }
 
-      const handleChipDelete1 = (v) => () => props.setFieldValue(name, [...get(values, name, []).filter(val => val.value !== v)])
+      const handleChipDelete1 = (v) => () => {
+        props.setFieldTouched(name, true, false)
+        props.setFieldValue(name, [...get(values, name, []).filter(val => val.value !== v)])
+      }
 
       const renderChips1 = () => get(values, name, []).map((chip, i) => {
         return chip.value === -1 || chip.value === ''
@@ -223,11 +261,19 @@ const FormikInput = props => {
     case 'autocompleteMultipleLarge':
       const onChangeAutocompleteMultipleLarge = (e, d) => {
         const _v = e.target.value
-        if (_v === 0) props.setFieldValue(name, d)
-        else if (!_v) props.setFieldValue(name, [])
+        if (_v === 0) {
+          props.setFieldTouched(name, true, false)
+          props.setFieldValue(name, d)
+        } else if (!_v) {
+          props.setFieldTouched(name, true, false)
+          props.setFieldValue(name, [])
+        }
       }
 
-      const handleChipDelete2 = (v) => () => props.setFieldValue(name, [...get(values, name, []).filter(val => val.value !== v)])
+      const handleChipDelete2 = (v) => () => {
+        props.setFieldTouched(name, true, false)
+        props.setFieldValue(name, [...get(values, name, []).filter(val => val.value !== v)])
+      }
 
       const renderChips2 = () => get(values, name, []).map((chip, i) => {
         return chip.value === -1
@@ -253,13 +299,18 @@ const FormikInput = props => {
       const onChangeAsyncAutocomplete = (e, d) => {
         if (props.multiple) {
           const currentValue = get(values, name, [])
+          props.setFieldTouched(name, true, false)
           props.setFieldValue(name, compact(uniqBy([...currentValue, d], 'value')))
         } else {
+          props.setFieldTouched(name, true, false)
           props.setFieldValue(name, d)
         }
       }
 
-      const handleChipDelete3 = (v) => () => props.setFieldValue(name, [...get(values, name, []).filter(val => val.value !== v)])
+      const handleChipDelete3 = (v) => () => {
+        props.setFieldTouched(name, true, false)
+        props.setFieldValue(name, [...get(values, name, []).filter(val => val.value !== v)])
+      }
 
       const hasChips = get(values, `${name}.0`, false)
 
@@ -289,6 +340,7 @@ const FormikInput = props => {
         const isValidDate = moment(v).isValid()
         if (isValidDate) {
           const isoDate = moment(v).toISOString()
+          props.setFieldTouched(name, true, false)
           props.setFieldValue(name, isoDate)
         }
       }
@@ -319,7 +371,7 @@ const FormikInput = props => {
         </GridWrapper>
       )
     default:
-      inputProps = {}
+      inputProps = { ...props.inputProps || {} }
       break
   }
 
@@ -333,7 +385,11 @@ const FormikInput = props => {
           type={type}
           className={textField}
           value={get(values, name, '') || ''}
-          onChange={handleChange}
+          onChange={e => {
+            props.setFieldTouched(name, true, false)
+            handleChange(e)
+            if (supplementaryOnChange) supplementaryOnChange(e.target.value)
+          }}
           margin='normal'
           disabled={disabled}
           helperText={helperText}

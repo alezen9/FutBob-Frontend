@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react'
 import { Grid, Button } from '@material-ui/core'
-import FormikInput from '../../../components/FomrikInput'
+import FormikInput from '../../../components/FormikInput'
 import { useFormik } from 'formik'
 import { apiInstance } from '../../../SDK'
 import { ServerMessage } from '../../../utils/serverMessages'
 import { privateInfoSchema } from '../validations'
-import { get } from 'lodash'
+import { get, isEmpty } from 'lodash'
 
 const Private = props => {
   const {
@@ -83,7 +83,7 @@ const Private = props => {
         <Grid item xs={12} align='right'>
           <Button
             style={{ minWidth: 150 }}
-            disabled={formik.isSubmitting}
+            disabled={formik.isSubmitting || isEmpty(formik.touched)}
             onClick={formik.handleSubmit}
             variant='contained'
             color='primary'>

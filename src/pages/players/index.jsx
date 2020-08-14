@@ -1,11 +1,15 @@
 import React, { useRef, useEffect } from 'react'
-import PlayersContainer from '../pageContainers/players'
-import { apiInstance } from '../SDK'
-import PageTransition from '../components/PageTransition'
+import PlayersContainer from '../../pageContainers/players'
+import PageTransition from '../../components/PageTransition'
+import { useRouter } from 'next/router'
 
 const Players = props => {
   const isMounted = useRef(true)
+  const router = useRouter()
+
   useEffect(() => {
+    router.prefetch('/players/create')
+    router.prefetch('/players/[id]')
     return () => {
       isMounted.current = false
     }
@@ -19,4 +23,4 @@ const Players = props => {
   )
 }
 
-export default Players
+export default React.memo(Players)

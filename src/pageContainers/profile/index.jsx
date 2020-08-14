@@ -1,47 +1,19 @@
 import React, { useEffect, useCallback, useMemo } from 'react'
-import { useUserStore, useConfigStore } from '../../zustand/stores'
-import { apiInstance } from '../../SDK'
-import { get, isEmpty } from 'lodash'
+import { useUserStore } from '../../zustand/userStore'
+import { useConfigStore } from '../../zustand/configStore'
+import { isEmpty } from 'lodash'
 import FutBobTabs, { FutBobTab } from '../../components/Tabs'
 import General from './1_General'
 import Private from './2_Private'
 import Player from './3_Player'
-
-const userFields = `{
-    _id,
-    name,
-    surname,
-    dateOfBirth,
-    sex,
-    futsalPlayer {
-      _id,
-      positions,
-      state,
-      type,
-      radar {
-        speed,
-        stamina,
-        defence,
-        balance,
-        ballControl,
-        passing,
-        finishing
-      }
-    }
-    avatar,
-    username,
-    email,
-    phone
-  }`
+import { ServerMessage } from '../../utils/serverMessages'
 
 const ProfileContainer = props => {
-  const { isMounted = false } = props
-  const { item, setItem } = useUserStore()
+  const { item, setItem, getData: getItem } = useUserStore()
   const { openSnackbar, setIsLoading } = useConfigStore(state => ({
     openSnackbar: state.openSnackbar,
     setIsLoading: state.setIsLoading
   }))
-
   const tabProps = useMemo(() => ({
     item,
     setItem,
@@ -53,14 +25,11 @@ const ProfileContainer = props => {
     async () => {
       setIsLoading(true)
       try {
-        if (isEmpty(item)) {
-          const item = await apiInstance.user_getUserConnected(userFields)
-          if (isMounted) setItem(item)
-        }
+        if (isEmpty(item)) await getItem()
       } catch (error) {
         openSnackbar({
           variant: 'error',
-          message: get(error, 'message', null) || 'Username o password errati'
+          message: ServerMessage[error] || ServerMessage.generic
         })
       }
       setIsLoading(false)

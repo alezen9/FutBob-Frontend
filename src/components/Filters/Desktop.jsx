@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Grid, Button, makeStyles, IconButton } from '@material-ui/core'
-import { Actions, Inputs } from './helpers'
+import { Actions, Inputs, SearchBox } from './helpers'
 import CondexoDrawer from '../../components/Drawer'
 import FilterListRoundedIcon from '@material-ui/icons/FilterListRounded'
 
@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const DesktopFilters = props => {
-  const { actionsGridProps = {}, desktopActions, filters = [], otherActions = [] } = props
+  const { actionsGridProps = {}, desktopActions, filters = [], otherActions = [], searchBox } = props
   const [openDrawer, setOpenDrawer] = useState(false)
   const classes = useStyles()
 
@@ -31,6 +31,7 @@ const DesktopFilters = props => {
 
   return (
     <Grid container spacing={3} style={{ position: 'relative' }}>
+      {searchBox && <SearchBox {...searchBox} />}
       {filters.length > 2
         ? <>
           <Grid container item xs={12} spacing={2} direction='row-reverse' className={`${classes.desktopFiltersButton} ${classes.opacityFix}`}>

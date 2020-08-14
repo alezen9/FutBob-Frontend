@@ -1,20 +1,22 @@
-import create from 'zustand'
-import produce from 'immer'
-import { apiInstance } from '../SDK'
-import cleanDeep from 'clean-deep'
 import { FutBobPalette } from '../../palette'
-
-const _immer = config => (set, get, api) => config(fn => set(produce(fn)), get, api)
+import create from 'zustand'
+import { _immer } from './helpers'
 
 export const [useConfigStore, apiConfig] = create(_immer((set, get, api) => ({
   themeType: 'light',
   isLogged: false,
   menuOpen: false,
   isLoading: false,
+  pageTitle: 'Dashboard',
   snackbar: {
     open: false,
     variant: 'success',
     message: 'Noice!'
+  },
+  setPageTitle: title => {
+    set(state => {
+      state.pageTitle = title
+    })
   },
   openSnackbar: data => {
     set(state => {
@@ -53,54 +55,6 @@ export const [useConfigStore, apiConfig] = create(_immer((set, get, api) => ({
   setIsLoading: bool => {
     set(state => {
       state.isLoading = bool
-    })
-  }
-})))
-
-export const [useUserStore, apiUser] = create(_immer((set, get, api) => ({
-  item: {},
-  setItem: (fields = {}) => {
-    set(state => {
-      state.item = {
-        ...state.item,
-        ...cleanDeep(fields)
-      }
-    })
-  },
-  reset: () => {
-    set(state => {
-      state.item = {}
-    })
-  },
-  refreshItem: async () => {
-    const userFields = `{
-      _id,
-      name,
-      surname,
-      dateOfBirth,
-      sex,
-      futsalPlayer {
-        _id,
-        positions,
-        state,
-        radar {
-          speed,
-          stamina,
-          defence,
-          balance,
-          ballControl,
-          passing,
-          finishing
-        }
-      },
-      avatar,
-      username,
-      email,
-      phone
-    }`
-    const item = await apiInstance.user_getUserConnected(userFields)
-    set(state => {
-      state.item = cleanDeep(item)
     })
   }
 })))
