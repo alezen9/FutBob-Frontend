@@ -1,5 +1,5 @@
 {
-  "name": "condexo-backoffice",
+  "name": "futbob-frontend",
   "version": "4.0.0",
   "private": true,
   "dependencies": {
@@ -29,7 +29,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "next start --port=3000",
+    "start": "NODE_ENV=production ENV=production next start --port=3000",
     "start-test": "NODE_ENV=production ENV=test next start",
     "build-test": "NODE_ENV=production ENV=test PORT=3000 next build",
     "build-production": "NODE_ENV=production ENV=production PORT=3000 next build",

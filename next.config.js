@@ -5,9 +5,9 @@ const getApiUrl = (config = '') => {
   console.log(`Listening on port ${process.env.PORT || 3000}`)
   switch (process.env.ENV || 'test') {
     case 'test':
-      return 'http://192.168.0.15:7000'
-    case 'production':
       return 'http://localhost:7000'
+    case 'production':
+      return ' https://144.202.1.31:7000'
     default:
       return 'http://localhost:7000'
   }
