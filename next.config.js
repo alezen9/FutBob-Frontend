@@ -7,7 +7,7 @@ const getApiUrl = (config = '') => {
     case 'test':
       return 'http://localhost:7000'
     case 'production':
-      return ' https://144.202.1.31:7000'
+      return ' http://144.202.1.31:7000'
     default:
       return 'http://localhost:7000'
   }
@@ -24,8 +24,8 @@ module.exports = withPWA({
     autoPrerender: false
   },
   pwa: {
-    disable: process.NODE_ENV !== 'production',
-    register: process.NODE_ENV === 'production',
+    disable: true,
+    register: false,
     dest: 'public',
     maximumFileSizeToCacheInBytes: 3000000, // 3MB
     sourcemap: false
