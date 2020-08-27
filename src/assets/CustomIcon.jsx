@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core'
 import ExpandLessRoundedIcon from '@material-ui/icons/ExpandLessRounded'
 import CancelRoundedIcon from '@material-ui/icons/CancelRounded'
 import { FutBobPalette } from '../../palette'
+import { getScoreColor } from '../utils/helpers'
 
 const useStyles = makeStyles(theme => ({
   topFormIcon: {
@@ -123,11 +124,7 @@ export const OverallScore = props => {
   const { value = 0, autoColor = true, ...rest } = props
   const color = useMemo(() => {
     if (!autoColor) return FutBobPalette.typographyGrey
-    if (value < 40) return 'crimson'
-    if (value < 65) return 'orange'
-    if (value < 85) return FutBobPalette.darkGreen
-    if (value <= 100) return '#B29600'
-    return FutBobPalette.typographyGrey
+    return getScoreColor(value)
   }, [value, autoColor])
 
   const { overallScore } = useStyles({ color })
@@ -137,4 +134,12 @@ export const OverallScore = props => {
     </SvgIcon>
     <span>{value}</span>
   </span>
+}
+
+export const JerseyIcon = props => {
+  return (
+    <SvgIcon {...props} viewBox='0 0 531.44 474.27'>
+      <path fill='none' stroke='currentColor' strokeMiterlimit={10} strokeWidth={50} d='M683,590.47H567.3a30,30,0,0,1-30-30V367.72a10,10,0,0,0-17.07-7.07l-5,5a10,10,0,0,1-14.14,0l-50.05-50.05a30,30,0,0,1-.21-42.22l81.06-82.7a30,30,0,0,1,14-8.07l60.74-15.44a29.75,29.75,0,0,1,15.08.08c18.2,4.87,68.71,15.43,122.19.16a29.85,29.85,0,0,1,15.5-.2L820,182.57a30,30,0,0,1,14,8.07l81.06,82.7a30,30,0,0,1-.21,42.22l-50,50.05a10,10,0,0,1-14.14,0l-5-5a10,10,0,0,0-17.07,7.07V560.47a30,30,0,0,1-30,30Z' transform='translate(-417.28 -141.2)' />
+    </SvgIcon>
+  )
 }

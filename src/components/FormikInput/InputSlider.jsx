@@ -3,10 +3,19 @@ import { makeStyles } from '@material-ui/core/styles'
 import Slider from '@material-ui/core/Slider'
 import Typography from '@material-ui/core/Typography'
 import { get } from 'lodash'
+import { FutBobPalette } from '../../../palette'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     width: '100%'
+  },
+  thumb: {
+    '& > span > span': {
+      color: `${FutBobPalette.typographyGrey}`,
+      backgroundColor: theme.type === 'dark'
+        ? '#333'
+        : `currentColor`
+    }
   }
 }))
 
@@ -41,6 +50,7 @@ const Inputslider = props => {
     <div className={classes.root}>
       <Typography gutterBottom>{label}</Typography>
       <Slider
+        classes={{ thumb: classes.thumb }}
         marks={marks}
         value={localVal}
         onChange={(e, d) => setLocalVal(d)}

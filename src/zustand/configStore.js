@@ -8,11 +8,7 @@ export const [useConfigStore, apiConfig] = create(_immer((set, get, api) => ({
   menuOpen: false,
   isLoading: false,
   pageTitle: 'Dashboard',
-  snackbar: {
-    open: false,
-    variant: 'success',
-    message: 'Noice!'
-  },
+  snackbar: { open: false },
   setPageTitle: title => {
     set(state => {
       state.pageTitle = title
@@ -25,10 +21,7 @@ export const [useConfigStore, apiConfig] = create(_immer((set, get, api) => ({
   },
   closeSnackbar: () => {
     set(state => {
-      state.snackbar = {
-        open: false,
-        variant: 'success',
-        message: 'Noice!' }
+      state.snackbar = { open: false }
     })
   },
   setIsLogged: bool => {

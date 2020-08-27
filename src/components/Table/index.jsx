@@ -13,6 +13,7 @@ import CondexoLoadingMask from '../ContentLoader/LoadingMask'
 import ContentLoader from '../ContentLoader'
 import { Typography, useTheme, useMediaQuery } from '@material-ui/core'
 import { camelize } from '../../utils/helpers'
+import { FutBobPalette } from '../../../palette'
 
 const useStyles = makeStyles(theme => ({
   table: {
@@ -24,6 +25,9 @@ const useStyles = makeStyles(theme => ({
       margin: '0 -1em',
       overflowX: 'hidden'
     }
+  },
+  userRow: {
+    backgroundColor: FutBobPalette.userTableRowBackgroundColor
   }
 }))
 
@@ -34,11 +38,12 @@ const FutBobTable = React.memo(props => {
   const classes = useStyles()
   const [tableId] = useState(uniqueId('table-'))
 
-  const { _headers = [], _data = [] } = useMemo(() => {
+  const { _headers = [], _data = [], _isUserIndexRow } = useMemo(() => {
     if (!headers.length) {
       return {
         _headers: [],
-        _data: []
+        _data: [],
+        _isUserIndexRow: undefined
       }
     }
     return setData({ headers, data, withActions })
@@ -87,7 +92,7 @@ const FutBobTable = React.memo(props => {
                         mainHeaders={mainHeaders}
                         withActions={withActions}
                       />
-                      : <TableRow key={`${tableId}row-${i}`}>
+                      : <TableRow key={`${tableId}row-${i}`} {..._isUserIndexRow === i && { className: classes.userRow }}>
                         {Object.entries(row).map(([key, value], j) => {
                           const found = key === 'actions'
                             ? undefined

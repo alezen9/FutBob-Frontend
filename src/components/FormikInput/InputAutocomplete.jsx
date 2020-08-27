@@ -2,16 +2,22 @@ import React, { useMemo, useRef } from 'react'
 import TextField from '@material-ui/core/TextField'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import { sortBy, get } from 'lodash'
-import { makeStyles, FormHelperText } from '@material-ui/core'
+import { makeStyles, FormHelperText, useTheme, useMediaQuery, ListSubheader } from '@material-ui/core'
 import { FutBobPalette } from '../../../palette'
+import { VariableSizeList } from 'react-window'
 
 const useStyles = makeStyles(theme => ({
   paper: {
     boxShadow: theme.shadows[24]
   },
-  listbox: {
-    padding: '.5em'
-  },
+  listbox: ({ large }) => ({
+    padding: '.5em',
+    ...large && {
+      '& > ul': {
+        margin: 0
+      }
+    }
+  }),
   option: {
     position: 'relative',
     padding: '.5em 1em',
@@ -54,29 +60,50 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const InputAutocomplete = ({ options = [], grouped, label, id, name, required, handleChange, values, disabled, errors, helperText, onChange, variant, sortByLabel = true }) => {
-  const classes = useStyles({ error: !!get(errors, name, false) })
+const InputAutocomplete = props => {
+  const {
+    options = [],
+    grouped,
+    label,
+    id,
+    name,
+    values,
+    disabled,
+    errors,
+    onChange,
+    sortByLabel = true,
+    multiple = false,
+    large = false
+  } = props
+  const classes = useStyles({ error: !!get(errors, name, false), large })
   const optionsRef = useRef(options)
   const optionsToRender = useMemo(() => {
+    const valuesKeys = multiple
+      ? (get(values, name, []) || []).map(({ value }) => value)
+      : [get(values, `${name}.value`, null)]
     return sortByLabel
-      ? sortBy(optionsRef.current.filter(({ value }) => value !== get(values, `${name}.value`, null)), ['label'])
-      : optionsRef.current.filter(({ value }) => value !== get(values, `${name}.value`, null))
-  }, [values[name]])
+      ? sortBy(optionsRef.current.filter(({ value }) => !valuesKeys.includes(value)), ['label'])
+      : optionsRef.current.filter(({ value }) => !valuesKeys.includes(value))
+  }, [get(values, name, null), multiple])
 
   return (
     <>
       <Autocomplete
         id={id}
+        multiple={multiple}
         freeSolo
+        disabled={disabled}
         classes={classes}
-        {...grouped && {
+        {...grouped && !large && {
           groupBy: option => option.label[0].toUpperCase()
         }}
-        value={values[name] || null}
+        value={get(values, name, multiple ? [] : null)}
         options={optionsToRender}
         onChange={onChange}
         ChipProps={{ style: { display: 'none' } }}
         getOptionLabel={option => option.label || ''}
+        renderOption={option => get(option, 'component', option.label || '')}
+        {...large && { ListboxComponent }}
         renderInput={params => <TextField {...params} label={label} variant='outlined' />}
       />
       {get(errors, name, false) && <FormHelperText margin='dense' style={{ color: 'red', margin: '12px 14px 0 14px' }} id={`${id}_error`}>{errors[name]}</FormHelperText>}
@@ -85,3 +112,76 @@ const InputAutocomplete = ({ options = [], grouped, label, id, name, required, h
 }
 
 export default React.memo(InputAutocomplete)
+
+const LISTBOX_PADDING = 8
+
+function renderRow (props) {
+  const { data, index, style } = props
+  return React.cloneElement(data[index], {
+    style: {
+      ...style,
+      top: style.top + LISTBOX_PADDING
+    }
+  })
+}
+
+const OuterElementContext = React.createContext({})
+
+const OuterElementType = React.forwardRef((props, ref) => {
+  const outerProps = React.useContext(OuterElementContext)
+  return <div ref={ref} {...props} {...outerProps} />
+})
+
+const useResetCache = data => {
+  const ref = React.useRef(null)
+  React.useEffect(() => {
+    if (ref.current != null) {
+      ref.current.resetAfterIndex(0, true)
+    }
+  }, [data])
+  return ref
+}
+
+// Adapter for react-window
+const ListboxComponent = React.forwardRef(function ListboxComponent (props, ref) {
+  const { children, ...other } = props
+  const itemData = React.Children.toArray(children)
+  const itemCount = itemData.length
+  const itemSize = 52
+
+  const getChildSize = (child) => {
+    if (React.isValidElement(child) && child.type === ListSubheader) {
+      return 52
+    }
+    return itemSize
+  }
+
+  const getHeight = () => {
+    if (itemCount > 8) {
+      return 8 * itemSize
+    }
+    return itemData.map(getChildSize).reduce((a, b) => a + b, 0)
+  }
+
+  const gridRef = useResetCache(itemCount)
+
+  return (
+    <div ref={ref}>
+      <OuterElementContext.Provider value={other}>
+        <VariableSizeList
+          itemData={itemData}
+          height={getHeight() + 2 * LISTBOX_PADDING}
+          width='100%'
+          ref={gridRef}
+          outerElementType={OuterElementType}
+          innerElementType='ul'
+          itemSize={(index) => getChildSize(itemData[index])}
+          overscanCount={5}
+          itemCount={itemCount}
+        >
+          {renderRow}
+        </VariableSizeList>
+      </OuterElementContext.Provider>
+    </div>
+  )
+})

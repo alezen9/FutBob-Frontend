@@ -1,6 +1,7 @@
 import React from 'react'
 import { Checkbox, makeStyles } from '@material-ui/core'
 import { FutBobPalette } from '../../../palette'
+import { get } from 'lodash'
 
 const useStyles = makeStyles(theme => ({
   wrapper: {
@@ -19,7 +20,7 @@ const InputCheckbox = ({ name, onChange, values }) => {
       <Checkbox
         classes={{ root: classes.rootCheckbox }}
         name={name}
-        checked={values[name] || false}
+        checked={get(values, name, false)}
         onChange={onChange}
         color='primary'
         margin='normal'

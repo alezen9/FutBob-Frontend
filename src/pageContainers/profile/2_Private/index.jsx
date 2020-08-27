@@ -40,7 +40,7 @@ const Private = props => {
       } catch (error) {
         openSnackbar({
           variant: 'error',
-          message: ServerMessage[error] || ServerMessage.generic
+          message: ServerMessage[error] || get(error, 'message', error)
         })
       }
       setIsLoading(false)

@@ -58,7 +58,7 @@ const useStyles = makeStyles(theme => ({
 
 const SignIn = props => {
   const classes = useStyles()
-  const { openSnackbar, setIsLogged, themeType } = useConfigStore(state => ({
+  const { openSnackbar, setIsLogged, isLogged, themeType } = useConfigStore(state => ({
     openSnackbar: state.openSnackbar,
     setIsLogged: state.setIsLogged,
     themeType: state.themeType
@@ -70,7 +70,6 @@ const SignIn = props => {
     try {
       const { token } = await apiInstance.user_login(values, `{ token }`)
       if (token) {
-        // window.localStorage.setItem('FutBobToken', token)
         apiInstance.setToken(token)
         setIsLogged(true)
         router.push('/')
@@ -88,6 +87,8 @@ const SignIn = props => {
     initialValues: {},
     onSubmit
   })
+
+  if (isLogged) return null
 
   return (
     <Grid container justify='space-between' alignItems='center' direction='column' className={classes.main}>

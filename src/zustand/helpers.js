@@ -8,19 +8,54 @@ export const userFields = `{
     surname,
     dateOfBirth,
     sex,
+    country,
     futsalPlayer {
       _id,
       positions,
       state,
       type,
-      radar {
-        speed,
-        stamina,
-        defence,
-        balance,
-        ballControl,
-        passing,
-        finishing
+      score {
+        pace {
+          acceleration,
+          sprintSpeed
+        },
+        shooting {
+          positioning,
+          finishing,
+          shotPower,
+          longShots,
+          volleys,
+          penalties
+        },
+        passing {
+          vision,
+          crossing,
+          freeKick,
+          shortPassing,
+          longPassing,
+          curve
+        },
+        dribbling {
+          agility,
+          balance,
+          reactions,
+          ballControl,
+          dribbling,
+          composure
+        },
+        defense {
+          interceptions,
+          heading,
+          defensiveAwareness,
+          standingTackle,
+          slidingTackle
+        },
+        physical {
+          jumping,
+          stamina,
+          strength,
+          aggression
+        }
       }
     }
     avatar,
@@ -37,18 +72,53 @@ export const playerFields = `{
       surname,
       dateOfBirth,
       sex,
+      country,
       phone,
       email
     },
     positions,
     state,
-    radar {
-      speed,
-      stamina,
-      defence,
-      balance,
-      ballControl,
-      passing,
-      finishing
+    score {
+      pace {
+        acceleration,
+        sprintSpeed
+      },
+      shooting {
+        positioning,
+        finishing,
+        shotPower,
+        longShots,
+        volleys,
+        penalties
+      },
+      passing {
+        vision,
+        crossing,
+        freeKick,
+        shortPassing,
+        longPassing,
+        curve
+      },
+      dribbling {
+        agility,
+        balance,
+        reactions,
+        ballControl,
+        dribbling,
+        composure
+      },
+      defense {
+        interceptions,
+        heading,
+        defensiveAwareness,
+        standingTackle,
+        slidingTackle
+      },
+      physical {
+        jumping,
+        stamina,
+        strength,
+        aggression
+      }
     }
   }`

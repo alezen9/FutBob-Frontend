@@ -1,14 +1,25 @@
 import React, { useEffect, useCallback, useMemo } from 'react'
 import { useUserStore } from '../../zustand/userStore'
 import { useConfigStore } from '../../zustand/configStore'
-import { isEmpty } from 'lodash'
+import { get, isEmpty } from 'lodash'
 import FutBobTabs, { FutBobTab } from '../../components/Tabs'
 import General from './1_General'
 import Private from './2_Private'
 import Player from './3_Player'
 import { ServerMessage } from '../../utils/serverMessages'
+import useSWR, { mutate, trigger } from 'swr'
+import { apiInstance } from '../../SDK'
+import { userFields } from '../../zustand/helpers'
+
+const key = 'GET_USER_CONNECTED'
+
+const profileFetcher = async key => {
+  return apiInstance.user_getUserConnected(userFields)
+}
 
 const ProfileContainer = props => {
+  // const res = useSWR(key, profileFetcher)
+  // console.log(res)
   const { item, setItem, getData: getItem } = useUserStore()
   const { openSnackbar, setIsLoading } = useConfigStore(state => ({
     openSnackbar: state.openSnackbar,
@@ -29,7 +40,7 @@ const ProfileContainer = props => {
       } catch (error) {
         openSnackbar({
           variant: 'error',
-          message: ServerMessage[error] || ServerMessage.generic
+          message: ServerMessage[error] || get(error, 'message', error)
         })
       }
       setIsLoading(false)

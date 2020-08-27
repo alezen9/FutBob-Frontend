@@ -6,9 +6,6 @@ import { get, uniqBy, uniqueId, compact } from 'lodash'
 import Lock from '@material-ui/icons/Lock'
 import LockOpen from '@material-ui/icons/LockOpen'
 import InputSelect from './InputSelect'
-import InputSelectMultiple from './InputSelectMultiple'
-import InputAutocompleteMultiple from './InputAutocompleteMultiple'
-import InputAutocompleteMultipleLarge from './InputAutocompleteMultipleLarge'
 import InputCheckbox from './InputCheckbox'
 import InputPhone from './InputPhone'
 import InputAddress from './InputAddress'
@@ -78,6 +75,8 @@ const FormikInput = props => {
   </InputAdornment>
 
   let inputProps = {}
+
+  const hasChips = get(values, `${name}.0`, false)
 
   switch (type) {
     case 'slider':
@@ -156,26 +155,19 @@ const FormikInput = props => {
       )
     case 'select':
       const onChangeSelect = (e, d) => {
-        props.setFieldTouched(name, true, false)
-        props.setFieldValue(name, e.target.value, true)
-      }
-      return (
-        <GridWrapper {...props}>
-          <FormControl variant={variant} className={formControl} style={{ marginTop: 16, ...style }}>
-            <InputSelect {...defaultProps} formControl={formControl} onChange={onChangeSelect} />
-          </FormControl>
-        </GridWrapper>
-      )
-    case 'selectMultiple':
-      const onChangeSelectMultiple = (e, d) => {
-        const _v = { value: d.props.value, label: d.props.name }
-        if (_v.value === -1) {
+        if (props.multiple) {
+          const _v = { value: d.props.value, label: get(d, 'props.children.props.children.props.label', '-') }
+          if (_v.value === -1) {
+            props.setFieldTouched(name, true, false)
+            props.setFieldValue(name, [_v])
+          } else if (_v.value !== null) {
+            const newValues = [...new Set([...get(values, name, []), _v])]
+            props.setFieldTouched(name, true, false)
+            props.setFieldValue(name, newValues.filter(({ value }) => value !== -1))
+          }
+        } else {
           props.setFieldTouched(name, true, false)
-          props.setFieldValue(name, [_v])
-        } else if (_v.value !== null) {
-          const newValues = [...new Set([...get(values, name, []), _v])]
-          props.setFieldTouched(name, true, false)
-          props.setFieldValue(name, newValues.filter(({ value }) => value !== -1))
+          props.setFieldValue(name, e.target.value, true)
         }
       }
 
@@ -184,7 +176,7 @@ const FormikInput = props => {
         props.setFieldValue(name, [...get(values, name, []).filter(val => val.value !== v)])
       }
 
-      const renderChips = () => get(values, name, []).map((chip, i) => {
+      const renderChips = () => (get(values, name, []) || []).map((chip, i) => {
         return chip.value === -1
           ? <Fragment key={i} />
           : <Chip
@@ -195,106 +187,51 @@ const FormikInput = props => {
             color='primary'
           />
       })
+
       return (
         <GridWrapper {...props}>
           <FormControl variant={variant} className={formControl} style={{ marginTop: 16, ...style }}>
-            <InputSelectMultiple {...defaultProps} formControl={formControl} onChange={onChangeSelectMultiple} />
+            <InputSelect {...defaultProps} formControl={formControl} onChange={onChangeSelect} />
           </FormControl>
-          {renderChips()}
+          {hasChips && renderChips()}
         </GridWrapper>
       )
     case 'autocomplete':
       const onChangeAutocomplete = (e, d) => {
-        const _v = e.target.value
-        if (_v === 0) {
+        const { component, ...rest } = d || {}
+        if (get(d, 'value', null)) {
           props.setFieldTouched(name, true, false)
-          props.setFieldValue(name, d)
-        } else if (!_v) {
+          props.setFieldValue(name, rest)
+        } else if (!get(d, 'value', null)) {
           props.setFieldTouched(name, true, false)
-          props.setFieldValue(name, null)
+          props.setFieldValue(name, props.multiple ? [] : null)
         }
       }
 
-      return (
-        <GridWrapper {...props}>
-          <FormControl variant={variant} className={formControl} style={{ marginTop: 16, ...style }}>
-            <InputAutocomplete {...defaultProps} grouped={grouped} formControl={formControl} onChange={onChangeAutocomplete} />
-          </FormControl>
-        </GridWrapper>
-      )
-    case 'autocompleteMultiple':
-      const onChangeAutocompleteMultiple = (e, d) => {
-        const _v = e.target.value
-        if (_v === 0) {
-          props.setFieldTouched(name, true, false)
-          props.setFieldValue(name, d)
-        } else if (!_v) {
-          props.setFieldTouched(name, true, false)
-          props.setFieldValue(name, [])
-        }
-      }
-
-      const handleChipDelete1 = (v) => () => {
+      const handleChipDeleteAutoCompleteMultiple = (v) => () => {
         props.setFieldTouched(name, true, false)
         props.setFieldValue(name, [...get(values, name, []).filter(val => val.value !== v)])
       }
 
-      const renderChips1 = () => get(values, name, []).map((chip, i) => {
+      const renderChipsAutoCompleteMultiple = () => get(values, name, []).map((chip, i) => {
         return chip.value === -1 || chip.value === ''
           ? <Fragment key={i} />
           : <Chip
             className={chipClass}
             label={chip.label}
             key={i}
-            onDelete={handleChipDelete1(chip.value)}
+            onDelete={handleChipDeleteAutoCompleteMultiple(chip.value)}
             color='primary'
           />
       })
       return (
         <GridWrapper {...props}>
           <FormControl variant={variant} className={formControl} style={{ marginTop: 16, ...style }}>
-            <InputAutocompleteMultiple {...defaultProps} grouped={grouped} formControl={formControl} onChange={onChangeAutocompleteMultiple} />
+            <InputAutocomplete {...defaultProps} grouped={grouped} formControl={formControl} onChange={onChangeAutocomplete} />
           </FormControl>
-          {renderChips1()}
+          {hasChips && renderChipsAutoCompleteMultiple()}
         </GridWrapper>
       )
-    case 'autocompleteMultipleLarge':
-      const onChangeAutocompleteMultipleLarge = (e, d) => {
-        const _v = e.target.value
-        if (_v === 0) {
-          props.setFieldTouched(name, true, false)
-          props.setFieldValue(name, d)
-        } else if (!_v) {
-          props.setFieldTouched(name, true, false)
-          props.setFieldValue(name, [])
-        }
-      }
-
-      const handleChipDelete2 = (v) => () => {
-        props.setFieldTouched(name, true, false)
-        props.setFieldValue(name, [...get(values, name, []).filter(val => val.value !== v)])
-      }
-
-      const renderChips2 = () => get(values, name, []).map((chip, i) => {
-        return chip.value === -1
-          ? <Fragment key={i} />
-          : <Chip
-            className={chipClass}
-            label={chip.label}
-            key={i}
-            onDelete={handleChipDelete2(chip.value)}
-            color='primary'
-          />
-      })
-      return (
-        <GridWrapper {...props}>
-          <FormControl variant={variant} className={formControl} style={{ marginTop: 16, ...style }}>
-            <InputAutocompleteMultipleLarge {...defaultProps} formControl={formControl} onChange={onChangeAutocompleteMultipleLarge} />
-          </FormControl>
-          {renderChips2()}
-        </GridWrapper>
-      )
-
     case 'asyncAutocomplete':
       const onChangeAsyncAutocomplete = (e, d) => {
         if (props.multiple) {
@@ -311,8 +248,6 @@ const FormikInput = props => {
         props.setFieldTouched(name, true, false)
         props.setFieldValue(name, [...get(values, name, []).filter(val => val.value !== v)])
       }
-
-      const hasChips = get(values, `${name}.0`, false)
 
       const renderChips3 = () => compact(get(values, name, []).map(chip => {
         return !chip || chip.value === -1 || chip.value === ''

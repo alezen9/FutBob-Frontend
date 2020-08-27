@@ -3,10 +3,13 @@ import PageTransition from '../../components/PageTransition'
 import PlayerDetail from '../../pageContainers/players/show'
 import { useConfigStore } from '../../zustand/configStore'
 import { usePlayerStore } from '../../zustand/playersStore'
+import {useUserStore} from '../../zustand/userStore'
 import { get, isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
 import GoBack from '../../components/GoBack'
 import { ServerMessage } from '../../utils/serverMessages'
+import FaceRoundedIcon from '@material-ui/icons/FaceRounded'
+
 
 const Player = props => {
   const isMounted = useRef(true)
@@ -17,7 +20,9 @@ const Player = props => {
     setIsLoading: state.setIsLoading,
     setPageTitle: state.setPageTitle
   }))
-  const { name, surname, resetItem, getItem } = usePlayerStore(state => ({
+  const item = useUserStore(state => state.item)
+  const { name, surname, resetItem, getItem, userId } = usePlayerStore(state => ({
+    userId: get(state, 'item.user._id', null),
     name: get(state, 'item.user.name', ''),
     surname: get(state, 'item.user.surname', ''),
     resetItem: state.resetItem,
@@ -31,14 +36,9 @@ const Player = props => {
         try {
           await getItem(id)
         } catch (error) {
-          console.log('')
-          console.log('')
-          console.log('error => ', error)
-          console.log('')
-          console.log('')
           openSnackbar({
             variant: 'error',
-            message: ServerMessage[error] || ServerMessage.generic
+            message: ServerMessage[error] || get(error, 'message', error)
           })
         }
         setIsLoading(false)
@@ -56,8 +56,15 @@ const Player = props => {
   }, [resetItem])
 
   useEffect(() => {
-    setPageTitle(`${surname} ${name}`)
-  }, [name, surname])
+    const _isUser = userId === item._id
+    const pageTitle = _isUser
+    ? <span style={{display: 'flex', alignItems: 'center'}}>
+      <FaceRoundedIcon style={{marginRight: '.5em', fontSize: '1.2em' }}/>
+      {`${surname} ${name}`}
+    </span>
+    : `${surname} ${name}`
+  setPageTitle(pageTitle)
+  }, [name, surname, userId, item._id])
 
   useEffect(() => {
     return () => {

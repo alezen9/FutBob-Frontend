@@ -1,25 +1,29 @@
 import React from 'react'
 import { get, mean } from 'lodash'
 import { OverallScore } from '../../assets/CustomIcon'
-import { playerPhysicalStateOptions, getLabelsByValues, futsalPositionsOptions } from '../../utils/helpers'
+import { playerPhysicalStateOptions, getLabelsByValues, futsalPositionsOptions, initialScoreValues } from '../../utils/helpers'
 import moment from 'moment'
 import NavigateNextRoundedIcon from '@material-ui/icons/NavigateNextRounded'
 import ListField from '../../components/ListField'
 import SearchRoundedIcon from '@material-ui/icons/SearchRounded'
+import DeleteForeverRoundedIcon from '@material-ui/icons/DeleteForeverRounded'
 import { InputAdornment } from '@material-ui/core'
+import { getMeanScoreField } from '../../components/FormikInput/PlayerScoreInputs/SingleScore'
 
 export const headers = [
   { name: 'Name', style: { minWidth: 230 } },
-  { name: 'Physical state', style: { minWidth: 160, textAlign: 'left' } },
-  { name: 'Positions', style: { minWidth: 190, textAlign: 'left' } },
+  { name: 'Physical state', style: { minWidth: 130, textAlign: 'left' } },
+  { name: 'Positions', style: { minWidth: 100, textAlign: 'left' } },
   { name: 'Age', style: { maxWidth: 70 } },
   { name: 'Phone', style: { minWidth: 180 } }
 ]
 
-export const getPlayerDataRow = ({ isLoading, openSnackbar, getData, openDialog, goToDetails }) => playerData => {
-  const playerValue = parseInt(mean(Object.values(get(playerData, 'radar', {}))))
+export const getPlayerDataRow = ({ onDelete, goToDetails, playerId }) => playerData => {
+  const score = get(playerData, 'score', initialScoreValues)
+  const playerValue = parseInt(mean(Object.entries(score).map(([key, value]) => getMeanScoreField(value))))
 
   return {
+    _isUser: playerId === playerData._id,
     name: <span style={{ display: 'flex', alignItems: 'center' }}>
       <OverallScore value={playerValue} style={{ transform: 'scale(.75)' }} />
       {`${get(playerData, 'user.surname', '-')} ${get(playerData, 'user.name', '-')}`}
@@ -41,6 +45,12 @@ export const getPlayerDataRow = ({ isLoading, openSnackbar, getData, openDialog,
         icon: <NavigateNextRoundedIcon />,
         label: 'Details',
         onClick: goToDetails(playerData)
+      },
+      {
+        icon: <DeleteForeverRoundedIcon />,
+        label: 'Delete',
+        onClick: onDelete(playerData),
+        color: 'crimson'
       }
     ]
   }

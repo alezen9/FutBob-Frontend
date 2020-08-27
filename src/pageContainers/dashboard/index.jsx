@@ -1,67 +1,35 @@
-import React, { useCallback } from 'react'
-import { Grid } from '@material-ui/core'
-import Esportazioni from './widgets/Esportazioni'
-import Totali from './widgets/Totali'
-import { indigoLight, azureLight, pinkDark, redLight } from '../../../lightTheme'
-import { useRouter } from 'next/router'
-import { deepOrange, brown, yellow } from '@material-ui/core/colors'
+import React from 'react'
+import { makeStyles, Typography } from '@material-ui/core'
+
+const useStyles = makeStyles(theme => ({
+  main: {
+    position: 'relative',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '85vh',
+    marginTop: '1em'
+  },
+  deadpool: {
+    maxWidth: '70%',
+    position: 'absolute',
+    bottom: '-10vh',
+    right: 0
+  },
+  text: {
+    fontSize: '5em',
+    fontWeight: 'bold'
+  }
+}))
 
 const DashboardContainer = props => {
-  const { totaleCondomini, totaleFornitori, totalePersone, totaleAdmins } = props
-  const router = useRouter()
-
-  const goToPeople = useCallback(() => {
-    router.push('/persone')
-  }, [router])
-
-  const goToSuppliers = useCallback(() => {
-    router.push('/fornitori')
-  }, [router])
-
-  const goToAdmins = useCallback(() => {
-    router.push('/amministratori')
-  }, [router])
+  const classes = useStyles()
 
   return (
-    <div style={{ margin: '1em 0' }}>
-      dashboard aleks
-      {/* <Grid container spacing={3}>
-        <Totali
-          title='Condomini'
-          sm={4}
-          color={redLight}
-          total={totaleCondomini}
-        />
-        <Totali
-          title='Persone'
-          sm={4}
-          color={pinkDark}
-          total={totalePersone}
-          style={{ cursor: 'pointer' }}
-          onClick={goToPeople}
-        />
-        <Totali
-          title='Fornitori'
-          sm={4}
-          color={azureLight}
-          total={totaleFornitori}
-          style={{ cursor: 'pointer' }}
-          onClick={goToSuppliers}
-        />
-        <Totali
-          title='Amministratori'
-          sm={4}
-          color={yellow[900]}
-          total={totaleAdmins}
-          style={{ cursor: 'pointer' }}
-          onClick={goToAdmins}
-        />
-        <Esportazioni
-          title='Esportazioni'
-          sm={8}
-          color={indigoLight}
-        />
-      </Grid> */}
+    <div className={classes.main}>
+      <Typography className={classes.text} >It's gonna be lit!</Typography>
+      <img src='/assets/deadpool.png' className={classes.deadpool} />
     </div>
   )
 }

@@ -1,11 +1,11 @@
 import React, { useMemo, useCallback, useState } from 'react'
 import { usePlayerStore } from '../../../zustand/playersStore'
-import { Grid, Button, Typography } from '@material-ui/core'
+import { Grid, Button, Typography, Hidden } from '@material-ui/core'
 import FormikInput from '../../../components/FormikInput'
 import { useFormik } from 'formik'
 import { isEmpty, meanBy, get, isEqual } from 'lodash'
 import FutsalField from '../../../components/FutsalField'
-import { playerPhysicalStateOptions, decamelize, initialRadarValues } from '../../../utils/helpers'
+import { playerPhysicalStateOptions, decamelize, initialScoreValues } from '../../../utils/helpers'
 import { OverallScore } from '../../../assets/CustomIcon'
 import RadarChart from '../../../components/Charts/Radar'
 import { apiInstance } from '../../../SDK'
@@ -14,6 +14,9 @@ import { ServerMessage } from '../../../utils/serverMessages'
 import { FutBobPalette } from '../../../../palette'
 import { useRouter } from 'next/router'
 import CustomDialog from '../../../components/Dialog'
+import { getMeanScoreField } from '../../../components/FormikInput/PlayerScoreInputs/SingleScore'
+import PlayerScoreInputs from '../../../components/FormikInput/PlayerScoreInputs'
+import { CountryOptions } from '../../../utils/nationalities'
 
 const PlayerDetail = props => {
   const { item = {}, setItem } = usePlayerStore(state => ({
@@ -22,7 +25,7 @@ const PlayerDetail = props => {
   }))
   const { setIsLoading, openSnackbar, pageTitle, setPageTitle } = useConfigStore()
   const router = useRouter()
-  const [openConfirmDialog, setOpenConfirmDialog] = useState()
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(null)
 
   const onSubmit = useCallback(
     async (values, { setSubmitting, setFieldValue }) => {
@@ -31,9 +34,14 @@ const PlayerDetail = props => {
       try {
         let done = false
         let idPlayer
-        const { _id, positions, state, radar, user } = values
-        const { _id: itemId, positions: itemPositions, state: itemState, radar: itemRadar, user: itemUser } = item
-
+        const { _id, positions, state, score, user } = values
+        const { _id: itemId, positions: itemPositions, state: itemState, score: itemScore, user: itemUser } = item
+        const newValsUser = {
+          ...user,
+          ...user.country && {
+            country: get(user, 'country.value', 'IT')
+          }
+        }
         if (!positions || !positions.length || [null, undefined].includes(state)) {
           const err = 'player_fields_required'
           throw err
@@ -48,31 +56,34 @@ const PlayerDetail = props => {
             _id,
             positions,
             state,
-            radarData: radar
+            score
           }
-          if (!isEqual(user, itemUser)) {
-            done = await apiInstance.user_updateUser(user)
+          const { country, ...restOfUser } = user
+          const { country: itemCountry, ...restOfItemUser } = itemUser
+          if (!isEqual(restOfUser, restOfItemUser) || (country && country.value !== itemCountry)) {
+            done = await apiInstance.user_updateUser(newValsUser)
           }
           if (!isEqual(bodyUpdatePlayer, {
             _id: itemId,
             positions: itemPositions,
             state: itemState,
-            radarData: itemRadar
+            score: itemScore
           })) {
             done = await apiInstance.player_updatePlayer(bodyUpdatePlayer)
           }
         } else {
           const bodyCreate = {
-            userData: user,
+            userData: newValsUser,
             playerData: {
               ...playerData,
-              radarData: radar
+              score
             }
           }
           idPlayer = await apiInstance.player_createPlayer(bodyCreate)
         }
         if ((_id && !done) || (!_id && !idPlayer)) throw new Error()
         if (done || idPlayer) {
+          // update userItem and player item here
           openSnackbar({
             variant: 'success',
             message: _id
@@ -87,7 +98,7 @@ const PlayerDetail = props => {
         console.log(error)
         openSnackbar({
           variant: 'error',
-          message: ServerMessage[error] || ServerMessage.generic
+          message: ServerMessage[error] || get(error, 'message', error)
         })
       }
       setIsLoading(false)
@@ -112,7 +123,7 @@ const PlayerDetail = props => {
       } catch (error) {
         openSnackbar({
           variant: 'error',
-          message: ServerMessage[error] || ServerMessage.generic
+          message: ServerMessage[error] || get(error, 'message', error)
         })
       }
       setIsLoading(false)
@@ -121,20 +132,24 @@ const PlayerDetail = props => {
   const formik = useFormik({
     initialValues: {
       ...item,
-      radar: get(item, 'radar', initialRadarValues)
+      user: {
+        ...get(item, 'user', {}),
+        country: CountryOptions.find(({ value }) => value === get(item, 'user.country', 'IT'))
+      },
+      score: get(item, 'score', initialScoreValues)
     },
     enableReinitialize: true,
     onSubmit
   })
 
-  const radarData = useMemo(() => {
-    const vals = formik.values.radar
+  const scoreData = useMemo(() => {
+    const vals = formik.values.score
     const data = Object.entries(vals).map(([key, value]) => ({
       prop: decamelize(key),
-      value
+      value: getMeanScoreField(value)
     }))
     return data
-  }, [formik.values.radar])
+  }, [formik.values.score])
 
   return (
     <>
@@ -184,7 +199,23 @@ const PlayerDetail = props => {
           label='Email'
           {...formik}
         />
-        <OverallScore style={{ margin: 'auto' }} value={parseInt(meanBy(radarData, 'value'))} />
+        <Hidden only='xs'>
+          <Grid item xs={4} />
+        </Hidden>
+        <FormikInput
+          sm={4}
+          name='user.country'
+          label='Nationality'
+          type='autocomplete'
+          large
+          options={CountryOptions}
+          required
+          {...formik}
+        />
+        <Hidden only='xs'>
+          <Grid item xs={4} />
+        </Hidden>
+        <OverallScore style={{ margin: 'auto' }} value={parseInt(meanBy(scoreData, 'value'))} />
         <Grid item container xs={12} justify='center'>
           <FormikInput
             sm={4}
@@ -198,52 +229,10 @@ const PlayerDetail = props => {
           />
         </Grid>
         <Grid item xs={12} sm={7} style={{ height: 500 }}>
-          <RadarChart data={radarData} />
+          <RadarChart data={scoreData} />
         </Grid>
-        <Grid item container xs={12} sm={5} justify='center'>
-          <FormikInput
-            type='slider'
-            name='radar.speed'
-            label='Speed'
-            {...formik}
-          />
-          <FormikInput
-            type='slider'
-            name='radar.stamina'
-            label='Stamina'
-            {...formik}
-          />
-          <FormikInput
-            type='slider'
-            name='radar.defence'
-            label='Defence'
-            {...formik}
-          />
-          <FormikInput
-            type='slider'
-            name='radar.balance'
-            label='Balance'
-            {...formik}
-          />
-          <FormikInput
-            type='slider'
-            name='radar.ballControl'
-            label='Ball control'
-            {...formik}
-          />
-          <FormikInput
-            type='slider'
-            name='radar.passing'
-            label='Passing'
-            {...formik}
-          />
-          <FormikInput
-            type='slider'
-            name='radar.finishing'
-            label='Finishing'
-            {...formik}
-          />
-        </Grid>
+        <PlayerScoreInputs formik={formik} gridProps={{ sm: 5 }} />
+        <Grid item container xs={12} sm={5} justify='center' />
         <Grid item xs={12}>
           <FutsalField
             type='outdoor'

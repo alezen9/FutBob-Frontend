@@ -24,10 +24,10 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const InputPhone = (props) => {
+const InputPhone = props => {
   const { label, onChange, values, name, disabled = false, errors } = props
   const classes = useStyles({error: !!get(errors, name, null)})
-  const v = useMemo(() => !String(get(values, name, '')).startsWith('+') ? '+39' + get(values, name, '') : get(values, name, ''), [values[name]])
+  const v = useMemo(() => !String(get(values, name, '')).startsWith('+') ? '+39' + get(values, name, '') : get(values, name, ''), [get(values, name, null)])
   return (
     <>
       <MuiPhoneNumber

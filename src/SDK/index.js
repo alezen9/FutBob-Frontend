@@ -7,16 +7,17 @@ const { publicRuntimeConfig } = getConfig()
 class FutBobServer {
   constructor () {
     this.localStorageToken = 'FutBobToken'
-    const token = process.browser
+    this.TOKEN = process.browser
       ? window.localStorage.getItem(this.localStorageToken)
       : undefined
+    const authHeader = `Bearer ${this.TOKEN}`
     this._self = axios.create({
       baseURL: `${publicRuntimeConfig.API_URL}`,
       timeout: 100000,
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        ...{ ...token && { token } }
+        ...this.TOKEN && { Authorization: authHeader }
       }
     })
     this._self.interceptors.response.use(
@@ -27,8 +28,15 @@ class FutBobServer {
     )
     this._self.interceptors.request.use(config => {
       if (process.browser && !config.headers.common['Authorization'] && window.localStorage.getItem(this.localStorageToken)) {
-        const authorization = `Bearer ${window.localStorage.getItem(this.localStorageToken)}`
+        const _token = window.localStorage.getItem(this.localStorageToken)
+        const authorization = `Bearer ${_token}`
         config.headers.common['Authorization'] = authorization
+        this._self.defaults.headers.common['Authorization'] = `Bearer ${_token}`
+        this.TOKEN = _token
+      } else if (this.TOKEN) {
+        const authorization = `Bearer ${this.TOKEN}`
+        config.headers.common['Authorization'] = authorization
+        this._self.defaults.headers.common['Authorization'] = `Bearer ${this.TOKEN}`
       }
       return config
     },
@@ -54,6 +62,7 @@ class FutBobServer {
     if (token !== _token) {
       this._self.defaults.headers.common['Authorization'] = `Bearer ${token}`
     }
+    this.TOKEN = token
     window.localStorage.setItem(this.localStorageToken, token)
   }
 
@@ -121,7 +130,7 @@ class FutBobServer {
    * @param {number?} fields.futsalPlayer.type
    * @param {number?} fields.futsalPlayer.state
    * @param {any?} fields.futsalPlayer.user
-   * @param {any?} fields.futsalPlayer.radar
+   * @param {any?} fields.futsalPlayer.score
    * @param {any?} fields.futsalPlayer.matches
    */
   async user_getUserConnected (fields) { // eslint-disable-line
@@ -210,7 +219,7 @@ class FutBobServer {
    * @param {number[]} createPlayerInput.playerData.positions
    * @param {number?} createPlayerInput.playerData.state
    * @param {number} createPlayerInput.playerData.type
-   * @param {any} createPlayerInput.playerData.radarData
+   * @param {any} createPlayerInput.playerData.score
    */
   async player_createPlayer (createPlayerInput) { // eslint-disable-line
     const query = `
@@ -226,7 +235,7 @@ class FutBobServer {
    * @param {string} updatePlayerInput._id
    * @param {number[]?} updatePlayerInput.positions
    * @param {number?} updatePlayerInput.state
-   * @param {any?} updatePlayerInput.radarData
+   * @param {any?} updatePlayerInput.score
    */
   async player_updatePlayer (updatePlayerInput) { // eslint-disable-line
     const query = `
@@ -259,7 +268,7 @@ class FutBobServer {
    * @param {number[]?} fields.positions
    * @param {number?} fields.type
    * @param {number?} fields.state
-   * @param {any?} fields.radar
+   * @param {any?} fields.score
    * @param {any?} fields.matches
    * @param {any?} fields.user
    */

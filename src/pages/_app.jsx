@@ -19,8 +19,8 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useConfigStore } from '../zustand/configStore'
 
 import { isEmpty } from 'lodash'
-import cleanDeep from 'clean-deep'
 import { cleanQueryParams } from '../utils/helpers'
+import { useUserStore } from '../zustand/userStore'
 
 const AS_PATH = 'FutBobLastPath' // eslint-disable-line
 
@@ -113,6 +113,10 @@ const MyApp = props => {
     setIsLogged,
     setIsLoading
   } = useConfigStore()
+  const { item, getData } = useUserStore(state => ({
+    item: state.item,
+    getData: state.getData
+  }))
   const router = useRouter()
 
   const [isFirstRun, setFirstRun] = useState(true)
@@ -133,6 +137,19 @@ const MyApp = props => {
   }, [router.query])
 
   useEffect(() => {
+    if (isEmpty(item)) {
+      const getUserConnected = async () => {
+        try {
+          await getData()
+        } catch (error) {
+          console.log(error)
+        }
+      }
+      getUserConnected()
+    }
+  }, [item])
+
+  useEffect(() => {
     router.prefetch('/login')
     router.prefetch('/')
     router.prefetch('/profile')
@@ -151,7 +168,11 @@ const MyApp = props => {
     setIsLogged(!!isLogged)
     setTheme(_themeType || 'light')
     window.localStorage.setItem('FutBobTheme', _themeType || 'light')
-    const path = isLogged ? router.pathname || '/' : '/login'
+    const path = isLogged
+      ? /\/login/.test(router.pathname)
+        ? '/'
+        : router.pathname || '/'
+      : '/login'
     const asPath = isLogged ? window.localStorage.getItem(AS_PATH) : null
     if (asPath && rawParams.test(router.pathname)) {
       router.replace(path, asPath)

@@ -1,6 +1,6 @@
-import React, { useRef } from 'react'
-import { get, sortBy } from 'lodash'
-import { Select, MenuItem, InputLabel, FormHelperText, FilledInput, Typography } from '@material-ui/core'
+import React, { useRef, useCallback } from 'react'
+import { get, sortBy, last, find } from 'lodash'
+import { Select, MenuItem, InputLabel, FormHelperText, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { FutBobPalette } from '../../../palette'
 
@@ -37,8 +37,6 @@ const promoteItem = ({ arr = [], value }) => {
     }
   }
   return data
-  // Matching item wasn't found. Array is unchanged, but you could do something
-  // else here if you wish (like an error message).
 }
 
 export const measureText = (pText, pFontSize, pStyle) => {
@@ -62,39 +60,71 @@ export const measureText = (pText, pFontSize, pStyle) => {
   return lResult
 }
 
-const InputSelect = ({ options = null, label, id, name, required, handleChange, values, disabled, errors, helperText, onChange, variant, sortByLabel = true }) => {
+const InputSelect = props => {
+  const {
+    options = null,
+    label,
+    id,
+    name,
+    required,
+    values,
+    disabled,
+    errors,
+    onChange,
+    variant,
+    sortByLabel = true,
+    multiple = false,
+    autoWidth = false
+  } = props
   const { menuItem, inputRoot, labelClass } = useStyles({ error: !!get(errors, name, false) })
   const labelRef = useRef(null)
   const labelWidth = labelRef.current ? labelRef.current.offsetWidth : measureText(label).width
 
-  const Options = options => options && promoteItem({
-    arr: sortByLabel
-      ? sortBy(options, ['label'])
-      : options,
-    value: -1
-  }).map((opt, i) =>
-    <MenuItem className={menuItem} key={i} value={opt.value}>
-      <Typography>{get(opt, 'component', opt.label)}</Typography>
-    </MenuItem>)
+  const Options = useCallback(
+    options => {
+      if (options && options.length) {
+        const opt = multiple
+          ? options.filter(opt => !find(get(values, name, []), ['value', opt.value]))
+          : options
+        return promoteItem({
+          arr: sortByLabel
+            ? sortBy(opt, ['label'])
+            : opt,
+          value: -1
+        }).map((opt, i) =>
+          <MenuItem className={menuItem} key={i} value={opt.value}>
+            <Typography>{get(opt, 'component', opt.label)}</Typography>
+          </MenuItem>)
+      }
+      return []
+    }
+    , [options, get(values, name, [])])
 
-  const input = variant === 'filled' ? { input: <FilledInput name={name} /> } : {}
+  const renderValue = useCallback(
+    val => {
+      if (multiple) {
+        const res = last(get(values, name, []))
+        return res ? get(res, 'component', res.label) : null
+      } else {
+        const v = options.find(({ value }) => val === value)
+        return <Typography style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>{get(v, 'component', v.label)}</Typography>
+      }
+    }, [multiple, options])
 
   return (
     <>
       <InputLabel className={labelClass} ref={labelRef} htmlFor={id}>{label}</InputLabel>
       <Select
         className={inputRoot}
+        multiple={multiple}
+        autoWidth={autoWidth}
         labelWidth={labelWidth}
         disabled={disabled}
-        value={get(values, `${name}`, '')}
+        value={get(values, name, multiple ? [] : '')}
         onChange={onChange}
         variant={variant}
-        renderValue={val => {
-          const v = options.find(({ value }) => val === value)
-          return <Typography style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>{get(v, 'component', v.label)}</Typography>
-        }}
-        {...input}
-        inputProps={{ id }}
+        renderValue={renderValue}
+        inputProps={{ id, required }}
       >
       >
         {Options(options)}

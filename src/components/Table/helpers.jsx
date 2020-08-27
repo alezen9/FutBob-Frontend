@@ -38,15 +38,18 @@ const useStyles = makeStyles(theme => ({
 
 export const setData = ({ headers, data, withActions }) => {
   const headerKeys = headers.map(({ name, id }) => id || camelize(name))
-  return data.reduce((acc, row) => {
+  return data.reduce((acc, _row, i) => {
+    const { _isUser, ...row } = _row
     acc._data = [
       ...acc._data,
       sortRow({ row, withActions, headerKeys })
     ]
+    if (_isUser) acc._isUserIndexRow = i
     return acc
   }, {
     _headers: [...headers, ...[...withActions ? [{ name: ' ' }] : []]],
-    _data: []
+    _data: [],
+    _isUserIndexRow: undefined
   })
 }
 
@@ -165,13 +168,14 @@ const ActionsMenu = React.memo(props => {
         getContentAnchorEl={null}
       >
         {actions.map(action => {
-          const { onClick, label, icon } = action
+          const { onClick, label, icon, color } = action
           const handleClickAction = e => {
             e.stopPropagation()
             onClick()
             handleClose()
           }
           return <MenuItem
+            {...color && { style: { color } }}
             key={uniqueId('action-')}
             onClick={handleClickAction}>
             {icon && React.cloneElement(icon, { style: { marginRight: '1em', fontSize: '1em' } })}

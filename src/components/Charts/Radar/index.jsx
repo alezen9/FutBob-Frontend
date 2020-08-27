@@ -43,7 +43,7 @@ const RadarChart = ({ data = [] }) => {
         borderColor={{ from: 'color' }}
         gridLevels={5}
         gridShape='circular'
-        gridLabelOffset={20}
+        gridLabelOffset={30}
         enableDots
         dotSize={10}
         dotColor={{ theme: 'background' }}

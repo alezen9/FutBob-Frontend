@@ -11,6 +11,7 @@ import { FutBobPalette } from '../../palette'
 import { TopFormIcon, InjuredIcon, RecoveryIcon } from '../assets/CustomIcon'
 import ExpandLessRoundedIcon from '@material-ui/icons/ExpandLessRounded'
 import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
+import cleanDeep from 'clean-deep'
 
 export const getTitleFromPathname = pathname => {
   const routeInfo = find(sections, ['path', pathname])
@@ -241,14 +242,48 @@ export const decamelize = (str, separator) => {
     .toLowerCase())
 }
 
-export const initialRadarValues = {
-  speed: 0,
-  stamina: 0,
-  defence: 0,
-  balance: 0,
-  ballControl: 0,
-  passing: 0,
-  finishing: 0
+export const initialScoreValues = {
+  pace: {
+    acceleration: 0,
+    sprintSpeed: 0
+  },
+  shooting: {
+    positioning: 0,
+    finishing: 0,
+    shotPower: 0,
+    longShots: 0,
+    volleys: 0,
+    penalties: 0
+  },
+  passing: {
+    vision: 0,
+    crossing: 0,
+    freeKick: 0,
+    shortPassing: 0,
+    longPassing: 0,
+    curve: 0
+  },
+  dribbling: {
+    agility: 0,
+    balance: 0,
+    reactions: 0,
+    ballControl: 0,
+    dribbling: 0,
+    composure: 0
+  },
+  defense: {
+    interceptions: 0,
+    heading: 0,
+    defensiveAwareness: 0,
+    standingTackle: 0,
+    slidingTackle: 0
+  },
+  physical: {
+    jumping: 0,
+    stamina: 0,
+    strength: 0,
+    aggression: 0
+  }
 }
 
 export const cleanQueryParams = query => {
@@ -259,4 +294,20 @@ export const cleanQueryParams = query => {
       [key]: value
     }
   }, {})
+}
+
+export const getScoreColor = value => {
+  if (value < 40) return 'crimson'
+  if (value < 65) return 'orange'
+  if (value < 85) return FutBobPalette.darkGreen
+  if (value <= 100) return '#B29600'
+  return FutBobPalette.typographyGrey
+}
+
+export const getMultipleInitValue = (vals = [], options = []) => {
+  return cleanDeep(options.reduce((acc, val) => {
+    const { value, label } = val || {}
+    if (vals.includes(value)) acc.push({ value, label })
+    return acc
+  }, []))
 }

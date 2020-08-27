@@ -1,6 +1,7 @@
 import React from 'react'
 import { makeStyles, Switch } from '@material-ui/core'
 import { FutBobPalette } from '../../../palette'
+import { get } from 'lodash'
 
 const useStyles = makeStyles(theme => ({
   wrapper: {
@@ -24,7 +25,7 @@ const InputSwitch = ({ name, onChange, values }) => {
       <Switch
         classes={{ root: classes.rootCheckbox, track: classes.track }}
         name={name}
-        checked={values[name] || false}
+        checked={get(values, name, false)}
         onChange={onChange}
         color='primary'
         margin='normal'

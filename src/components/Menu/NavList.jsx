@@ -47,12 +47,22 @@ const buildSubPath = (mainPath, subPath) => {
     .map(el => el.startsWith(':') ? take(subPaths) : el)
     .join('/')
 }
+
+const checkActivePage = (currentPath, itemPath) => {
+  if (currentPath === '/') return itemPath === '/'
+  const [_, ...str] = itemPath
+  const exp = `^\\/${str.length ? '+' : '+dashboard'}${str.join('')}`
+  const testPath = new RegExp(exp)
+  return testPath.test(currentPath)
+}
+
 const SingleItemList = props => {
   const { handleRoute, icon, title, path, iconStaticProps = {}, ignoreActiveProps = false } = props
   const router = useRouter()
+
   const activeProps = ignoreActiveProps
     ? {}
-    : { ...router.pathname === path && { color: 'primary' } }
+    : { ...checkActivePage(router.pathname, path) && { color: 'primary' } }
   const classes = useStyles()
   return <ListItem className={classes.listItem} button onClick={handleRoute(path)}>
     <ListItemIcon {...iconStaticProps}>

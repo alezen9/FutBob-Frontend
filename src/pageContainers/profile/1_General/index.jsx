@@ -1,11 +1,12 @@
 import React, { useCallback } from 'react'
-import { Grid, Button } from '@material-ui/core'
+import { Grid, Button, Hidden } from '@material-ui/core'
 import FormikInput from '../../../components/FormikInput'
-import { isEqual, isEmpty } from 'lodash'
+import { isEqual, isEmpty, get } from 'lodash'
 import { useFormik } from 'formik'
 import { apiInstance } from '../../../SDK'
 import { ServerMessage } from '../../../utils/serverMessages'
 import { generalInfoSchema } from '../validations'
+import { CountryOptions } from '../../../utils/nationalities'
 
 const General = props => {
   const {
@@ -21,9 +22,13 @@ const General = props => {
       setIsLoading(true)
       try {
         if (!isEqual(rest, values)) {
-          const done = await apiInstance.user_updateUserConnected(values)
+          const newVals = {
+            ...values,
+            ...values.country && { country: get(values, 'country.value', 'IT') }
+          }
+          const done = await apiInstance.user_updateUserConnected(newVals)
           if (done) {
-            setItem(values)
+            setItem(newVals)
             openSnackbar({
               variant: 'success',
               message: 'Info updated successfully!'
@@ -33,7 +38,7 @@ const General = props => {
       } catch (error) {
         openSnackbar({
           variant: 'error',
-          message: ServerMessage[error] || ServerMessage.generic
+          message: ServerMessage[error] || get(error, 'message', error)
         })
       }
       setIsLoading(false)
@@ -41,7 +46,7 @@ const General = props => {
     }, [rest])
 
   const formik = useFormik({
-    initialValues: rest,
+    initialValues: { ...rest, country: CountryOptions.find(({ value }) => value === rest.country) },
     enableReinitialize: true,
     onSubmit,
     validationSchema: generalInfoSchema
@@ -96,6 +101,21 @@ const General = props => {
             label='Email'
             {...formik}
           />
+          <Hidden only='xs'>
+            <Grid item xs={4} />
+          </Hidden>
+          <FormikInput
+            sm={4}
+            name='country'
+            label='Nationality'
+            type='autocomplete'
+            options={CountryOptions}
+            required
+            {...formik}
+          />
+          <Hidden only='xs'>
+            <Grid item xs={4} />
+          </Hidden>
           <Grid item xs={12} align='right'>
             <Button
               style={{ minWidth: 150 }}
