@@ -264,7 +264,7 @@ class FutBobServer {
    *
    * @param {any} playerFilters
    * @param {any} fields
-   * @param {string?} fields._id
+   * @param {string[]?} fields.ids
    * @param {number[]?} fields.positions
    * @param {number?} fields.type
    * @param {number?} fields.state

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { ThemeProvider, Snackbar, makeStyles, useTheme, useMediaQuery } from '@material-ui/core'
 import MuiAlert from '@material-ui/lab/Alert'
@@ -18,9 +18,12 @@ import { FutBobLogo } from '../assets/CustomIcon'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useConfigStore } from '../zustand/configStore'
 
-import { isEmpty } from 'lodash'
+import { isEmpty, get } from 'lodash'
 import { cleanQueryParams } from '../utils/helpers'
 import { useUserStore } from '../zustand/userStore'
+import { SWRConfig, cache } from 'swr'
+import { ServerMessage } from '../utils/serverMessages'
+import { useSWRUser } from '../../swr'
 
 const AS_PATH = 'FutBobLastPath' // eslint-disable-line
 
@@ -111,12 +114,16 @@ const MyApp = props => {
     closeSnackbar,
     setTheme,
     setIsLogged,
-    setIsLoading
+    setIsLoading,
+    openSnackbar
   } = useConfigStore()
-  const { item, getData } = useUserStore(state => ({
-    item: state.item,
-    getData: state.getData
-  }))
+
+  useSWRUser()
+
+  useEffect(() => {
+    if (!isLogged) cache.clear()
+  }, [isLogged])
+
   const router = useRouter()
 
   const [isFirstRun, setFirstRun] = useState(true)
@@ -130,24 +137,19 @@ const MyApp = props => {
     closeSnackbar()
   }
 
+  const onError = useCallback(
+    (error, key, config) => {
+      openSnackbar({
+        variant: 'error',
+        message: ServerMessage[error] || get(error, 'message', error)
+      })
+    }, [openSnackbar])
+
   useEffect(() => {
     if (!isEmpty(cleanQueryParams(router.query))) {
       window.localStorage.setItem(AS_PATH, router.asPath)
     }
   }, [router.query])
-
-  useEffect(() => {
-    if (isEmpty(item)) {
-      const getUserConnected = async () => {
-        try {
-          await getData()
-        } catch (error) {
-          console.log(error)
-        }
-      }
-      getUserConnected()
-    }
-  }, [item])
 
   useEffect(() => {
     router.prefetch('/login')
@@ -223,7 +225,9 @@ const MyApp = props => {
             {isLogged && <>{isSmallScreen ? <Navbar isLoading={isLoading} /> : <Menu />}</>}
             <div {...isLogged && { className: classes.content }}>
               {isLogged && <Title />}
-              <Component {...pageProps} />
+              <SWRConfig value={{ onError, errorRetryCount: 2 }} >
+                <Component {...pageProps} />
+              </SWRConfig>
             </div>
           </div>}
         <Snackbar

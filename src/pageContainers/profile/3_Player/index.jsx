@@ -13,7 +13,7 @@ import { getMeanScoreField } from '../../../components/FormikInput/PlayerScoreIn
 import PlayerScoreInputs from '../../../components/FormikInput/PlayerScoreInputs'
 
 const Player = props => {
-  const { item: { _id: userId, futsalPlayer }, setIsLoading, setItem, openSnackbar } = props
+  const { item: { _id: userId, futsalPlayer }, setIsLoading, mutate, openSnackbar } = props
 
   const onSubmit = useCallback(
     async (values, { setSubmitting, setFieldValue }) => {
@@ -52,7 +52,9 @@ const Player = props => {
         }
         if ((_id && !done) || (!_id && !idPlayer)) throw new Error()
         if (done || idPlayer) {
-          setItem({ futsalPlayer: { _id: _id || idPlayer, ...playerData, score } })
+          mutate(state => {
+            state.futsalPlayer = { _id: _id || idPlayer, ...playerData, score }
+          })
           openSnackbar({
             variant: 'success',
             message: _id
@@ -61,6 +63,7 @@ const Player = props => {
           })
         }
       } catch (error) {
+        console.error(error)
         openSnackbar({
           variant: 'error',
           message: ServerMessage[error] || get(error, 'message', error)

@@ -1,66 +1,53 @@
-import React, { useEffect, useCallback, useMemo, useState } from 'react'
-import { makeStyles, Button, Grid, IconButton, useTheme, useMediaQuery, Tooltip, Typography } from '@material-ui/core'
-import { get, isEmpty } from 'lodash'
+import React, { useCallback, useMemo, useState } from 'react'
+import { Button, Grid, IconButton, Tooltip, Typography } from '@material-ui/core'
+import { get } from 'lodash'
 import { useConfigStore } from '../../zustand/configStore'
-import { usePlayerStore } from '../../zustand/playersStore'
 import { ServerMessage } from '../../utils/serverMessages'
 import FutBobTable from '../../components/Table'
-import { getPlayerDataRow, headers, filters } from './helpers'
+import { getPlayerDataRow, headers } from './helpers'
 import { useRouter } from 'next/router'
 import AddRoundedIcon from '@material-ui/icons/AddRounded'
 import Filters from '../../components/Filters'
 import { apiInstance } from '../../SDK'
 import CustomDialog from '../../components/Dialog'
 import { FutBobPalette } from '../../../palette'
-import { useUserStore } from '../../zustand/userStore'
+import { useSWRPlayers, useSWRUser } from '../../../swr'
+import { cache } from 'swr'
+import swrKeys from '../../../swr/keys'
 
-const useStyles = makeStyles(theme => ({
-  '@keyframes animateOpacity': {
-    '0%': { opacity: 0 },
-    '70%': { opacity: 0 },
-    '100%': { opacity: 1 }
-  },
-  mobileAddButton: {
-    position: 'absolute',
-    top: '.2em',
-    right: '3em',
-    opacity: 0
-  },
-  opacityFix: {
-    opacity: 0,
-    animation: '$animateOpacity 1s forwards'
-  }
-}))
+// const useStyles = makeStyles(theme => ({
+//   '@keyframes animateOpacity': {
+//     '0%': { opacity: 0 },
+//     '70%': { opacity: 0 },
+//     '100%': { opacity: 1 }
+//   },
+//   mobileAddButton: {
+//     position: 'absolute',
+//     top: '.2em',
+//     right: '3em',
+//     opacity: 0
+//   },
+//   opacityFix: {
+//     opacity: 0,
+//     animation: '$animateOpacity 1s forwards'
+//   }
+// }))
 
 const PlayersContainer = props => {
-  const theme = useTheme()
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'))
-  const { getData: getList, list, setItem } = usePlayerStore()
-  const item = useUserStore(state => state.item)
+  const { players = [] } = props
+
+  const { list = [], trigger } = useSWRPlayers({ initialData: players })
+  const { item = {} } = useSWRUser({ revalidateOnMount: false })
+
   const { openSnackbar, setIsLoading } = useConfigStore(state => ({
     openSnackbar: state.openSnackbar,
     setIsLoading: state.setIsLoading
   }))
+
   const [_filters, setFilters] = useState({})
   const [searchText, setSearchText] = useState('')
   const [currentItem, setCurrentItem] = useState(null)
   const router = useRouter()
-
-  const classes = useStyles()
-
-  const getData = useCallback(
-    async () => {
-      setIsLoading(true)
-      try {
-        await getList()
-      } catch (error) {
-        openSnackbar({
-          variant: 'error',
-          message: ServerMessage[error] || get(error, 'message', error)
-        })
-      }
-      setIsLoading(false)
-    }, [])
 
   const openDialog = useCallback(
     item => () => {
@@ -71,10 +58,6 @@ const PlayersContainer = props => {
     () => {
       setCurrentItem(null)
     }, [])
-
-  useEffect(() => {
-    getData()
-  }, [getData])
 
   const onDelete = useCallback(
     async () => {
@@ -92,7 +75,7 @@ const PlayersContainer = props => {
           message: 'Player deleted successfully!'
         })
         closeDialog()
-        getData()
+        trigger()
       } catch (error) {
         openSnackbar({
           variant: 'error',
@@ -100,11 +83,11 @@ const PlayersContainer = props => {
         })
       }
       setIsLoading(false)
-    }, [currentItem, getData, closeDialog])
+    }, [currentItem, trigger, closeDialog])
 
   const goToDetails = useCallback(
     item => () => {
-      setItem(item)
+      cache.set([swrKeys.PLAYER, item._id], item)
       router.push('/players/[id]', `/players/${item._id}`)
     }, [])
 
@@ -116,7 +99,7 @@ const PlayersContainer = props => {
   const tableData = useMemo(() => {
     const data = list.map(getPlayerDataRow({ goToDetails, onDelete: openDialog, playerId: get(item, 'futsalPlayer._id', null) }))
     return searchText
-      ? data.filter(({ fullName }) => (fullName.toLowerCase()).includes(searchText.toLowerCase()))
+      ? data.filter(({ name, surname }) => (`${surname} ${name}`.toLowerCase()).includes(searchText.toLowerCase()))
       : data
   }, [list, goToDetails, searchText, openDialog, get(item, 'futsalPlayer._id', null)])
 

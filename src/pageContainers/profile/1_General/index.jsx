@@ -7,13 +7,14 @@ import { apiInstance } from '../../../SDK'
 import { ServerMessage } from '../../../utils/serverMessages'
 import { generalInfoSchema } from '../validations'
 import { CountryOptions } from '../../../utils/nationalities'
+import cleanDeep from 'clean-deep'
 
 const General = props => {
   const {
-    item: { _id, username, ...rest },
-    setItem,
-    openSnackbar,
-    setIsLoading
+    item: { _id, username, futsalPlayer, avatar, ...rest },
+    mutate,
+    setIsLoading,
+    openSnackbar
   } = props
 
   const onSubmit = useCallback(
@@ -22,13 +23,13 @@ const General = props => {
       setIsLoading(true)
       try {
         if (!isEqual(rest, values)) {
-          const newVals = {
+          const newVals = cleanDeep({
             ...values,
             ...values.country && { country: get(values, 'country.value', 'IT') }
-          }
+          })
           const done = await apiInstance.user_updateUserConnected(newVals)
           if (done) {
-            setItem(newVals)
+            mutate(newVals)
             openSnackbar({
               variant: 'success',
               message: 'Info updated successfully!'
@@ -43,7 +44,7 @@ const General = props => {
       }
       setIsLoading(false)
       setSubmitting(false)
-    }, [rest])
+    }, [rest, mutate])
 
   const formik = useFormik({
     initialValues: { ...rest, country: CountryOptions.find(({ value }) => value === rest.country) },

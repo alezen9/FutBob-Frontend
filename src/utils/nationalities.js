@@ -731,7 +731,7 @@ export const CountryOptions = [
     component: <FlagOption value='MH' label='Marshall Islands' />
   },
   {
-    value: 'NMK',
+    value: 'MK',
     label: 'North Macedonia, Republic Of',
     component: <FlagOption value='MK' label='North Macedonia, Republic Of' />
   },

@@ -1,5 +1,4 @@
 import React, { useMemo, useCallback, useState } from 'react'
-import { usePlayerStore } from '../../../zustand/playersStore'
 import { Grid, Button, Typography, Hidden } from '@material-ui/core'
 import FormikInput from '../../../components/FormikInput'
 import { useFormik } from 'formik'
@@ -17,14 +16,13 @@ import CustomDialog from '../../../components/Dialog'
 import { getMeanScoreField } from '../../../components/FormikInput/PlayerScoreInputs/SingleScore'
 import PlayerScoreInputs from '../../../components/FormikInput/PlayerScoreInputs'
 import { CountryOptions } from '../../../utils/nationalities'
+import { useSWRPlayer, useSWRUser } from '../../../../swr'
 
 const PlayerDetail = props => {
-  const { item = {}, setItem } = usePlayerStore(state => ({
-    item: state.item,
-    setItem: state.setItem
-  }))
-  const { setIsLoading, openSnackbar, pageTitle, setPageTitle } = useConfigStore()
   const router = useRouter()
+  const { item, trigger } = useSWRPlayer(router.query.id, { revalidateOnMount: !!router.query.id })
+  const { item: userConnectedItem, trigger: triggerUserConnected } = useSWRUser({ revalidateOnMount: false })
+  const { setIsLoading, openSnackbar, pageTitle } = useConfigStore()
   const [openConfirmDialog, setOpenConfirmDialog] = useState(null)
 
   const onSubmit = useCallback(
@@ -33,6 +31,8 @@ const PlayerDetail = props => {
       setIsLoading(true)
       try {
         let done = false
+        let userDataChanged = false
+        let playerDataChanged = false
         let idPlayer
         const { _id, positions, state, score, user } = values
         const { _id: itemId, positions: itemPositions, state: itemState, score: itemScore, user: itemUser } = item
@@ -61,6 +61,7 @@ const PlayerDetail = props => {
           const { country, ...restOfUser } = user
           const { country: itemCountry, ...restOfItemUser } = itemUser
           if (!isEqual(restOfUser, restOfItemUser) || (country && country.value !== itemCountry)) {
+            userDataChanged = true
             done = await apiInstance.user_updateUser(newValsUser)
           }
           if (!isEqual(bodyUpdatePlayer, {
@@ -69,6 +70,7 @@ const PlayerDetail = props => {
             state: itemState,
             score: itemScore
           })) {
+            playerDataChanged = true
             done = await apiInstance.player_updatePlayer(bodyUpdatePlayer)
           }
         } else {
@@ -79,11 +81,16 @@ const PlayerDetail = props => {
               score
             }
           }
+          userDataChanged = true
+          playerDataChanged = true
           idPlayer = await apiInstance.player_createPlayer(bodyCreate)
         }
         if ((_id && !done) || (!_id && !idPlayer)) throw new Error()
         if (done || idPlayer) {
-          // update userItem and player item here
+          if (userDataChanged && get(user, '_id', null) === get(userDataChanged, '_id', null)) {
+            triggerUserConnected()
+          }
+          if (playerDataChanged) trigger()
           openSnackbar({
             variant: 'success',
             message: _id
@@ -95,7 +102,7 @@ const PlayerDetail = props => {
           router.replace('/players/[id]', `/players/${idPlayer}`)
         }
       } catch (error) {
-        console.log(error)
+        console.error(error)
         openSnackbar({
           variant: 'error',
           message: ServerMessage[error] || get(error, 'message', error)
@@ -103,7 +110,7 @@ const PlayerDetail = props => {
       }
       setIsLoading(false)
       setSubmitting(false)
-    }, [item])
+    }, [item, userConnectedItem, trigger, triggerUserConnected])
 
   const onDelete = useCallback(
     async () => {
@@ -115,6 +122,7 @@ const PlayerDetail = props => {
           type: 1
         })
         if (!done) throw new Error()
+        if (get(item, 'user._id', null) === get(userConnectedItem, '_id', null)) triggerUserConnected()
         router.replace('/players')
         openSnackbar({
           variant: 'success',
@@ -127,7 +135,7 @@ const PlayerDetail = props => {
         })
       }
       setIsLoading(false)
-    }, [item])
+    }, [item, triggerUserConnected, userConnectedItem])
 
   const formik = useFormik({
     initialValues: {

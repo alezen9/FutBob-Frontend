@@ -10,7 +10,7 @@ import { get, isEmpty } from 'lodash'
 const Private = props => {
   const {
     item: { username },
-    setItem,
+    mutate,
     setIsLoading,
     openSnackbar
   } = props
@@ -29,7 +29,7 @@ const Private = props => {
           done = await apiInstance.user_changePassword(oldPassword, newPassword)
         }
         if (done) {
-          setItem({ username })
+          if (username !== props.item.username) mutate({ username })
           openSnackbar({
             variant: 'success',
             message: 'Info updated successfully!'
