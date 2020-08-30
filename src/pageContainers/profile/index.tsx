@@ -5,7 +5,7 @@ import FutBobTabs, { FutBobTab } from '../../components/Tabs'
 import General from './1_General'
 import Private from './2_Private'
 import Player from './3_Player'
-import { useSWRUser } from '../../../swr'
+import { useSWRUser } from '../../swr'
 
 const ProfileContainer = props => {
   const { openSnackbar, setIsLoading } = useConfigStore(state => ({

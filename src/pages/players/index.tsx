@@ -3,7 +3,7 @@ import PlayersContainer from '../../pageContainers/players'
 import PageTransition from '../../components/PageTransition'
 import { useRouter } from 'next/router'
 import { apiInstance } from '../../SDK'
-import { playerFields } from '../../../swr/helpers'
+import { playerFields } from '../../swr/helpers'
 
 const Players = props => {
   const isMounted = useRef(true)

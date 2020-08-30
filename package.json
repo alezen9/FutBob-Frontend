@@ -36,5 +36,11 @@
     "build-test": "NODE_ENV=production ENV=test PORT=3000 next build",
     "build-production": "NODE_ENV=production ENV=production PORT=3000 next build",
     "dev": "NODE_ENV=test ENV=test next"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.161",
+    "@types/node": "^14.6.2",
+    "@types/react": "^16.9.48",
+    "typescript": "^4.0.2"
   }
 }

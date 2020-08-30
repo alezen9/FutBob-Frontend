@@ -1,5 +1,4 @@
-import React, { useLayoutEffect } from 'react'
-import PropTypes from 'prop-types'
+import React, { useLayoutEffect, ReactNode } from 'react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -19,7 +18,20 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const CustomDialog = props => {
+type Props = {
+  open: boolean
+  onClose: any
+  withTransition: boolean
+  title?: string
+  content: ReactNode
+  actions?: ReactNode
+  maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+  fullHeight?: boolean
+  overflowY?: string
+  fullScreen?: boolean
+}
+
+const CustomDialog: React.FC<Props> = props => {
   const {
     open,
     onClose,
@@ -76,16 +88,6 @@ const CustomDialog = props => {
       {actions && <DialogActions style={{ padding: '8px 24px', ...fullScreen && { padding: 24 } }}>{actions}</DialogActions>}
     </Dialog>
   )
-}
-
-CustomDialog.propTypes = {
-  open: PropTypes.bool,
-  onClose: PropTypes.any,
-  withTransition: PropTypes.bool,
-  title: PropTypes.string,
-  content: PropTypes.node,
-  actions: PropTypes.node,
-  maxWidth: PropTypes.oneOf(['xs', 'sm', 'md', 'lg', 'xl'])
 }
 
 export default React.memo(CustomDialog)

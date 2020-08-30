@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Grid, Button, makeStyles, IconButton } from '@material-ui/core'
 import { Actions, Inputs, SearchBox } from './helpers'
-import CondexoDrawer from '../../components/Drawer'
+import CondexoDrawer from '../Drawer'
 import FilterListRoundedIcon from '@material-ui/icons/FilterListRounded'
 
 const useStyles = makeStyles(theme => ({

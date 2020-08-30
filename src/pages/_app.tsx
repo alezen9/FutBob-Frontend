@@ -17,12 +17,12 @@ import '../components/Navbar/Navbar.css'
 import { FutBobLogo } from '../assets/CustomIcon'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useConfigStore } from '../zustand/configStore'
-
 import { isEmpty, get } from 'lodash'
 import { cleanQueryParams } from '../utils/helpers'
 import { SWRConfig, cache } from 'swr'
 import { ServerMessage } from '../utils/serverMessages'
-import { useSWRUser } from '../../swr'
+import { useSWRUser } from '../swr'
+import { ThemeType } from '../../palette'
 
 const AS_PATH = 'FutBobLastPath' // eslint-disable-line
 
@@ -165,10 +165,10 @@ const MyApp = props => {
       : false
     const _themeType = window && window.localStorage
       ? window.localStorage.getItem('FutBobTheme')
-      : 'light'
+      : ThemeType.light
     setIsLogged(!!isLogged)
-    setTheme(_themeType || 'light')
-    window.localStorage.setItem('FutBobTheme', _themeType || 'light')
+    setTheme(_themeType)
+    window.localStorage.setItem('FutBobTheme', _themeType)
     const path = isLogged
       ? /\/login/.test(router.pathname)
         ? '/'

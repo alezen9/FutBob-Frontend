@@ -1,15 +1,15 @@
-import { FutBobPalette } from '../../palette'
+import { FutBobPalette, ThemeType } from '../../palette'
 import create from 'zustand'
 import { _immer } from './helpers'
 
-export const [useConfigStore, apiConfig] = create(_immer((set, get, api) => ({
-  themeType: 'light',
+export const [useConfigStore, apiConfig] = create(_immer((set: amy, get: any, api: any) => ({
+  themeType: ThemeType.light,
   isLogged: false,
   menuOpen: false,
   isLoading: false,
   pageTitle: 'Dashboard',
   snackbar: { open: false },
-  setPageTitle: title => {
+  setPageTitle: (title: any) => {
     set(state => {
       state.pageTitle = title
     })
@@ -34,15 +34,13 @@ export const [useConfigStore, apiConfig] = create(_immer((set, get, api) => ({
       state.menuOpen = !state.menuOpen
     })
   },
-  setTheme: (type, onlyType = false) => {
-    if (['light', 'dark'].includes(type)) {
-      set(state => {
-        state.themeType = type
-      })
-      if (!onlyType) {
-        window.localStorage.setItem('FutBobTheme', type)
-        FutBobPalette.swithTheme(type)
-      }
+  setTheme: (type: ThemeType, onlyType: boolean = false) => {
+    set(state => {
+      state.themeType = type
+    })
+    if (!onlyType) {
+      window.localStorage.setItem('FutBobTheme', type)
+      FutBobPalette.switchTheme(type)
     }
   },
   setIsLoading: bool => {

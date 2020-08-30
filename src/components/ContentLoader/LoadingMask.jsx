@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactChildren, ReactChild } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -12,7 +12,12 @@ const useStyles = makeStyles({
   })
 })
 
-const CondexoLoadingMask = props => {
+type Props = {
+  isLoading: boolean,
+  children?: ReactChildren | ReactChild
+}
+
+const CondexoLoadingMask: React.FC<Props> = props => {
   const { isLoading = false, children = [] } = props
   const { withMask } = useStyles({ isLoading })
 
@@ -29,8 +34,4 @@ const CondexoLoadingMask = props => {
   )
 }
 
-CondexoLoadingMask.propTypes = {
-  isLoading: PropTypes.bool
-}
-
-export default CondexoLoadingMask
+export default React.memo(CondexoLoadingMask)

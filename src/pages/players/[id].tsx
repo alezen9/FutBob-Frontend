@@ -6,7 +6,7 @@ import { get, isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
 import GoBack from '../../components/GoBack'
 import FaceRoundedIcon from '@material-ui/icons/FaceRounded'
-import { useSWRUser, useSWRPlayer } from '../../../swr'
+import { useSWRUser, useSWRPlayer } from '../../swr'
 
 
 const Player = props => {

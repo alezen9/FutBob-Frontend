@@ -13,17 +13,17 @@ import ExpandLessRoundedIcon from '@material-ui/icons/ExpandLessRounded'
 import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
 import cleanDeep from 'clean-deep'
 
-export const getTitleFromPathname = pathname => {
-  const routeInfo = find(sections, ['path', pathname])
+export const getTitleFromPathname = (pathname: string) => {
+  const routeInfo: any = find(sections, ['path', pathname])
   if (!routeInfo) return 'Dashboard'
   return routeInfo.title
 }
 
-export const capitalize = s => s.substr(0, 1).toUpperCase() + s.substr(1).toLowerCase()
+export const capitalize = (s: string) => s.substr(0, 1).toUpperCase() + s.substr(1).toLowerCase()
 
-export const asyncTimeout = ms => new Promise(resolve => setTimeout(resolve, ms))
+export const asyncTimeout = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
-export const camelize = str => {
+export const camelize = (str: string) => {
   if (!str) return ''
   return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function (match, index) {
     if (+match === 0) return '' // or if (/\s+/.test(match)) for white spaces
@@ -31,7 +31,7 @@ export const camelize = str => {
   })
 }
 
-const defaultStyleIcons = {
+const defaultStyleIcons: any = {
   marginRight: '.5em',
   fontSize: '1.1em'
 }
@@ -54,7 +54,7 @@ export const paramsToString = params => {
   return `{${str.slice(0, -2)}}`
 }
 
-export const UserStatusIconMap = {
+export const UserStatusIconMap = Object.freeze({
   0: {
     normal: <AccessTimeRoundedIcon style={{ ...defaultStyleIcons, color: 'orange' }} />,
     tooltip: <Tooltip title='In attesa'>
@@ -95,7 +95,7 @@ export const UserStatusIconMap = {
       </IconButton>
     </Tooltip>
   }
-}
+})
 
 export const futsalPositionsOptions = [
   {

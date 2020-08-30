@@ -10,7 +10,6 @@ import CondexoTableCell from './Cell'
 import { uniqueId } from 'lodash'
 import { setData, MobileRowCell } from './helpers'
 import CondexoLoadingMask from '../ContentLoader/LoadingMask'
-import ContentLoader from '../ContentLoader'
 import { Typography, useTheme, useMediaQuery } from '@material-ui/core'
 import { camelize } from '../../utils/helpers'
 import { FutBobPalette } from '../../../palette'
@@ -31,7 +30,16 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const FutBobTable = React.memo(props => {
+
+interface TableProps {
+  headers: any[],
+  data: any[],
+  withActions?: boolean,
+  pagination?: any,
+  forceMobile?: boolean
+}
+
+const FutBobTable: React.FC<TableProps> = React.memo(props => {
   const { headers = [], data = [], withActions = false, pagination, forceMobile = false } = props
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'))
@@ -119,7 +127,12 @@ const FutBobTable = React.memo(props => {
   )
 })
 
-const WrapperTable = props => {
+interface WrapperProps extends TableProps {
+  withMask?: boolean,
+  isFetching?: boolean
+}
+
+const WrapperTable: React.FC<WrapperProps> = props => {
   const { withMask = false, isFetching = false } = props
   const [isFirstRun, setIsFirstRun] = useState(true)
 
@@ -132,12 +145,10 @@ const WrapperTable = props => {
   }, [isFirstRun, isFetching])
 
   return withMask
-    ? isFirstRun && isFetching
-      ? <ContentLoader />
-      : <>
-        <CondexoLoadingMask isLoading={isFetching}>
-          <FutBobTable {...props} />
-        </CondexoLoadingMask>
+    ? <>
+      <CondexoLoadingMask isLoading={isFetching}>
+        <FutBobTable {...props} />
+      </CondexoLoadingMask>
       </>
     : <FutBobTable {...props} />
 }

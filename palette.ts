@@ -1,22 +1,34 @@
-const ThemeType = Object.freeze({
-  light: 'light',
-  dark: 'dark'
-})
+export enum ThemeType {
+  light = 'light',
+  dark = 'dark'
+}
 
 class ColorPalette {
-  constructor (themeType) {
-    this.themeType = themeType || ThemeType.light
+  themeType: ThemeType
+  lightGreen: string
+  darkGreen: string
+  lightRed: string
+  darkRed: string
+  boxShadow: string
+  userTableRowBackgroundColor: string
+  backgroundColor: string
+  paperBackgroundColor: string
+  typographyGrey: string
+  borderColor: string
+  border: string
+
+
+  constructor (themeType: ThemeType = ThemeType.light) {
+    this.themeType = themeType
     this.lightGreen = 'rgb(52,199,89)'
     this.darkGreen = 'rgb(42, 156, 71)'
     this.lightRed = 'rgb(255,59,48)'
     this.darkRed = 'rgb(255,69,58)'
-    this.boxShadow = '0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)'
-    this.userTableRowBackgroundColor = 'red'
     this.updatePalette()
   }
 
-  swithTheme (type) {
-    this.themeType = type
+  switchTheme (themeType: ThemeType = ThemeType.light) {
+    this.themeType = themeType
     this.updatePalette()
   }
   updatePalette () {
@@ -44,4 +56,4 @@ class ColorPalette {
   }
 }
 
-export const FutBobPalette = new ColorPalette()
+export const FutBobPalette: ColorPalette = new ColorPalette()

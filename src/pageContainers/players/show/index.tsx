@@ -16,7 +16,7 @@ import CustomDialog from '../../../components/Dialog'
 import { getMeanScoreField } from '../../../components/FormikInput/PlayerScoreInputs/SingleScore'
 import PlayerScoreInputs from '../../../components/FormikInput/PlayerScoreInputs'
 import { CountryOptions } from '../../../utils/nationalities'
-import { useSWRPlayer, useSWRUser } from '../../../../swr'
+import { useSWRPlayer, useSWRUser } from '../../../swr'
 
 const PlayerDetail = props => {
   const router = useRouter()

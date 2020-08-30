@@ -1,11 +1,11 @@
-import useSWR, { trigger } from 'swr'
+import useSWR, { trigger, RevalidateOptionInterface } from 'swr'
 import swrKeys from './keys'
 import swrFetchers from './fetchers'
 import produce from 'immer'
-import { useConfigStore } from '../src/zustand/configStore'
+import { useConfigStore } from '../zustand/configStore'
 import { useEffect, useCallback } from 'react'
 
-export const useSWRUser = options => {
+export const useSWRUser = (options?: RevalidateOptionInterface) => {
   const { data, mutate } = useSWR(
     swrKeys.USER,
     swrFetchers.profileFetcher,
@@ -29,13 +29,13 @@ export const useSWRUser = options => {
   }
 }
 
-export const useSWRPlayers = options => {
+export const useSWRPlayers = (options?: RevalidateOptionInterface) => {
   const { setIsLoading } = useConfigStore()
   const { data, isValidating, mutate } = useSWR(
     swrKeys.PLAYERS,
     swrFetchers.playersFetcher,
     {
-      initialData: {},
+      initialData: [],
       revalidateOnFocus: false,
       revalidateOnMount: true,
       ...options || {}
@@ -58,7 +58,7 @@ export const useSWRPlayers = options => {
   }
 }
 
-export const useSWRPlayer = (_id, options) => {
+export const useSWRPlayer = (_id: string | null, options?: RevalidateOptionInterface) => {
   const { data, mutate } = useSWR(
     [swrKeys.PLAYER, _id],
     swrFetchers.playerFetcher,

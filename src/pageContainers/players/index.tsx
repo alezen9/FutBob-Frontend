@@ -11,9 +11,9 @@ import Filters from '../../components/Filters'
 import { apiInstance } from '../../SDK'
 import CustomDialog from '../../components/Dialog'
 import { FutBobPalette } from '../../../palette'
-import { useSWRPlayers, useSWRUser } from '../../../swr'
+import { useSWRPlayers, useSWRUser } from '../../swr'
 import { cache } from 'swr'
-import swrKeys from '../../../swr/keys'
+import swrKeys from '../../swr/keys'
 
 // const useStyles = makeStyles(theme => ({
 //   '@keyframes animateOpacity': {
