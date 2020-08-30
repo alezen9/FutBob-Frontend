@@ -26,11 +26,11 @@ const PlayerDetail = props => {
   const [openConfirmDialog, setOpenConfirmDialog] = useState(null)
 
   const onSubmit = useCallback(
-    async (values, { setSubmitting, setFieldValue }) => {
+    async (values, { setSubmitting, setFieldValue, setTouched }) => {
       setSubmitting(true)
       setIsLoading(true)
       try {
-        let done = false
+        let done = true
         let userDataChanged = false
         let playerDataChanged = false
         let idPlayer
@@ -110,6 +110,7 @@ const PlayerDetail = props => {
       }
       setIsLoading(false)
       setSubmitting(false)
+      setTouched({}, false)
     }, [item, userConnectedItem, trigger, triggerUserConnected])
 
   const onDelete = useCallback(

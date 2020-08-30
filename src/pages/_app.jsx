@@ -20,7 +20,6 @@ import { useConfigStore } from '../zustand/configStore'
 
 import { isEmpty, get } from 'lodash'
 import { cleanQueryParams } from '../utils/helpers'
-import { useUserStore } from '../zustand/userStore'
 import { SWRConfig, cache } from 'swr'
 import { ServerMessage } from '../utils/serverMessages'
 import { useSWRUser } from '../../swr'

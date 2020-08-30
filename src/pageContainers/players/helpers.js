@@ -13,8 +13,9 @@ import { getMeanScoreField } from '../../components/FormikInput/PlayerScoreInput
 export const headers = [
   { name: 'Name', style: { minWidth: 230 } },
   { name: 'Physical state', style: { minWidth: 130, textAlign: 'left' } },
-  { name: 'Positions', style: { minWidth: 100, textAlign: 'left' } },
-  { name: 'Age', style: { maxWidth: 70 } },
+  { name: 'Positions', style: { minWidth: 100, textAlign: 'center' } },
+  { name: 'Country', style: { maxWidth: 50, textAlign: 'center' } },
+  { name: 'Age', style: { maxWidth: 70, textAlign: 'center' } },
   { name: 'Phone', style: { minWidth: 180 } }
 ]
 
@@ -32,6 +33,7 @@ export const getPlayerDataRow = ({ onDelete, goToDetails, playerId }) => playerD
     physicalState: playerPhysicalStateOptions.find(({ value }) => value === get(playerData, 'state', 0)).label,
     age: moment().diff(get(playerData, 'user.dateOfBirth', null), 'years'),
     phone: get(playerData, 'user.phone', '-'),
+    country: get(playerData, 'user.country', '-'),
     positions: <ListField
       data={getLabelsByValues({
         values: get(playerData, 'positions', []),

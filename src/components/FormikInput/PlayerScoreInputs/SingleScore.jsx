@@ -1,11 +1,24 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react'
 import { Grid, Typography, makeStyles } from '@material-ui/core'
 import { get, reduce } from 'lodash'
-import FlashOnIcon from '@material-ui/icons/FlashOn'
 import { FutBobPalette } from '../../../../palette'
 import CustomDialog from '../../Dialog'
 import { SlidersDialogContent, SlidersDialogActions } from './helpers'
 import { getScoreColor } from '../../../utils/helpers'
+import { DefenseIcon, PhysicalIcon } from '../../../assets/CustomIcon'
+import FlashOnIcon from '@material-ui/icons/FlashOn'
+import TimelineOutlinedIcon from '@material-ui/icons/TimelineOutlined'
+import GpsFixedOutlinedIcon from '@material-ui/icons/GpsFixedOutlined'
+import AllInclusiveIcon from '@material-ui/icons/AllInclusive'
+
+const ScoreValuesIconMap = {
+  Pace: <FlashOnIcon style={{ fontSize: '1.1em', marginRight: '.5em' }} />,
+  Passing: <TimelineOutlinedIcon style={{ fontSize: '1.1em', marginRight: '.5em' }} />,
+  Shooting: <GpsFixedOutlinedIcon style={{ fontSize: '1.1em', marginRight: '.5em' }} />,
+  Defense: <DefenseIcon style={{ fontSize: '1.1em', marginRight: '.5em' }} />,
+  Physical: <PhysicalIcon style={{ fontSize: '1.1em', marginRight: '.5em' }} />,
+  Dribbling: <AllInclusiveIcon style={{ fontSize: '1.1em', marginRight: '.5em' }} />
+}
 
 export const getMeanScoreField = fieldData => {
   const { nItems, totVal } = reduce(fieldData, (acc, value, key) => ({
@@ -66,7 +79,7 @@ const SingleScore = props => {
         <Grid onClick={toggleSliders(false)} className={classes.mainWrapper} container item xs={6} sm={4}>
           <Grid className={classes.main} item container xs={12}>
             <Grid item xs={12} style={{ display: 'flex', alignItems: 'center' }}>
-              <FlashOnIcon style={{ fontSize: '1.1em', marginRight: '.5em' }} />
+              {ScoreValuesIconMap[title] || 'A'}
               <Typography variant='caption' style={{ fontSize: '1em' }}>
                 {title}
               </Typography>

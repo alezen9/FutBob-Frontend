@@ -2,61 +2,25 @@ import React, { useRef, useEffect, useCallback } from 'react'
 import PageTransition from '../../components/PageTransition'
 import PlayerDetail from '../../pageContainers/players/show'
 import { useConfigStore } from '../../zustand/configStore'
-import { usePlayerStore } from '../../zustand/playersStore'
-import {useUserStore} from '../../zustand/userStore'
 import { get, isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
 import GoBack from '../../components/GoBack'
-import { ServerMessage } from '../../utils/serverMessages'
 import FaceRoundedIcon from '@material-ui/icons/FaceRounded'
+import { useSWRUser, useSWRPlayer } from '../../../swr'
 
 
 const Player = props => {
   const isMounted = useRef(true)
   const router = useRouter()
   const { id } = router.query
-    const { setPageTitle, openSnackbar, setIsLoading } = useConfigStore(state => ({
-    openSnackbar: state.openSnackbar,
-    setIsLoading: state.setIsLoading,
-    setPageTitle: state.setPageTitle
-  }))
-  const item = useUserStore(state => state.item)
-  const { name, surname, resetItem, getItem, userId } = usePlayerStore(state => ({
-    userId: get(state, 'item.user._id', null),
-    name: get(state, 'item.user.name', ''),
-    surname: get(state, 'item.user.surname', ''),
-    resetItem: state.resetItem,
-    getItem: state.getItem
-  }))
+    const setPageTitle = useConfigStore(state => state.setPageTitle)
 
-  const getData = useCallback(
-    async () => {
-      if(id && id !== '[id]' && !name){
-        setIsLoading(true)
-        try {
-          await getItem(id)
-        } catch (error) {
-          openSnackbar({
-            variant: 'error',
-            message: ServerMessage[error] || get(error, 'message', error)
-          })
-        }
-        setIsLoading(false)
-      }
-    }, [id, name])
-
-    useEffect(() => {
-      getData()
-    }, [getData])
+  const { item: player } = useSWRPlayer(id, { revalidateOnMount:false })
+  const { item: user } = useSWRUser({ revalidateOnMount: false })
 
   useEffect(() => {
-    return () => {
-      resetItem()
-    }
-  }, [resetItem])
-
-  useEffect(() => {
-    const _isUser = userId === item._id
+    const _isUser = get(user, '_id', null) === get(player, 'user._id', null)
+    const { name = '-', surname = '-' } = get(player, 'user', {})
     const pageTitle = _isUser
     ? <span style={{display: 'flex', alignItems: 'center'}}>
       <FaceRoundedIcon style={{marginRight: '.5em', fontSize: '1.2em' }}/>
@@ -64,7 +28,7 @@ const Player = props => {
     </span>
     : `${surname} ${name}`
   setPageTitle(pageTitle)
-  }, [name, surname, userId, item._id])
+  }, [player._id, user._id])
 
   useEffect(() => {
     return () => {

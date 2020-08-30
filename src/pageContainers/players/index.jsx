@@ -99,7 +99,7 @@ const PlayersContainer = props => {
   const tableData = useMemo(() => {
     const data = list.map(getPlayerDataRow({ goToDetails, onDelete: openDialog, playerId: get(item, 'futsalPlayer._id', null) }))
     return searchText
-      ? data.filter(({ name, surname }) => (`${surname} ${name}`.toLowerCase()).includes(searchText.toLowerCase()))
+      ? data.filter(({ fullName }) => (`${fullName}`.toLowerCase()).includes(searchText.toLowerCase()))
       : data
   }, [list, goToDetails, searchText, openDialog, get(item, 'futsalPlayer._id', null)])
 

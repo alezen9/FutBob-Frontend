@@ -143,3 +143,60 @@ export const JerseyIcon = props => {
     </SvgIcon>
   )
 }
+
+export const FieldIcon = props => {
+  return (
+    <SvgIcon {...props} viewBox='0 0 779.9 617.98'>
+      <path fill='none' stroke='currentColor' strokeMiterlimit={10} strokeWidth={50} d='M349.26,705.21l57.22-343.14H990l108.47,343.14c3.22,10.2-7.71,18.57-24.46,18.57H376.49C359.74,723.78,347.56,715.41,349.26,705.21Z' transform='translate(-334.1 -120.8)' />
+      <path fill='none' stroke='currentColor' strokeMiterlimit={10} strokeWidth={50} d='M406.48,362.07,443,143.22c.68-4.11,9.73-7.42,20.2-7.42H882.88c19.64,0,37.53,6.22,40,14L990,362.07Z' transform='translate(-334.1 -120.8)' />
+      <path fill='none' stroke='currentColor' strokeMiterlimit={10} strokeWidth={50} d='M702.58,420.43c67.56,0,117.74-26.81,112.34-58.36-5.14-30-59.06-53.23-120.67-53.23s-112.07,23.24-112.73,53.23C580.83,393.62,635,420.43,702.58,420.43Z' transform='translate(-334.1 -120.8)' />
+      <path fill='none' stroke='currentColor' strokeMiterlimit={10} strokeWidth={50} d='M491.63,135.8c-5,42.38,82.38,79.52,195.63,79.52S882.37,178.18,871,135.8' transform='translate(-334.1 -120.8)' />
+      <path fill='none' stroke='currentColor' strokeMiterlimit={10} strokeWidth={50} d='M422,723.78C433.51,626.4,563.12,555.89,712.7,555.89s289.71,70.51,315.79,167.89' transform='translate(-334.1 -120.8)' />
+    </SvgIcon>
+  )
+}
+
+export const PassingIcon = props => {
+  return (
+    <SvgIcon {...props} viewBox='0 0 429.65 328.32'>
+      <circle cx='47.24' cy='279.35' r='47.24' />
+      <path d='M609.65,288.08,545,225.75l-9.21-8.88c-11.13-10.72-28.12,6.23-17,17l64.69,62.33,9.22,8.88c11.13,10.72,28.12-6.23,17-17Z' transform='translate(-353.51 -211.87)' />
+      <path d='M591.33,215.51,529,280.21l-8.88,9.22c-10.72,11.13,6.23,28.12,17,17l62.33-64.7,8.88-9.21c10.72-11.13-6.23-28.12-17-17Z' transform='translate(-353.51 -211.87)' />
+      <path d='M779.51,518.23l-64.69-62.32L705.6,447c-11.13-10.72-28.12,6.22-17,17l64.69,62.32,9.22,8.88c11.13,10.72,28.12-6.23,17-17Z' transform='translate(-353.51 -211.87)' />
+      <path d='M761.19,445.67l-62.33,64.7L690,519.59c-10.72,11.12,6.23,28.12,17,17l62.33-64.7,8.88-9.22c10.72-11.12-6.23-28.12-17-17Z' transform='translate(-353.51 -211.87)' />
+      <line fill='none' stroke='currentColor' strokeMiterlimit={5} strokeWidth={10} x1='262.69' y1='106.65' x2='338.19' y2='207.11' />
+      <polygon points='355.65 189.9 316.81 219.1 350.82 223.92 355.65 189.9' />
+      <line fill='none' stroke='currentColor' strokeMiterlimit={5} strokeWidth={10} x1='70.69' y1='223.92' x2='146.19' y2='123.46' />
+      <polygon points='124.81 111.47 163.65 140.66 158.82 106.65 124.81 111.47' />
+    </SvgIcon>
+  )
+}
+
+export const ShootingIcon = props => {
+  return (
+    <SvgIcon {...props} viewBox='0 0 617.29 617.29'>
+      {/* <circle fill='none' stroke='currentColor' strokeMiterlimit={5} strokeWidth={50} class='cls-1' cx='308.64' cy='308.64' r='255.86' /> */}
+      <circle fill='none' stroke='currentColor' strokeMiterlimit={5} strokeWidth={50} class='cls-1' cx='308.64' cy='308.64' r='170.57' />
+      <path fill='none' stroke='currentColor' strokeMiterlimit={5} strokeWidth={20} d='M1006,349H482.2c-24,0-48.17-.74-72.18,0h-1c-13.51,0-13.53,21,0,21H932.8c24,0,48.17.74,72.18,0h1c13.51,0,13.53-21,0-21Z' transform='translate(-398.86 -50.86)' />
+      <path fill='none' stroke='currentColor' strokeMiterlimit={5} strokeWidth={20} d='M697,61V584.8c0,24-.74,48.17,0,72.18,0,.34,0,.68,0,1,0,13.51,21,13.53,21,0V134.2c0-24,.74-48.17,0-72.18,0-.34,0-.68,0-1,0-13.51-21-13.53-21,0Z' transform='translate(-398.86 -50.86)' />
+      <circle fill='none' stroke='currentColor' strokeMiterlimit={5} strokeWidth={30} class='cls-2' cx='308.64' cy='308.64' r='85.29' />
+    </SvgIcon>
+  )
+}
+
+export const DefenseIcon = props => {
+  return (
+    <SvgIcon {...props} viewBox='0 0 372 496'>
+      <path d='M635,157.58c51.67,37.3,94.12,47.36,144.67,49.93V405.39c0,62.87-34.87,79.09-144.67,146.88-109.74-67.75-144.67-84-144.67-146.88V207.51C540.88,204.94,583.33,194.88,635,157.58ZM635,105c-69.67,59.23-113.34,62-186,62V405.39c0,95.13,66.2,120,186,195.61,119.8-75.66,186-100.48,186-195.61V167C748.34,167,704.67,164.23,635,105Z' transform='translate(-449 -105)' />
+    </SvgIcon>
+  )
+}
+
+export const PhysicalIcon = props => {
+  return (
+    <SvgIcon {...props} viewBox='0 0 620.26 699.68'>
+      <path fill='none' stroke='currentColor' strokeMiterlimit={5} strokeWidth={60} d='M979.32,566.83c-37.58,55.26-33.16,79.57-33.16,79.57s4.42,42-46.41,44.21S744.28,703,725.12,684C709,668,462.08,794.5,442.19,558s243.14-227.67,298.4-134.83l11.11,16c14.11-82.26,83.7-154.1,87.26-174,5.08-28.44-22.32-14.59-33.16-19.89-5.89-2.88-53.89-17.41-89.12-36.42a60.4,60.4,0,0,1-31.48-58.15c2-24.59,6.6-43.16,11.25-56.45a44.88,44.88,0,0,1,40.71-30c35.23-1.29,101.39,4.72,181.3,52.38a36.26,36.26,0,0,1,17.66,28.69c2.52,37.12,10.66,121.7,34.36,167.41C1001.42,372.31,1016.9,511.57,979.32,566.83Z' transform='translate(-411.12 -34)' />
+      <path fill='none' stroke='currentColor' strokeMiterlimit={5} strokeWidth={60} d='M799.17,576.77C753.06,532.23,744,484.09,751.7,439.1' transform='translate(-411.12 -34)' />
+    </SvgIcon>
+  )
+}

@@ -13,7 +13,7 @@ const ProfileContainer = props => {
     setIsLoading: state.setIsLoading
   }))
 
-  const { item = {}, mutate, trigger } = useSWRUser({ revalidateOnMount: false })
+  const { item = {}, mutate, trigger } = useSWRUser()
 
   useEffect(() => {
     if (isEmpty(item)) trigger()
