@@ -1,10 +1,17 @@
 import React, { useMemo } from 'react'
-import { Grid } from '@material-ui/core'
+import { Grid, GridProps } from '@material-ui/core'
 import { get, reduce } from 'lodash'
 import SingleScore from './SingleScore'
 import { decamelize } from '../../../utils/helpers'
+import { FormikBag } from 'formik'
+import { FormikEssentials } from '..'
 
-const PlayerScoreInputs = props => {
+type Props = {
+  gridProps: GridProps
+  formik: FormikEssentials
+}
+
+const PlayerScoreInputs: React.FC<Props> = props => {
   const { gridProps = {}, formik } = props
 
   const items = useMemo(() => {

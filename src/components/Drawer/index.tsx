@@ -9,7 +9,13 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const CondexoDrawer = props => {
+type Props = {
+  open?: boolean
+  toggleDrawer: VoidFunction
+  content: any
+}
+
+const FutbobDrawer: React.FC<Props> = props => {
   const { open = false, toggleDrawer, content = <></> } = props
   const classes = useStyles()
 
@@ -22,4 +28,4 @@ const CondexoDrawer = props => {
   )
 }
 
-export default React.memo(CondexoDrawer)
+export default React.memo(FutbobDrawer)

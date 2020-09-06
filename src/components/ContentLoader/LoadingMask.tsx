@@ -4,16 +4,16 @@ import { makeStyles } from '@material-ui/core'
 import { AnimatePresence, motion } from 'framer-motion'
 
 const useStyles = makeStyles({
-  withMask: ({ isLoading }) => ({
+  withMask: (props: any) => ({
     position: 'relative',
-    filter: isLoading ? 'opacity(0.3)' : 'none',
-    pointerEvents: isLoading ? 'none' : 'all',
-    cursor: isLoading ? 'initial' : 'poiunter'
+    filter: props.isLoading ? 'opacity(0.3)' : 'none',
+    pointerEvents: props.isLoading ? 'none' : 'all',
+    cursor: props.isLoading ? 'initial' : 'poiunter'
   })
 })
 
 type Props = {
-  isLoading: boolean,
+  isLoading: boolean
   children?: ReactChildren | ReactChild
 }
 

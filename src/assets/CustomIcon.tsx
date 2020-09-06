@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
   },
   overallScore: {
     position: 'relative',
-    color: ({ color }) => color,
+    color: (props: any) => props.color,
     '& > svg': {
       fontSize: '3em'
     },
@@ -146,12 +146,10 @@ export const JerseyIcon = props => {
 
 export const FieldIcon = props => {
   return (
-    <SvgIcon {...props} viewBox='0 0 779.9 617.98'>
-      <path fill='none' stroke='currentColor' strokeMiterlimit={10} strokeWidth={50} d='M349.26,705.21l57.22-343.14H990l108.47,343.14c3.22,10.2-7.71,18.57-24.46,18.57H376.49C359.74,723.78,347.56,715.41,349.26,705.21Z' transform='translate(-334.1 -120.8)' />
-      <path fill='none' stroke='currentColor' strokeMiterlimit={10} strokeWidth={50} d='M406.48,362.07,443,143.22c.68-4.11,9.73-7.42,20.2-7.42H882.88c19.64,0,37.53,6.22,40,14L990,362.07Z' transform='translate(-334.1 -120.8)' />
-      <path fill='none' stroke='currentColor' strokeMiterlimit={10} strokeWidth={50} d='M702.58,420.43c67.56,0,117.74-26.81,112.34-58.36-5.14-30-59.06-53.23-120.67-53.23s-112.07,23.24-112.73,53.23C580.83,393.62,635,420.43,702.58,420.43Z' transform='translate(-334.1 -120.8)' />
-      <path fill='none' stroke='currentColor' strokeMiterlimit={10} strokeWidth={50} d='M491.63,135.8c-5,42.38,82.38,79.52,195.63,79.52S882.37,178.18,871,135.8' transform='translate(-334.1 -120.8)' />
-      <path fill='none' stroke='currentColor' strokeMiterlimit={10} strokeWidth={50} d='M422,723.78C433.51,626.4,563.12,555.89,712.7,555.89s289.71,70.51,315.79,167.89' transform='translate(-334.1 -120.8)' />
+    <SvgIcon {...props} viewBox='0 0 462 340'>
+      <line fill='none' stroke='currentColor' strokeMiterlimit={10} strokeWidth={50} strokeLinecap='round' x1="20" y1="170" x2="442" y2="170"/>
+      <circle fill='none' stroke='currentColor' strokeMiterlimit={10} strokeWidth={50} cx="231" cy="170" r="150"/>
+      <circle fill='currentColor' stroke='none' cx="231.5" cy="170.5" r="41.01"/>
     </SvgIcon>
   )
 }
@@ -176,10 +174,10 @@ export const ShootingIcon = props => {
   return (
     <SvgIcon {...props} viewBox='0 0 617.29 617.29'>
       {/* <circle fill='none' stroke='currentColor' strokeMiterlimit={5} strokeWidth={50} class='cls-1' cx='308.64' cy='308.64' r='255.86' /> */}
-      <circle fill='none' stroke='currentColor' strokeMiterlimit={5} strokeWidth={50} class='cls-1' cx='308.64' cy='308.64' r='170.57' />
+      <circle fill='none' stroke='currentColor' strokeMiterlimit={5} strokeWidth={50} cx='308.64' cy='308.64' r='170.57' />
       <path fill='none' stroke='currentColor' strokeMiterlimit={5} strokeWidth={20} d='M1006,349H482.2c-24,0-48.17-.74-72.18,0h-1c-13.51,0-13.53,21,0,21H932.8c24,0,48.17.74,72.18,0h1c13.51,0,13.53-21,0-21Z' transform='translate(-398.86 -50.86)' />
       <path fill='none' stroke='currentColor' strokeMiterlimit={5} strokeWidth={20} d='M697,61V584.8c0,24-.74,48.17,0,72.18,0,.34,0,.68,0,1,0,13.51,21,13.53,21,0V134.2c0-24,.74-48.17,0-72.18,0-.34,0-.68,0-1,0-13.51-21-13.53-21,0Z' transform='translate(-398.86 -50.86)' />
-      <circle fill='none' stroke='currentColor' strokeMiterlimit={5} strokeWidth={30} class='cls-2' cx='308.64' cy='308.64' r='85.29' />
+      <circle fill='none' stroke='currentColor' strokeMiterlimit={5} strokeWidth={30} cx='308.64' cy='308.64' r='85.29' />
     </SvgIcon>
   )
 }

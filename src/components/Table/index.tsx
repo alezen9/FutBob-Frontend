@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo, useEffect, ReactNode } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -8,7 +8,7 @@ import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 import CondexoTableCell from './Cell'
 import { uniqueId } from 'lodash'
-import { setData, MobileRowCell } from './helpers'
+import { setData, MobileRowCell, TableHeaderData, TableRowData, SetDataOut } from './helpers'
 import CondexoLoadingMask from '../ContentLoader/LoadingMask'
 import { Typography, useTheme, useMediaQuery } from '@material-ui/core'
 import { camelize } from '../../utils/helpers'
@@ -30,12 +30,11 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-
-interface TableProps {
-  headers: any[],
-  data: any[],
+type TableProps = {
+  headers: TableHeaderData[],
+  data: TableRowData[],
   withActions?: boolean,
-  pagination?: any,
+  pagination?: ReactNode,
   forceMobile?: boolean
 }
 
@@ -46,7 +45,7 @@ const FutBobTable: React.FC<TableProps> = React.memo(props => {
   const classes = useStyles()
   const [tableId] = useState(uniqueId('table-'))
 
-  const { _headers = [], _data = [], _isUserIndexRow } = useMemo(() => {
+  const { _headers = [], _data = [], _isUserIndexRow } = useMemo(():SetDataOut => {
     if (!headers.length) {
       return {
         _headers: [],
@@ -127,7 +126,7 @@ const FutBobTable: React.FC<TableProps> = React.memo(props => {
   )
 })
 
-interface WrapperProps extends TableProps {
+type WrapperProps = TableProps & {
   withMask?: boolean,
   isFetching?: boolean
 }

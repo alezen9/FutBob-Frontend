@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { ReactChildren, ReactChild } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useRouter } from 'next/router'
 
-const PageTransition = React.memo(props => {
+type Props = {
+  children: ReactChildren | ReactChild
+}
+
+const PageTransition: React.FC<Props> = props => {
   const { children = [] } = props
   const router = useRouter()
   return (
@@ -17,6 +21,6 @@ const PageTransition = React.memo(props => {
       </motion.div>
     </AnimatePresence>
   )
-})
+}
 
-export default PageTransition
+export default React.memo(PageTransition)

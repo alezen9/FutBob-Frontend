@@ -1,4 +1,4 @@
-import React, { useState, useMemo, Fragment, useCallback } from 'react'
+import React, { useState, useMemo, Fragment, useCallback, ReactNode, ReactElement } from 'react'
 import { Button, Grid, Tooltip, IconButton, Menu, MenuItem, makeStyles, TableCell, Collapse, TableRow, useTheme, useMediaQuery } from '@material-ui/core'
 import { camelize } from '../../utils/helpers'
 import { uniqueId, get } from 'lodash'
@@ -36,9 +36,38 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-export const setData = ({ headers, data, withActions }) => {
+
+export type TableHeaderData = {
+  id?: string
+  main?: any
+  name: string
+  style?: any
+}
+
+export type TableRowData = {
+  [field: string]: any
+}
+
+interface TableData {
+  headers: TableHeaderData[],
+  data: TableRowData[]
+}
+
+interface SetDataIn extends TableData {
+  withActions: boolean
+}
+
+
+
+export interface SetDataOut {
+  _headers: TableHeaderData[]
+  _data: TableRowData[]
+  _isUserIndexRow: number|undefined
+}
+
+export const setData = <T extends SetDataIn>({ headers, data, withActions }:T):SetDataOut => {
   const headerKeys = headers.map(({ name, id }) => id || camelize(name))
-  return data.reduce((acc, _row, i) => {
+  const res = data.reduce((acc: SetDataOut, _row: TableRowData, i: number) => {
     const { _isUser, ...row } = _row
     acc._data = [
       ...acc._data,
@@ -51,12 +80,26 @@ export const setData = ({ headers, data, withActions }) => {
     _data: [],
     _isUserIndexRow: undefined
   })
+  return res as SetDataOut
 }
 
-const sortRow = ({ row, withActions = false, headerKeys }) => {
-  let newRow = {}
+interface SortRowIn { 
+  row: TableRowData, 
+  withActions?: boolean, 
+  headerKeys: string[]
+}
+
+type Action = {
+  icon: ReactElement
+  label: string
+  onClick: <T>(param?: T) => any
+  color?: string
+}
+
+const sortRow = <T extends SortRowIn>({ row, withActions = false, headerKeys }:T):TableRowData => {
+  let newRow: TableRowData = {}
   for (const key of headerKeys) newRow[key] = row[key]
-  const actions = row.actions || []
+  const actions: Action[] = row.actions || []
   return {
     ...newRow,
     ...withActions && { actions: !actions.length
@@ -68,7 +111,11 @@ const sortRow = ({ row, withActions = false, headerKeys }) => {
   }
 }
 
-const Actions = React.memo(props => {
+type ActionProps = {
+  actions: Action[]
+}
+
+const Actions: React.FC<ActionProps> = React.memo(props => {
   const { actions } = props
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'))
@@ -77,7 +124,7 @@ const Actions = React.memo(props => {
     : <ActionButtons actions={actions} />
 })
 
-const ActionButtons = React.memo(props => {
+const ActionButtons: React.FC<ActionProps> = React.memo(props => {
   const { actions } = props
   return (
     <Grid container spacing={3} justify='flex-end'>
@@ -100,7 +147,7 @@ const ActionButtons = React.memo(props => {
   )
 })
 
-const ActionTooltips = React.memo(props => {
+const ActionTooltips: React.FC<ActionProps> = React.memo(props => {
   const { actions } = props
   return (
     <Grid container spacing={3} justify='flex-end'>
@@ -124,7 +171,7 @@ const ActionTooltips = React.memo(props => {
   )
 })
 
-const ActionsMenu = React.memo(props => {
+const ActionsMenu: React.FC<ActionProps> = React.memo(props => {
   const { actions } = props
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState(null)
@@ -134,7 +181,7 @@ const ActionsMenu = React.memo(props => {
       setAnchorEl(e.currentTarget)
     }, [])
   const handleClose = useCallback(
-    e => {
+    (e?: any) => {
       if (e) e.stopPropagation()
       setAnchorEl(null)
     }, [])
@@ -187,7 +234,20 @@ const ActionsMenu = React.memo(props => {
   )
 })
 
-export const MobileRowCell = React.memo(props => {
+type MobileRowCellProps = {
+  row: TableRowData
+  mainHeaders: TableHeaderData[]
+  withActions?: boolean
+  _headers: TableHeaderData[]
+}
+
+type mainRowType = {
+  name?: any
+  component?: ReactNode
+  style?: any
+}
+
+export const MobileRowCell: React.FC<MobileRowCellProps> = React.memo(props => {
   const { row, mainHeaders, withActions, _headers } = props
   const classes = useStyles()
   const [open, setOpen] = useState(false)
@@ -198,15 +258,16 @@ export const MobileRowCell = React.memo(props => {
       setOpen(state => !state)
     }, [])
 
-  const { mainRow, mainName } = useMemo(() => {
+  const { mainRow, mainName } = useMemo((): { mainRow: mainRowType[], mainName: string } => {
     const first = mainHeaders[0]
     const mainName = camelize(first.id || first.name)
     return {
       mainRow: [
         { name: row[mainName] },
         ...[...withActions
-          ? row.actions ? [{ component: row.actions }]
-            : [{ name: ' ' }]
+          ? row.actions
+            ? [{ component: row.actions }]
+              : [{ name: ' ' }]
           : []]
       ],
       mainName

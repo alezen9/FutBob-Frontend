@@ -18,7 +18,13 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const InputSwitch = ({ name, onChange, values }) => {
+type Props = {
+  name: string
+  onChange: (e: any, d: boolean) => void
+  values: any
+}
+
+const InputSwitch: React.FC<Props> = ({ name, onChange, values }) => {
   const classes = useStyles()
   return (
     <div className={classes.wrapper}>
@@ -28,7 +34,6 @@ const InputSwitch = ({ name, onChange, values }) => {
         checked={get(values, name, false)}
         onChange={onChange}
         color='primary'
-        margin='normal'
       />
     </div>
   )

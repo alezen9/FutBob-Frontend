@@ -25,7 +25,13 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const CondexoPagination = props => {
+type Props = {
+  totalCount: number
+  currentPage: number
+  onChangePage: (e: any, newPage: number) => void
+}
+
+const CondexoPagination: React.FC<Props> = props => {
   const { totalCount = 20, currentPage = 1, onChangePage } = props
   const classes = useStyles()
 

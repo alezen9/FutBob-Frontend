@@ -3,10 +3,11 @@ import { makeStyles } from '@material-ui/core/styles'
 import Players from './Players'
 import { get } from 'lodash'
 import { Switch } from '@material-ui/core'
+import { FormikValues } from 'formik'
 
 const useStyles = makeStyles(theme => {
-  const indoorLineColor = 'rgb(0, 0, 138, 1)'
-  const outDoorLineColor = '#fafafa'
+  const indoorLineColor: string = 'rgb(0, 0, 138, 1)'
+  const outDoorLineColor: string = '#fafafa'
 
   return {
     typeSwitch: {
@@ -38,7 +39,7 @@ const useStyles = makeStyles(theme => {
       position: 'relative',
       width: '100%',
       height: '100%',
-      backgroundImage: ({ indoor = false }) => `url("${indoor ? '/assets/parquet.jpg' : '/assets/grass.jpg'}")`,
+      backgroundImage: (props: any) => `url("${props.indoor ? '/assets/parquet.jpg' : '/assets/grass.jpg'}")`,
       backgroundRepeat: 'repeat',
       backgroundSize: 75,
       backgroundPosition: -20,
@@ -48,7 +49,7 @@ const useStyles = makeStyles(theme => {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      border: ({ indoor = false }) => `2px solid ${indoor ? indoorLineColor : outDoorLineColor}`,
+      border: (props: any) => `2px solid ${props.indoor ? indoorLineColor : outDoorLineColor}`,
       overflow: 'hidden',
       transition: 'background-image .5s ease',
       '&:before': {
@@ -59,7 +60,7 @@ const useStyles = makeStyles(theme => {
         width: '70%',
         content: '""',
         transform: 'translateX(-50%)',
-        border: ({ indoor = false }) => `3px solid ${indoor ? indoorLineColor : outDoorLineColor}`,
+        border: (props: any) => `3px solid ${props.indoor ? indoorLineColor : outDoorLineColor}`,
         borderTop: 'none',
         borderBottomLeftRadius: 100,
         borderBottomRightRadius: 100
@@ -72,7 +73,7 @@ const useStyles = makeStyles(theme => {
         width: '70%',
         content: '""',
         transform: 'translateX(-50%)',
-        border: ({ indoor = false }) => `2px solid ${indoor ? indoorLineColor : outDoorLineColor}`,
+        border: (props: any) => `2px solid ${props.indoor ? indoorLineColor : outDoorLineColor}`,
         borderBottom: 'none',
         borderTopLeftRadius: 100,
         borderTopRightRadius: 100
@@ -82,7 +83,7 @@ const useStyles = makeStyles(theme => {
       position: 'relative',
       width: '100%',
       height: 2,
-      backgroundColor: ({ indoor = false }) => indoor ? indoorLineColor : outDoorLineColor,
+      backgroundColor: (props: any) => props.indoor ? indoorLineColor : outDoorLineColor,
       transform: 'translateY(20px)',
       '&:after': {
         position: 'absolute',
@@ -93,7 +94,7 @@ const useStyles = makeStyles(theme => {
         borderRadius: '50%',
         content: '""',
         transform: 'translate(-50%, -50%)',
-        backgroundColor: ({ indoor = false }) => indoor ? indoorLineColor : outDoorLineColor
+        backgroundColor: (props: any) => props.indoor ? indoorLineColor : outDoorLineColor
       }
     },
     lines2: {
@@ -102,7 +103,7 @@ const useStyles = makeStyles(theme => {
       height: '20%',
       borderRadius: '50%',
       transform: 'translateY(20px)',
-      border: ({ indoor = false }) => `2px solid ${indoor ? indoorLineColor : outDoorLineColor}`,
+      border: (props: any) => `2px solid ${props.indoor ? indoorLineColor : outDoorLineColor}`,
       '&:before': {
         position: 'absolute',
         top: -54,
@@ -112,7 +113,7 @@ const useStyles = makeStyles(theme => {
         borderRadius: '50%',
         content: '""',
         transform: 'translateX(-50%)',
-        backgroundColor: ({ indoor = false }) => indoor ? indoorLineColor : outDoorLineColor,
+        backgroundColor: (props: any) => props.indoor ? indoorLineColor : outDoorLineColor,
         [theme.breakpoints.down('xs')]: {
           top: '-88%'
         }
@@ -126,7 +127,7 @@ const useStyles = makeStyles(theme => {
         borderRadius: '50%',
         content: '""',
         transform: 'translateX(-50%)',
-        backgroundColor: ({ indoor = false }) => indoor ? indoorLineColor : outDoorLineColor,
+        backgroundColor: (props: any) => props.indoor ? indoorLineColor : outDoorLineColor,
         [theme.breakpoints.down('xs')]: {
           top: 71
         }
@@ -140,12 +141,22 @@ const useStyles = makeStyles(theme => {
   }
 })
 
-const FutsalField = props => {
+type Props = {
+  positions: number[]
+  onPositionClick: () => any
+  name: string
+  values: FormikValues
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
+  setFieldTouched: (field: string, isTouched?: boolean, shouldValidate?: boolean) => void
+  type: 'indoor'|'outdoor'
+}
+
+const FutsalField: React.FC<Props> = props => {
   const { positions = [], onPositionClick, name, values, setFieldValue, setFieldTouched, type = 'outdoor' } = props
   const [outDoor, setOutDoor] = useState(true)
   const { wrapper, typeSwitch, fieldWrapper, field, lines1, lines2, trackClass } = useStyles({ indoor: !outDoor })
 
-  const vals = useMemo(() => get(values, name, positions) || [], [name, positions, values])
+  const vals: number[] = useMemo(() => get(values, name, positions) || [], [name, positions, values])
 
   const setVal = useCallback(
     val => {
@@ -153,14 +164,16 @@ const FutsalField = props => {
         setFieldTouched(name, true, false)
         setFieldValue(name, val, false)
       }
-    }, [setFieldValue, setFieldTouched, name, onPositionClick])
+    }, [setFieldValue, setFieldTouched, name])
 
   const onPositionClickFormik = useCallback(
-    pos => {
-      const newVals = vals.filter(el => el !== pos)
+    (pos: number) => {
+      const newVals = vals.filter((el: number) => el !== pos)
       if (newVals.length === vals.length) newVals.push(pos)
       setVal(newVals)
     }, [vals, setVal])
+
+  const toggleField = useCallback(() => setOutDoor(state => !state), [])
 
   return (
     <div className={wrapper}>
@@ -171,7 +184,7 @@ const FutsalField = props => {
           <Players name={name} values={vals} onClick={onPositionClickFormik || onPositionClick} />
         </div>
         <div className={typeSwitch}>
-          <Switch classes={{ track: trackClass }} color='primary' checked={outDoor} onChange={() => setOutDoor(state => !state)} />
+          <Switch classes={{ track: trackClass }} color='primary' checked={outDoor} onChange={toggleField} />
         </div>
       </div>
     </div>

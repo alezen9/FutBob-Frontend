@@ -31,7 +31,7 @@ export const camelize = (str: string) => {
   })
 }
 
-const defaultStyleIcons: any = {
+const defaultStyleIcons = {
   marginRight: '.5em',
   fontSize: '1.1em'
 }
@@ -183,7 +183,7 @@ export const footballPositionsOptions = [
   }
 ]
 
-const PhysicalState = React.memo(props => {
+const PhysicalState: React.FC<{label: string, value: number}> = React.memo(props => {
   const { label, value } = props
   return <span style={{ display: 'flex', fontSize: '1em', alignItems: 'center' }}>
     {value === 0 && <TopFormIcon style={{ color: 'limegreen', fontSize: '1.2em' }} />}
@@ -233,7 +233,7 @@ export const getLabelsByValues = ({ values = [], options = [], list = false, sep
     : labels.join(separator)
 }
 
-export const decamelize = (str, separator) => {
+export const decamelize = (str: string, separator?: string) => {
   separator = typeof separator === 'undefined' ? ' ' : separator
 
   return capitalize((str || '')
@@ -296,7 +296,7 @@ export const cleanQueryParams = query => {
   }, {})
 }
 
-export const getScoreColor = value => {
+export const getScoreColor = (value: number) => {
   if (value < 40) return 'crimson'
   if (value < 65) return 'orange'
   if (value < 85) return FutBobPalette.darkGreen

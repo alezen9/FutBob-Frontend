@@ -25,7 +25,16 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const RadarChart = ({ data = [] }) => {
+type Data = {
+  prop: string
+  value: number
+}
+
+type Props = {
+  data: Data[]
+}
+
+const RadarChart:React.FC<Props> = ({ data = [] }) => {
   const classes = useStyles()
   const theme = useTheme()
   const blendMode = useMemo(() => theme.type === 'dark' ? 'normal' : 'multiply', [theme.type])
@@ -59,6 +68,7 @@ const RadarChart = ({ data = [] }) => {
         motionStiffness={90}
         motionDamping={15}
         isInteractive
+        legends={[]}
         //   legends={[
         //     {
         //       anchor: 'top-left',

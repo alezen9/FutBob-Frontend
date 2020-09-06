@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import { useConfigStore } from '../../zustand/configStore'
 import { getTitleFromPathname } from '../../utils/helpers'
 
-const Title = props => {
+const Title = () => {
   const router = useRouter()
   const { pageTitle, setPageTitle } = useConfigStore(state => ({
     pageTitle: state.pageTitle,

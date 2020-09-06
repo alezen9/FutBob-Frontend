@@ -10,25 +10,33 @@ import FlashOnIcon from '@material-ui/icons/FlashOn'
 import TimelineOutlinedIcon from '@material-ui/icons/TimelineOutlined'
 import GpsFixedOutlinedIcon from '@material-ui/icons/GpsFixedOutlined'
 import AllInclusiveIcon from '@material-ui/icons/AllInclusive'
+import { FormikEssentials } from '..'
+
+const iconProps = {
+  style: {
+    fontSize: '1.1em',
+    marginRight: '.5em'
+  }
+}
 
 const ScoreValuesIconMap = {
-  Pace: <FlashOnIcon style={{ fontSize: '1.1em', marginRight: '.5em' }} />,
-  Passing: <TimelineOutlinedIcon style={{ fontSize: '1.1em', marginRight: '.5em' }} />,
-  Shooting: <GpsFixedOutlinedIcon style={{ fontSize: '1.1em', marginRight: '.5em' }} />,
-  Defense: <DefenseIcon style={{ fontSize: '1.1em', marginRight: '.5em' }} />,
-  Physical: <PhysicalIcon style={{ fontSize: '1.1em', marginRight: '.5em' }} />,
-  Dribbling: <AllInclusiveIcon style={{ fontSize: '1.1em', marginRight: '.5em' }} />
+  Pace: <FlashOnIcon {...iconProps} />,
+  Passing: <TimelineOutlinedIcon {...iconProps} />,
+  Shooting: <GpsFixedOutlinedIcon {...iconProps} />,
+  Defense: <DefenseIcon {...iconProps} />,
+  Physical: <PhysicalIcon {...iconProps} />,
+  Dribbling: <AllInclusiveIcon {...iconProps} />
 }
 
 export const getMeanScoreField = fieldData => {
-  const { nItems, totVal } = reduce(fieldData, (acc, value, key) => ({
+  const { nItems, totVal } = reduce(fieldData, (acc, value) => ({
     nItems: acc.nItems + 1,
     totVal: acc.totVal + value
   })
   , { nItems: 0, totVal: 0 })
   return nItems === 0
     ? 0
-    : parseInt(totVal / nItems)
+    : Math.trunc(totVal / nItems)
 }
 
 const useStyles = makeStyles(theme => ({
@@ -45,7 +53,16 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const SingleScore = props => {
+type Props = {
+  title?: string
+  name: string
+  values?: {
+    [field: string]: number
+  }
+  formik: FormikEssentials
+}
+
+const SingleScore: React.FC<Props> = props => {
   const { title = '-', name, values = {}, formik } = props
   const classes = useStyles()
   const [openSliders, setOpenSliders] = useState(false)
@@ -61,7 +78,7 @@ const SingleScore = props => {
     }, [initialVals, formik.setFieldValue])
 
   const toggleSliders = useCallback(
-    (_cancelChanges = true) => () => {
+    (_cancelChanges: boolean = true) => () => {
       setOpenSliders(state => !state)
       if (_cancelChanges) cancelChanges()
     }, [cancelChanges])

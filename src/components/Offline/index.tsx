@@ -49,4 +49,4 @@ const OfflinePage = () => {
   )
 }
 
-export default OfflinePage
+export default React.memo(OfflinePage)

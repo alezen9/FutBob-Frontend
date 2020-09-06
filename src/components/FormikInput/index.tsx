@@ -1,7 +1,7 @@
-import React, { useState, Fragment, useMemo } from 'react'
+import React, { useState, Fragment, useMemo, ReactNode, useCallback, ReactNodeArray } from 'react'
 import TextField from '@material-ui/core/TextField'
 import { makeStyles } from '@material-ui/core/styles'
-import { FormControl, FormHelperText, Grid, IconButton, InputAdornment, Chip, FormControlLabel } from '@material-ui/core'
+import { FormControl, FormHelperText, Grid, IconButton, InputAdornment, Chip, FormControlLabel, GridSpacing } from '@material-ui/core'
 import { get, uniqBy, uniqueId, compact } from 'lodash'
 import Lock from '@material-ui/icons/Lock'
 import LockOpen from '@material-ui/icons/LockOpen'
@@ -32,7 +32,61 @@ const useStyles = makeStyles(theme => ({
 
 const labelPlacementAccepted = ['top', 'bottom', 'start', 'end']
 
-const FormikInput = props => {
+type GridSize = 1|2|3|4|5|6|7|8|9|10|11|12
+
+type GridWrapperProps = {
+  xs?: GridSize
+  sm?: GridSize
+  md?: GridSize
+  lg?: GridSize
+  xl?: GridSize
+  container?: boolean
+  spacing?: GridSpacing
+  style?: any
+}
+
+export type OptionType = {
+  label: any
+  value: any
+  component?: ReactNode
+  [field: string]: any
+}
+
+export type FormikEssentials = {
+  values: any
+  errors: any
+  setFieldTouched: any
+  setFieldValue: any
+  setFieldError: any
+}
+
+
+type Props = FormikEssentials & GridWrapperProps & {
+  id?: any
+  name: string
+  label: string
+  type?: 'text'|'password'|'phone'|'checkbox'|'switch'|'select'|'autocomplete'|'asyncAutocomplete'|'date'|'address'|'slider'
+  handleChange?: any
+  helperText?: string
+  variant?: 'outlined'
+  disabled?: boolean
+  multiline?: boolean
+  rows?: number
+  grouped?: boolean
+  required?: boolean
+  supplementaryOnChange?: (e: any, v?: any) => void
+  style?: any
+  labelPlacement?: 'bottom'|'top'|'end'|'start'
+  inputProps?: any
+  multiple?: boolean
+  onSearchText?: (v: string) => void
+  loading?: boolean
+  sortByLabel?: boolean
+  autoWidth?: boolean
+  options?: OptionType[]
+}
+
+const FormikInput: React.FC<Props> = props => {
   const { formControl, textField, chipClass } = useStyles()
   const [show, toggleShow] = useState(false)
   const {
@@ -57,9 +111,8 @@ const FormikInput = props => {
 
   const labelPlacementCorrected = useMemo(() => {
     const { labelPlacement } = props
-    if (!labelPlacement) return 'end'
     if (labelPlacementAccepted.includes(labelPlacement)) return labelPlacement
-    return 'right'
+    return 'end'
   }, [get(props, 'labelPlacement', undefined)])
 
   const label = useMemo(() => typeof _label === 'string'
@@ -68,8 +121,11 @@ const FormikInput = props => {
 
   const defaultProps = { ...props, id, type, values, handleChange, helperText, errors, variant, disabled, xs, multiline, rows, required, label }
 
+
+  const toggleShowMemoized = useCallback((e: any) => toggleShow(state => !state), [])
+
   const PasswordAdornment = () => <InputAdornment position='end' >
-    <IconButton aria-label='Vedi/Nascondi password' onClick={() => toggleShow(!show)}>
+    <IconButton aria-label='Show/Hide password' onClick={toggleShowMemoized}>
       {show ? <LockOpen /> : <Lock />}
     </IconButton>
   </InputAdornment>
@@ -80,7 +136,7 @@ const FormikInput = props => {
 
   switch (type) {
     case 'slider':
-      const onSliderChange = (e, d) => {
+      const onSliderChange = (e, d: number) => {
         props.setFieldTouched(name, true, false)
         props.setFieldValue(name, d, true)
       }
@@ -106,7 +162,7 @@ const FormikInput = props => {
       }
       break
     case 'phone':
-      const onChangePhone = v => {
+      const onChangePhone = (v: string) => {
         props.setFieldTouched(name, true, false)
         props.setFieldValue(name, v, true)
       }
@@ -118,9 +174,9 @@ const FormikInput = props => {
         </GridWrapper>
       )
     case 'checkbox':
-      const onChangeCheckbox = e => {
+      const onChangeCheckbox = (e, d: boolean) => {
         props.setFieldTouched(name, true, false)
-        props.setFieldValue(name, e.target.checked, true)
+        props.setFieldValue(name, d, true)
       }
       return (
         <GridWrapper {...props}>
@@ -128,7 +184,7 @@ const FormikInput = props => {
             style={{ marginTop: 16, ...style }}
             onChange={onChangeCheckbox}
             value={get(values, name, false)}
-            control={<InputCheckbox {...defaultProps} formControl={formControl} onChange={onChangeCheckbox} />}
+            control={<InputCheckbox {...defaultProps} onChange={onChangeCheckbox} />}
             label={label}
             disabled={disabled}
             labelPlacement={labelPlacementCorrected}
@@ -136,9 +192,9 @@ const FormikInput = props => {
         </GridWrapper>
       )
     case 'switch':
-      const onChangeSwitch = e => {
+      const onChangeSwitch = (e, d: boolean) => {
         props.setFieldTouched(name, true, false)
-        props.setFieldValue(name, e.target.checked, true)
+        props.setFieldValue(name, d, true)
       }
       return (
         <GridWrapper {...props}>
@@ -146,7 +202,7 @@ const FormikInput = props => {
             style={{ marginTop: 16, ...style }}
             onChange={onChangeSwitch}
             value={get(values, name, false)}
-            control={<InputSwitch {...defaultProps} formControl={formControl} onChange={onChangeSwitch} />}
+            control={<InputSwitch {...defaultProps} onChange={onChangeSwitch} />}
             label={label}
             disabled={disabled}
             labelPlacement={labelPlacementCorrected}
@@ -171,7 +227,7 @@ const FormikInput = props => {
         }
       }
 
-      const handleChipDelete = (v) => () => {
+      const handleChipDelete = v => () => {
         props.setFieldTouched(name, true, false)
         props.setFieldValue(name, [...get(values, name, []).filter(val => val.value !== v)])
       }
@@ -191,7 +247,7 @@ const FormikInput = props => {
       return (
         <GridWrapper {...props}>
           <FormControl variant={variant} className={formControl} style={{ marginTop: 16, ...style }}>
-            <InputSelect {...defaultProps} formControl={formControl} onChange={onChangeSelect} />
+            <InputSelect {...defaultProps} onChange={onChangeSelect} />
           </FormControl>
           {hasChips && renderChips()}
         </GridWrapper>
@@ -227,7 +283,7 @@ const FormikInput = props => {
       return (
         <GridWrapper {...props}>
           <FormControl variant={variant} className={formControl} style={{ marginTop: 16, ...style }}>
-            <InputAutocomplete {...defaultProps} grouped={grouped} formControl={formControl} onChange={onChangeAutocomplete} />
+            <InputAutocomplete {...defaultProps} grouped={grouped} onChange={onChangeAutocomplete} />
           </FormControl>
           {hasChips && renderChipsAutoCompleteMultiple()}
         </GridWrapper>
@@ -271,7 +327,7 @@ const FormikInput = props => {
       )
     case 'date':
       const onDateChange = e => {
-        const v = e.target.value
+        const v: string = e.target.value
         const isValidDate = moment(v).isValid()
         if (isValidDate) {
           const isoDate = moment(v).toISOString()
@@ -340,9 +396,9 @@ const FormikInput = props => {
   )
 }
 
-const GridWrapper = React.memo(props => {
+const GridWrapper: React.FC<GridWrapperProps> = React.memo(props => {
   const { xs = 12, sm, md, lg, xl, container, spacing } = props
-  return <Grid item {...container && { container: true, spacing: spacing || 0 }} style={{ ...props.style || {} }} xs={xs} sm={sm || xs} md={md || sm || xs} lg={lg || sm || xs} xl={xl || lg || sm || xs}>
+  return <Grid item {...container && { container: true, spacing: spacing || 1 }} style={{ ...props.style || {} }} xs={xs} sm={sm || xs} md={md || sm || xs} lg={lg || sm || xs} xl={xl || lg || sm || xs}>
     {props.children}
   </Grid>
 })

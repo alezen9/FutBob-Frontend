@@ -96,7 +96,7 @@ const useStyles = makeStyles(theme => ({
 const useStylesAutocomplete = makeStyles(theme => ({
   root: {
     '& > div > label': {
-      color: ({ error }) => error
+      color: (props: any) => props.error
         ? '#ff443a'
         : FutBobPalette.borderColor
     }
@@ -142,14 +142,18 @@ const useStylesAutocomplete = makeStyles(theme => ({
   },
   inputRoot: {
     '& > fieldset': {
-      borderColor: ({ error }) => error
+      borderColor: (props: any) => props.error
         ? '#ff443a'
         : FutBobPalette.borderColor
     }
   }
 }))
 
-const OptionRenderer = React.memo(props => {
+type OptionRendererProps = {
+  label: any
+}
+
+const OptionRenderer: React.FC<OptionRendererProps> = React.memo(props => {
   const { label } = props
   const classes = useStyles()
   return <div className={classes.singleOption}>
@@ -158,7 +162,12 @@ const OptionRenderer = React.memo(props => {
   </div>
 })
 
-const InfoPopover = React.memo(props => {
+type InfoPopoverProps = {
+  anchorEl?: null | Element | ((element: Element) => Element)
+  handleClose: VoidFunction
+}
+
+const InfoPopover: React.FC<InfoPopoverProps> = React.memo(props => {
   const { anchorEl, handleClose } = props
   const classes = useStyles()
   return <Popover

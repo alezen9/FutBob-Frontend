@@ -5,14 +5,15 @@ import { sortBy, get } from 'lodash'
 import { makeStyles, FormHelperText, useTheme, useMediaQuery, ListSubheader } from '@material-ui/core'
 import { FutBobPalette } from '../../../palette'
 import { VariableSizeList } from 'react-window'
+import { OptionType } from '.'
 
 const useStyles = makeStyles(theme => ({
   paper: {
     boxShadow: theme.shadows[24]
   },
-  listbox: ({ large }) => ({
+  listbox: (props: any) => ({
     padding: '.5em',
-    ...large && {
+    ...props.large && {
       '& > ul': {
         margin: 0
       }
@@ -53,14 +54,30 @@ const useStyles = makeStyles(theme => ({
   },
   inputRoot: {
     '& > fieldset': {
-      borderColor: ({ error }) => error
+      borderColor: (props: any) => props.error
         ? '#ff443a'
         : FutBobPalette.borderColor
     }
   }
 }))
 
-const InputAutocomplete = props => {
+type Props = {
+  options?: OptionType[]
+  label: string
+  id?: string
+  name: string
+  required?: boolean
+  disabled?: boolean
+  errors: any
+  onChange: (e: any, d: any) => void
+  large?: boolean
+  sortByLabel?: boolean
+  multiple?: boolean
+  grouped?: boolean
+  values: any
+}
+
+const InputAutocomplete: React.FC<Props> = props => {
   const {
     options = [],
     grouped,
@@ -88,6 +105,7 @@ const InputAutocomplete = props => {
 
   return (
     <>
+      {/* @ts-ignore */}
       <Autocomplete
         id={id}
         multiple={multiple}
@@ -115,7 +133,13 @@ export default React.memo(InputAutocomplete)
 
 const LISTBOX_PADDING = 8
 
-function renderRow (props) {
+type RowProps = {
+  data: any[]
+  index: number
+  style: any
+}
+
+const renderRow = (props: RowProps) => {
   const { data, index, style } = props
   return React.cloneElement(data[index], {
     style: {
@@ -129,6 +153,7 @@ const OuterElementContext = React.createContext({})
 
 const OuterElementType = React.forwardRef((props, ref) => {
   const outerProps = React.useContext(OuterElementContext)
+  // @ts-ignore
   return <div ref={ref} {...props} {...outerProps} />
 })
 
@@ -166,6 +191,7 @@ const ListboxComponent = React.forwardRef(function ListboxComponent (props, ref)
   const gridRef = useResetCache(itemCount)
 
   return (
+    // @ts-ignore
     <div ref={ref}>
       <OuterElementContext.Provider value={other}>
         <VariableSizeList

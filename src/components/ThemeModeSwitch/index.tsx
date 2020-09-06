@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { makeStyles, Switch } from '@material-ui/core'
 import { useConfigStore } from '../../zustand/configStore'
+import { ThemeType } from '../../../palette'
 
 const useStyles = makeStyles(theme => ({
   toggleThumb: {
@@ -23,21 +24,26 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const ThemeSwitch = props => {
+const ThemeSwitch = () => {
   const { setTheme, themeType } = useConfigStore(state => ({
     themeType: state.themeType,
     setTheme: state.setTheme
   }))
   const classes = useStyles()
+
+  const toggleTheme = useCallback(() => {
+    setTheme(themeType === ThemeType.light
+      ? ThemeType.dark
+      : ThemeType.light)
+  }, [setTheme, themeType])
+
   return (
     <Switch
-      classes={{
-        thumb: classes.toggleThumb
-      }}
+      classes={{ thumb: classes.toggleThumb }}
       checked={themeType === 'dark'}
       color='primary'
-      onChange={e => setTheme(themeType === 'light' ? 'dark' : 'light')} />
+      onChange={toggleTheme} />
   )
 }
 
-export default ThemeSwitch
+export default React.memo(ThemeSwitch)

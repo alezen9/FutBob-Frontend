@@ -6,7 +6,19 @@ import FaceRoundedIcon from '@material-ui/icons/FaceRounded'
 import BarChartRoundedIcon from '@material-ui/icons/BarChartRounded'
 import { JerseyIcon, FieldIcon } from '../assets/CustomIcon'
 
-export const sections = [
+type SubPaths = {
+  title: string,
+  path: string
+}
+
+export type Section = {
+  title: string
+  icon: JSX.Element
+  path: string
+  subpaths?: SubPaths[]
+}
+
+export const sections: Section[] = [
   {
     title: 'Dashboard',
     icon: <DashboardRoundedIcon />,

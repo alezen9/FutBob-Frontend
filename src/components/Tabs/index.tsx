@@ -1,13 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, ReactChild, ReactNode, ReactChildren } from 'react'
 import PropTypes from 'prop-types'
 // MUI
 import { makeStyles } from '@material-ui/core/styles'
-import AppBar from '@material-ui/core/AppBar'
-import { Tabs, Tab, useMediaQuery } from '@material-ui/core'
+import { AppBar, Tabs, Tab, useMediaQuery } from '@material-ui/core'
 // components
 import SingleTab from './SingleTab'
 // utils
 import { compact, get } from 'lodash'
+
+type Props = {
+  children: React.FC<TabProps>[],
+  safeGuard?: (val: number) => boolean
+}
 
 const useStyles = makeStyles(theme => ({
   wrapper: {
@@ -48,7 +52,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const tabProps = index => {
+const tabProps: any = (index: number) => {
   const { tab, tabSelected } = useStyles()
   return {
     id: `tabPanel-${index}`,
@@ -60,7 +64,7 @@ const tabProps = index => {
   }
 }
 
-const FutBobTabs = props => {
+const FutBobTabs: React.FC<Props> = props => {
   const { children, safeGuard } = props
   const { wrapper, appBar, tabs, indicatorClass } = useStyles()
   const [value, setValue] = useState(0)
@@ -110,14 +114,10 @@ const FutBobTabs = props => {
 
 export default FutBobTabs
 
-FutBobTabs.propTypes = {
-  safeGuard: PropTypes.func
+type TabProps = {
+  title: string,
+  component?: ReactNode,
+  outercomponent?: ReactNode
 }
 
-export const FutBobTab = props => <div {...props} />
-
-FutBobTab.propTypes = {
-  title: PropTypes.string.isRequired,
-  component: PropTypes.node,
-  outercomponent: PropTypes.node
-}
+export const FutBobTab: React.FC<TabProps> = props => <div {...props} />

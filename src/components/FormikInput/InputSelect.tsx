@@ -3,6 +3,7 @@ import { get, sortBy, last, find } from 'lodash'
 import { Select, MenuItem, InputLabel, FormHelperText, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { FutBobPalette } from '../../../palette'
+import { OptionType } from '.'
 
 const useStyles = makeStyles(theme => ({
   menuItem: {
@@ -15,13 +16,13 @@ const useStyles = makeStyles(theme => ({
   },
   inputRoot: {
     '& fieldset': {
-      borderColor: ({ error }) => error
+      borderColor: (props: any) => props.error
         ? '#ff443a'
         : FutBobPalette.borderColor
     }
   },
   labelClass: {
-    color: ({ error }) => error
+    color: (props: any) => props.error
       ? '#ff443a'
       : FutBobPalette.typographyGrey
   }
@@ -39,16 +40,12 @@ const promoteItem = ({ arr = [], value }) => {
   return data
 }
 
-export const measureText = (pText, pFontSize, pStyle) => {
+export const measureText = (pText: string) => {
   var lDiv = document.createElement('div')
   document.body.appendChild(lDiv)
-  if (pStyle != null) {
-    lDiv.style = pStyle
-  }
-  lDiv.style.fontSize = '' + pFontSize + 'px'
   lDiv.style.position = 'absolute'
-  lDiv.style.left = -1000
-  lDiv.style.top = -1000
+  lDiv.style.left = '-1000px'
+  lDiv.style.top = '-1000px'
   lDiv.innerHTML = pText
   var lResult = {
     width: lDiv.clientWidth,
@@ -56,11 +53,26 @@ export const measureText = (pText, pFontSize, pStyle) => {
   }
   document.body.removeChild(lDiv)
   lDiv = null
-
   return lResult
 }
 
-const InputSelect = props => {
+type Props = {
+  options: OptionType[],
+  label: string,
+  id?: string
+  name: string
+  required?: boolean
+  values: any
+  disabled?: boolean
+  errors: any
+  onChange: (e: any, d: any) => void
+  variant: 'outlined'
+  sortByLabel?: boolean
+  multiple?: boolean
+  autoWidth?: boolean
+}
+
+const InputSelect: React.FC<Props> = props => {
   const {
     options = null,
     label,
@@ -101,10 +113,12 @@ const InputSelect = props => {
     , [options, get(values, name, [])])
 
   const renderValue = useCallback(
-    val => {
+    (val: OptionType) => {
       if (multiple) {
-        const res = last(get(values, name, []))
-        return res ? get(res, 'component', res.label) : null
+        const res: OptionType = last(get(values, name, []))
+      return res 
+        ? get(res, 'component', <Typography style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>{res.label}</Typography>) 
+        : <></>
       } else {
         const v = options.find(({ value }) => val === value)
         return <Typography style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>{get(v, 'component', v.label)}</Typography>
@@ -125,7 +139,6 @@ const InputSelect = props => {
         variant={variant}
         renderValue={renderValue}
         inputProps={{ id, required }}
-      >
       >
         {Options(options)}
       </Select>

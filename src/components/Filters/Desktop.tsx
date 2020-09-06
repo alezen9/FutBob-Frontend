@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { Grid, Button, makeStyles, IconButton } from '@material-ui/core'
+import { Grid, makeStyles, IconButton } from '@material-ui/core'
 import { Actions, Inputs, SearchBox } from './helpers'
-import CondexoDrawer from '../Drawer'
+import FutbobDrawer from '../Drawer'
 import FilterListRoundedIcon from '@material-ui/icons/FilterListRounded'
 
 const useStyles = makeStyles(theme => ({
@@ -40,7 +40,7 @@ const DesktopFilters = props => {
             </IconButton>
             {otherActions}
           </Grid>
-          <CondexoDrawer
+          <FutbobDrawer
             open={openDrawer}
             toggleDrawer={toggleDrawer}
             content={<Grid container spacing={3}>

@@ -59,7 +59,11 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const ListField = props => {
+type Props = {
+  data?: string[]
+}
+
+const ListField: React.FC<Props> = props => {
   const { data = [] } = props
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState(null)

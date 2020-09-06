@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Slider from '@material-ui/core/Slider'
 import Typography from '@material-ui/core/Typography'
@@ -37,14 +37,23 @@ const marks = [
   }
 ]
 
-const Inputslider = props => {
+type Props = {
+  label: string
+  values: any
+  name: string
+  onChange: (e: any, d: number) => void
+}
+
+const Inputslider: React.FC<Props> = props => {
   const { label, values, name, onChange } = props
   const classes = useStyles()
-  const [localVal, setLocalVal] = useState(get(values, name, 0))
+  const [localVal, setLocalVal]: [number, (v: number) => void] = useState(get(values, name, 0))
 
   useEffect(() => {
     if (![null, undefined].includes(get(values, name, null))) setLocalVal(get(values, name, 0))
   }, [get(values, name, null)])
+
+  const onLocalChange = useCallback((e, d) => setLocalVal(d), [])
 
   return (
     <div className={classes.root}>
@@ -53,7 +62,7 @@ const Inputslider = props => {
         classes={{ thumb: classes.thumb }}
         marks={marks}
         value={localVal}
-        onChange={(e, d) => setLocalVal(d)}
+        onChange={onLocalChange}
         onChangeCommitted={onChange}
         valueLabelDisplay='auto' />
     </div>

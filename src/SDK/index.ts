@@ -1,10 +1,13 @@
-import axios from 'axios'
+import axios, { AxiosInstance, AxiosResponse } from 'axios'
 import { get } from 'lodash'
 import getConfig from 'next/config'
 import { paramsToString } from '../utils/helpers'
 const { publicRuntimeConfig } = getConfig()
 
 class FutBobServer {
+  localStorageToken: string
+  TOKEN: string|undefined
+  _self: AxiosInstance
   constructor () {
     this.localStorageToken = 'FutBobToken'
     this.TOKEN = process.browser
@@ -45,7 +48,7 @@ class FutBobServer {
 
   async API ({ query, name }) {
     return this._self.post('/graphql', { query })
-      .then(res => {
+      .then((res: any) => {
         const { data, errors } = res
         if (errors && errors.length) throw errors[0].message
         else return data[name]

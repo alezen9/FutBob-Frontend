@@ -1,4 +1,15 @@
 import { createMuiTheme } from '@material-ui/core/styles'
+import { ThemeType } from './palette'
+
+declare module '@material-ui/core/styles/createMuiTheme' {
+  interface Theme {
+    type: ThemeType
+  }
+  // allow configuration using `createMuiTheme`
+  interface ThemeOptions {
+    type: ThemeType
+  }
+}
 
 const subtitleGrey = '#686868'
 const lightGrey = '#c1c1c1'
@@ -20,8 +31,8 @@ const border = '1px solid rgba(0, 0, 0, 0.23)'
 const borderRadius = 7
 
 const lightTheme = createMuiTheme({
-  type: 'light',
-  activeColor: darkGreen,
+  // @ts-ignore
+  type: ThemeType.light,
   palette: {
     primary: {
       light: pinkLight,
@@ -44,7 +55,6 @@ const lightTheme = createMuiTheme({
   },
   typography: {
     fontFamily: "'Poppins', sans-serif",
-    useNextVariants: true,
     h1: {
       padding: 0,
       fontSize: '25pt',
@@ -64,7 +74,7 @@ const lightTheme = createMuiTheme({
       padding: 0,
       fontSize: '15pt',
       color: typographyGrey,
-      fontWeight: 'semi-bold'
+      fontWeight: 500
     },
     h5: {
       padding: 0,
@@ -85,7 +95,7 @@ const lightTheme = createMuiTheme({
     body2: {
       padding: 0,
       fontSize: '12pt',
-      fontWeight: 'semi-bold',
+      fontWeight: 500,
       color: typographyGrey
     },
     caption: {

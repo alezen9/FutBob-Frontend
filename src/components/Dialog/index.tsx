@@ -6,14 +6,18 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import Slide from '@material-ui/core/Slide'
 import { IconButton, Typography, Grid, makeStyles, useTheme, useMediaQuery } from '@material-ui/core'
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded'
+import { TransitionProps } from '@material-ui/core/transitions/transition'
 
-const Transition = React.forwardRef((props, ref) => {
-  return <Slide ref={ref} direction='left' {...props} />
-})
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & { children?: React.ReactElement<any, any> },
+  ref: React.Ref<unknown>,
+) {
+  return <Slide direction="left" ref={ref} {...props} />;
+});
 
 const useStyles = makeStyles(theme => ({
   content: {
-    height: ({ fullHeight }) => fullHeight ? '85vh' : 'auto',
+    height: (props: any) => props.fullHeight ? '85vh' : 'auto',
     overflowY: 'auto'
   }
 }))
@@ -21,13 +25,13 @@ const useStyles = makeStyles(theme => ({
 type Props = {
   open: boolean
   onClose: any
-  withTransition: boolean
+  withTransition?: boolean
   title?: string
   content: ReactNode
   actions?: ReactNode
   maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
   fullHeight?: boolean
-  overflowY?: string
+  overflowY?: 'hidden'|'scroll'|'auto'
   fullScreen?: boolean
 }
 
@@ -72,7 +76,7 @@ const CustomDialog: React.FC<Props> = props => {
           <Grid item xs={10}>
             <Typography align='left' variant='h4'>{title}</Typography>
           </Grid>
-          <Grid item align='right' style={{ padding: 0 }} xs={2}>
+          <Grid item style={{ padding: 0, textAlign: 'right' }} xs={2}>
             <IconButton
               color='primary'
               onClick={onClose}

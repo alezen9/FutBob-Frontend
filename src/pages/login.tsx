@@ -1,7 +1,7 @@
 import React from 'react'
-import { Button, Typography, Grid } from '@material-ui/core'
+import { Button, Typography, Grid, Theme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { useFormik } from 'formik'
+import { useFormik, FormikComputedProps, FormikValues, FormikBag, FormikHelpers } from 'formik'
 import FormikInput from '../components/FormikInput'
 import { apiInstance } from '../SDK'
 import { FutBobLogo } from '../assets/CustomIcon'
@@ -10,7 +10,7 @@ import ThemeSwitch from '../components/ThemeModeSwitch'
 import { ServerMessage } from '../utils/serverMessages'
 import { useConfigStore } from '../zustand/configStore'
 
-const Copyright = props => {
+const Copyright = () => {
   return (
     <Grid container item xs={12} justify='center'>
       <Typography variant='caption' align='center'>
@@ -20,7 +20,7 @@ const Copyright = props => {
   )
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme: Theme) => ({
   main: {
     position: 'fixed',
     width: '100vw',
@@ -56,16 +56,17 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const SignIn = props => {
+const SignIn = () => {
   const classes = useStyles()
   const { openSnackbar, setIsLogged, isLogged, themeType } = useConfigStore(state => ({
+    isLogged: state.isLogged,
     openSnackbar: state.openSnackbar,
     setIsLogged: state.setIsLogged,
     themeType: state.themeType
   }))
   const router = useRouter()
 
-  const onSubmit = async (values, { setSubmitting, setErrors }) => {
+  const onSubmit = async (values: FormikValues, { setSubmitting }:FormikHelpers<any>) => {
     setSubmitting(true)
     try {
       const { token } = await apiInstance.user_login(values, `{ token }`)

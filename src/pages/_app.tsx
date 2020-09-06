@@ -91,7 +91,6 @@ const Alert = props => {
 const SplashScreen = React.memo(props => {
   return <AnimatePresence>
     <motion.div
-      transi
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -157,24 +156,22 @@ const MyApp = props => {
     router.prefetch('/players')
     router.prefetch('/matches')
     const jssStyles = document.querySelector('#jss-server-side')
-    if (jssStyles) {
-      jssStyles.parentElement.removeChild(jssStyles)
-    }
-    const isLogged = window && window.localStorage
+    if (jssStyles) jssStyles.parentElement.removeChild(jssStyles)
+    const isLogged: any = window && window.localStorage
       ? window.localStorage.getItem('FutBobToken')
       : false
-    const _themeType = window && window.localStorage
+    const _themeType: ThemeType = window && window.localStorage
       ? window.localStorage.getItem('FutBobTheme')
       : ThemeType.light
     setIsLogged(!!isLogged)
     setTheme(_themeType)
     window.localStorage.setItem('FutBobTheme', _themeType)
-    const path = isLogged
+    const path: string = isLogged
       ? /\/login/.test(router.pathname)
         ? '/'
         : router.pathname || '/'
       : '/login'
-    const asPath = isLogged ? window.localStorage.getItem(AS_PATH) : null
+    const asPath: string|null = isLogged ? window.localStorage.getItem(AS_PATH) : null
     if (asPath && rawParams.test(router.pathname)) {
       router.replace(path, asPath)
         .then(() => setFirstRun(false))

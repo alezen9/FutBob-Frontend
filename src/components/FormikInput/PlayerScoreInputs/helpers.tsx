@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from 'react'
+import React from 'react'
 import { Grid, Button } from '@material-ui/core'
-import FormikInput from '..'
+import FormikInput, { FormikEssentials } from '..'
 import { get } from 'lodash'
 import { decamelize } from '../../../utils/helpers'
 
@@ -48,7 +48,12 @@ const scoreProperties = {
   ]
 }
 
-export const SlidersDialogContent = React.memo(props => {
+type ContentProps = {
+  name: string
+  formik: FormikEssentials
+}
+
+export const SlidersDialogContent: React.FC<ContentProps> = React.memo(props => {
   const { name, formik } = props
 
   return <Grid container>
@@ -65,7 +70,12 @@ export const SlidersDialogContent = React.memo(props => {
   </Grid>
 })
 
-export const SlidersDialogActions = React.memo(props => {
+type ActionsProps = {
+  cancelChanges: VoidFunction
+  confirmChanges: VoidFunction
+}
+
+export const SlidersDialogActions: React.FC<ActionsProps> = React.memo(props => {
   const { cancelChanges, confirmChanges } = props
 
   return <Grid container justify='flex-end'>

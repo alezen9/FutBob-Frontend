@@ -1,8 +1,8 @@
 import { FutBobPalette, ThemeType } from '../../palette'
-import create from 'zustand'
-import { _immer } from './helpers'
+import create, { UseStore, StoreApi } from 'zustand'
+import { _immer, ConfigStore } from './helpers'
 
-export const [useConfigStore, apiConfig] = create(_immer((set: amy, get: any, api: any) => ({
+export const [useConfigStore, apiConfig]: [UseStore<ConfigStore>, StoreApi<any>] = create(_immer((set: any, get: any, api: any) => ({
   themeType: ThemeType.light,
   isLogged: false,
   menuOpen: false,
@@ -10,32 +10,32 @@ export const [useConfigStore, apiConfig] = create(_immer((set: amy, get: any, ap
   pageTitle: 'Dashboard',
   snackbar: { open: false },
   setPageTitle: (title: any) => {
-    set(state => {
+    set((state: ConfigStore) => {
       state.pageTitle = title
     })
   },
-  openSnackbar: data => {
-    set(state => {
+  openSnackbar: (data: any) => {
+    set((state: ConfigStore) => {
       state.snackbar = { ...data, open: true }
     })
   },
   closeSnackbar: () => {
-    set(state => {
+    set((state: ConfigStore) => {
       state.snackbar = { open: false }
     })
   },
-  setIsLogged: bool => {
-    set(state => {
+  setIsLogged: (bool: boolean) => {
+    set((state: ConfigStore) => {
       state.isLogged = bool
     })
   },
   toggleMenu: () => {
-    set(state => {
+    set((state: ConfigStore) => {
       state.menuOpen = !state.menuOpen
     })
   },
   setTheme: (type: ThemeType, onlyType: boolean = false) => {
-    set(state => {
+    set((state: ConfigStore) => {
       state.themeType = type
     })
     if (!onlyType) {
@@ -43,8 +43,8 @@ export const [useConfigStore, apiConfig] = create(_immer((set: amy, get: any, ap
       FutBobPalette.switchTheme(type)
     }
   },
-  setIsLoading: bool => {
-    set(state => {
+  setIsLoading: (bool: boolean) => {
+    set((state: ConfigStore) => {
       state.isLoading = bool
     })
   }

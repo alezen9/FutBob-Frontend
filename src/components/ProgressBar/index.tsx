@@ -9,13 +9,12 @@ const useStyles = makeStyles(theme => ({
     width: '100vw',
     height: 4,
     zIndex: 20
-
   }
 }))
 
-const ProgressBar = props => {
+const ProgressBar = () => {
   const classes = useStyles()
   return <LinearProgress className={classes.progressBar} />
 }
 
-export default ProgressBar
+export default React.memo(ProgressBar)

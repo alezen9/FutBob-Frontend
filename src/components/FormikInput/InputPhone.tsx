@@ -3,8 +3,6 @@ import dynamic from 'next/dynamic'
 const MuiPhoneNumber = dynamic(() => import('material-ui-phone-number'),{ssr:false})
 import { makeStyles, FormHelperText } from '@material-ui/core'
 import { uniqueId, get, isEmpty } from 'lodash'
-import { inputBorderColorDark } from '../../../darkTheme'
-import { inputBorderColorLight } from '../../../lightTheme'
 import { FutBobPalette } from '../../../palette'
 
 const useStyles = makeStyles(theme => ({
@@ -12,25 +10,38 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2),
     width: '100%',
     '& fieldset': {
-      borderColor: ({ error }) => error
+      borderColor: (props: any) => props.error
         ? '#ff443a'
         : FutBobPalette.borderColor
     },
     '& label': {
-      color: ({ error }) => error
+      color: (props: any) => props.error
         ? '#ff443a'
         : FutBobPalette.typographyGrey
     }
   }
 }))
 
-const InputPhone = props => {
+type Props = {
+  label: string
+  onChange: (e: any) => void
+  values: any
+  name: string
+  disabled?: boolean
+  errors: any
+}
+
+const InputPhone: React.FC<Props> = props => {
   const { label, onChange, values, name, disabled = false, errors } = props
   const classes = useStyles({error: !!get(errors, name, null)})
-  const v = useMemo(() => !String(get(values, name, '')).startsWith('+') ? '+39' + get(values, name, '') : get(values, name, ''), [get(values, name, null)])
+  const v: string = useMemo(() => !String(get(values, name, '')).startsWith('+') 
+    ? '+39' + get(values, name, '') 
+    : get(values, name, '')
+  , [get(values, name, null)])
   return (
     <>
       <MuiPhoneNumber
+        //@ts-ignore
         value={v || ''}
         label={label}
         defaultCountry='it'

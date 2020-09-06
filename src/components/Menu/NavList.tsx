@@ -1,17 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { makeStyles, List, ListItemIcon, ListItem, ListItemText, Collapse } from '@material-ui/core'
 import ArrowDropDownRoundedIcon from '@material-ui/icons/ArrowDropDownRounded'
 import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded'
 import KeyboardArrowRightRoundedIcon from '@material-ui/icons/KeyboardArrowRightRounded'
 import { compact, take } from 'lodash'
 import { useRouter } from 'next/router'
-import { sections } from '../../utils/routes'
+import { sections, Section } from '../../utils/routes'
 import ExitToAppRoundedIcon from '@material-ui/icons/ExitToAppRounded'
 import { apiInstance } from '../../SDK'
 import { FutBobPalette } from '../../../palette'
 import { useConfigStore } from '../../zustand/configStore'
 
 const useStyles = makeStyles({
+  root: {},
+  nested: {},
+  subpaths: {},
   list: {
     position: 'absolute',
     top: '50%',
@@ -40,7 +43,16 @@ const useStyles = makeStyles({
   }
 })
 
-const buildSubPath = (mainPath, subPath) => {
+type SubPathsItemProps = Section & {
+  handleRoute: (path: string) => (e?: any) => void | Promise<void>
+}
+
+type ItemProps = SubPathsItemProps & {
+  iconStaticProps?: any
+  ignoreActiveProps?: boolean
+}
+
+const buildSubPath = (mainPath: string, subPath: string): string => {
   const subPaths = compact(subPath.split('/'))
   return mainPath
     .split('/')
@@ -48,7 +60,7 @@ const buildSubPath = (mainPath, subPath) => {
     .join('/')
 }
 
-const checkActivePage = (currentPath, itemPath) => {
+const checkActivePage = (currentPath: string, itemPath: string): boolean => {
   if (currentPath === '/') return itemPath === '/'
   const [_, ...str] = itemPath
   const exp = `^\\/${str.length ? '+' : '+dashboard'}${str.join('')}`
@@ -56,7 +68,7 @@ const checkActivePage = (currentPath, itemPath) => {
   return testPath.test(currentPath)
 }
 
-const SingleItemList = props => {
+const SingleItemList: React.FC<ItemProps> = props => {
   const { handleRoute, icon, title, path, iconStaticProps = {}, ignoreActiveProps = false } = props
   const router = useRouter()
 
@@ -72,14 +84,15 @@ const SingleItemList = props => {
   </ListItem>
 }
 
-const ExpandableItemList = props => {
+const ExpandableItemList: React.FC<SubPathsItemProps> = props => {
   const { handleRoute, icon, title, path: mainPath, subpaths } = props
   const [openMore, setOpenMore] = useState(false)
   const classes = useStyles()
 
-  const handleClick = () => {
-    setOpenMore(state => !state)
-  }
+  const handleClick = useCallback(
+    () => {
+      setOpenMore(state => !state)
+    }, [])
 
   return <>
     <ListItem className={classes.listItem} button onClick={handleClick}>
@@ -105,7 +118,7 @@ const ExpandableItemList = props => {
 </>
 }
 
-const NavList = props => {
+const NavList = () => {
   const router = useRouter()
   const setIsLogged = useConfigStore(state => state.setIsLogged)
   const classes = useStyles()
@@ -114,20 +127,24 @@ const NavList = props => {
     router.prefetch('/login')
   }, [])
 
-  const handleRoute = path => e => router.push(path)
+  const handleRoute = useCallback(path => async () => {
+    await router.push(path)
+  }, [router])
 
-  const afterLogout = () => {
-    router.push('/login')
-      .then(() => setIsLogged(false))
-  }
+  const afterLogout = useCallback(
+    async () => {
+    await router.push('/login')
+    setIsLogged(false)
+  },[router])
 
-  const logout = path => e => {
+  const logout = useCallback(
+    (path: string) => (e: Event) => {
     e.preventDefault()
     apiInstance.user_logout(afterLogout)
-  }
+  }, [])
 
   const routeBuilder = () => {
-    return sections.map((section, i) => {
+    return sections.map((section: Section, i: number) => {
       return !section.subpaths
         ? <SingleItemList key={`main-path-${i}`} {...{ ...section, handleRoute }} />
         : <ExpandableItemList key={`main-path-${i}`} {...{ ...section, handleRoute }} />

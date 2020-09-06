@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react'
 import { makeStyles } from '@material-ui/core'
+import { get } from 'lodash'
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -11,11 +12,11 @@ const useStyles = makeStyles((theme) => ({
       transform: 'rotateX(-30deg) translateY(-44px)'
     }
   },
-  player: ({ cssPosition = {}, active = false }) => ({
+  player: (props: any) => ({
     position: 'absolute',
     width: 35,
     height: 35,
-    background: active
+    background: props.active
       ? '#333'
       : 'rgba(255,255,255,.3)',
     color: '#fafafa',
@@ -25,13 +26,13 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     border: '2px solid #fafafa',
     cursor: 'pointer',
-    ...cssPosition,
+    ...props.cssPosition,
     transition: 'transform .2s ease, border .2s ease',
     '&:hover': {
       border: '2px solid red',
       transform: 'rotateX(-30deg) translateY(-48px) scale(1.05)'
     },
-    ...cssPosition.left === '45%' && {
+    ...get(props, 'cssPosition.left', null) === '45%' && {
       [theme.breakpoints.down('xs')]: {
         left: '43%'
       }
@@ -39,7 +40,14 @@ const useStyles = makeStyles((theme) => ({
   })
 }))
 
-const Player = React.memo(props => {
+type PlayerProps = {
+  position?: number
+  active?: boolean
+  label?: string
+  onClick: (pos: number) => void
+}
+
+const Player: React.FC<PlayerProps> = React.memo(props => {
   const { position = 0, active = false, label = '', onClick } = props
   const cssPosition = useMemo(() => getCssPosition(position), [position])
   const { player } = useStyles({ cssPosition, active })
@@ -47,7 +55,12 @@ const Player = React.memo(props => {
   return <div className={player} onClick={() => onClick(position)}>{label || ''}</div>
 })
 
-const Players = props => {
+type PlayersProps = {
+  values?: number[]
+  onClick: (pos: number) => void
+}
+
+const Players: React.FC<PlayersProps> = props => {
   const { values = [], onClick } = props
   const { main } = useStyles()
 
@@ -72,7 +85,14 @@ const Players = props => {
 
 export default React.memo(Players)
 
-const getCssPosition = pos => {
+type CSSPosition = {
+  top?: string|number
+  bottom?: string|number
+  left?: string|number
+  right?: string|number
+}
+
+const getCssPosition = (pos: number): CSSPosition => {
   switch (pos) {
     case 0:
       return {

@@ -61,7 +61,7 @@ const useStyles = makeStyles({
 
 })
 
-const Spinner = props => {
+const Spinner = () => {
   const { ldsEllipsis } = useStyles()
   return (
     <div className={ldsEllipsis}>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
@@ -59,7 +59,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const BottomNavbar = props => {
+const BottomNavbar = () => {
   const setIsLogged = useConfigStore(state => state.setIsLogged)
   const classes = useStyles()
   const [value, setValue] = useState(0)
@@ -67,31 +67,33 @@ const BottomNavbar = props => {
 
   useEffect(() => {
     router.prefetch('/login')
-  }, [])
+  }, [router])
 
   useEffect(() => {
     const active = sections.findIndex(({ path }) => path === router.pathname)
     setValue(active)
   }, [router])
 
-  const afterLogout = () => {
-    router.push('/login')
-      .then(() => setIsLogged(false))
-  }
+  const afterLogout = useCallback(
+    async () => {
+    await router.push('/login')
+    setIsLogged(false)
+  }, [router])
 
-  const logout = e => {
-    e.preventDefault()
-    apiInstance.user_logout(afterLogout)
-  }
+  const logout = useCallback(
+    (e: any) => {
+      e.preventDefault()
+      apiInstance.user_logout(afterLogout)
+  }, [])
 
-  const onItemClick = path => () => router.push(path)
+  const onItemClick = useCallback(path => async () => await router.push(path), [router])
+
+  const onChange = useCallback((e: any, newVal: number) => setValue(newVal), [])
 
   return (
     <BottomNavigation
       value={value}
-      onChange={(event, newValue) => {
-        setValue(newValue)
-      }}
+      onChange={onChange}
       className={classes.root}
     >
       {sections.map((item, i) => <BottomNavigationAction

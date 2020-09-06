@@ -1,4 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles'
+import { ThemeType } from './palette'
 
 const subtitleGrey = '#686868'
 const lightGrey = '#c1c1c1'
@@ -20,8 +21,8 @@ const border = '1px solid #b3b3b3'
 const borderRadius = 7
 
 const darkTheme = createMuiTheme({
-  type: 'dark',
-  activeColor: darkGreen,
+  // @ts-ignore
+  type: ThemeType.dark,
   palette: {
     primary: {
       light: lightGreen,
@@ -44,7 +45,6 @@ const darkTheme = createMuiTheme({
   },
   typography: {
     fontFamily: "'Poppins', sans-serif",
-    useNextVariants: true,
     h1: {
       padding: 0,
       fontSize: '25pt',
@@ -64,7 +64,7 @@ const darkTheme = createMuiTheme({
       padding: 0,
       fontSize: '15pt',
       color: typographyGrey,
-      fontWeight: 'semi-bold'
+      fontWeight: 500
     },
     h5: {
       padding: 0,
@@ -85,7 +85,7 @@ const darkTheme = createMuiTheme({
     body2: {
       padding: 0,
       fontSize: '12pt',
-      fontWeight: 'semi-bold',
+      fontWeight: 500,
       color: typographyGrey
     },
     caption: {
@@ -296,14 +296,6 @@ const darkTheme = createMuiTheme({
         fontSize: '.9em',
         color: 'rgba(255,255,255,.5)',
         borderBottom: 'none'
-      }
-    },
-    MuiPaginationItem: {
-      root: {
-        color: typographyGrey,
-        '&$disabled': {
-          color: typographyGrey
-        }
       }
     },
     MuiMenuItem: {

@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
   relativeWrapper: {
     position: 'relative',
     width: '100%',
-    maxWidth: ({ menuOpen }) => menuOpen ? 250 : 60,
+    maxWidth: (props: any) => props.menuOpen ? 250 : 60,
     overflow: 'hidden'
   },
   fixed: {
@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    maxWidth: ({ menuOpen }) => menuOpen ? 250 : 60,
+    maxWidth: (props: any) => props.menuOpen ? 250 : 60,
     overflow: 'hidden',
     transition: 'max-width .2s ease, background-color .3s ease',
     height: '100vh',
@@ -51,13 +51,13 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     top: '1em',
     right: '1em',
-    transform: ({ menuOpen }) => menuOpen
+    transform: (props: any) => props.menuOpen
       ? 'translate(0)'
       : 'translate(.7em, 3em)',
     transition: 'transform .1s ease',
     '@media(max-height: 450px)': {
-      visibility: ({ menuOpen }) => menuOpen ? 'visible' : 'hidden',
-      pointerEvents: ({ menuOpen }) => menuOpen ? 'all' : 'none'
+      visibility: (props: any) => props.menuOpen ? 'visible' : 'hidden',
+      pointerEvents: (props: any) => props.menuOpen ? 'all' : 'none'
     }
   }
 }))
@@ -88,4 +88,4 @@ const Menu = () => {
   )
 }
 
-export default Menu
+export default React.memo(Menu)

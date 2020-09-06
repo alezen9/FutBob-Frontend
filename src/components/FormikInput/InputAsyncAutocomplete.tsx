@@ -4,6 +4,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete'
 import { get } from 'lodash'
 import { makeStyles, FormHelperText, InputAdornment, CircularProgress } from '@material-ui/core'
 import { FutBobPalette } from '../../../palette'
+import { OptionType } from '.'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -47,22 +48,36 @@ const useStyles = makeStyles(theme => ({
   },
   inputRoot: {
     '& > fieldset': {
-      borderColor: ({ error }) => error
+      borderColor: (props: any) => props.error
         ? '#ff443a'
         : FutBobPalette.borderColor
     }
   }
 }))
 
-const Adornment = () => <InputAdornment position='end' >
+const Adornment = React.memo(() => <InputAdornment position='end' >
   <CircularProgress style={{ width: 20, height: 20 }} />
-</InputAdornment>
+</InputAdornment>)
 
 const inputProps = {
   endAdornment: <Adornment />
 }
 
-const InputAsyncAutocomplete = ({ options = [], grouped, label, id, name, required, handleChange, values, disabled, errors, helperText, onChange, onSearchText, variant, multiple = false, loading = false }) => {
+type Props = {
+  options?: OptionType[]
+  label: string
+  id?: string
+  name: string
+  required?: boolean
+  disabled?: boolean
+  errors: any
+  onChange: (e: any, d: any) => void
+  onSearchText: (v: string) => void
+  multiple?: boolean 
+  loading?: boolean
+}
+
+const InputAsyncAutocomplete: React.FC<Props> = ({ options = [], label, id, name, disabled, errors, onChange, onSearchText, multiple = false, loading = false }) => {
   const classes = useStyles({ error: !!get(errors, name, false) })
   const [inputValue, setInputValue] = useState('')
 
@@ -72,6 +87,7 @@ const InputAsyncAutocomplete = ({ options = [], grouped, label, id, name, requir
         id={id}
         freeSolo
         loading={loading}
+        multiple={multiple}
         disabled={disabled}
         classes={classes}
         options={options}

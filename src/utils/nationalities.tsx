@@ -1,7 +1,12 @@
 import React from 'react'
 import { CircleFlag } from 'react-circle-flags'
 
-const FlagOption = React.memo(props => {
+type PropsFlags = {
+  value: string
+  label: string
+}
+
+const FlagOption: React.FC<PropsFlags> = React.memo(props => {
   const { value = '', label } = props
   return <div style={{ display: 'flex', alignItems: 'center' }}>
     <CircleFlag countryCode={value.toLowerCase()} height='20' style={{ marginRight: '1em' }} />

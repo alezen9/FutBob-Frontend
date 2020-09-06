@@ -13,7 +13,13 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const InputCheckbox = ({ name, onChange, values }) => {
+type Props = {
+  name: string
+  onChange: (e: any, d: boolean) => void
+  values: any
+}
+
+const InputCheckbox: React.FC<Props> = ({ name, onChange, values }) => {
   const classes = useStyles()
   return (
     <div className={classes.wrapper}>
@@ -23,7 +29,6 @@ const InputCheckbox = ({ name, onChange, values }) => {
         checked={get(values, name, false)}
         onChange={onChange}
         color='primary'
-        margin='normal'
       />
     </div>
   )

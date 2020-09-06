@@ -39,10 +39,10 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const Links = React.memo(props => {
+const Links = React.memo((props: any) => {
   const { menuItemBorderFix } = useStyles()
   const { toggleMenu } = props
-  return sections.map(({ title, path, disabled }, i) => {
+  return sections.map(({ title, path }, i) => {
     return <li key={`main-path-${i}`} className={`menu-item ${menuItemBorderFix}`}>
       <Link href={path} >
         <div style={{
@@ -56,7 +56,11 @@ const Links = React.memo(props => {
   })
 })
 
-const Navbar = props => {
+type Props = {
+  isLoading?: boolean
+}
+
+const Navbar: React.FC<Props> = props => {
   const { isLoading = false } = props
   const { themeSwitchColor, themeSwitchColorInvert, headerBoxShadowFix } = useStyles()
   const router = useRouter()
@@ -64,27 +68,28 @@ const Navbar = props => {
   const [open, setOpen] = useState(false)
 
   useLayoutEffect(() => {
-    const setBodyPosition = async () => {
+    const setBodyPosition = async (): Promise<void> => {
       if (open) await asyncTimeout(600)
       document.body.style.overflow = open ? 'hidden' : 'auto'
     }
     setBodyPosition()
   }, [open])
 
-  const afterLogout = () => {
-    router.push('/login')
-      .then(() => setIsLogged(false))
-  }
-
-  const logout = e => {
-    e.preventDefault()
-    if (open) toggleMenu()
-    apiInstance.user_logout(afterLogout)
-  }
-
   const toggleMenu = useCallback(() => {
     setOpen(state => !state)
-  }, [setOpen])
+  }, [])
+
+  const afterLogout = useCallback(async () => {
+    await router.push('/login')
+    setIsLogged(false)
+  },[router])
+
+  const logout = useCallback(
+    (e: any) => {
+      e.preventDefault()
+      if (open) toggleMenu()
+      apiInstance.user_logout(afterLogout)
+    }, [toggleMenu])
 
   return (
     <>
@@ -121,7 +126,7 @@ const Copyrights = React.memo(() => {
   const { themeSwitchColorInvertNoBg } = useStyles()
   return <div style={{ marginTop: '5em', width: '100%', textAlign: 'center' }}>
     <Typography variant='caption' align='center' className={themeSwitchColorInvertNoBg}>
-      {`© Condexo Backoffice- ${new Date().getFullYear()}`}
+      {`© Futbob - ${new Date().getFullYear()}`}
     </Typography>
   </div>
 })
