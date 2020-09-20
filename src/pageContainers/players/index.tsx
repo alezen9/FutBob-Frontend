@@ -34,9 +34,7 @@ import swrKeys from '../../swr/keys'
 // }))
 
 const PlayersContainer = props => {
-  const { players = [] } = props
-
-  const { list = [], trigger } = useSWRPlayers({ initialData: players })
+  const { list = [], trigger } = useSWRPlayers()
   const { item = {} } = useSWRUser({ revalidateOnMount: false })
 
   const { openSnackbar, setIsLoading } = useConfigStore(state => ({
