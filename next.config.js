@@ -7,7 +7,7 @@ const getApiUrl = (config = '') => {
     case 'test':
       return 'http://localhost:7000'
     case 'production':
-      return ' http://144.202.1.31'
+      return 'https://futbob.xyz/'
     default:
       return 'http://localhost:7000'
   }
