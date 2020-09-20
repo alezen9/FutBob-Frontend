@@ -20,7 +20,8 @@ import { useSWRPlayer, useSWRUser } from '../../../swr'
 
 const PlayerDetail = props => {
   const router = useRouter()
-  const { item, trigger } = useSWRPlayer(router.query.id, { revalidateOnMount: !!router.query.id })
+  const { id }: { id?: string } = router.query
+  const { item, trigger } = useSWRPlayer(id, { revalidateOnMount: !!router.query.id })
   const { item: userConnectedItem, trigger: triggerUserConnected } = useSWRUser({ revalidateOnMount: false })
   const { setIsLoading, openSnackbar, pageTitle } = useConfigStore()
   const [openConfirmDialog, setOpenConfirmDialog] = useState(null)
@@ -88,9 +89,9 @@ const PlayerDetail = props => {
         if ((_id && !done) || (!_id && !idPlayer)) throw new Error()
         if (done || idPlayer) {
           if (userDataChanged && get(user, '_id', null) === get(userDataChanged, '_id', null)) {
-            triggerUserConnected()
+            await triggerUserConnected()
           }
-          if (playerDataChanged) trigger()
+          if (playerDataChanged) await trigger()
           openSnackbar({
             variant: 'success',
             message: _id
@@ -224,7 +225,7 @@ const PlayerDetail = props => {
         <Hidden only='xs'>
           <Grid item xs={4} />
         </Hidden>
-        <OverallScore style={{ margin: 'auto' }} value={parseInt(meanBy(scoreData, 'value'))} />
+        <OverallScore style={{ margin: 'auto' }} value={parseInt(String(meanBy(scoreData, 'value')))} />
         <Grid item container xs={12} justify='center'>
           <FormikInput
             sm={4}
@@ -262,7 +263,7 @@ const PlayerDetail = props => {
             <Button
               style={{ minWidth: 150 }}
               disabled={formik.isSubmitting || isEmpty(formik.touched)}
-              onClick={formik.handleSubmit}
+              onClick={formik.handleSubmit as any}
               variant='contained'
               color='primary'>
               {item._id ? 'Update' : 'Create'}

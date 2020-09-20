@@ -80,11 +80,11 @@ const Private = props => {
           required={!!get(formik, 'values.newPassword', null) || !!get(formik, 'values.oldPassword', null)}
           {...formik}
         />
-        <Grid item xs={12} align='right'>
+        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button
             style={{ minWidth: 150 }}
             disabled={formik.isSubmitting || isEmpty(formik.touched)}
-            onClick={formik.handleSubmit}
+            onClick={() => formik.handleSubmit()}
             variant='contained'
             color='primary'>
                 Update

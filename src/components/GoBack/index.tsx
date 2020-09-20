@@ -4,13 +4,13 @@ import NavigateBeforeRoundedIcon from '@material-ui/icons/NavigateBeforeRounded'
 import { useRouter } from 'next/router'
 
 type Props = {
-  label: any
+  label?: any
   route: string
   as?: string
   margin?: boolean
 }
 
-const GoBack: React.FC<Props> = props => {
+const GoBack = (props: Props) => {
   const { label, route, as, margin = true } = props
   const router = useRouter()
 

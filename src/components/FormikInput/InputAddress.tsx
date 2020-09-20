@@ -153,7 +153,7 @@ type OptionRendererProps = {
   label: any
 }
 
-const OptionRenderer: React.FC<OptionRendererProps> = React.memo(props => {
+const OptionRenderer = React.memo((props: OptionRendererProps) => {
   const { label } = props
   const classes = useStyles()
   return <div className={classes.singleOption}>
@@ -167,7 +167,7 @@ type InfoPopoverProps = {
   handleClose: VoidFunction
 }
 
-const InfoPopover: React.FC<InfoPopoverProps> = React.memo(props => {
+const InfoPopover = React.memo((props: InfoPopoverProps) => {
   const { anchorEl, handleClose } = props
   const classes = useStyles()
   return <Popover
@@ -204,7 +204,22 @@ const InfoPopover: React.FC<InfoPopoverProps> = React.memo(props => {
   </Popover>
 })
 
-const InputAddressAutoComplete = ({
+type Props = {
+  name: string
+  label?: any
+  placeholder?: string
+  values: any,
+  onChange: any
+  errors: any
+  setFieldError: any
+  showExpandButton?: boolean
+  inputGridProps?: {
+    [field: string]: any
+  }
+}
+
+const InputAddressAutoComplete = (props: Props) => {
+  const {
   name,
   label = '',
   placeholder = '',
@@ -220,7 +235,7 @@ const InputAddressAutoComplete = ({
   errors,
   setFieldError,
   showExpandButton = false
-}) => {
+} = props
   const classes = useStylesAutocomplete({ error: !isEmpty(get(errors, name, false)) })
   const generalClasses = useStyles()
   const [addressValue, setAddressValue] = useState('')

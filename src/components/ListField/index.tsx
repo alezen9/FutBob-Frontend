@@ -63,7 +63,7 @@ type Props = {
   data?: string[]
 }
 
-const ListField: React.FC<Props> = props => {
+const ListField = (props: Props) => {
   const { data = [] } = props
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState(null)

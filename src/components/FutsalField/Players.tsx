@@ -47,7 +47,7 @@ type PlayerProps = {
   onClick: (pos: number) => void
 }
 
-const Player: React.FC<PlayerProps> = React.memo(props => {
+const Player = React.memo((props: PlayerProps) => {
   const { position = 0, active = false, label = '', onClick } = props
   const cssPosition = useMemo(() => getCssPosition(position), [position])
   const { player } = useStyles({ cssPosition, active })
@@ -60,7 +60,7 @@ type PlayersProps = {
   onClick: (pos: number) => void
 }
 
-const Players: React.FC<PlayersProps> = props => {
+const Players = (props: PlayersProps) => {
   const { values = [], onClick } = props
   const { main } = useStyles()
 

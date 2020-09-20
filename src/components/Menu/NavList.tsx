@@ -68,7 +68,7 @@ const checkActivePage = (currentPath: string, itemPath: string): boolean => {
   return testPath.test(currentPath)
 }
 
-const SingleItemList: React.FC<ItemProps> = props => {
+const SingleItemList = (props: ItemProps) => {
   const { handleRoute, icon, title, path, iconStaticProps = {}, ignoreActiveProps = false } = props
   const router = useRouter()
 
@@ -84,7 +84,7 @@ const SingleItemList: React.FC<ItemProps> = props => {
   </ListItem>
 }
 
-const ExpandableItemList: React.FC<SubPathsItemProps> = props => {
+const ExpandableItemList = (props: SubPathsItemProps) => {
   const { handleRoute, icon, title, path: mainPath, subpaths } = props
   const [openMore, setOpenMore] = useState(false)
   const classes = useStyles()

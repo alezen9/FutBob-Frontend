@@ -17,7 +17,7 @@ type Props = {
   children?: ReactChildren | ReactChild
 }
 
-const CondexoLoadingMask: React.FC<Props> = props => {
+const CondexoLoadingMask = (props: Props) => {
   const { isLoading = false, children = [] } = props
   const { withMask } = useStyles({ isLoading })
 

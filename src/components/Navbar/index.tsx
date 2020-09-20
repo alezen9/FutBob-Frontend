@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useCallback } from 'react'
+import React, { useState, useLayoutEffect, useCallback, Fragment } from 'react'
 import Link from 'next/link'
 import { Typography, makeStyles, IconButton } from '@material-ui/core'
 import { sections } from '../../utils/routes'
@@ -42,25 +42,29 @@ const useStyles = makeStyles(theme => ({
 const Links = React.memo((props: any) => {
   const { menuItemBorderFix } = useStyles()
   const { toggleMenu } = props
-  return sections.map(({ title, path }, i) => {
-    return <li key={`main-path-${i}`} className={`menu-item ${menuItemBorderFix}`}>
-      <Link href={path} >
-        <div style={{
-          height: 35,
-          fontSize: '1.4em',
-          marginBottom: '.3em',
-          display: 'flex',
-          alignItems: 'flex-end' }} onClick={toggleMenu}> {title} </div>
-      </Link>
-    </li>
-  })
+  return <>
+  {sections.map(({ title, path }, i) => {
+    return <Fragment key={`main-path-${i}`}>
+      <li className={`menu-item ${menuItemBorderFix}`}>
+        <Link href={path} >
+          <div style={{
+            height: 35,
+            fontSize: '1.4em',
+            marginBottom: '.3em',
+            display: 'flex',
+            alignItems: 'flex-end' }} onClick={toggleMenu}> {title} </div>
+        </Link>
+      </li>
+    </Fragment>
+  })}
+  </>
 })
 
 type Props = {
   isLoading?: boolean
 }
 
-const Navbar: React.FC<Props> = props => {
+const Navbar = (props: Props) => {
   const { isLoading = false } = props
   const { themeSwitchColor, themeSwitchColorInvert, headerBoxShadowFix } = useStyles()
   const router = useRouter()

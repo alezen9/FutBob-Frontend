@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const TypographyLabel: React.FC<Props> = props => {
+const TypographyLabel = (props: Props) => {
   const { label = '', value = '', sm, valueStyle = {} } = props
   const classes = useStyles()
 

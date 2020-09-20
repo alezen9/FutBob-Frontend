@@ -72,12 +72,13 @@ type Props = {
   disabled?: boolean
   errors: any
   onChange: (e: any, d: any) => void
-  onSearchText: (v: string) => void
+  onSearchText?: (v: string) => void
   multiple?: boolean 
   loading?: boolean
 }
 
-const InputAsyncAutocomplete: React.FC<Props> = ({ options = [], label, id, name, disabled, errors, onChange, onSearchText, multiple = false, loading = false }) => {
+const InputAsyncAutocomplete = (props: Props) => {
+  const { options = [], label, id, name, disabled, errors, onChange, onSearchText, multiple = false, loading = false } = props
   const classes = useStyles({ error: !!get(errors, name, false) })
   const [inputValue, setInputValue] = useState('')
 

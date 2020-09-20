@@ -31,7 +31,7 @@ type Props = {
   errors: any
 }
 
-const InputPhone: React.FC<Props> = props => {
+const InputPhone = (props: Props) => {
   const { label, onChange, values, name, disabled = false, errors } = props
   const classes = useStyles({error: !!get(errors, name, null)})
   const v: string = useMemo(() => !String(get(values, name, '')).startsWith('+') 

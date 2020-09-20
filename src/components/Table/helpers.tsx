@@ -115,7 +115,7 @@ type ActionProps = {
   actions: Action[]
 }
 
-const Actions: React.FC<ActionProps> = React.memo(props => {
+const Actions = React.memo((props: ActionProps) => {
   const { actions } = props
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'))
@@ -124,7 +124,7 @@ const Actions: React.FC<ActionProps> = React.memo(props => {
     : <ActionButtons actions={actions} />
 })
 
-const ActionButtons: React.FC<ActionProps> = React.memo(props => {
+const ActionButtons = React.memo((props: ActionProps) => {
   const { actions } = props
   return (
     <Grid container spacing={3} justify='flex-end'>
@@ -147,7 +147,7 @@ const ActionButtons: React.FC<ActionProps> = React.memo(props => {
   )
 })
 
-const ActionTooltips: React.FC<ActionProps> = React.memo(props => {
+const ActionTooltips = React.memo((props: ActionProps) => {
   const { actions } = props
   return (
     <Grid container spacing={3} justify='flex-end'>
@@ -171,7 +171,7 @@ const ActionTooltips: React.FC<ActionProps> = React.memo(props => {
   )
 })
 
-const ActionsMenu: React.FC<ActionProps> = React.memo(props => {
+const ActionsMenu= React.memo((props: ActionProps) => {
   const { actions } = props
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState(null)
@@ -247,7 +247,7 @@ type mainRowType = {
   style?: any
 }
 
-export const MobileRowCell: React.FC<MobileRowCellProps> = React.memo(props => {
+export const MobileRowCell = React.memo((props: MobileRowCellProps) => {
   const { row, mainHeaders, withActions, _headers } = props
   const classes = useStyles()
   const [open, setOpen] = useState(false)

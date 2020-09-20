@@ -77,7 +77,7 @@ type Props = {
   values: any
 }
 
-const InputAutocomplete: React.FC<Props> = props => {
+const InputAutocomplete = (props: Props) => {
   const {
     options = [],
     grouped,

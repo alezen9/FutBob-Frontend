@@ -1,8 +1,8 @@
 import { FutBobPalette, ThemeType } from '../../palette'
-import create, { UseStore, StoreApi } from 'zustand'
+import create, { UseStore } from 'zustand'
 import { _immer, ConfigStore } from './helpers'
 
-export const [useConfigStore, apiConfig]: [UseStore<ConfigStore>, StoreApi<any>] = create(_immer((set: any, get: any, api: any) => ({
+export const useConfigStore: UseStore<ConfigStore> = create(_immer((set: any, get: any, api: any) => ({
   themeType: ThemeType.light,
   isLogged: false,
   menuOpen: false,

@@ -44,7 +44,7 @@ type Props = {
   onChange: (e: any, d: number) => void
 }
 
-const Inputslider: React.FC<Props> = props => {
+const Inputslider = (props: Props) => {
   const { label, values, name, onChange } = props
   const classes = useStyles()
   const [localVal, setLocalVal]: [number, (v: number) => void] = useState(get(values, name, 0))

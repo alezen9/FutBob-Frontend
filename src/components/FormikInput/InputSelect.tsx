@@ -57,7 +57,7 @@ export const measureText = (pText: string) => {
 }
 
 type Props = {
-  options: OptionType[],
+  options?: OptionType[],
   label: string,
   id?: string
   name: string
@@ -72,9 +72,9 @@ type Props = {
   autoWidth?: boolean
 }
 
-const InputSelect: React.FC<Props> = props => {
+const InputSelect = (props: Props) => {
   const {
-    options = null,
+    options = [],
     label,
     id,
     name,

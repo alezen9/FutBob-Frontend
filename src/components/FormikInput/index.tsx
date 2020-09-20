@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useMemo, ReactNode, useCallback, ReactNodeArray } from 'react'
+import React, { useState, Fragment, useMemo, ReactNode, useCallback, ReactNodeArray, ReactChildren, ReactChild } from 'react'
 import TextField from '@material-ui/core/TextField'
 import { makeStyles } from '@material-ui/core/styles'
 import { FormControl, FormHelperText, Grid, IconButton, InputAdornment, Chip, FormControlLabel, GridSpacing } from '@material-ui/core'
@@ -43,6 +43,7 @@ type GridWrapperProps = {
   container?: boolean
   spacing?: GridSpacing
   style?: any
+  children?: ReactChildren | ReactChild | ReactNode[]
 }
 
 export type OptionType = {
@@ -84,9 +85,10 @@ type Props = FormikEssentials & GridWrapperProps & {
   sortByLabel?: boolean
   autoWidth?: boolean
   options?: OptionType[]
+  large?: boolean
 }
 
-const FormikInput: React.FC<Props> = props => {
+const FormikInput = (props: Props) => {
   const { formControl, textField, chipClass } = useStyles()
   const [show, toggleShow] = useState(false)
   const {
@@ -396,10 +398,10 @@ const FormikInput: React.FC<Props> = props => {
   )
 }
 
-const GridWrapper: React.FC<GridWrapperProps> = React.memo(props => {
+const GridWrapper = React.memo((props: GridWrapperProps) => {
   const { xs = 12, sm, md, lg, xl, container, spacing } = props
   return <Grid item {...container && { container: true, spacing: spacing || 1 }} style={{ ...props.style || {} }} xs={xs} sm={sm || xs} md={md || sm || xs} lg={lg || sm || xs} xl={xl || lg || sm || xs}>
-    {props.children}
+    {props.children || <></>}
   </Grid>
 })
 

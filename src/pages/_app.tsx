@@ -54,7 +54,7 @@ const useStyles = makeStyles(theme => ({
     }
   },
   content: {
-    width: ({ menuOpen, isLogged }) => !isLogged ? '100vw' : `calc(100vw - ${menuOpen ? 250 : 60}px)`,
+    width: (props: any) => !props.isLogged ? '100vw' : `calc(100vw - ${props.menuOpen ? 250 : 60}px)`,
     transition: 'width .2s ease',
     overflow: 'hidden auto',
     minHeight: '100vh',
@@ -161,7 +161,7 @@ const MyApp = props => {
       ? window.localStorage.getItem('FutBobToken')
       : false
     const _themeType: ThemeType = window && window.localStorage
-      ? window.localStorage.getItem('FutBobTheme')
+      ? window.localStorage.getItem('FutBobTheme') as ThemeType
       : ThemeType.light
     setIsLogged(!!isLogged)
     setTheme(_themeType)

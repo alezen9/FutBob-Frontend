@@ -93,11 +93,11 @@ export enum PhysicalState {
 }
 
 export interface Player {
-    _id?: string
-    user?: User
-    positions?: PlayerPosition[]
-    type?: PlayerType
+    _id: string
+    user: User
+    positions: PlayerPosition[]
+    type: PlayerType
     matches?: string[]
-    state?: PhysicalState
-    score?: PlayerScore
+    state: PhysicalState
+    score: PlayerScore
 }

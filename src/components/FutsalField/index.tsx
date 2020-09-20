@@ -142,8 +142,8 @@ const useStyles = makeStyles(theme => {
 })
 
 type Props = {
-  positions: number[]
-  onPositionClick: () => any
+  positions?: number[]
+  onPositionClick?: () => any
   name: string
   values: FormikValues
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
@@ -151,7 +151,7 @@ type Props = {
   type: 'indoor'|'outdoor'
 }
 
-const FutsalField: React.FC<Props> = props => {
+const FutsalField = (props: Props) => {
   const { positions = [], onPositionClick, name, values, setFieldValue, setFieldTouched, type = 'outdoor' } = props
   const [outDoor, setOutDoor] = useState(true)
   const { wrapper, typeSwitch, fieldWrapper, field, lines1, lines2, trackClass } = useStyles({ indoor: !outDoor })
@@ -181,7 +181,7 @@ const FutsalField: React.FC<Props> = props => {
         <div className={field}>
           <div className={lines1} />
           <div className={lines2} />
-          <Players name={name} values={vals} onClick={onPositionClickFormik || onPositionClick} />
+          <Players values={vals} onClick={onPositionClickFormik || onPositionClick} />
         </div>
         <div className={typeSwitch}>
           <Switch classes={{ track: trackClass }} color='primary' checked={outDoor} onChange={toggleField} />

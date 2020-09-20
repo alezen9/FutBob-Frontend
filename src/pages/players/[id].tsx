@@ -7,12 +7,13 @@ import { useRouter } from 'next/router'
 import GoBack from '../../components/GoBack'
 import FaceRoundedIcon from '@material-ui/icons/FaceRounded'
 import { useSWRUser, useSWRPlayer } from '../../swr'
+import { User } from '../../Entities/User'
 
 
 const Player = props => {
   const isMounted = useRef(true)
   const router = useRouter()
-  const { id } = router.query
+  const { id }: { id?: string } = router.query
     const setPageTitle = useConfigStore(state => state.setPageTitle)
 
   const { item: player } = useSWRPlayer(id, { revalidateOnMount:false })
@@ -20,7 +21,7 @@ const Player = props => {
 
   useEffect(() => {
     const _isUser = get(user, '_id', null) === get(player, 'user._id', null)
-    const { name = '-', surname = '-' } = get(player, 'user', {})
+    const { name = '-', surname = '-' } = get(player, 'user', {} as User)
     const pageTitle = _isUser
     ? <span style={{display: 'flex', alignItems: 'center'}}>
       <FaceRoundedIcon style={{marginRight: '.5em', fontSize: '1.2em' }}/>
@@ -38,10 +39,12 @@ const Player = props => {
 
   return (
     <PageTransition>
+      <>
       <GoBack route='/players' />
       <PlayerDetail
         {...props}
         isMounted={isMounted.current} />
+        </>
     </PageTransition>
   )
 }

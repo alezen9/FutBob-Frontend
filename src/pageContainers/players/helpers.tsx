@@ -21,7 +21,7 @@ export const headers = [
 
 export const getPlayerDataRow = ({ onDelete, goToDetails, playerId }) => playerData => {
   const score = get(playerData, 'score', initialScoreValues)
-  const playerValue = parseInt(mean(Object.entries(score).map(([key, value]) => getMeanScoreField(value))))
+  const playerValue = parseInt(String(mean(Object.entries(score).map(([key, value]) => getMeanScoreField(value)))))
 
   return {
     _isUser: playerId === playerData._id,
@@ -39,8 +39,8 @@ export const getPlayerDataRow = ({ onDelete, goToDetails, playerId }) => playerD
         values: get(playerData, 'positions', []),
         options: futsalPositionsOptions
       }).split(',')}
-      stringData={getPlayersPositionLabelListString(get(playerData, 'positions', []))}
-      typoGraphyLabelPropsForward={{ valueStyle: { whiteSpace: 'pre' } }}
+      // stringData={getPlayersPositionLabelListString(get(playerData, 'positions', []))}
+      // typoGraphyLabelPropsForward={{ valueStyle: { whiteSpace: 'pre' } }}
     />,
     actions: [
       {

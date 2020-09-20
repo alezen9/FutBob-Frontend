@@ -10,7 +10,7 @@ type Props = {
   [x: string]: any
 }
 
-const CondexoTableCell: React.FC<Props> = props => {
+const CondexoTableCell = (props: Props) => {
   const { name = '', align = 'left', style = {}, headerStyles = {}, component } = props
   return (
     <TableCell

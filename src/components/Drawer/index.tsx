@@ -15,7 +15,7 @@ type Props = {
   content: any
 }
 
-const FutbobDrawer: React.FC<Props> = props => {
+const FutbobDrawer = (props: Props) => {
   const { open = false, toggleDrawer, content = <></> } = props
   const classes = useStyles()
 

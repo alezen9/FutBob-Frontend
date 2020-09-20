@@ -38,7 +38,7 @@ type TableProps = {
   forceMobile?: boolean
 }
 
-const FutBobTable: React.FC<TableProps> = React.memo(props => {
+const FutBobTable = React.memo((props: TableProps) => {
   const { headers = [], data = [], withActions = false, pagination, forceMobile = false } = props
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'))
@@ -131,7 +131,7 @@ type WrapperProps = TableProps & {
   isFetching?: boolean
 }
 
-const WrapperTable: React.FC<WrapperProps> = props => {
+const WrapperTable = (props: WrapperProps) => {
   const { withMask = false, isFetching = false } = props
   const [isFirstRun, setIsFirstRun] = useState(true)
 

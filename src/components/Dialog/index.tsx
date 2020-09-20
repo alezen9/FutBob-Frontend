@@ -35,7 +35,7 @@ type Props = {
   fullScreen?: boolean
 }
 
-const CustomDialog: React.FC<Props> = props => {
+const CustomDialog = (props: Props) => {
   const {
     open,
     onClose,

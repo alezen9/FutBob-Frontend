@@ -24,7 +24,8 @@ type Props = {
   values: any
 }
 
-const InputSwitch: React.FC<Props> = ({ name, onChange, values }) => {
+const InputSwitch = (props: Props) => {
+  const { name, onChange, values } = props
   const classes = useStyles()
   return (
     <div className={classes.wrapper}>

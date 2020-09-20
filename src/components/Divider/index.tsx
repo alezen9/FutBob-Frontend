@@ -5,7 +5,7 @@ type Props = {
   title?: any
 }
 
-const CustomDivider: React.FC<Props> = props => {
+const CustomDivider = (props: Props) => {
   const { title = '' } = props
   return (
     <Grid item xs={12}>

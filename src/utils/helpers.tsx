@@ -183,7 +183,7 @@ export const footballPositionsOptions = [
   }
 ]
 
-const PhysicalState: React.FC<{label: string, value: number}> = React.memo(props => {
+const PhysicalState = React.memo((props: { label: string, value: number }) => {
   const { label, value } = props
   return <span style={{ display: 'flex', fontSize: '1em', alignItems: 'center' }}>
     {value === 0 && <TopFormIcon style={{ color: 'limegreen', fontSize: '1.2em' }} />}

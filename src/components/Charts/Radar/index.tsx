@@ -34,7 +34,7 @@ type Props = {
   data: Data[]
 }
 
-const RadarChart:React.FC<Props> = ({ data = [] }) => {
+const RadarChart = ({ data = [] }: Props) => {
   const classes = useStyles()
   const theme = useTheme()
   const blendMode = useMemo(() => theme.type === 'dark' ? 'normal' : 'multiply', [theme.type])

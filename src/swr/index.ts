@@ -1,11 +1,13 @@
-import useSWR, { trigger, RevalidateOptionInterface } from 'swr'
+import useSWR, { trigger } from 'swr'
 import swrKeys from './keys'
 import swrFetchers from './fetchers'
 import produce from 'immer'
 import { useConfigStore } from '../zustand/configStore'
 import { useEffect, useCallback } from 'react'
+import { Player } from '../Entities/Player'
+import { User } from '../Entities/User'
 
-export const useSWRUser = (options?: RevalidateOptionInterface) => {
+export const useSWRUser = (options?: any) => {
   const { data, mutate } = useSWR(
     swrKeys.USER,
     swrFetchers.profileFetcher,
@@ -18,18 +20,18 @@ export const useSWRUser = (options?: RevalidateOptionInterface) => {
   )
 
   const triggerThis = useCallback(
-    () => {
+    async () => {
       trigger(swrKeys.USER)
     }, [trigger])
 
   return {
-    item: data || {},
+    item: data || {} as User,
     mutate: produce(mutate),
     trigger: triggerThis
   }
 }
 
-export const useSWRPlayers = (options?: RevalidateOptionInterface) => {
+export const useSWRPlayers = (options?: any) => {
   const { setIsLoading } = useConfigStore()
   const { data, isValidating, mutate } = useSWR(
     swrKeys.PLAYERS,
@@ -47,18 +49,18 @@ export const useSWRPlayers = (options?: RevalidateOptionInterface) => {
   }, [setIsLoading, isValidating])
 
   const triggerThis = useCallback(
-    () => {
+    async () => {
       trigger(swrKeys.PLAYERS)
     }, [trigger])
 
   return {
-    list: data || [],
+    list: data || [] as Player[],
     mutate: produce(mutate),
     trigger: triggerThis
   }
 }
 
-export const useSWRPlayer = (_id: string | null, options?: RevalidateOptionInterface) => {
+export const useSWRPlayer = (_id: string | null, options?: any) => {
   const { data, mutate } = useSWR(
     [swrKeys.PLAYER, _id],
     swrFetchers.playerFetcher,
@@ -71,12 +73,12 @@ export const useSWRPlayer = (_id: string | null, options?: RevalidateOptionInter
   )
 
   const triggerThis = useCallback(
-    () => {
+    async () => {
       trigger(swrKeys.PLAYER)
     }, [trigger])
 
   return {
-    item: data || {},
+    item: data || {} as Player,
     mutate: produce(mutate),
     trigger: triggerThis
   }

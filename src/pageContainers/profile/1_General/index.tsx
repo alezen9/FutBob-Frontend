@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Grid, Button, Hidden } from '@material-ui/core'
 import FormikInput from '../../../components/FormikInput'
 import { isEqual, isEmpty, get } from 'lodash'
@@ -8,8 +8,16 @@ import { ServerMessage } from '../../../utils/serverMessages'
 import { generalInfoSchema } from '../validations'
 import { CountryOptions } from '../../../utils/nationalities'
 import cleanDeep from 'clean-deep'
+import { User } from '../../../Entities/User'
 
-const General = props => {
+type Props = {
+  item: User
+  mutate: any
+  setIsLoading: (isLoading: boolean) => void
+  openSnackbar: (data: any) => void
+}
+
+const General = (props: Props) => {
   const {
     item: { _id, username, futsalPlayer, avatar, ...rest },
     mutate,
@@ -46,90 +54,94 @@ const General = props => {
       setSubmitting(false)
     }, [rest, mutate])
 
+  const initCountry = useMemo(() => {
+    if(!rest.country) return null
+    if(CountryOptions) return CountryOptions.find(({ value }) => value === rest.country)
+    return null
+  }, [CountryOptions, rest.country])
+
   const formik = useFormik({
-    initialValues: { ...rest, country: CountryOptions.find(({ value }) => value === rest.country) },
+    initialValues: { ...rest, country: initCountry },
     enableReinitialize: true,
     onSubmit,
     validationSchema: generalInfoSchema
   })
 
   return (
-    <div>
-      <form onSubmit={formik.handleSubmit}>
-        <Grid container spacing={3}>
-          <FormikInput
-            sm={4}
-            name='name'
-            label='Name'
-            required
-            {...formik}
-          />
-          <FormikInput
-            sm={4}
-            name='surname'
-            label='Surname'
-            required
-            {...formik}
-          />
-          <FormikInput
-            sm={4}
-            name='dateOfBirth'
-            label='Date of birth'
-            type='date'
-            required
-            {...formik}
-          />
-          <FormikInput
-            sm={4}
-            name='sex'
-            label='Sex'
-            type='select'
-            options={[{ label: 'Male', value: 0 }, { label: 'Female', value: 1 }]}
-            required
-            {...formik}
-          />
-          <FormikInput
-            sm={4}
-            name='phone'
-            label='Phone'
-            type='phone'
-            required
-            {...formik}
-          />
-          <FormikInput
-            sm={4}
-            name='email'
-            label='Email'
-            {...formik}
-          />
-          <Hidden only='xs'>
-            <Grid item xs={4} />
-          </Hidden>
-          <FormikInput
-            sm={4}
-            name='country'
-            label='Nationality'
-            type='autocomplete'
-            options={CountryOptions}
-            required
-            {...formik}
-          />
-          <Hidden only='xs'>
-            <Grid item xs={4} />
-          </Hidden>
-          <Grid item xs={12} align='right'>
-            <Button
-              style={{ minWidth: 150 }}
-              disabled={formik.isSubmitting || isEmpty(formik.touched)}
-              onClick={formik.handleSubmit}
-              variant='contained'
-              color='primary'>
+    <form onSubmit={formik.handleSubmit}>
+      <Grid container spacing={3}>
+        <FormikInput
+          sm={4}
+          name='name'
+          label='Name'
+          required
+          {...formik}
+        />
+        <FormikInput
+          sm={4}
+          name='surname'
+          label='Surname'
+          required
+          {...formik}
+        />
+        <FormikInput
+          sm={4}
+          name='dateOfBirth'
+          label='Date of birth'
+          type='date'
+          required
+          {...formik}
+        />
+        <FormikInput
+          sm={4}
+          name='sex'
+          label='Sex'
+          type='select'
+          options={[{ label: 'Male', value: 0 }, { label: 'Female', value: 1 }]}
+          required
+          {...formik}
+        />
+        <FormikInput
+          sm={4}
+          name='phone'
+          label='Phone'
+          type='phone'
+          required
+          {...formik}
+        />
+        <FormikInput
+          sm={4}
+          name='email'
+          label='Email'
+          {...formik}
+        />
+        <Hidden only='xs'>
+          <Grid item xs={4} />
+        </Hidden>
+        <FormikInput
+          sm={4}
+          name='country'
+          label='Nationality'
+          type='autocomplete'
+          options={CountryOptions}
+          required
+          {...formik}
+        />
+        <Hidden only='xs'>
+          <Grid item xs={4} />
+        </Hidden>
+        <Grid item xs={12} style={{display: 'flex', justifyContent: 'flex-end'}}>
+          <Button
+            style={{ minWidth: 150 }}
+            disabled={formik.isSubmitting || isEmpty(formik.touched)}
+            onClick={() => formik.handleSubmit()}
+            variant='contained'
+            color='primary'>
                 Update
-            </Button>
-          </Grid>
+          </Button>
         </Grid>
-      </form>
-    </div>
+      </Grid>
+    </form>
   )
 }
 

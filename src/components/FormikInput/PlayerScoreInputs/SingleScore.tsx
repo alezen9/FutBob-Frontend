@@ -62,7 +62,7 @@ type Props = {
   formik: FormikEssentials
 }
 
-const SingleScore: React.FC<Props> = props => {
+const SingleScore = (props: Props) => {
   const { title = '-', name, values = {}, formik } = props
   const classes = useStyles()
   const [openSliders, setOpenSliders] = useState(false)

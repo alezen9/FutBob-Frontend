@@ -6,15 +6,15 @@ export enum Sex {
 }
 
 export interface User {
-    _id?: string
-    name?: string
-    surname?: string
-    dateOfBirth?: string
-    sex?: Sex
-    country?: string
+    _id: string
+    name: string
+    surname: string
+    dateOfBirth: string
+    sex: Sex
+    country: string
     futsalPlayer?: Player
     avatar?: string
     username?: string
     email?: string
-    phone?: string
+    phone: string
 }

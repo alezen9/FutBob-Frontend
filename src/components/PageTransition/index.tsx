@@ -6,7 +6,7 @@ type Props = {
   children: ReactChildren | ReactChild
 }
 
-const PageTransition: React.FC<Props> = props => {
+const PageTransition = (props: Props) => {
   const { children = [] } = props
   const router = useRouter()
   return (

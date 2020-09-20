@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactChild, ReactChildren } from 'react'
 import { Grid, Button } from '@material-ui/core'
 import FormikInput, { FormikEssentials } from '..'
 import { get } from 'lodash'
@@ -53,7 +53,7 @@ type ContentProps = {
   formik: FormikEssentials
 }
 
-export const SlidersDialogContent: React.FC<ContentProps> = React.memo(props => {
+export const SlidersDialogContent = React.memo((props: ContentProps) => {
   const { name, formik } = props
 
   return <Grid container>
@@ -75,7 +75,7 @@ type ActionsProps = {
   confirmChanges: VoidFunction
 }
 
-export const SlidersDialogActions: React.FC<ActionsProps> = React.memo(props => {
+export const SlidersDialogActions = React.memo((props: ActionsProps) => {
   const { cancelChanges, confirmChanges } = props
 
   return <Grid container justify='flex-end'>

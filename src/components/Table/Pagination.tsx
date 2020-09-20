@@ -31,7 +31,7 @@ type Props = {
   onChangePage: (e: any, newPage: number) => void
 }
 
-const CondexoPagination: React.FC<Props> = props => {
+const CondexoPagination = (props: Props) => {
   const { totalCount = 20, currentPage = 1, onChangePage } = props
   const classes = useStyles()
 

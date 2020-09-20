@@ -1,16 +1,14 @@
-import React, { useState, ReactChild, ReactNode, ReactChildren } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState, ReactNode, ReactElement } from 'react'
 // MUI
 import { makeStyles } from '@material-ui/core/styles'
-import { AppBar, Tabs, Tab, useMediaQuery } from '@material-ui/core'
-// components
-import SingleTab from './SingleTab'
+import { AppBar, Tabs, Tab, useMediaQuery, Box } from '@material-ui/core'
 // utils
-import { compact, get } from 'lodash'
+import { get } from 'lodash'
+import cleanDeep from 'clean-deep'
 
 type Props = {
-  children: React.FC<TabProps>[],
-  safeGuard?: (val: number) => boolean
+  children?: ReactElement<TabProps>[]
+  safeGuard?: (newTabIndex: number) => boolean
 }
 
 const useStyles = makeStyles(theme => ({
@@ -49,6 +47,22 @@ const useStyles = makeStyles(theme => ({
       ? '0 3px 10px rgba(0,0,0,.1)'
       : 'unset',
     bottom: 0
+  },
+  box: {
+    paddingTop: theme.spacing(),
+    paddingBottom: theme.spacing(4),
+    paddingRight: theme.spacing(2),
+    paddingLeft: theme.spacing(2),
+    marginBottom: theme.spacing(4),
+    marginTop: theme.spacing(4),
+    borderRadius: 4
+  },
+  outercomponentBox: {
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(4),
+    paddingRight: theme.spacing(2),
+    paddingLeft: theme.spacing(2),
+    marginBottom: theme.spacing(4)
   }
 }))
 
@@ -64,9 +78,9 @@ const tabProps: any = (index: number) => {
   }
 }
 
-const FutBobTabs: React.FC<Props> = props => {
+const FutBobTabs = (props: Props) => {
   const { children, safeGuard } = props
-  const { wrapper, appBar, tabs, indicatorClass } = useStyles()
+  const { wrapper, appBar, tabs, indicatorClass, box, outercomponentBox } = useStyles()
   const [value, setValue] = useState(0)
   const isSmallScreen = useMediaQuery('(max-width: 850px)')
 
@@ -88,36 +102,43 @@ const FutBobTabs: React.FC<Props> = props => {
           indicatorColor='primary'
           classes={{ root: tabs, indicator: indicatorClass }}
         >
-          {compact(children).map((child, i) => {
-            return <Tab
+          {React.Children.map(cleanDeep(children), (child, i) =>
+            <Tab
               disableRipple
               key={`tab-${i}`}
-              label={get(child, 'props.title', '-')}
+              label={get(child, 'props.title' , '-')}
               {...tabProps(i)}
             />
-          })
-          }
+          )}
         </Tabs>
       </AppBar>
-      {compact(children).map((child, i) =>
-        <SingleTab
-          key={`tabPanel-${i}`}
-          value={value}
-          index={i}
-          title={get(child, 'props.title', '-')}
-          component={get(child, 'props.component', <></>)}
-          outercomponent={get(child, 'props.outercomponent', <></>)}
-        />)}
+      {children.map((child, i) => {
+        return (
+          <div
+            role='tabPanel'
+            hidden={value !== i}
+            id={`tabPanel-${i}`}
+            aria-labelledby={`tabPanel-${i}`}
+          >
+            <Box p={3} className={box}>
+              {child.props.component}
+            </Box>
+            {child.props.outercomponent && <Box p={3} className={outercomponentBox}>
+              {child.props.outercomponent}
+            </Box>}
+          </div>
+        )
+      })}
     </div>
   )
 }
 
-export default FutBobTabs
+export default React.memo(FutBobTabs)
 
 type TabProps = {
-  title: string,
-  component?: ReactNode,
+  title: string
+  component: ReactNode
   outercomponent?: ReactNode
 }
 
-export const FutBobTab: React.FC<TabProps> = props => <div {...props} />
+export const FutBobTab = (props: TabProps) => <div {...props} />

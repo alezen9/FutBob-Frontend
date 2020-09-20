@@ -11,7 +11,7 @@ type Props = {
   formik: FormikEssentials
 }
 
-const PlayerScoreInputs: React.FC<Props> = props => {
+const PlayerScoreInputs = (props: Props) => {
   const { gridProps = {}, formik } = props
 
   const items = useMemo(() => {

@@ -3,7 +3,8 @@ import PlayersContainer from '../../pageContainers/players'
 import PageTransition from '../../components/PageTransition'
 import { useRouter } from 'next/router'
 import { apiInstance } from '../../SDK'
-import { playerFields } from '../../swr/helpers'
+import { allPlayerFields } from '../../SDK/allFields'
+import { NextPageContext } from 'next'
 
 const Players = props => {
   const isMounted = useRef(true)
@@ -25,8 +26,8 @@ const Players = props => {
   )
 }
 
-export const getStaticProps = async ctx => {
-  const players = await apiInstance.player_getPlayers({}, playerFields)
+export const getStaticProps = async (ctx: NextPageContext) => {
+  const players = await apiInstance.player_getPlayers({}, allPlayerFields)
   return {
     props: { players }
   }

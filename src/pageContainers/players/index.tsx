@@ -7,7 +7,7 @@ import FutBobTable from '../../components/Table'
 import { getPlayerDataRow, headers } from './helpers'
 import { useRouter } from 'next/router'
 import AddRoundedIcon from '@material-ui/icons/AddRounded'
-import Filters from '../../components/Filters'
+// import Filters from '../../components/Filters'
 import { apiInstance } from '../../SDK'
 import CustomDialog from '../../components/Dialog'
 import { FutBobPalette } from '../../../palette'
@@ -75,7 +75,7 @@ const PlayersContainer = props => {
           message: 'Player deleted successfully!'
         })
         closeDialog()
-        trigger()
+        await trigger()
       } catch (error) {
         openSnackbar({
           variant: 'error',
@@ -105,7 +105,7 @@ const PlayersContainer = props => {
 
   return (
     <div>
-      <Filters
+      {/* <Filters
         filters={[]}
         onFiltersChange={setFilters}
         actionsGridProps={{ sm: 6, lg: 8 }}
@@ -127,7 +127,7 @@ const PlayersContainer = props => {
             <AddRoundedIcon />
           </IconButton>
         </Tooltip>
-      </Filters>
+      </Filters> */}
       <FutBobTable
         withActions
         isFetching={false}

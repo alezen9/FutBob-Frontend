@@ -19,7 +19,8 @@ type Props = {
   values: any
 }
 
-const InputCheckbox: React.FC<Props> = ({ name, onChange, values }) => {
+const InputCheckbox = (props: Props) => {
+  const { name, onChange, values } = props
   const classes = useStyles()
   return (
     <div className={classes.wrapper}>
