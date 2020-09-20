@@ -16,18 +16,25 @@ import CustomDialog from '../../../components/Dialog'
 import { getMeanScoreField } from '../../../components/FormikInput/PlayerScoreInputs/SingleScore'
 import PlayerScoreInputs from '../../../components/FormikInput/PlayerScoreInputs'
 import { CountryOptions } from '../../../utils/nationalities'
-import { useSWRPlayer, useSWRUser } from '../../../swr'
+import { useSWRPlayer, useSWRPlayers, useSWRUser } from '../../../swr'
+import { getPlayerPageTitle } from '../../../pages/players/[id]'
 
 const PlayerDetail = props => {
   const router = useRouter()
   const { id }: { id?: string } = router.query
+  const { trigger: triggerGetPlayers } = useSWRPlayers({ revalidateOnMount: false })
   const { item, trigger } = useSWRPlayer(id, { revalidateOnMount: !!router.query.id })
   const { item: userConnectedItem, trigger: triggerUserConnected } = useSWRUser({ revalidateOnMount: false })
-  const { setIsLoading, openSnackbar, pageTitle } = useConfigStore()
+  const { setIsLoading, openSnackbar, pageTitle, setPageTitle } = useConfigStore(state => ({
+    setIsLoading: state.setIsLoading,
+    openSnackbar: state.openSnackbar,
+    pageTitle: state.pageTitle,
+    setPageTitle: state.setPageTitle
+  }))
   const [openConfirmDialog, setOpenConfirmDialog] = useState(null)
 
   const onSubmit = useCallback(
-    async (values, { setSubmitting, setFieldValue, setTouched }) => {
+    async (values, { setSubmitting, setTouched }) => {
       setSubmitting(true)
       setIsLoading(true)
       try {
@@ -37,6 +44,7 @@ const PlayerDetail = props => {
         let idPlayer
         const { _id, positions, state, score, user } = values
         const { _id: itemId, positions: itemPositions, state: itemState, score: itemScore, user: itemUser } = item
+        const isUser = get(userConnectedItem, '_id', null) === _id
         const newValsUser = {
           ...user,
           ...user.country && {
@@ -91,7 +99,10 @@ const PlayerDetail = props => {
           if (userDataChanged && get(user, '_id', null) === get(userDataChanged, '_id', null)) {
             await triggerUserConnected()
           }
-          if (playerDataChanged) await trigger()
+          if (playerDataChanged) {
+            await trigger()
+            await triggerGetPlayers()
+          }
           openSnackbar({
             variant: 'success',
             message: _id
@@ -101,6 +112,10 @@ const PlayerDetail = props => {
         }
         if (idPlayer) {
           router.replace('/players/[id]', `/players/${idPlayer}`)
+        }
+        if(userDataChanged) {
+          const _pageTitle = getPlayerPageTitle(user, isUser)
+          setPageTitle(_pageTitle)
         }
       } catch (error) {
         console.error(error)
@@ -112,7 +127,7 @@ const PlayerDetail = props => {
       setIsLoading(false)
       setSubmitting(false)
       setTouched({}, false)
-    }, [item, userConnectedItem, trigger, triggerUserConnected])
+    }, [item, userConnectedItem, setPageTitle, trigger, triggerGetPlayers, triggerUserConnected])
 
   const onDelete = useCallback(
     async () => {

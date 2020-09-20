@@ -9,6 +9,16 @@ import FaceRoundedIcon from '@material-ui/icons/FaceRounded'
 import { useSWRUser, useSWRPlayer } from '../../swr'
 import { User } from '../../Entities/User'
 
+export const getPlayerPageTitle = (user: User, isUser: boolean = false) => {
+  const { name, surname } = user
+  return isUser
+    ? <span style={{display: 'flex', alignItems: 'center'}}>
+      <FaceRoundedIcon style={{marginRight: '.5em', fontSize: '1.2em' }}/>
+      {`${surname} ${name}`}
+    </span>
+    : `${surname} ${name}`
+}
+
 
 const Player = props => {
   const isMounted = useRef(true)
@@ -21,14 +31,8 @@ const Player = props => {
 
   useEffect(() => {
     const _isUser = get(user, '_id', null) === get(player, 'user._id', null)
-    const { name = '-', surname = '-' } = get(player, 'user', {} as User)
-    const pageTitle = _isUser
-    ? <span style={{display: 'flex', alignItems: 'center'}}>
-      <FaceRoundedIcon style={{marginRight: '.5em', fontSize: '1.2em' }}/>
-      {`${surname} ${name}`}
-    </span>
-    : `${surname} ${name}`
-  setPageTitle(pageTitle)
+    const pageTitle = getPlayerPageTitle(get(player, 'user', {} as User), _isUser)
+    setPageTitle(pageTitle)
   }, [player._id, user._id])
 
   useEffect(() => {

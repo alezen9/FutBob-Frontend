@@ -34,19 +34,19 @@ export const sections: Section[] = [
     icon: <JerseyIcon />,
     path: '/players'
   },
-  {
-    title: 'Fields',
-    icon: <FieldIcon />,
-    path: '/fields'
-  },
-  {
-    title: 'Matches',
-    icon: <SportsSoccerRoundedIcon />,
-    path: '/matches'
-  },
-  {
-    title: 'Stats',
-    icon: <BarChartRoundedIcon />,
-    path: '/statistics'
-  }
+  // {
+  //   title: 'Fields',
+  //   icon: <FieldIcon />,
+  //   path: '/fields'
+  // },
+  // {
+  //   title: 'Matches',
+  //   icon: <SportsSoccerRoundedIcon />,
+  //   path: '/matches'
+  // },
+  // {
+  //   title: 'Stats',
+  //   icon: <BarChartRoundedIcon />,
+  //   path: '/statistics'
+  // }
 ]

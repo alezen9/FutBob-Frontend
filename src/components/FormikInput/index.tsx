@@ -43,7 +43,7 @@ type GridWrapperProps = {
   container?: boolean
   spacing?: GridSpacing
   style?: any
-  children?: ReactChildren | ReactChild | ReactNode[]
+  children?: any | any[]
 }
 
 export type OptionType = {
@@ -307,7 +307,7 @@ const FormikInput = (props: Props) => {
         props.setFieldValue(name, [...get(values, name, []).filter(val => val.value !== v)])
       }
 
-      const renderChips3 = () => compact(get(values, name, []).map(chip => {
+      const renderChips3 = (): JSX.Element[] => compact(get(values, name, []).map(chip => {
         return !chip || chip.value === -1 || chip.value === ''
           ? null
           : <Chip

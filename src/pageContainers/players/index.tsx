@@ -4,7 +4,7 @@ import { get } from 'lodash'
 import { useConfigStore } from '../../zustand/configStore'
 import { ServerMessage } from '../../utils/serverMessages'
 import FutBobTable from '../../components/Table'
-import { getPlayerDataRow, headers } from './helpers'
+import { getPlayerDataRow, headers, SearchBox } from './helpers'
 import { useRouter } from 'next/router'
 import AddRoundedIcon from '@material-ui/icons/AddRounded'
 // import Filters from '../../components/Filters'
@@ -128,6 +128,17 @@ const PlayersContainer = props => {
           </IconButton>
         </Tooltip>
       </Filters> */}
+      <Grid container justify='space-between' alignItems='center' style={{ marginBottom: '1em' }}>
+        <SearchBox onTextChange={v => setSearchText(v)} />
+        <Grid item xs={12} sm={6} lg={8} style={{ textAlign: 'right' }}>
+          <Button
+            onClick={goToCreate}
+            variant='outlined'>
+            <AddRoundedIcon style={{ marginRight: '.5em' }} />
+            Create
+          </Button>
+        </Grid>
+      </Grid>
       <FutBobTable
         withActions
         isFetching={false}

@@ -9,6 +9,8 @@ import SearchRoundedIcon from '@material-ui/icons/SearchRounded'
 import DeleteForeverRoundedIcon from '@material-ui/icons/DeleteForeverRounded'
 import { InputAdornment } from '@material-ui/core'
 import { getMeanScoreField } from '../../components/FormikInput/PlayerScoreInputs/SingleScore'
+import { useFormik } from 'formik'
+import FormikInput from '../../components/FormikInput'
 
 export const headers = [
   { name: 'Name', style: { minWidth: 230 } },
@@ -93,3 +95,37 @@ export const filters = [
   //   options: UserStato
   // }
 ]
+
+
+
+/**
+ * TEMPORARY
+ */
+
+type SearchBoxProps = {
+  onTextChange: (v: any) => void
+}
+
+export const SearchBox = React.memo((props: SearchBoxProps) => {
+  const { onTextChange } = props
+
+  const formik = useFormik({
+    initialValues: { searchText: '' },
+    onSubmit: onTextChange
+  })
+
+  return (
+    <FormikInput
+      xs={12}
+      sm={6}
+      lg={4}
+      name='searchText'
+      label='Search'
+      inputProps={{
+        endAdornment: <SearchAdornment />
+      }}
+      supplementaryOnChange={onTextChange}
+      {...formik}
+    />
+  )
+})

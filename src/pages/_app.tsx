@@ -116,11 +116,20 @@ const MyApp = props => {
     openSnackbar
   } = useConfigStore()
 
-  useSWRUser()
+  const { trigger } = useSWRUser({ initialData: {} })
 
   useEffect(() => {
-    if (!isLogged) cache.clear()
-  }, [isLogged])
+    let mounted = true
+    if(isLogged){
+      const getUser = async () => {
+        await trigger()
+      }
+      if(mounted) getUser()
+     } else if (!isLogged) cache.clear()
+    return () => {
+      mounted = false
+    }
+  }, [isLogged, trigger])
 
   const router = useRouter()
 
