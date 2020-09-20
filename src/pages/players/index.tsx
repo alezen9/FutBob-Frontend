@@ -26,7 +26,7 @@ const Players = props => {
   )
 }
 
-export const getStaticProps = async (ctx: NextPageContext) => {
+export const getServerSideProps = async (ctx: NextPageContext) => {
   const players = await apiInstance.player_getPlayers({}, allPlayerFields)
   return {
     props: { players }

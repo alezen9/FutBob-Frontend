@@ -115,6 +115,7 @@ const FutBobTabs = (props: Props) => {
       {children.map((child, i) => {
         return (
           <div
+            key={`tabPanel-${i}`}
             role='tabPanel'
             hidden={value !== i}
             id={`tabPanel-${i}`}
