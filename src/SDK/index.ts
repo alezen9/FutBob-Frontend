@@ -25,21 +25,18 @@ const LogRequest = ({name, response, params, fields, isError = false}) => {
 
 class FutBobServer {
   localStorageToken: string
-  TOKEN: string|undefined
   _self: AxiosInstance
+  authHeader: string|undefined
   constructor () {
     this.localStorageToken = 'FutBobToken'
-    this.TOKEN = process.browser
-      ? window.localStorage.getItem(this.localStorageToken)
-      : undefined
-    const authHeader = `Bearer ${this.TOKEN}`
+    this.authHeader = process.browser ? window.localStorage.getItem(this.localStorageToken) : undefined
     this._self = axios.create({
       baseURL: `${publicRuntimeConfig.API_URL}`,
       timeout: 100000,
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        ...this.TOKEN && { Authorization: authHeader }
+        ...this.authHeader && { Authorization: `Bearer ${this.authHeader}` }
       }
     })
     this._self.interceptors.response.use(
@@ -49,16 +46,11 @@ class FutBobServer {
       }
     )
     this._self.interceptors.request.use(config => {
-      if (process.browser && !config.headers.common['Authorization'] && window.localStorage.getItem(this.localStorageToken)) {
+      if (process.browser && !config.headers.common['Authorization'] && process.browser && window.localStorage.getItem(this.localStorageToken)) {
         const _token = window.localStorage.getItem(this.localStorageToken)
         const authorization = `Bearer ${_token}`
         config.headers.common['Authorization'] = authorization
         this._self.defaults.headers.common['Authorization'] = `Bearer ${_token}`
-        this.TOKEN = _token
-      } else if (this.TOKEN) {
-        const authorization = `Bearer ${this.TOKEN}`
-        config.headers.common['Authorization'] = authorization
-        this._self.defaults.headers.common['Authorization'] = `Bearer ${this.TOKEN}`
       }
       return config
     },
@@ -90,18 +82,17 @@ class FutBobServer {
       })
   }
 
-  /**
-   *
-   * @param {string} token
-   */
-  setToken (token) {
+  setToken (token: string) {
     const tokenSet = get(this._self, 'defaults.headers.common.Authorization', undefined)
     let _token = tokenSet ? tokenSet.split(' ')[1] : undefined
     if (token !== _token) {
       this._self.defaults.headers.common['Authorization'] = `Bearer ${token}`
     }
-    this.TOKEN = token
     window.localStorage.setItem(this.localStorageToken, token)
+  }
+
+  hasToken () {
+    return get(this._self, 'defaults.headers.common.Authorization', undefined)
   }
 
   /**
@@ -142,12 +133,9 @@ class FutBobServer {
     return this.API({ query, name: 'login', params: signinInput })
   }
 
-  /**
-   *
-   * @param {function?} _logout
-   */
-  user_logout (_logout) { // eslint-disable-line
+  user_logout (_logout?: VoidFunction) { // eslint-disable-line
     window.localStorage.removeItem(this.localStorageToken)
+    this._self.defaults.headers.common['Authorization'] = undefined
     if (_logout) _logout()
   }
 

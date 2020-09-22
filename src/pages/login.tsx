@@ -58,15 +58,17 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const SignIn = () => {
   const classes = useStyles()
-  const { openSnackbar, setIsLogged, isLogged, themeType } = useConfigStore(state => ({
+  const { openSnackbar, setIsLogged, setIsLoading, isLogged, themeType } = useConfigStore(state => ({
     isLogged: state.isLogged,
     openSnackbar: state.openSnackbar,
     setIsLogged: state.setIsLogged,
+    setIsLoading: state.setIsLoading,
     themeType: state.themeType
   }))
   const router = useRouter()
 
   const onSubmit = async (values: FormikValues, { setSubmitting }:FormikHelpers<any>) => {
+    setIsLoading(true)
     setSubmitting(true)
     try {
       const { token } = await apiInstance.user_login(values, `{ token }`)
@@ -82,6 +84,7 @@ const SignIn = () => {
       })
     }
     setSubmitting(false)
+    setIsLoading(false)
   }
 
   const formik = useFormik({

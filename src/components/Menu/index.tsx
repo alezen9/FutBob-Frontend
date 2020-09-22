@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     maxWidth: (props: any) => props.menuOpen ? 250 : 60,
     overflow: 'hidden',
-    transition: 'max-width .2s ease, background-color .3s ease',
+    transition: 'max-width .1s ease, background-color .1s ease',
     height: '100vh',
     padding: '0 1em',
     boxSizing: 'border-box',

@@ -12,6 +12,7 @@ import ProgressBar from '../components/ProgressBar'
 import lightTheme from '../../lightTheme'
 import darkTheme from '../../darkTheme'
 import Navbar from '../components/Navbar'
+import BottomNavbar from '../components/BottomNav'
 // css
 import '../components/Navbar/Navbar.css'
 import { FutBobLogo } from '../assets/CustomIcon'
@@ -62,7 +63,7 @@ const useStyles = makeStyles(theme => ({
     float: 'right',
     [theme.breakpoints.down('sm')]: {
       position: 'relative',
-      marginTop: '5em',
+      // marginTop: '5em',
       width: '100vw !important',
       padding: '1em 1em 90px 1em'
     }
@@ -116,7 +117,7 @@ const MyApp = props => {
     openSnackbar
   } = useConfigStore()
 
-  const { trigger } = useSWRUser({ initialData: {} })
+  const { trigger } = useSWRUser({ initialData: {}, revalidateOnMount: false })
 
   useEffect(() => {
     let mounted = true
@@ -209,7 +210,7 @@ const MyApp = props => {
   useEffect(() => {
     if (process.browser) {
       if (!document.body.style.transition) {
-        document.body.style.transition = 'background-color .3s ease'
+        document.body.style.transition = 'background-color .1s ease'
       }
       document.body.style.backgroundColor = themeType === 'light' ? '#fafafa' : '#111'
     }
@@ -226,8 +227,9 @@ const MyApp = props => {
         {isFirstRun
           ? <SplashScreen />
           : <div className={classes.wrapper}>
-            {isLogged && isLoading && !isSmallScreen && <ProgressBar />}
-            {isLogged && <>{isSmallScreen ? <Navbar isLoading={isLoading} /> : <Menu />}</>}
+            {isLoading && !isSmallScreen && <ProgressBar />}
+            {/* {isLogged && <>{isSmallScreen ? <Navbar isLoading={isLoading} /> : <Menu />}</>} */}
+            {isLogged && <>{isSmallScreen ? <BottomNavbar /> : <Menu />}</>}
             <div {...isLogged && { className: classes.content }}>
               {isLogged && <Title />}
               <SWRConfig value={{ onError, errorRetryCount: 2 }} >

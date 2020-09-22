@@ -6,15 +6,17 @@ import { useConfigStore } from '../zustand/configStore'
 import { useEffect, useCallback } from 'react'
 import { Player } from '../Entities/Player'
 import { User } from '../Entities/User'
+import { apiInstance } from '../SDK'
 
 export const useSWRUser = (options?: any) => {
+  const hasToken = apiInstance.hasToken()
   const { data, mutate } = useSWR(
     swrKeys.USER,
     swrFetchers.profileFetcher,
     {
       initialData: {},
       revalidateOnFocus: false,
-      revalidateOnMount: true,
+      revalidateOnMount: hasToken,
       ...options || {}
     }
   )
@@ -32,6 +34,7 @@ export const useSWRUser = (options?: any) => {
 }
 
 export const useSWRPlayers = (options?: any) => {
+  const hasToken = apiInstance.hasToken()
   const { setIsLoading } = useConfigStore()
   const { data, isValidating, mutate } = useSWR(
     swrKeys.PLAYERS,
@@ -39,7 +42,7 @@ export const useSWRPlayers = (options?: any) => {
     {
       initialData: [],
       revalidateOnFocus: false,
-      revalidateOnMount: true,
+      revalidateOnMount: hasToken,
       ...options || {}
     }
   )

@@ -16,7 +16,7 @@ import { FutBobPalette } from '../../../palette'
 
 const useStyles = makeStyles(theme => ({
   table: {
-    transition: 'background-color .3s ease'
+    transition: 'background-color .1s ease'
   },
   tableContainer: {
     [theme.breakpoints.down('xs')]: {
