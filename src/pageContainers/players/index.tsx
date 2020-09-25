@@ -13,7 +13,7 @@ import { FutBobPalette } from '@_palette'
 import { useSWRPlayers, useSWRUser } from '@_swr/hooks'
 import { cache } from 'swr'
 import SwrKey from '@_swr/keys'
-import { Player, PlayerType } from '@_myentities/Player'
+import { Player, PlayerType } from '@_entities/Player'
 
 const PlayersContainer = () => {
   const { list = [], mutate } = useSWRPlayers()

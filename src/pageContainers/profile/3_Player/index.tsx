@@ -12,7 +12,7 @@ import { OverallScore } from '@_icons'
 import { getMeanScoreField } from '@_components/FormikInput/PlayerScoreInputs/SingleScore'
 import PlayerScoreInputs from '@_components/FormikInput/PlayerScoreInputs'
 import { ProfileTabProps } from '..'
-import { EditablePlayer, PhysicalState, PlayerPosition, PlayerType } from '@_myentities/Player'
+import { EditablePlayer, PhysicalState, PlayerPosition, PlayerType } from '@_entities/Player'
 import { useSWRPlayers } from '@_swr/hooks'
 
 const Player = (props: ProfileTabProps) => {

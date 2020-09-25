@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 import GoBack from '@_components/GoBack'
 import FaceRoundedIcon from '@material-ui/icons/FaceRounded'
 import { useSWRUser, useSWRPlayer } from '@_swr/hooks'
-import { User } from '@_myentities/User'
+import { User } from '@_entities/User'
 
 export const getPlayerPageTitle = (user: User, isUser: boolean = false) => {
   const { name, surname } = user

@@ -1,7 +1,7 @@
 import { apiInstance } from '../SDK'
 import { get } from 'lodash'
-import { User } from '@_myentities/User'
-import { Player } from '@_myentities/Player'
+import { User } from '@_entities/User'
+import { Player } from '@_entities/Player'
 import { allUserFields, allPlayerFields } from '../SDK/allFields'
 
 const swrFetchers = Object.freeze({
