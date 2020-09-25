@@ -13,9 +13,11 @@ import { getMeanScoreField } from '@_components/FormikInput/PlayerScoreInputs/Si
 import PlayerScoreInputs from '@_components/FormikInput/PlayerScoreInputs'
 import { ProfileTabProps } from '..'
 import { EditablePlayer, PhysicalState, PlayerPosition, PlayerType } from '@_entities/Player'
+import { useSWRPlayers } from '@_swr/hooks'
 
 const Player = (props: ProfileTabProps) => {
-  const { item: { _id: userId, futsalPlayer }, setIsLoading, mutate, openSnackbar } = props
+  const { item: { _id: userId, futsalPlayer, ...restOfUserData }, setIsLoading, mutate, openSnackbar } = props
+  const { mutate: mutatePlayerList } = useSWRPlayers({ revalidateOnMount: false })
 
   const onSubmit = useCallback(
     async (values, { setSubmitting }) => {
@@ -54,8 +56,21 @@ const Player = (props: ProfileTabProps) => {
         }
         if ((_id && !done) || (!_id && !idPlayer)) throw new Error()
         if (done || idPlayer) {
+          const mePlayer = { _id: _id || idPlayer, ...playerData, score }
           mutate(draft => {
-            draft.futsalPlayer = { _id: _id || idPlayer, ...playerData, score }
+            draft.futsalPlayer = mePlayer
+          })
+          mutatePlayerList(draft => {
+            if((draft || []).length){
+              const idx = draft.findIndex(player => player._id === mePlayer._id)
+              if(![null, undefined].includes(idx)) draft[idx] = {
+                ...mePlayer,
+                user: {
+                  _id: userId,
+                  ...restOfUserData
+                }
+              }
+            }
           })
           openSnackbar({
             variant: 'success',
@@ -65,7 +80,6 @@ const Player = (props: ProfileTabProps) => {
           })
         }
       } catch (error) {
-        console.error(error)
         openSnackbar({
           variant: 'error',
           message: ServerMessage[error] || get(error, 'message', error)
@@ -73,7 +87,7 @@ const Player = (props: ProfileTabProps) => {
       }
       setIsLoading(false)
       setSubmitting(false)
-    }, [userId, futsalPlayer])
+    }, [restOfUserData, userId, futsalPlayer, mutatePlayerList])
 
   const formik = useFormik({
     initialValues: {

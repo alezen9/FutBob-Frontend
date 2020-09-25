@@ -17,7 +17,7 @@ import { Player, PlayerType } from '@_entities/Player'
 
 const PlayersContainer = () => {
   const { list = [], mutate } = useSWRPlayers()
-  const { item: userConnectedItem, mutate: mutateUserConnected } = useSWRUser({ fromCache: true, revalidateOnMount: false })
+  const { item: userConnectedItem, mutate: mutateUserConnected } = useSWRUser()
 
   const { openSnackbar, setIsLoading } = useConfigStore(state => ({
     openSnackbar: state.openSnackbar,

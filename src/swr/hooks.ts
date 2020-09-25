@@ -12,9 +12,7 @@ import { ServerMessage } from '@_utils/serverMessages'
 import { get, isEmpty, isObject } from 'lodash'
 
 const stateSelector = (state: ConfigStore) => ({
-  setIsLoading: state.setIsLoading,
-  isLoading: state.isLoading,
-  openSnackbar: state.openSnackbar
+  setIsLoading: state.setIsLoading
 })
 
 const iterateAndAssign = (data, draft, prefix?: string) => {
@@ -41,19 +39,19 @@ interface MoreOptions {
 export const useSWRUser = <T extends MoreOptions>(options?: T) => {
   const { fromCache = true, ...restOfOpts } = options || {}
   const hasToken = apiInstance.hasToken()
-  const { setIsLoading, isLoading, openSnackbar } = useConfigStore(stateSelector)
+  const { setIsLoading } = useConfigStore(stateSelector)
   const initialData = fromCache
     ? cache.get(SwrKey.USER)
     : undefined
   const [revalidateOnMount, setRevalidateOnMount] = useState(fromCache && initialData ? false : hasToken)
-  const { data, mutate } = useSWR(
+  const { data, mutate, isValidating } = useSWR(
     SwrKey.USER,
     swrFetchers.profileFetcher,
     {
       initialData,
-      revalidateOnFocus: false,
       revalidateOnMount,
       shouldRetryOnError: false,
+      revalidateOnFocus: false,
       ...restOfOpts || {}
     }
   )
@@ -63,12 +61,11 @@ export const useSWRUser = <T extends MoreOptions>(options?: T) => {
   }, [get(data, '_id', null), revalidateOnMount, hasToken])
 
   useEffect(() => {
-    if(data && isLoading) setIsLoading(false)
-    else if(!data && !isLoading) setIsLoading(true)
-  }, [data, isLoading])
+    setIsLoading(isValidating)
+  }, [isValidating])
 
   const triggerThis = useCallback(
-    (shouldRevalidate: boolean = false) => {
+    (shouldRevalidate: boolean = true) => {
       return trigger(SwrKey.USER, shouldRevalidate)
     }, [trigger])
 
@@ -88,19 +85,19 @@ export const useSWRUser = <T extends MoreOptions>(options?: T) => {
 export const useSWRPlayers = <T extends MoreOptions>(options?: T) => {
   const { fromCache = true, ...restOfOpts } = options || {}
   const hasToken = apiInstance.hasToken()
-  const { setIsLoading, isLoading, openSnackbar } = useConfigStore(stateSelector)
+  const { setIsLoading } = useConfigStore(stateSelector)
   const initialData = fromCache
     ? cache.get(SwrKey.PLAYERS)
     : undefined
   const [revalidateOnMount, setRevalidateOnMount] = useState(fromCache && initialData ? false : hasToken)
-  const { data, mutate } = useSWR(
+  const { data, mutate, isValidating } = useSWR(
     SwrKey.PLAYERS,
     swrFetchers.playersFetcher,
     {
       initialData,
-      revalidateOnFocus: false,
       revalidateOnMount,
       shouldRetryOnError: false,
+      revalidateOnFocus: false,
       ...restOfOpts || {}
     }
   )
@@ -110,12 +107,11 @@ export const useSWRPlayers = <T extends MoreOptions>(options?: T) => {
   }, [(data || []).length, revalidateOnMount, hasToken])
 
   useEffect(() => {
-    if(data && isLoading) setIsLoading(false)
-    else if(!data && !isLoading) setIsLoading(true)
-  }, [data, isLoading])
+    setIsLoading(isValidating)
+  }, [isValidating])
 
   const triggerThis = useCallback(
-    (shouldRevalidate: boolean = false) => {
+    (shouldRevalidate: boolean = true) => {
       return trigger(SwrKey.PLAYERS, shouldRevalidate)
     }, [trigger])
 
@@ -135,19 +131,19 @@ export const useSWRPlayers = <T extends MoreOptions>(options?: T) => {
 export const useSWRPlayer = <T extends MoreOptions>(_id: string|null|undefined, options?: T) => {
   const { fromCache = true, ...restOfOpts } = options || {}
   const hasToken = apiInstance.hasToken()
-  const { setIsLoading, isLoading, openSnackbar } = useConfigStore(stateSelector)
+  const { setIsLoading } = useConfigStore(stateSelector)
   const initialData = fromCache
     ? cache.get([SwrKey.PLAYER, _id])
     : undefined
   const [revalidateOnMount, setRevalidateOnMount] = useState(fromCache && initialData ? false : hasToken)
-  const { data, mutate } = useSWR(
+  const { data, mutate, isValidating } = useSWR(
     [SwrKey.PLAYER, _id],
     swrFetchers.playerFetcher,
     {
       initialData,
-      revalidateOnFocus: false,
       revalidateOnMount,
       shouldRetryOnError: false,
+      revalidateOnFocus: false,
       ...restOfOpts || {}
     }
   )
@@ -157,12 +153,11 @@ export const useSWRPlayer = <T extends MoreOptions>(_id: string|null|undefined, 
   }, [get(data, '_id', null), revalidateOnMount, hasToken])
 
   useEffect(() => {
-    if(data && isLoading) setIsLoading(false)
-    else if(!data && !isLoading) setIsLoading(true)
-  }, [data, isLoading, hasToken])
+    setIsLoading(isValidating)
+  }, [isValidating])
 
   const triggerThis = useCallback(
-    (shouldRevalidate: boolean = false) => {
+    (shouldRevalidate: boolean = true) => {
       return trigger([SwrKey.PLAYER, _id], shouldRevalidate)
     }, [trigger])
 

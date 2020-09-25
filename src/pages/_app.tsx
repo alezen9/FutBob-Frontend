@@ -64,7 +64,7 @@ const useStyles = makeStyles(theme => ({
     float: 'right',
     [theme.breakpoints.down('sm')]: {
       position: 'relative',
-      // marginTop: '5em',
+      marginTop: '5em',
       width: '100vw !important',
       padding: '1em 1em 90px 1em'
     }
@@ -216,11 +216,10 @@ const MyApp = props => {
           ? <SplashScreen />
           : <div className={classes.wrapper}>
             {isLoading && !isSmallScreen && <ProgressBar />}
-            {/* {isLogged && <>{isSmallScreen ? <Navbar isLoading={isLoading} /> : <Menu />}</>} */}
-            {isLogged && <>{isSmallScreen ? <BottomNavbar /> : <Menu />}</>}
+            {isLogged && <>{isSmallScreen ? <Navbar isLoading={isLoading} /> : <Menu />}</>}
             <div {...isLogged && { className: classes.content }}>
               {isLogged && <Title />}
-              <SWRConfig value={{ onError, errorRetryCount: 2 }} >
+              <SWRConfig value={{ onError }} >
                 <Component {...pageProps} />
               </SWRConfig>
             </div>

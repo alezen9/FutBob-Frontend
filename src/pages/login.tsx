@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { Button, Typography, Grid, Theme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { FormikHelpers, useFormik } from 'formik'
@@ -69,18 +69,24 @@ const SignIn = () => {
   const classes = useStyles()
   const { openSnackbar, setIsLogged, setIsLoading, isLogged, themeType } = useConfigStore(stateSelector)
   const router = useRouter()
+  const isMounted = useRef(null)
+
+  useEffect(() => {
+    isMounted.current = true
+    return () => {
+      isMounted.current = false
+    }
+  }, [])
 
   const onSubmit = useCallback(
     async (values, { setSubmitting }:FormikHelpers<any>) => {
     setIsLoading(true)
     setSubmitting(true)
+    let _token
     try {
       const { token } = await apiInstance.user_login(values)
-      if (token) {
-        apiInstance.setToken(token)
-        setIsLogged(true)
-        await router.push('/')
-      } else throw new Error('Username o password errati')
+      if (token) _token = token
+      else throw new Error('Username o password errati')
     } catch (error) {
       openSnackbar({
         variant: 'error',
@@ -89,6 +95,11 @@ const SignIn = () => {
     }
     setSubmitting(false)
     setIsLoading(false)
+    if(_token){
+      apiInstance.setToken(_token)
+      setIsLogged(true)
+      await router.push('/')
+    }
   }, [openSnackbar, setIsLoading, setIsLogged])
 
   const formik = useFormik({
