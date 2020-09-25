@@ -12,7 +12,7 @@ import { TopFormIcon, InjuredIcon, RecoveryIcon } from '../assets/CustomIcon'
 import ExpandLessRoundedIcon from '@material-ui/icons/ExpandLessRounded'
 import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
 import cleanDeep from 'clean-deep'
-import { PlayerScore } from '@_entities/Player'
+import { PlayerScore } from '@_myentities/Player'
 
 export const getTitleFromPathname = (pathname: string) => {
   const routeInfo: any = find(sections, ['path', pathname])

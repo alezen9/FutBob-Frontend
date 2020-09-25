@@ -8,7 +8,7 @@
       "@_swr/*": ["src/swr/*"],
       "@_utils/*": ["src/utils/*"],
       "@_zustand/*": ["src/zustand/*"],
-      "@_entities/*": ["src/entities/*"],
+      "@_myentities/*": ["src/entities/*"],
       "@_icons": ["src/assets/CustomIcon"],
       "@_palette": ["palette"]
     },
