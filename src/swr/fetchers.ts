@@ -1,6 +1,6 @@
 import { apiInstance } from '../SDK'
 import { get } from 'lodash'
-import { User } from '@_entities/User'
+import { User } from '@_myentities/User'
 import { Player } from '@_myentities/Player'
 import { allUserFields, allPlayerFields } from '../SDK/allFields'
 

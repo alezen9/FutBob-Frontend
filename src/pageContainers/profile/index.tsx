@@ -4,7 +4,7 @@ import FutBobTabs, { FutBobTab } from '../../components/Tabs'
 import General from './1_General'
 import Private from './2_Private'
 import Player from './3_Player'
-import { EditableUser, User } from '@_entities/User'
+import { EditableUser, User } from '@_myentities/User'
 import { setSnackbarData } from '@_zustand/helpers'
 import { DirectMutationImmer, useSWRUser } from '@_swr/hooks'
 

@@ -9,7 +9,7 @@ import { generalInfoSchema } from '../validations'
 import { CountryOptions } from '@_utils/nationalities'
 import cleanDeep from 'clean-deep'
 import { ProfileTabProps } from '..'
-import { EditableUser } from '@_entities/User'
+import { EditableUser } from '@_myentities/User'
 
 
 
