@@ -60,7 +60,9 @@ const useStyles = makeStyles(theme => ({
 }))
 
 type Props = {
-  data?: string[]
+  data: string[]
+  stringData: string
+  typoGraphyLabelPropsForward?: any
 }
 
 const ListField = (props: Props) => {

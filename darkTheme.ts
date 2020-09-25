@@ -3,21 +3,14 @@ import { ThemeType } from './palette'
 
 const subtitleGrey = '#686868'
 const lightGrey = '#c1c1c1'
-const darkGrey = '#585858'
-const pinkLight = 'rgb(255,45,85)'
-const pinkDark = 'rgb(255,55,95)'
 const azureLight = 'rgb(0,122,255)'
 const azureDark = 'rgb(10,132,255)'
 const lightGreen = 'rgb(52,199,89)'
 const darkGreen = 'rgb(42, 156, 71)'
 const lightRed = 'rgb(255,59,48)'
 const darkRed = 'rgb(255,69,58)'
-const backgroundColor = '#111'
 const typographyGrey = '#b3b3b3'
 const borderColor = '#b3b3b3'
-
-const border = '1px solid #b3b3b3'
-
 const borderRadius = 7
 
 const darkTheme = createMuiTheme({

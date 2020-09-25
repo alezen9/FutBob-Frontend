@@ -1,5 +1,5 @@
+import { ThemeType } from '@_palette'
 import produce from 'immer'
-import { ThemeType } from '../../palette'
 import { State, StateCreator } from 'zustand'
 
 export const _immer = <T extends State>(
@@ -16,7 +16,7 @@ export type ConfigStore = {
     pageTitle: any
     snackbar: any
     setPageTitle: (title: any) => void
-    openSnackbar: (data: any) => void
+    openSnackbar: (data: setSnackbarData) => void
     closeSnackbar: VoidFunction
     setIsLogged: (bool: boolean) => void
     toggleMenu: VoidFunction
@@ -24,8 +24,11 @@ export type ConfigStore = {
     setIsLoading: (isLoading: boolean) => void
 }
 
-export type SnackbarData = {
-    open: boolean
+export type setSnackbarData = {
     variant?: 'error'|'success'|'warning'
     message?: string
+}
+
+export type SnackbarData = setSnackbarData & {
+    open: boolean
 }

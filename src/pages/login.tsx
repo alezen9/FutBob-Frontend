@@ -1,14 +1,15 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Button, Typography, Grid, Theme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { useFormik, FormikComputedProps, FormikValues, FormikBag, FormikHelpers } from 'formik'
-import FormikInput from '../components/FormikInput'
-import { apiInstance } from '../SDK'
-import { FutBobLogo } from '../assets/CustomIcon'
+import { FormikHelpers, useFormik } from 'formik'
+import FormikInput from '@_components/FormikInput'
+import { apiInstance } from 'src/SDK'
+import { FutBobLogo } from '@_icons'
 import { useRouter } from 'next/router'
-import ThemeSwitch from '../components/ThemeModeSwitch'
-import { ServerMessage } from '../utils/serverMessages'
-import { useConfigStore } from '../zustand/configStore'
+import ThemeSwitch from '@_components/ThemeModeSwitch'
+import { ServerMessage } from '@_utils/serverMessages'
+import { useConfigStore } from '@_zustand/configStore'
+import { ConfigStore } from '@_zustand/helpers'
 
 const Copyright = () => {
   return (
@@ -56,26 +57,29 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }))
 
-const SignIn = () => {
-  const classes = useStyles()
-  const { openSnackbar, setIsLogged, setIsLoading, isLogged, themeType } = useConfigStore(state => ({
+const stateSelector = (state: ConfigStore) => ({
     isLogged: state.isLogged,
     openSnackbar: state.openSnackbar,
     setIsLogged: state.setIsLogged,
     setIsLoading: state.setIsLoading,
     themeType: state.themeType
-  }))
+  })
+
+const SignIn = () => {
+  const classes = useStyles()
+  const { openSnackbar, setIsLogged, setIsLoading, isLogged, themeType } = useConfigStore(stateSelector)
   const router = useRouter()
 
-  const onSubmit = async (values: FormikValues, { setSubmitting }:FormikHelpers<any>) => {
+  const onSubmit = useCallback(
+    async (values, { setSubmitting }:FormikHelpers<any>) => {
     setIsLoading(true)
     setSubmitting(true)
     try {
-      const { token } = await apiInstance.user_login(values, `{ token }`)
+      const { token } = await apiInstance.user_login(values)
       if (token) {
         apiInstance.setToken(token)
         setIsLogged(true)
-        router.push('/')
+        await router.push('/')
       } else throw new Error('Username o password errati')
     } catch (error) {
       openSnackbar({
@@ -85,13 +89,14 @@ const SignIn = () => {
     }
     setSubmitting(false)
     setIsLoading(false)
-  }
+  }, [openSnackbar, setIsLoading, setIsLogged])
 
   const formik = useFormik({
     initialValues: {},
     onSubmit
   })
 
+  // shouldn't happen
   if (isLogged) return null
 
   return (

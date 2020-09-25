@@ -34,7 +34,7 @@
     "start-test": "NODE_ENV=production ENV=test next start",
     "build-test": "NODE_ENV=production ENV=test PORT=3000 next build",
     "build-production": "NODE_ENV=production ENV=production PORT=3000 next build",
-    "dev": "NODE_ENV=test ENV=test next"
+    "dev": "NODE_ENV=production ENV=production next"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.161",

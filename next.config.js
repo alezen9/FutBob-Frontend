@@ -24,8 +24,10 @@ module.exports = withPWA({
     autoPrerender: false
   },
   pwa: {
-    disable: process.env.ENV !== 'production',
-    register: process.env.ENV !== 'production',
+    // disable: process.env.ENV !== 'production',
+    // register: process.env.ENV !== 'production',
+    disable: true,
+    register: false,
     dest: 'public',
     maximumFileSizeToCacheInBytes: 10000000, // 10MB
     sourcemap: process.env.ENV === 'test'

@@ -18,3 +18,5 @@ export interface User {
     email?: string
     phone: string
 }
+
+export type EditableUser = Partial<User>

@@ -1,49 +1,73 @@
 import React, { useMemo, useCallback, useState } from 'react'
 import { Grid, Button, Typography, Hidden } from '@material-ui/core'
-import FormikInput from '../../../components/FormikInput'
+import FormikInput from '@_components/FormikInput'
 import { useFormik } from 'formik'
 import { isEmpty, meanBy, get, isEqual } from 'lodash'
-import FutsalField from '../../../components/FutsalField'
-import { playerPhysicalStateOptions, decamelize, initialScoreValues } from '../../../utils/helpers'
-import { OverallScore } from '../../../assets/CustomIcon'
-import RadarChart from '../../../components/Charts/Radar'
-import { apiInstance } from '../../../SDK'
-import { useConfigStore } from '../../../zustand/configStore'
-import { ServerMessage } from '../../../utils/serverMessages'
-import { FutBobPalette } from '../../../../palette'
+import FutsalField from '@_components/FutsalField'
+import { playerPhysicalStateOptions, decamelize, initialScoreValues } from '@_utils/helpers'
+import { OverallScore } from '@_icons'
+import RadarChart from '@_components/Charts/Radar'
+import { apiInstance } from 'src/SDK'
+import { useConfigStore } from '@_zustand/configStore'
+import { ServerMessage } from '@_utils/serverMessages'
+import { FutBobPalette } from '@_palette'
 import { useRouter } from 'next/router'
-import CustomDialog from '../../../components/Dialog'
-import { getMeanScoreField } from '../../../components/FormikInput/PlayerScoreInputs/SingleScore'
-import PlayerScoreInputs from '../../../components/FormikInput/PlayerScoreInputs'
-import { CountryOptions } from '../../../utils/nationalities'
-import { useSWRPlayer, useSWRPlayers, useSWRUser } from '../../../swr'
-import { getPlayerPageTitle } from '../../../pages/players/[id]'
+import CustomDialog from '@_components/Dialog'
+import { getMeanScoreField } from '@_components/FormikInput/PlayerScoreInputs/SingleScore'
+import PlayerScoreInputs from '@_components/FormikInput/PlayerScoreInputs'
+import { CountryOptions } from '@_utils/nationalities'
+import { useSWRPlayer, useSWRPlayers, useSWRUser } from '@_swr/hooks'
+import { getPlayerPageTitle } from 'src/pages/players/[id]'
+import { ConfigStore } from '@_zustand/helpers'
 
-const PlayerDetail = props => {
-  const router = useRouter()
-  const { id }: { id?: string } = router.query
-  const { trigger: triggerGetPlayers } = useSWRPlayers({ revalidateOnMount: false })
-  const { item, trigger } = useSWRPlayer(id, { revalidateOnMount: !!router.query.id })
-  const { item: userConnectedItem, trigger: triggerUserConnected } = useSWRUser({ revalidateOnMount: false })
-  const { setIsLoading, openSnackbar, pageTitle, setPageTitle } = useConfigStore(state => ({
+const stateSelector = (state: ConfigStore) => ({
     setIsLoading: state.setIsLoading,
     openSnackbar: state.openSnackbar,
     pageTitle: state.pageTitle,
     setPageTitle: state.setPageTitle
-  }))
+  })
+
+const PlayerDetail = () => {
+  const router = useRouter()
+  const { id }: { id?: string } = router.query
+
+  const { trigger: triggerGetPlayers } = useSWRPlayers({ revalidateOnMount: false, initialData: [] })
+  const { item: playerItem, trigger } = useSWRPlayer(id)
+  const { item: userConnectedItem, trigger: triggerUserConnected } = useSWRUser({ revalidateOnMount: false })
+
+  const { setIsLoading, openSnackbar, pageTitle, setPageTitle } = useConfigStore(stateSelector)
   const [openConfirmDialog, setOpenConfirmDialog] = useState(null)
 
   const onSubmit = useCallback(
     async (values, { setSubmitting, setTouched }) => {
       setSubmitting(true)
       setIsLoading(true)
+      // const _player: EditablePlayer = {}
+      
+      // if(get(values, 'user.country.value', null) !== get(_player, 'user.country', null))
+      // try {
+      //   if(playerItem._id) {
+      //     const _userVals = {
+      //       ...values.user,
+      //       country: get(values, 'user.country.value', null)
+      //     }
+      //     if(!)
+      //   } else {
+      //     if()
+      //   }
+      // } catch (error) {
+      //   openSnackbar({
+      //     variant: 'error',
+      //     message: ServerMessage[error] || get(error, 'message', error)
+      //   })
+      // }
       try {
         let done = true
         let userDataChanged = false
         let playerDataChanged = false
         let idPlayer
         const { _id, positions, state, score, user } = values
-        const { _id: itemId, positions: itemPositions, state: itemState, score: itemScore, user: itemUser } = item
+        const { _id: itemId, positions: itemPositions, state: itemState, score: itemScore, user: itemUser } = playerItem
         const isUser = get(userConnectedItem, '_id', null) === _id
         const newValsUser = {
           ...user,
@@ -118,7 +142,6 @@ const PlayerDetail = props => {
           setPageTitle(_pageTitle)
         }
       } catch (error) {
-        console.error(error)
         openSnackbar({
           variant: 'error',
           message: ServerMessage[error] || get(error, 'message', error)
@@ -127,19 +150,19 @@ const PlayerDetail = props => {
       setIsLoading(false)
       setSubmitting(false)
       setTouched({}, false)
-    }, [item, userConnectedItem, setPageTitle, trigger, triggerGetPlayers, triggerUserConnected])
+    }, [playerItem, userConnectedItem, setPageTitle, trigger, triggerGetPlayers, triggerUserConnected, setIsLoading])
 
   const onDelete = useCallback(
     async () => {
       setIsLoading(true)
       try {
         const done = await apiInstance.player_deletePlayer({
-          _id: item._id,
-          idUser: item.user._id,
+          _id: playerItem._id,
+          idUser: playerItem.user._id,
           type: 1
         })
         if (!done) throw new Error()
-        if (get(item, 'user._id', null) === get(userConnectedItem, '_id', null)) triggerUserConnected()
+        if (get(playerItem, 'user._id', null) === get(userConnectedItem, '_id', null)) triggerUserConnected()
         router.replace('/players')
         openSnackbar({
           variant: 'success',
@@ -152,16 +175,16 @@ const PlayerDetail = props => {
         })
       }
       setIsLoading(false)
-    }, [item, triggerUserConnected, userConnectedItem])
+    }, [playerItem, triggerUserConnected, userConnectedItem, setIsLoading])
 
   const formik = useFormik({
     initialValues: {
-      ...item,
+      ...playerItem,
       user: {
-        ...get(item, 'user', {}),
-        country: CountryOptions.find(({ value }) => value === get(item, 'user.country', 'IT'))
+        ...get(playerItem, 'user', {}),
+        country: CountryOptions.find(({ value }) => value === get(playerItem, 'user.country', 'IT'))
       },
-      score: get(item, 'score', initialScoreValues)
+      score: get(playerItem, 'score', initialScoreValues)
     },
     enableReinitialize: true,
     onSubmit
@@ -265,7 +288,7 @@ const PlayerDetail = props => {
             {...formik} />
         </Grid>
         <Grid item container xs={12} justify='flex-end'>
-          {item._id && <Grid item>
+          {playerItem._id && <Grid item>
             <Button
               style={{ minWidth: 150, color: FutBobPalette.darkRed, marginRight: '1.5em', borderColor: FutBobPalette.darkRed }}
               disabled={formik.isSubmitting}
@@ -281,7 +304,7 @@ const PlayerDetail = props => {
               onClick={formik.handleSubmit as any}
               variant='contained'
               color='primary'>
-              {item._id ? 'Update' : 'Create'}
+              {playerItem._id ? 'Update' : 'Create'}
             </Button>
           </Grid>
         </Grid>

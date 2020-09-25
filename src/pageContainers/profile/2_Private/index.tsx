@@ -1,13 +1,15 @@
 import React, { useCallback } from 'react'
 import { Grid, Button } from '@material-ui/core'
-import FormikInput from '../../../components/FormikInput'
+import FormikInput from '@_components/FormikInput'
 import { useFormik } from 'formik'
-import { apiInstance } from '../../../SDK'
-import { ServerMessage } from '../../../utils/serverMessages'
+import { apiInstance } from 'src/SDK'
+import { ServerMessage } from '@_utils/serverMessages'
 import { privateInfoSchema } from '../validations'
 import { get, isEmpty } from 'lodash'
+import { ProfileTabProps } from '..'
+import { EditableUser } from '@_entities/User'
 
-const Private = props => {
+const Private = (props: ProfileTabProps) => {
   const {
     item: { username },
     mutate,
@@ -21,15 +23,15 @@ const Private = props => {
       setIsLoading(true)
       try {
         let done = false
-        const { username, oldPassword, newPassword } = values
-        if (username !== props.item.username) {
+        const { username, oldPassword, newPassword }: { username?: string, oldPassword?: string, newPassword?: string } = values
+        if (username && username !== props.item.username) {
           done = await apiInstance.user_changeUsername(username)
+          mutate({ username })
         }
         if (oldPassword && newPassword) {
           done = await apiInstance.user_changePassword(oldPassword, newPassword)
         }
         if (done) {
-          if (username !== props.item.username) mutate({ username })
           openSnackbar({
             variant: 'success',
             message: 'Info updated successfully!'

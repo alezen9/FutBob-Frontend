@@ -1,36 +1,19 @@
-import React, { useRef, useEffect } from 'react'
-import PlayersContainer from '../../pageContainers/players'
-import PageTransition from '../../components/PageTransition'
+import React, { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { apiInstance } from '../../SDK'
-import { allPlayerFields } from '../../SDK/allFields'
-import { NextPageContext } from 'next'
+import PageTransition from '@_components/PageTransition'
+import PlayersContainer from '@_page-containers/players'
 
-const Players = props => {
-  const isMounted = useRef(true)
+const Players = () => {
   const router = useRouter()
 
   useEffect(() => {
     router.prefetch('/players/create')
-    router.prefetch('/players/[id]')
-    return () => {
-      isMounted.current = false
-    }
   }, [])
   return (
     <PageTransition>
-      <PlayersContainer
-        {...props}
-        isMounted={isMounted.current} />
+      <PlayersContainer />
     </PageTransition>
   )
-}
-
-export const getServerSideProps = async (ctx: NextPageContext) => {
-  const players = await apiInstance.player_getPlayers({}, allPlayerFields)
-  return {
-    props: { players }
-  }
 }
 
 export default React.memo(Players)

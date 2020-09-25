@@ -1,34 +1,36 @@
 import React, { useCallback, useMemo } from 'react'
 import { Grid, Button } from '@material-ui/core'
 import { get, meanBy, isEmpty } from 'lodash'
-import FutsalField from '../../../components/FutsalField'
+import FutsalField from '@_components/FutsalField'
 import { useFormik } from 'formik'
-import FormikInput from '../../../components/FormikInput'
-import { playerPhysicalStateOptions, decamelize, initialScoreValues } from '../../../utils/helpers'
-import { apiInstance } from '../../../SDK'
-import { ServerMessage } from '../../../utils/serverMessages'
-import RadarChart from '../../../components/Charts/Radar'
-import { OverallScore } from '../../../assets/CustomIcon'
-import { getMeanScoreField } from '../../../components/FormikInput/PlayerScoreInputs/SingleScore'
-import PlayerScoreInputs from '../../../components/FormikInput/PlayerScoreInputs'
+import FormikInput from '@_components/FormikInput'
+import { playerPhysicalStateOptions, decamelize, initialScoreValues } from '@_utils/helpers'
+import { apiInstance } from 'src/SDK'
+import { ServerMessage } from '@_utils/serverMessages'
+import RadarChart from '@_components/Charts/Radar'
+import { OverallScore } from '@_icons'
+import { getMeanScoreField } from '@_components/FormikInput/PlayerScoreInputs/SingleScore'
+import PlayerScoreInputs from '@_components/FormikInput/PlayerScoreInputs'
+import { ProfileTabProps } from '..'
+import { EditablePlayer, PhysicalState, PlayerPosition, PlayerType } from '@_entities/Player'
 
-const Player = props => {
+const Player = (props: ProfileTabProps) => {
   const { item: { _id: userId, futsalPlayer }, setIsLoading, mutate, openSnackbar } = props
 
   const onSubmit = useCallback(
-    async (values, { setSubmitting, setFieldValue }) => {
+    async (values, { setSubmitting }) => {
       setSubmitting(true)
       setIsLoading(true)
       try {
         let done = false
         let idPlayer
-        const { _id, positions, state, score } = values
+        const { _id, positions, state, score }: EditablePlayer = values
         if (!positions || !positions.length || [null, undefined].includes(state)) {
           const err = 'player_fields_required'
           throw err
         }
         const playerData = {
-          type: 1,
+          type: PlayerType.Futsal,
           positions,
           state
         }
@@ -52,8 +54,8 @@ const Player = props => {
         }
         if ((_id && !done) || (!_id && !idPlayer)) throw new Error()
         if (done || idPlayer) {
-          mutate(state => {
-            state.futsalPlayer = { _id: _id || idPlayer, ...playerData, score }
+          mutate(draft => {
+            draft.futsalPlayer = { _id: _id || idPlayer, ...playerData, score }
           })
           openSnackbar({
             variant: 'success',

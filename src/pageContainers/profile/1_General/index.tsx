@@ -1,23 +1,19 @@
 import React, { useCallback, useMemo } from 'react'
-import { Grid, Button, Hidden } from '@material-ui/core'
-import FormikInput from '../../../components/FormikInput'
+import { Grid, Button, Hidden, Fab } from '@material-ui/core'
+import FormikInput from '@_components/FormikInput'
 import { isEqual, isEmpty, get } from 'lodash'
 import { useFormik } from 'formik'
-import { apiInstance } from '../../../SDK'
-import { ServerMessage } from '../../../utils/serverMessages'
+import { apiInstance } from 'src/SDK'
+import { ServerMessage } from '@_utils/serverMessages'
 import { generalInfoSchema } from '../validations'
-import { CountryOptions } from '../../../utils/nationalities'
+import { CountryOptions } from '@_utils/nationalities'
 import cleanDeep from 'clean-deep'
-import { User } from '../../../Entities/User'
+import { ProfileTabProps } from '..'
+import { EditableUser } from '@_entities/User'
 
-type Props = {
-  item: User
-  mutate: any
-  setIsLoading: (isLoading: boolean) => void
-  openSnackbar: (data: any) => void
-}
 
-const General = (props: Props) => {
+
+const General = (props: ProfileTabProps) => {
   const {
     item: { _id, username, futsalPlayer, avatar, ...rest },
     mutate,
@@ -31,7 +27,7 @@ const General = (props: Props) => {
       setIsLoading(true)
       try {
         if (!isEqual(rest, values)) {
-          const newVals = cleanDeep({
+          const newVals: EditableUser = cleanDeep({
             ...values,
             ...values.country && { country: get(values, 'country.value', 'IT') }
           })

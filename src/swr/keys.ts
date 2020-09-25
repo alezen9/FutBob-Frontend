@@ -1,7 +1,7 @@
-const swrKeys = Object.freeze({
-  USER: 'USER',
-  PLAYERS: 'PLAYERS',
-  PLAYER: 'PLAYER'
-})
+enum SwrKey {
+  USER = 'USER',
+  PLAYERS = 'PLAYERS',
+  PLAYER = 'PLAYER'
+}
 
-export default swrKeys
+export default SwrKey

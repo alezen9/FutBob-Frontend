@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react'
 import PageTransition from '../../components/PageTransition'
 import PlayerDetail from '../../pageContainers/players/show'
-import { useConfigStore } from '../../zustand/configStore'
+import { useConfigStore } from '@_zustand/configStore'
 import GoBack from '../../components/GoBack'
 
 const CreatePlayer = props => {

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import dynamic from 'next/dynamic'
 const MuiPhoneNumber = dynamic(() => import('material-ui-phone-number'),{ssr:false})
 import { makeStyles, FormHelperText } from '@material-ui/core'
@@ -22,6 +22,17 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
+const formatPhoneNumber = (val: string): string => {
+  const res = [...(val || '').replace(/\s+/g, '')].map((el, i) => {
+    return el === ' '
+    ? ''
+    : i === 2 || i === 5
+      ? `${el} `
+      : el 
+  }).join('').slice(0, 15)
+  return res
+}
+
 type Props = {
   label: string
   onChange: (e: any) => void
@@ -38,6 +49,23 @@ const InputPhone = (props: Props) => {
     ? '+39' + get(values, name, '') 
     : get(values, name, '')
   , [get(values, name, null)])
+
+  const handleChange = (v: string): void => {
+    if(v && !v.startsWith('+39')){
+      const val = (v || '').replace(/\s+|\D/g, '')
+      const val1 = val.startsWith('39')
+        ? `+${val}`
+        : `+39${val}`
+      const finalVal = val1.slice(0, 13)
+      onChange(formatPhoneNumber(finalVal))
+    } else onChange(formatPhoneNumber(v))
+  }
+
+  const onPaste = (e: any): void => {
+    const paste = (e.clipboardData || window['clipboardData']).getData('text')
+    if(paste) handleChange(paste)
+  }
+
   return (
     <>
       <MuiPhoneNumber
@@ -49,6 +77,7 @@ const InputPhone = (props: Props) => {
         onlyCountries={['it']}
         variant='outlined'
         onChange={onChange}
+        onPaste={onPaste}
         inputClass={classes.textField}
         disabled={disabled}
         name={name}

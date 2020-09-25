@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 import ExitToAppRoundedIcon from '@material-ui/icons/ExitToAppRounded'
 import { apiInstance } from '../../SDK'
 import { FutBobPalette } from '../../../palette'
-import { useConfigStore } from '../../zustand/configStore'
+import { useConfigStore } from '@_zustand/configStore'
 
 const useStyles = makeStyles(theme => ({
   root: {

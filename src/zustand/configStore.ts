@@ -1,6 +1,6 @@
 import { FutBobPalette, ThemeType } from '../../palette'
 import create, { UseStore } from 'zustand'
-import { _immer, ConfigStore } from './helpers'
+import { _immer, ConfigStore, setSnackbarData } from './helpers'
 
 export const useConfigStore: UseStore<ConfigStore> = create(_immer((set: any, get: any, api: any) => ({
   themeType: ThemeType.light,
@@ -14,14 +14,14 @@ export const useConfigStore: UseStore<ConfigStore> = create(_immer((set: any, ge
       state.pageTitle = title
     })
   },
-  openSnackbar: (data: any) => {
+  openSnackbar: (data: setSnackbarData) => {
     set((state: ConfigStore) => {
       state.snackbar = { ...data, open: true }
     })
   },
   closeSnackbar: () => {
     set((state: ConfigStore) => {
-      state.snackbar = { open: false }
+      state.snackbar = { open: false, message: state.snackbar.message || '', variant: state.snackbar.variant || '' }
     })
   },
   setIsLogged: (bool: boolean) => {

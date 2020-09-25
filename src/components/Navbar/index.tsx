@@ -9,7 +9,7 @@ import { asyncTimeout } from '../../utils/helpers'
 import { apiInstance } from '../../SDK'
 import ThemeSwitch from '../ThemeModeSwitch'
 import { FutBobPalette } from '../../../palette'
-import { useConfigStore } from '../../zustand/configStore'
+import { useConfigStore } from '@_zustand/configStore'
 
 const useStyles = makeStyles(theme => ({
   themeSwitchColor: {

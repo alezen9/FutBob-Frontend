@@ -101,3 +101,5 @@ export interface Player {
     state: PhysicalState
     score: PlayerScore
 }
+
+export type EditablePlayer = Partial<Player>

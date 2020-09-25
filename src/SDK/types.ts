@@ -1,4 +1,4 @@
-export type ScoreType = {
+export type GQL_ScoreType = {
     pace?: {
         acceleration?: boolean,
         sprintSpeed?: boolean
@@ -42,25 +42,25 @@ export type ScoreType = {
     }
 }
 
-export type UserType =  {
+export type GQL_UserType =  {
     _id?: boolean,
     name?: boolean,
     surname?: boolean,
     dateOfBirth?: boolean,
     sex?: boolean,
     country?: boolean,
-    futsalPlayer?: PlayerType,
+    futsalPlayer?: GQL_PlayerType,
     avatar?: boolean,
     username?: boolean,
     email?: boolean,
     phone?: boolean
 }
 
-export type PlayerType = {
+export type GQL_PlayerType = {
     _id?: boolean,
-    user?: UserType,
+    user?: GQL_UserType,
     positions?: boolean,
     state?: boolean,
     type?: boolean,
-    score?: ScoreType
+    score?: GQL_ScoreType
 }

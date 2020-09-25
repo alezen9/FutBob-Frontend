@@ -1,6 +1,6 @@
-import { PlayerType, UserType, ScoreType } from './types'
+import { GQL_PlayerType, GQL_UserType, GQL_ScoreType } from './types'
 
-const allScoreFields: ScoreType = {
+const allScoreFields: GQL_ScoreType = {
     pace: {
         acceleration: true,
         sprintSpeed: true
@@ -44,7 +44,7 @@ const allScoreFields: ScoreType = {
     }
 }
 
-export const allUserFields: UserType = {
+export const allUserFields: GQL_UserType = {
     _id: true,
     name: true,
     surname: true,
@@ -64,7 +64,7 @@ export const allUserFields: UserType = {
     phone: true
 }
 
-export const allPlayerFields: PlayerType = {
+export const allPlayerFields: GQL_PlayerType = {
     _id: true,
     user: {
       _id: true,

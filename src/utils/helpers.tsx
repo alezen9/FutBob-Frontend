@@ -6,12 +6,13 @@ import AccessTimeRoundedIcon from '@material-ui/icons/AccessTimeRounded'
 import RemoveCircleOutlineRoundedIcon from '@material-ui/icons/RemoveCircleOutlineRounded'
 import { Tooltip, IconButton } from '@material-ui/core'
 import { sections } from './routes'
-import { find, isObject, uniqueId, reduce } from 'lodash'
+import { find, isObject, uniqueId, reduce, transform, isEqual, isUndefined, keys, entries, isObjectLike, get, has, set } from 'lodash'
 import { FutBobPalette } from '../../palette'
 import { TopFormIcon, InjuredIcon, RecoveryIcon } from '../assets/CustomIcon'
 import ExpandLessRoundedIcon from '@material-ui/icons/ExpandLessRounded'
 import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
 import cleanDeep from 'clean-deep'
+import { PlayerScore } from '@_entities/Player'
 
 export const getTitleFromPathname = (pathname: string) => {
   const routeInfo: any = find(sections, ['path', pathname])
@@ -242,7 +243,7 @@ export const decamelize = (str: string, separator?: string) => {
     .toLowerCase())
 }
 
-export const initialScoreValues = {
+export const initialScoreValues: PlayerScore = {
   pace: {
     acceleration: 0,
     sprintSpeed: 0
@@ -311,3 +312,28 @@ export const getMultipleInitValue = (vals = [], options = []) => {
     return acc
   }, []))
 }
+
+
+// export const deepDiff = (fromObject: object, toObject: object) => {
+//     const changes = {};
+//     const buildPath = (path: string, obj: object, key: string) => isUndefined(path) ? key : `${path}.${key}`
+//     const walk = (fromObject: object, toObject: object, path?: string) => {
+//         for (const key of keys(fromObject)) {
+//             const currentPath = buildPath(path, fromObject, key)
+//             if (!has(toObject, key)) set(changes, currentPath, toObject)
+//         }
+//         for (const [key, to] of entries(toObject)) {
+//             const currentPath = buildPath(path, toObject, key);
+//             if (!has(fromObject, key)) set(changes, currentPath, to)
+//             else {
+//                 const from = get(fromObject, key)
+//                 if (!isEqual(from, to)) {
+//                     if (isObjectLike(to) && isObjectLike(from)) walk(from, to, currentPath)
+//                     else set(changes, currentPath, to)
+//                 }
+//             }
+//         }
+//     }
+//     walk(fromObject, toObject)
+//     return changes
+// }

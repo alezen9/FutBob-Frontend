@@ -3,7 +3,7 @@ import { get } from 'lodash'
 import getConfig from 'next/config'
 import { paramsToString } from '../utils/helpers'
 import { FieldsToQuery } from './helpers'
-import { PlayerType, UserType } from './types'
+import { GQL_PlayerType, GQL_UserType } from './types'
 const { publicRuntimeConfig } = getConfig()
 
 const LogRequest = ({name, response, params, fields, isError = false}) => {
@@ -92,7 +92,7 @@ class FutBobServer {
   }
 
   hasToken () {
-    return get(this._self, 'defaults.headers.common.Authorization', undefined)
+    return get(this._self, 'defaults.headers.common.Authorization', undefined) || (process.browser && window.localStorage.getItem(this.localStorageToken))
   }
 
   /**
@@ -116,19 +116,10 @@ class FutBobServer {
     return this.API({ query, name: 'signup', params: signupInput, fields })
   }
 
-  /**
-   *
-   * @param {any} signinInput
-   * @param {string} signinInput.username
-   * @param {string} signinInput.password
-   * @param {any} fields
-   * @param {string?} fields.token
-   * @param {string?} fields.expiresIn
-   */
-  async user_login (signinInput, fields) { // eslint-disable-line
+  async user_login (signinInput: { username: string, password: string }) { // eslint-disable-line
     const query = `
     query {
-        login(signinInput: ${paramsToString(signinInput)})${fields}
+        login(signinInput: ${paramsToString(signinInput)}){ token }
     }`
     return this.API({ query, name: 'login', params: signinInput })
   }
@@ -139,7 +130,7 @@ class FutBobServer {
     if (_logout) _logout()
   }
 
-  async user_getUserConnected (fields: UserType) { // eslint-disable-line
+  async user_getUserConnected (fields: GQL_UserType) { // eslint-disable-line
     const strFields = FieldsToQuery(fields)
     const query = `
     query {
@@ -270,7 +261,7 @@ class FutBobServer {
    * @param {any?} fields.matches
    * @param {any?} fields.user
    */
-  async player_getPlayers (playerFilters, fields: PlayerType) { // eslint-disable-line
+  async player_getPlayers (playerFilters, fields: GQL_PlayerType) { // eslint-disable-line
     const strFields = FieldsToQuery(fields)
     const query = `
     query {

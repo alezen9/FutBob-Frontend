@@ -3,27 +3,28 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import { ThemeProvider, Snackbar, makeStyles, useTheme, useMediaQuery } from '@material-ui/core'
 import MuiAlert from '@material-ui/lab/Alert'
 import { Offline, Online } from 'react-detect-offline'
-import OfflinePage from '../components/Offline'
+import OfflinePage from '@_components/Offline'
 import Head from 'next/head'
-import Menu from '../components/Menu'
+import Menu from '@_components/Menu'
 import Router, { useRouter } from 'next/router'
-import Title from '../components/Title'
-import ProgressBar from '../components/ProgressBar'
-import lightTheme from '../../lightTheme'
-import darkTheme from '../../darkTheme'
+import Title from '@_components/Title'
+import ProgressBar from '@_components/ProgressBar'
+import lightTheme from 'lightTheme'
+import darkTheme from 'darkTheme'
 import Navbar from '../components/Navbar'
-import BottomNavbar from '../components/BottomNav'
+import BottomNavbar from '@_components/BottomNav'
 // css
 import '../components/Navbar/Navbar.css'
-import { FutBobLogo } from '../assets/CustomIcon'
+import { FutBobLogo } from '@_icons'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useConfigStore } from '../zustand/configStore'
+import { useConfigStore } from '@_zustand/configStore'
 import { isEmpty, get } from 'lodash'
-import { cleanQueryParams } from '../utils/helpers'
-import { SWRConfig, cache } from 'swr'
-import { ServerMessage } from '../utils/serverMessages'
-import { useSWRUser } from '../swr'
-import { ThemeType } from '../../palette'
+import { cleanQueryParams } from '@_utils/helpers'
+import { SWRConfig } from 'swr'
+import { ServerMessage } from '@_utils/serverMessages'
+import { useSWRUser } from '@_swr/hooks'
+import { ThemeType } from '@_palette'
+import { apiInstance } from 'src/SDK'
 
 const AS_PATH = 'FutBobLastPath' // eslint-disable-line
 
@@ -89,7 +90,7 @@ const Alert = props => {
   />
 }
 
-const SplashScreen = React.memo(props => {
+const SplashScreen = React.memo(() => {
   return <AnimatePresence>
     <motion.div
       initial={{ opacity: 0 }}
@@ -117,20 +118,7 @@ const MyApp = props => {
     openSnackbar
   } = useConfigStore()
 
-  const { trigger } = useSWRUser({ initialData: {}, revalidateOnMount: false })
-
-  useEffect(() => {
-    let mounted = true
-    if(isLogged){
-      const getUser = async () => {
-        await trigger()
-      }
-      if(mounted) getUser()
-     } else if (!isLogged) cache.clear()
-    return () => {
-      mounted = false
-    }
-  }, [isLogged, trigger])
+  useSWRUser()
 
   const router = useRouter()
 
@@ -151,7 +139,7 @@ const MyApp = props => {
         variant: 'error',
         message: ServerMessage[error] || get(error, 'message', error)
       })
-    }, [openSnackbar])
+    }, [])
 
   useEffect(() => {
     if (!isEmpty(cleanQueryParams(router.query))) {

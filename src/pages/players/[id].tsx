@@ -1,13 +1,13 @@
 import React, { useRef, useEffect, useCallback } from 'react'
-import PageTransition from '../../components/PageTransition'
-import PlayerDetail from '../../pageContainers/players/show'
-import { useConfigStore } from '../../zustand/configStore'
+import PageTransition from '@_components/PageTransition'
+import PlayerDetail from '@_page-containers/players/show'
+import { useConfigStore } from '@_zustand/configStore'
 import { get, isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
-import GoBack from '../../components/GoBack'
+import GoBack from '@_components/GoBack'
 import FaceRoundedIcon from '@material-ui/icons/FaceRounded'
-import { useSWRUser, useSWRPlayer } from '../../swr'
-import { User } from '../../Entities/User'
+import { useSWRUser, useSWRPlayer } from '@_swr/hooks'
+import { User } from '@_entities/User'
 
 export const getPlayerPageTitle = (user: User, isUser: boolean = false) => {
   const { name, surname } = user
@@ -20,35 +20,26 @@ export const getPlayerPageTitle = (user: User, isUser: boolean = false) => {
 }
 
 
-const Player = props => {
-  const isMounted = useRef(true)
+const Player = () => {
   const router = useRouter()
   const { id }: { id?: string } = router.query
-    const setPageTitle = useConfigStore(state => state.setPageTitle)
+  const setPageTitle = useConfigStore(state => state.setPageTitle)
 
-  const { item: player } = useSWRPlayer(id, { revalidateOnMount:false })
-  const { item: user } = useSWRUser({ revalidateOnMount: false })
+  const { item: playerItem, mutate } = useSWRPlayer(id, { fromCache: true })
+  const { item: userItem } = useSWRUser({ fromCache: true, revalidateOnMount: false })
 
   useEffect(() => {
-    const _isUser = get(user, '_id', null) === get(player, 'user._id', null)
-    const pageTitle = getPlayerPageTitle(get(player, 'user', {} as User), _isUser)
+    const _isUser = get(userItem, '_id', null) === get(playerItem, 'user._id', null)
+    const pageTitle = getPlayerPageTitle(get(playerItem, 'user', {} as User), _isUser)
     setPageTitle(pageTitle)
-  }, [player._id, user._id])
-
-  useEffect(() => {
-    return () => {
-      isMounted.current = false
-    }
-  }, [])
+  }, [playerItem._id, userItem._id])
 
   return (
     <PageTransition>
       <>
-      <GoBack route='/players' />
-      <PlayerDetail
-        {...props}
-        isMounted={isMounted.current} />
-        </>
+        <GoBack route='/players' />
+        <PlayerDetail />
+      </>
     </PageTransition>
   )
 }

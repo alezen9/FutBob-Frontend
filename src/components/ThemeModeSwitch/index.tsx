@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { makeStyles, Switch } from '@material-ui/core'
-import { useConfigStore } from '../../zustand/configStore'
+import { useConfigStore } from '@_zustand/configStore'
 import { ThemeType } from '../../../palette'
 
 const useStyles = makeStyles(theme => ({

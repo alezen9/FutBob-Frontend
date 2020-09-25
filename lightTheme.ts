@@ -13,21 +13,15 @@ declare module '@material-ui/core/styles/createMuiTheme' {
 
 const subtitleGrey = '#686868'
 const lightGrey = '#c1c1c1'
-const darkGrey = '#585858'
 const pinkLight = 'rgb(255,45,85)'
-const pinkDark = 'rgb(255,55,95)'
 const azureLight = 'rgb(0,122,255)'
 const azureDark = 'rgb(10,132,255)'
-const lightGreen = 'rgb(52,199,89)'
 const darkGreen = 'rgb(42, 156, 71)'
 const lightRed = 'rgb(255,59,48)'
 const darkRed = 'rgb(255,69,58)'
 const backgroundColor = '#fafafa'
 const typographyGrey = '#717171'
 const borderColor = 'rgba(0, 0, 0, 0.23)'
-
-const border = '1px solid rgba(0, 0, 0, 0.23)'
-
 const borderRadius = 7
 
 const lightTheme = createMuiTheme({

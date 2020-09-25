@@ -9,7 +9,7 @@ import { sections, Section } from '../../utils/routes'
 import ExitToAppRoundedIcon from '@material-ui/icons/ExitToAppRounded'
 import { apiInstance } from '../../SDK'
 import { FutBobPalette } from '../../../palette'
-import { useConfigStore } from '../../zustand/configStore'
+import { useConfigStore } from '@_zustand/configStore'
 
 const useStyles = makeStyles({
   root: {},
@@ -76,7 +76,9 @@ const SingleItemList = (props: ItemProps) => {
     ? {}
     : { ...checkActivePage(router.pathname, path) && { color: 'primary' } }
   const classes = useStyles()
-  return <ListItem className={classes.listItem} button onClick={handleRoute(path)}>
+  return <ListItem className={classes.listItem} button onClick={async  e => {
+    await handleRoute(path)(e)
+  }}>
     <ListItemIcon {...iconStaticProps}>
       {React.cloneElement(icon, activeProps)}
     </ListItemIcon>
@@ -106,7 +108,9 @@ const ExpandableItemList = (props: SubPathsItemProps) => {
       <List component='div' disablePadding>
         {subpaths.map(({ path, title: titleSubEl }, i) => {
           const route = buildSubPath(mainPath, path)
-          return <ListItem key={`subpath-${i}`} button className={classes.nested} onClick={handleRoute(route)}>
+          return <ListItem key={`subpath-${i}`} button className={classes.nested} onClick={async  e => {
+            await handleRoute(path)(e)
+          }}>
             <ListItemIcon>
               <KeyboardArrowRightRoundedIcon />
             </ListItemIcon>

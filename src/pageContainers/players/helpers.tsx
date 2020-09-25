@@ -41,8 +41,8 @@ export const getPlayerDataRow = ({ onDelete, goToDetails, playerId }) => playerD
         values: get(playerData, 'positions', []),
         options: futsalPositionsOptions
       }).split(',')}
-      // stringData={getPlayersPositionLabelListString(get(playerData, 'positions', []))}
-      // typoGraphyLabelPropsForward={{ valueStyle: { whiteSpace: 'pre' } }}
+      stringData={getPlayersPositionLabelListString(get(playerData, 'positions', []))}
+      typoGraphyLabelPropsForward={{ valueStyle: { whiteSpace: 'pre' } }}
     />,
     actions: [
       {
