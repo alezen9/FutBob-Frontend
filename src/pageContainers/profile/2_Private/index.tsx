@@ -7,7 +7,6 @@ import { ServerMessage } from '@_utils/serverMessages'
 import { privateInfoSchema } from '../validations'
 import { get, isEmpty } from 'lodash'
 import { ProfileTabProps } from '..'
-import { EditableUser } from '@_entities/User'
 
 const Private = (props: ProfileTabProps) => {
   const {

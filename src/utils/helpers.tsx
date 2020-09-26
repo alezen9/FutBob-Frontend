@@ -312,28 +312,3 @@ export const getMultipleInitValue = (vals = [], options = []) => {
     return acc
   }, []))
 }
-
-
-// export const deepDiff = (fromObject: object, toObject: object) => {
-//     const changes = {};
-//     const buildPath = (path: string, obj: object, key: string) => isUndefined(path) ? key : `${path}.${key}`
-//     const walk = (fromObject: object, toObject: object, path?: string) => {
-//         for (const key of keys(fromObject)) {
-//             const currentPath = buildPath(path, fromObject, key)
-//             if (!has(toObject, key)) set(changes, currentPath, toObject)
-//         }
-//         for (const [key, to] of entries(toObject)) {
-//             const currentPath = buildPath(path, toObject, key);
-//             if (!has(fromObject, key)) set(changes, currentPath, to)
-//             else {
-//                 const from = get(fromObject, key)
-//                 if (!isEqual(from, to)) {
-//                     if (isObjectLike(to) && isObjectLike(from)) walk(from, to, currentPath)
-//                     else set(changes, currentPath, to)
-//                 }
-//             }
-//         }
-//     }
-//     walk(fromObject, toObject)
-//     return changes
-// }

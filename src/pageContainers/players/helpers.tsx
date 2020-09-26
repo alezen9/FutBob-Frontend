@@ -1,16 +1,17 @@
 import React from 'react'
 import { get, mean } from 'lodash'
-import { OverallScore } from '../../assets/CustomIcon'
-import { playerPhysicalStateOptions, getLabelsByValues, futsalPositionsOptions, initialScoreValues } from '../../utils/helpers'
+import { OverallScore } from '@_icons'
+import { playerPhysicalStateOptions, getLabelsByValues, futsalPositionsOptions, initialScoreValues } from '@_utils/helpers'
 import moment from 'moment'
 import NavigateNextRoundedIcon from '@material-ui/icons/NavigateNextRounded'
-import ListField from '../../components/ListField'
+import ListField from '@_components/ListField'
 import SearchRoundedIcon from '@material-ui/icons/SearchRounded'
 import DeleteForeverRoundedIcon from '@material-ui/icons/DeleteForeverRounded'
 import { InputAdornment } from '@material-ui/core'
-import { getMeanScoreField } from '../../components/FormikInput/PlayerScoreInputs/SingleScore'
 import { useFormik } from 'formik'
-import FormikInput from '../../components/FormikInput'
+import FormikInput from '@_components/FormikInput'
+import { getMeanScoreField } from '@_components/FormikInput/PlayerScoreInputs/SingleScore'
+import { Player, PlayerScore } from '@_entities/Player'
 
 export const headers = [
   { name: 'Name', style: { minWidth: 230 } },
@@ -21,12 +22,13 @@ export const headers = [
   { name: 'Phone', style: { minWidth: 180 } }
 ]
 
-export const getPlayerDataRow = ({ onDelete, goToDetails, playerId }) => playerData => {
-  const score = get(playerData, 'score', initialScoreValues)
-  const playerValue = parseInt(String(mean(Object.entries(score).map(([key, value]) => getMeanScoreField(value)))))
+const getMeanScore = (score: PlayerScore) => parseInt(String(mean(Object.entries(score).map(([key, value]) => getMeanScoreField(value)))))
 
+export const getPlayerDataRow = ({ openDialog, goToDetails, userConnectedId }) => (playerData: Player) => {
+  const score = get(playerData, 'score', initialScoreValues)
+  const playerValue = getMeanScore(score)
   return {
-    _isUser: playerId === playerData._id,
+    _isUser: userConnectedId === playerData.user._id,
     name: <span style={{ display: 'flex', alignItems: 'center' }}>
       <OverallScore value={playerValue} style={{ transform: 'scale(.75)' }} />
       {`${get(playerData, 'user.surname', '-')} ${get(playerData, 'user.name', '-')}`}
@@ -53,7 +55,7 @@ export const getPlayerDataRow = ({ onDelete, goToDetails, playerId }) => playerD
       {
         icon: <DeleteForeverRoundedIcon />,
         label: 'Delete',
-        onClick: onDelete(playerData),
+        onClick: openDialog(playerData),
         color: 'crimson'
       }
     ]

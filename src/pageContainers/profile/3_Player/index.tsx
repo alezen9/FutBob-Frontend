@@ -5,94 +5,63 @@ import FutsalField from '@_components/FutsalField'
 import { useFormik } from 'formik'
 import FormikInput from '@_components/FormikInput'
 import { playerPhysicalStateOptions, decamelize, initialScoreValues } from '@_utils/helpers'
-import { apiInstance } from 'src/SDK'
 import { ServerMessage } from '@_utils/serverMessages'
 import RadarChart from '@_components/Charts/Radar'
 import { OverallScore } from '@_icons'
 import { getMeanScoreField } from '@_components/FormikInput/PlayerScoreInputs/SingleScore'
 import PlayerScoreInputs from '@_components/FormikInput/PlayerScoreInputs'
 import { ProfileTabProps } from '..'
-import { EditablePlayer, PlayerType } from '@_entities/Player'
-import { useSWRPlayers } from '@_swr/hooks'
+import { PlayerType } from '@_entities/Player'
 import { FutBobPalette } from '@_palette'
 import CustomDialog from '@_components/Dialog'
 
 const Player = (props: ProfileTabProps) => {
-  const { item: { _id: userId, futsalPlayer, ...restOfUserData }, setIsLoading, mutate, openSnackbar } = props
-  const { mutate: mutatePlayerList } = useSWRPlayers({ revalidateOnMount: false })
+  const { item, setIsLoading, openSnackbar, createEditPlayer, deletePlayer } = props
+  const { _id: userId, futsalPlayer, ...restOfUserData } = item
   const [openConfirmDialog, setOpenConfirmDialog] = useState(null)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'))
 
   const onSubmit = useCallback(
     async (values, { setSubmitting }) => {
-      setSubmitting(true)
-      setIsLoading(true)
-      try {
-        let done = false
-        let idPlayer
-        const { _id, positions, state, score }: EditablePlayer = values
-        if (!positions || !positions.length || [null, undefined].includes(state)) {
-          const err = 'player_fields_required'
-          throw err
-        }
-        const playerData = {
-          type: PlayerType.Futsal,
-          positions,
-          state
-        }
-        if (_id) {
-          const bodyUpdate = {
-            _id,
-            positions,
-            state,
-            score
-          }
-          done = await apiInstance.player_updatePlayer(bodyUpdate)
-        } else {
-          const bodyCreate = {
-            userId,
-            playerData: {
-              ...playerData,
-              score
-            }
-          }
-          idPlayer = await apiInstance.player_createPlayer(bodyCreate)
-        }
-        if ((_id && !done) || (!_id && !idPlayer)) throw new Error()
-        if (done || idPlayer) {
-          const mePlayer = { _id: _id || idPlayer, ...playerData, score }
-          mutate(draft => {
-            draft.futsalPlayer = mePlayer
-          })
-          mutatePlayerList(draft => {
-            if((draft || []).length){
-              const idx = draft.findIndex(player => player._id === mePlayer._id)
-              if(![null, undefined].includes(idx)) draft[idx] = {
-                ...mePlayer,
-                user: {
-                  _id: userId,
-                  ...restOfUserData
-                }
-              }
-            }
-          })
-          openSnackbar({
-            variant: 'success',
-            message: _id
-              ? 'Player info updated successfully!'
-              : 'Player created successfully'
-          })
-        }
-      } catch (error) {
+      if(!get(values, 'positions', []).length || ![0,1,2,3,4].includes(get(values, 'state', null))) {
         openSnackbar({
           variant: 'error',
-          message: ServerMessage[error] || get(error, 'message', error)
+          message: ServerMessage.player_fields_required
+        })
+        return
+      }
+      setSubmitting(true)
+      const player = {
+        ...values,
+        user: {
+          _id: item._id,
+          name: item.name,
+          surname: item.surname,
+          dateOfBirth: item.dateOfBirth,
+          sex: item.sex,
+          country: item.country,
+          phone: item.phone,
+          ...item.email && { email: item.email }
+        },
+        type: PlayerType.Futsal
+      }
+      try {
+        const done = await createEditPlayer(player)
+        if(done) openSnackbar({
+          variant: 'success',
+          message: values._id
+            ? 'Player info updated successfully!'
+            : 'Player created successfully'
+        })
+      } catch(error) {
+        openSnackbar({
+          variant: 'error',
+          message: ServerMessage.generic
         })
       }
-      setIsLoading(false)
       setSubmitting(false)
-    }, [restOfUserData, userId, futsalPlayer, mutatePlayerList])
+    },[item, createEditPlayer, openSnackbar])
 
   const formik = useFormik({
     initialValues: {
@@ -118,18 +87,8 @@ const Player = (props: ProfileTabProps) => {
     async () => {
       setIsLoading(true)
       try {
-        const done = await apiInstance.player_deletePlayer({
-          _id: futsalPlayer._id,
-          idUser: userId,
-          type: PlayerType.Futsal
-        })
+        const done = await deletePlayer()
         if (!done) throw new Error()
-        mutatePlayerList(draft => {
-          if((draft || []).length){
-            draft.splice(draft.findIndex(player => player._id === futsalPlayer._id), 1)
-          }
-        })
-        mutate({ futsalPlayer: null })
         openSnackbar({
           variant: 'success',
           message: 'Player deleted successfully!'
@@ -137,11 +96,12 @@ const Player = (props: ProfileTabProps) => {
       } catch (error) {
         openSnackbar({
           variant: 'error',
-          message: ServerMessage[error] || get(error, 'message', error)
+          message: ServerMessage.generic
         })
       }
+      setOpenConfirmDialog(false)
       setIsLoading(false)
-    }, [get(futsalPlayer, '_id', null), userId, mutatePlayerList, mutate, setIsLoading])
+    }, [deletePlayer, setIsLoading])
 
   return (
     <Grid container spacing={3}>

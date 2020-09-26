@@ -7,7 +7,6 @@ import FutsalField from '@_components/FutsalField'
 import { playerPhysicalStateOptions, decamelize, initialScoreValues } from '@_utils/helpers'
 import { OverallScore } from '@_icons'
 import RadarChart from '@_components/Charts/Radar'
-import { apiInstance } from 'src/SDK'
 import { useConfigStore } from '@_zustand/configStore'
 import { ServerMessage } from '@_utils/serverMessages'
 import { FutBobPalette } from '@_palette'
@@ -16,9 +15,10 @@ import CustomDialog from '@_components/Dialog'
 import { getMeanScoreField } from '@_components/FormikInput/PlayerScoreInputs/SingleScore'
 import PlayerScoreInputs from '@_components/FormikInput/PlayerScoreInputs'
 import { CountryOptions } from '@_utils/nationalities'
-import { useSWRPlayer, useSWRPlayers, useSWRUser } from '@_swr/hooks'
+import { useSWRPlayer, useSWRUser } from '@_swr/hooks'
 import { getPlayerPageTitle } from 'src/pages/players/[id]'
 import { ConfigStore } from '@_zustand/helpers'
+import { PlayerType } from '@_entities/Player'
 
 const stateSelector = (state: ConfigStore) => ({
     setIsLoading: state.setIsLoading,
@@ -31,9 +31,8 @@ const PlayerDetail = () => {
   const router = useRouter()
   const { id }: { id?: string } = router.query
 
-  const { trigger: triggerGetPlayers, mutate: mutatePlayerList } = useSWRPlayers({ revalidateOnMount: false, initialData: [] })
-  const { item: playerItem, trigger } = useSWRPlayer(id)
-  const { item: userConnectedItem, trigger: triggerUserConnected, mutate: mutateUserConnected } = useSWRUser({ revalidateOnMount: false })
+  const { item: playerItem, createEditPlayer, deletePlayer } = useSWRPlayer(id)
+  const { item: userConnectedItem } = useSWRUser({ revalidateOnMount: false })
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'))
 
@@ -42,136 +41,54 @@ const PlayerDetail = () => {
 
   const onSubmit = useCallback(
     async (values, { setSubmitting, setTouched }) => {
+      if(!get(values, 'positions', []).length) {
+        openSnackbar({
+          variant: 'error',
+          message: 'Positions are required!'
+        })
+        return
+      }
+      const isUser = values._id && get(userConnectedItem, '_id', null) === values._id
       setSubmitting(true)
       setIsLoading(true)
-      // const _player: EditablePlayer = {}
-      
-      // if(get(values, 'user.country.value', null) !== get(_player, 'user.country', null))
-      // try {
-      //   if(playerItem._id) {
-      //     const _userVals = {
-      //       ...values.user,
-      //       country: get(values, 'user.country.value', null)
-      //     }
-      //     if(!)
-      //   } else {
-      //     if()
-      //   }
-      // } catch (error) {
-      //   openSnackbar({
-      //     variant: 'error',
-      //     message: ServerMessage[error] || get(error, 'message', error)
-      //   })
-      // }
+      const player = {
+        ...values,
+        type: PlayerType.Futsal,
+        user: {
+          ...values.user,
+          country: get(values, 'user.country.value', 'IT')
+        }
+      }
       try {
-        let done = true
-        let userDataChanged = false
-        let playerDataChanged = false
-        let idPlayer
-        const { _id, positions, state, score, user } = values
-        const { _id: itemId, positions: itemPositions, state: itemState, score: itemScore, user: itemUser } = playerItem
-        const isUser = get(userConnectedItem, '_id', null) === _id
-        const newValsUser = {
-          ...user,
-          ...user.country && {
-            country: get(user, 'country.value', 'IT')
-          }
-        }
-        if (!positions || !positions.length || [null, undefined].includes(state)) {
-          const err = 'player_fields_required'
-          throw err
-        }
-        const playerData = {
-          type: 1,
-          positions,
-          state
-        }
-        if (_id) {
-          const bodyUpdatePlayer = {
-            _id,
-            positions,
-            state,
-            score
-          }
-          const { country, ...restOfUser } = user
-          const { country: itemCountry, ...restOfItemUser } = itemUser
-          if (!isEqual(restOfUser, restOfItemUser) || (country && country.value !== itemCountry)) {
-            userDataChanged = true
-            done = await apiInstance.user_updateUser(newValsUser)
-          }
-          if (!isEqual(bodyUpdatePlayer, {
-            _id: itemId,
-            positions: itemPositions,
-            state: itemState,
-            score: itemScore
-          })) {
-            playerDataChanged = true
-            done = await apiInstance.player_updatePlayer(bodyUpdatePlayer)
-          }
-        } else {
-          const bodyCreate = {
-            userData: newValsUser,
-            playerData: {
-              ...playerData,
-              score
-            }
-          }
-          userDataChanged = true
-          playerDataChanged = true
-          idPlayer = await apiInstance.player_createPlayer(bodyCreate)
-        }
-        if ((_id && !done) || (!_id && !idPlayer)) throw new Error()
-        if (done || idPlayer) {
-          if (userDataChanged && get(user, '_id', null) === get(userDataChanged, '_id', null)) {
-            await triggerUserConnected()
-          }
-          if (playerDataChanged) {
-            await trigger()
-            await triggerGetPlayers()
-          }
+        const _id = await createEditPlayer(player)
+        if(!values._id && _id) router.replace('/players/[id]', `/players/${_id}`)
+        if(!!_id) {
           openSnackbar({
             variant: 'success',
-            message: _id
+            message: values._id
               ? 'Player info updated successfully!'
               : 'Player created successfully'
           })
-        }
-        if (idPlayer) {
-          router.replace('/players/[id]', `/players/${idPlayer}`)
-        }
-        if(userDataChanged) {
-          const _pageTitle = getPlayerPageTitle(user, isUser)
+          const _pageTitle = getPlayerPageTitle(values.user, isUser)
           setPageTitle(_pageTitle)
+          setTouched({}, false)
         }
-      } catch (error) {
+      } catch(error) {
         openSnackbar({
           variant: 'error',
-          message: ServerMessage[error] || get(error, 'message', error)
+          message: ServerMessage.generic
         })
       }
-      setIsLoading(false)
       setSubmitting(false)
-      setTouched({}, false)
-    }, [playerItem, userConnectedItem, setPageTitle, trigger, triggerGetPlayers, triggerUserConnected, setIsLoading])
+      setIsLoading(false)
+    },[createEditPlayer, openSnackbar, setIsLoading, setPageTitle])
 
   const onDelete = useCallback(
     async () => {
       setIsLoading(true)
       try {
-        const done = await apiInstance.player_deletePlayer({
-          _id: playerItem._id,
-          idUser: playerItem.user._id,
-          type: 1
-        })
+        const done = await deletePlayer()
         if (!done) throw new Error()
-        mutatePlayerList(draft => {
-          draft.splice(draft.findIndex(player => player._id === playerItem._id), 1)
-        })
-        if (get(playerItem, 'user._id', null) === get(userConnectedItem, '_id', null)){
-          mutateUserConnected(user => {
-            user.futsalPlayer = null
-          })
-        }
         router.replace('/players')
         openSnackbar({
           variant: 'success',
@@ -180,16 +97,19 @@ const PlayerDetail = () => {
       } catch (error) {
         openSnackbar({
           variant: 'error',
-          message: ServerMessage[error] || get(error, 'message', error)
+          message: ServerMessage.generic
         })
       }
+      setOpenConfirmDialog(false)
       setIsLoading(false)
-    }, [playerItem, get(userConnectedItem, '_id', null), mutatePlayerList, mutateUserConnected, setIsLoading])
+    }, [deletePlayer, playerItem, setOpenConfirmDialog, setIsLoading])
 
   const formik = useFormik({
     initialValues: {
+      state: 0,
       ...playerItem,
       user: {
+        sex: 0,
         ...get(playerItem, 'user', {}),
         country: CountryOptions.find(({ value }) => value === get(playerItem, 'user.country', 'IT'))
       },
@@ -207,6 +127,11 @@ const PlayerDetail = () => {
     }))
     return data
   }, [formik.values.score])
+
+  const playerName = useMemo(() => {
+    if(get(playerItem, 'user._id', null) === userConnectedItem._id) return <span style={{ color: FutBobPalette.darkRed }}>yourself</span>
+    return `${get(playerItem, 'user.surname', '')} ${get(playerItem, 'user.name', '')}`
+  }, [playerItem, userConnectedItem._id])
 
   return (
     <>
@@ -322,7 +247,7 @@ const PlayerDetail = () => {
         open={!!openConfirmDialog}
         fullScreen={false}
         title='Attention!'
-        content={<Typography >You are about to delete <span style={{ fontWeight: 'bold' }}>{pageTitle}</span>, continue and delete?</Typography>}
+        content={<Typography >You are about to delete <span style={{ fontWeight: 'bold' }}>{playerName}</span>, continue and delete?</Typography>}
         actions={
           <Button
             style={{ minWidth: 150, backgroundColor: FutBobPalette.darkRed }}

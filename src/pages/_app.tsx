@@ -27,6 +27,7 @@ import { ThemeType } from '@_palette'
 import { apiInstance } from 'src/SDK'
 import "nprogress/nprogress.css";
 import dynamic from 'next/dynamic'
+import { ConfigStore } from '@_zustand/helpers'
 const NProgress = dynamic(() => import("@_components/NProgress"), { ssr: false })
 
 const AS_PATH = 'FutBobLastPath' // eslint-disable-line
@@ -93,6 +94,18 @@ const Alert = props => {
   />
 }
 
+const stateSelector = (state: ConfigStore) => ({
+  themeType: state.themeType,
+  isLogged: state.isLogged,
+  menuOpen: state.menuOpen,
+  isLoading: state.isLoading,
+  snackbar: state.snackbar,
+  closeSnackbar: state.closeSnackbar,
+  setTheme: state.setTheme,
+  setIsLogged: state.setIsLogged,
+  openSnackbar: state.openSnackbar,
+})
+
 const SplashScreen = React.memo(() => {
   return <AnimatePresence>
     <motion.div
@@ -117,15 +130,14 @@ const MyApp = props => {
     closeSnackbar,
     setTheme,
     setIsLogged,
-    setIsLoading,
     openSnackbar
-  } = useConfigStore()
+  } = useConfigStore(stateSelector)
 
-  const { trigger } = useSWRUser({ revalidateOnMount: false })
+  const { item, trigger } = useSWRUser({ revalidateOnMount: false })
   
   useEffect(() => {
-    if(apiInstance.hasToken()) trigger()
-  }, [apiInstance.hasToken()])
+    if(apiInstance.hasToken() && !get(item, '_id', null) && !isLoading) trigger()
+  }, [apiInstance.hasToken(), get(item, '_id', null), isLoading])
 
   const router = useRouter()
 

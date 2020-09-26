@@ -1,4 +1,4 @@
-import useSWR, { cache, trigger } from 'swr'
+import useSWR, { cache, trigger, mutate as mutateCache } from 'swr'
 import SwrKey from './keys'
 import swrFetchers from './fetchers'
 import produce, { Draft } from 'immer'
@@ -9,7 +9,7 @@ import { EditableUser, User } from '@_entities/User'
 import { apiInstance } from '../SDK'
 import { ConfigStore } from '@_zustand/helpers'
 import { ServerMessage } from '@_utils/serverMessages'
-import { get, isEmpty, isObject } from 'lodash'
+import { findIndex, get, isEmpty, isEqual, isObject } from 'lodash'
 
 const stateSelector = (state: ConfigStore) => ({
   setIsLoading: state.setIsLoading
@@ -70,15 +70,83 @@ export const useSWRUser = <T extends MoreOptions>(options?: T) => {
     }, [trigger])
 
   const mutateThis = useCallback(
-    (data: EditableUser|DirectMutationImmer<User>, shouldRevalidate: boolean = false) => {
+    (data: EditableUser|DirectMutationImmer<User>, shouldRevalidate: boolean = false): Promise<User> => {
       if(typeof data === 'function') return mutate(produce(data), shouldRevalidate)
       return mutate(produce(mutateDraft(data)), shouldRevalidate)
     }, [mutate])
+
+  const createEditPlayer = useCallback(
+    async (player: Omit<Player, '_id'> & Partial<Pick<Player, '_id'>>): Promise<boolean> => {
+      try {
+      const _player = { ...player }
+      const { user, ...futsalPlayer } = _player
+      if(!_player._id){
+        const { _id, matches, ...playerData } = futsalPlayer
+        const bodyCreate = {
+            userId: user._id,
+            playerData
+          }
+        const playerId = await apiInstance.player_createPlayer(bodyCreate)
+        if(!playerId) throw new Error()
+        _player._id = playerId
+      } else {
+        const { type, matches, ...bodyUpdate } = futsalPlayer
+        const updated = await apiInstance.player_updatePlayer(bodyUpdate)
+        if(!updated) throw new Error()
+      }
+      mutateThis(draft => {
+        draft.futsalPlayer = futsalPlayer
+      }, false)
+      mutateCache([SwrKey.PLAYER, _player._id], _player, false)
+      mutateCache(SwrKey.PLAYERS, ((current: Player[]|undefined) => {
+        if(!current) return current
+        const { edited, data } = current.reduce((acc, val) => {
+          if(val._id === _player._id) {
+            acc.data.push(_player as Player)
+            acc.edited = true
+          }
+          else {
+            acc.data.push(val)
+          }
+          return acc
+        }, { edited: false, data: [] })
+        if(edited) return data
+        return [...data, _player as Player]
+      }), false)
+      return true
+    } catch(error){
+      return false
+    }
+  }, [mutateThis])
+
+  const deletePlayer = useCallback(
+    async (): Promise<boolean> => {
+      try {
+      const deleted = await apiInstance.player_deletePlayer({
+        _id: get(data, 'futsalPlayer._id', null),
+        idUser: get(data, '_id', null),
+        type: 1
+      })
+      if (!deleted) throw new Error()
+      mutateThis(draft => {
+        draft.futsalPlayer = null
+      }, false)
+      mutateCache(SwrKey.PLAYERS, (current: Player[]|undefined) => {
+        if(current) current.splice(current.findIndex(player => player._id === get(data, 'futsalPlayer._id', null)), 1)
+        return current
+      }, false)
+        return true
+      } catch (error) {
+        return false
+      }
+    }, [mutateThis, get(data, '_id', null), get(data, 'futsalPlayer._id', null)])
 
   return {
     item: data as User || {} as User,
     mutate: mutateThis,
     trigger: triggerThis,
+    createEditPlayer,
+    deletePlayer
   }
 }
 
@@ -121,10 +189,37 @@ export const useSWRPlayers = <T extends MoreOptions>(options?: T) => {
       else return mutate(produce(mutateDraft(data)), shouldRevalidate)
     }, [mutate])
 
+  const deletePlayer = useCallback(
+    async (playerId: string, userId: string): Promise<boolean> => {
+      try {
+      const deleted = await apiInstance.player_deletePlayer({
+        _id: playerId,
+        idUser: userId,
+        type: 1
+      })
+      if (!deleted) throw new Error()
+      cache.delete([SwrKey.PLAYER, playerId])
+      const { _id: userConnectedId } = cache.get(SwrKey.USER)
+      if(userConnectedId === userId){
+        mutateCache(SwrKey.USER, produce(draft => {
+          draft.futsalPlayer = null
+        }), false)
+      }
+      mutateCache(SwrKey.PLAYERS, (current: Player[]|undefined) => {
+        if(current) current.splice(current.findIndex(player => player._id === playerId), 1)
+        return current
+      }, false)
+        return true
+      } catch (error) {
+        return false
+      }
+    }, [mutateThis])
+
   return {
     list: data as Player[] || [] as Player[],
     mutate: mutateThis,
-    trigger: triggerThis
+    trigger: triggerThis,
+    deletePlayer
   }
 }
 
@@ -167,9 +262,93 @@ export const useSWRPlayer = <T extends MoreOptions>(_id: string|null|undefined, 
       else return mutate(produce(mutateDraft(data)), shouldRevalidate)
     }, [mutate])
 
+
+  const createEditPlayer = useCallback(
+    async (player: Omit<Player, '_id'> & Partial<Pick<Player, '_id'>>): Promise<string|boolean> => {
+      try {
+      const _player = { ...player }
+      const { user, ...futsalPlayer } = _player
+      if(!_player._id){
+        const { _id, matches, ...playerData } = futsalPlayer
+        const bodyCreate = {
+            userData: user,
+            playerData
+          }
+        const playerId = await apiInstance.player_createPlayer(bodyCreate)
+        if(!playerId) throw new Error()
+        _player._id = playerId
+      } else {
+        const { type, matches, ...bodyUpdate } = futsalPlayer
+        const { user: thisUser, ...thisFutsalPlayer } = cache.get([SwrKey.PLAYER, _player._id]) || {}
+        let playerUpdated = true
+        let userUpdated = true
+        if(!isEqual(thisFutsalPlayer, futsalPlayer)){
+          playerUpdated = await apiInstance.player_updatePlayer(bodyUpdate)
+        }
+        if(!isEqual(thisUser, user)){
+          userUpdated = await apiInstance.user_updateUser(user)
+        }
+        if(!(playerUpdated && userUpdated)) throw new Error()
+      }
+      mutateCache([SwrKey.PLAYER, _player._id], _player, false)
+      const { _id: userConnectedId } = cache.get(SwrKey.USER)
+      if(userConnectedId === user._id){
+        mutateCache(SwrKey.USER, produce(draft => {
+          draft.futsalPlayer = futsalPlayer
+        }), false)
+      }
+      mutateCache(SwrKey.PLAYERS, (current: Player[]|undefined) => {
+        if(!current) return current
+        const { edited, data } = current.reduce((acc, val) => {
+          if(val._id === _player._id) {
+            acc.data.push(_player as Player)
+            acc.edited = true
+          }
+          else {
+            acc.data.push(val)
+          }
+          return acc
+        }, { edited: false, data: [] })
+        if(edited) return data
+        return [...data, _player as Player]
+      }, false)
+      return _player._id
+    } catch(error){
+      return false
+    }
+  }, [mutateThis])
+
+  const deletePlayer = useCallback(
+    async (): Promise<boolean> => {
+      try {
+      const deleted = await apiInstance.player_deletePlayer({
+        _id: get(data, '_id', null),
+        idUser: get(data, 'user._id', null),
+        type: 1
+      })
+      if (!deleted) throw new Error()
+      cache.delete([SwrKey.PLAYER, _id])
+      const { _id: userConnectedId } = cache.get(SwrKey.USER)
+      if(userConnectedId === get(data, 'user._id', null)){
+        mutateCache(SwrKey.USER, produce(draft => {
+          draft.futsalPlayer = null
+        }), false)
+      }
+      mutateCache(SwrKey.PLAYERS, (current: Player[]|undefined) => {
+        if(current) current.splice(current.findIndex(player => player._id === get(data, '_id', null)), 1)
+        return current
+      }, false)
+        return true
+      } catch (error) {
+        return false
+      }
+    }, [mutateThis, get(data, '_id', null), get(data, 'user._id', null)])
+
   return {
     item: data as Player || {} as Player,
     mutate: mutateThis,
-    trigger: triggerThis
+    trigger: triggerThis,
+    createEditPlayer,
+    deletePlayer
   }
 }

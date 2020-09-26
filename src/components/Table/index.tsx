@@ -45,6 +45,7 @@ const FutBobTable = React.memo((props: TableProps) => {
   const classes = useStyles()
   const [tableId] = useState(uniqueId('table-'))
 
+
   const { _headers = [], _data = [], _isUserIndexRow } = useMemo(():SetDataOut => {
     if (!headers.length) {
       return {

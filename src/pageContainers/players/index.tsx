@@ -1,33 +1,39 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { Button, Grid, Typography } from '@material-ui/core'
-import { get } from 'lodash'
+import { get, isEqual } from 'lodash'
 import { useConfigStore } from '@_zustand/configStore'
 import { ServerMessage } from '@_utils/serverMessages'
 import FutBobTable from '@_components/Table'
 import { getPlayerDataRow, headers, SearchBox } from './helpers'
 import { useRouter } from 'next/router'
 import AddRoundedIcon from '@material-ui/icons/AddRounded'
-import { apiInstance } from 'src/SDK'
 import CustomDialog from '@_components/Dialog'
 import { FutBobPalette } from '@_palette'
 import { useSWRPlayers, useSWRUser } from '@_swr/hooks'
 import { cache } from 'swr'
 import SwrKey from '@_swr/keys'
-import { Player, PlayerType } from '@_entities/Player'
+import { Player } from '@_entities/Player'
+import { ConfigStore } from '@_zustand/helpers'
+
+const stateSelector = (state: ConfigStore) => ({
+  openSnackbar: state.openSnackbar,
+  setIsLoading: state.setIsLoading
+})
 
 const PlayersContainer = () => {
-  const { list = [], mutate } = useSWRPlayers()
-  const { item: userConnectedItem, mutate: mutateUserConnected } = useSWRUser()
-
-  const { openSnackbar, setIsLoading } = useConfigStore(state => ({
-    openSnackbar: state.openSnackbar,
-    setIsLoading: state.setIsLoading
-  }))
+  const { list = [], deletePlayer } = useSWRPlayers()
+  const { item: userConnectedItem} = useSWRUser()
+  const { openSnackbar, setIsLoading } = useConfigStore(stateSelector)
 
   const [_filters, setFilters] = useState({})
   const [searchText, setSearchText] = useState('')
   const [currentItem, setCurrentItem]: [Player|null, any] = useState(null)
   const router = useRouter()
+
+  const playerName = useMemo(() => {
+    if(get(currentItem, 'user._id', null) === userConnectedItem._id) return <span style={{ color: FutBobPalette.darkRed }}>yourself</span>
+    return `${get(currentItem, 'user.surname', '')} ${get(currentItem, 'user.name', '')}`
+  }, [currentItem, userConnectedItem._id])
 
   const openDialog = useCallback(
     item => () => {
@@ -41,34 +47,24 @@ const PlayersContainer = () => {
 
   const onDelete = useCallback(
     async () => {
-      if (!currentItem) return
       setIsLoading(true)
       try {
-        const done = await apiInstance.player_deletePlayer({
-          _id: currentItem._id,
-          idUser: currentItem.user._id,
-          type: PlayerType.Futsal
-        })
+        const done = await deletePlayer(currentItem._id, currentItem.user._id)
         if (!done) throw new Error()
         openSnackbar({
           variant: 'success',
           message: 'Player deleted successfully!'
         })
-        mutate(draft => {
-          draft.splice(draft.findIndex(player => player._id === currentItem._id), 1)
-        })
-        if(userConnectedItem._id === currentItem.user._id) mutateUserConnected(user => {
-          user.futsalPlayer = null
-        })
-        closeDialog()
       } catch (error) {
         openSnackbar({
           variant: 'error',
-          message: ServerMessage[error] || get(error, 'message', error)
+          message: ServerMessage.generic
         })
       }
+      closeDialog()
       setIsLoading(false)
-    }, [currentItem, mutate, userConnectedItem._id, mutateUserConnected, closeDialog])
+    }, [deletePlayer, currentItem, closeDialog, setIsLoading])
+
 
   const goToDetails = useCallback(
     item => async () => {
@@ -82,11 +78,11 @@ const PlayersContainer = () => {
     }, [])
 
   const tableData = useMemo(() => {
-    const data = list.map(getPlayerDataRow({ goToDetails, onDelete: openDialog, playerId: get(userConnectedItem, 'futsalPlayer._id', null) }))
+    const data = list.map(getPlayerDataRow({ goToDetails, openDialog, userConnectedId: get(userConnectedItem, '_id', null) }))
     return searchText
       ? data.filter(({ fullName }) => (`${fullName}`.toLowerCase()).includes(searchText.toLowerCase()))
       : data
-  }, [list, goToDetails, searchText, openDialog, get(userConnectedItem, 'futsalPlayer._id', null)])
+  }, [JSON.stringify(list), goToDetails, searchText, openDialog, get(userConnectedItem, '_id', null)])
 
   return (
     <>
@@ -111,7 +107,7 @@ const PlayersContainer = () => {
         open={!!currentItem}
         title='Attention!'
         fullScreen={false}
-        content={<Typography >You are about to delete <span style={{ fontWeight: 'bold' }}>{`${get(currentItem, 'user.surname', '')} ${get(currentItem, 'user.name', '')}`}</span>, continue and delete?</Typography>}
+        content={<Typography >You are about to delete <span style={{ fontWeight: 'bold' }}>{playerName}</span>, continue and delete?</Typography>}
         actions={
           <Button
             style={{ minWidth: 150, backgroundColor: FutBobPalette.darkRed }}

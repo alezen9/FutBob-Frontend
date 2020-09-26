@@ -7,12 +7,15 @@ import Player from './3_Player'
 import { EditableUser, User } from '@_entities/User'
 import { setSnackbarData } from '@_zustand/helpers'
 import { DirectMutationImmer, useSWRUser } from '@_swr/hooks'
+import { Player as PlayerEntity } from '@_entities/Player'
 
 export type ProfileTabProps = {
   item: User
   mutate: (data: EditableUser|DirectMutationImmer<User>, shouldRevalidate?: boolean) => Promise<User>
   setIsLoading: (isLoading: boolean) => void
   openSnackbar: (data: setSnackbarData) => void
+  createEditPlayer: (player: Omit<PlayerEntity, '_id'> & Partial<Pick<PlayerEntity, '_id'>>) => Promise<boolean>
+  deletePlayer: () => Promise<boolean>
 }
 
 const ProfileContainer = () => {
@@ -21,14 +24,16 @@ const ProfileContainer = () => {
     setIsLoading: state.setIsLoading
   }))
 
-  const { item, mutate } = useSWRUser()
+  const { item, mutate, createEditPlayer, deletePlayer } = useSWRUser()
 
   const tabProps = useMemo(() => ({
     item,
     mutate,
     openSnackbar,
-    setIsLoading
-  }), [item, openSnackbar, setIsLoading, mutate])
+    setIsLoading,
+    createEditPlayer,
+    deletePlayer
+  }), [item, openSnackbar, setIsLoading, mutate, createEditPlayer, deletePlayer])
 
   return (
     <FutBobTabs>
