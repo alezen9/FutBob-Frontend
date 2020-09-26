@@ -239,6 +239,7 @@ type MobileRowCellProps = {
   mainHeaders: TableHeaderData[]
   withActions?: boolean
   _headers: TableHeaderData[]
+  className?: string
 }
 
 type mainRowType = {
@@ -248,7 +249,7 @@ type mainRowType = {
 }
 
 export const MobileRowCell = React.memo((props: MobileRowCellProps) => {
-  const { row, mainHeaders, withActions, _headers } = props
+  const { row, mainHeaders, withActions, _headers, className = '' } = props
   const classes = useStyles()
   const [open, setOpen] = useState(false)
 
@@ -276,7 +277,7 @@ export const MobileRowCell = React.memo((props: MobileRowCellProps) => {
 
   return (
     <>
-      <TableRow className={classes.mainMobileRow} onClick={toggleOpen}>
+      <TableRow className={`${classes.mainMobileRow} ${className}`} onClick={toggleOpen}>
         {mainRow.map((cell, i) => {
           const { style = {}, name, component } = cell
           return <TableCell

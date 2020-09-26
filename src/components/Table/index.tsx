@@ -98,6 +98,7 @@ const FutBobTable = React.memo((props: TableProps) => {
                         _headers={_headers}
                         mainHeaders={mainHeaders}
                         withActions={withActions}
+                        {..._isUserIndexRow === i && { className: classes.userRow }}
                       />
                       : <TableRow key={`${tableId}row-${i}`} {..._isUserIndexRow === i && { className: classes.userRow }}>
                         {Object.entries(row).map(([key, value], j) => {

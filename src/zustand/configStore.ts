@@ -43,6 +43,16 @@ export const useConfigStore: UseStore<ConfigStore> = create(_immer((set: any, ge
       FutBobPalette.switchTheme(type)
     }
   },
+  toggleTheme: () => {
+    const newType = get().themeType === ThemeType.dark
+      ? ThemeType.light
+      : ThemeType.dark
+    set((state: ConfigStore) => {
+      state.themeType = newType
+    })
+    window.localStorage.setItem('FutBobTheme', newType)
+    FutBobPalette.switchTheme(newType)
+  },
   setIsLoading: (bool: boolean) => {
     set((state: ConfigStore) => {
       state.isLoading = bool

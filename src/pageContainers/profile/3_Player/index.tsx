@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo } from 'react'
-import { Grid, Button } from '@material-ui/core'
+import React, { useCallback, useMemo, useState } from 'react'
+import { Grid, Button, Typography } from '@material-ui/core'
 import { get, meanBy, isEmpty } from 'lodash'
 import FutsalField from '@_components/FutsalField'
 import { useFormik } from 'formik'
@@ -12,12 +12,15 @@ import { OverallScore } from '@_icons'
 import { getMeanScoreField } from '@_components/FormikInput/PlayerScoreInputs/SingleScore'
 import PlayerScoreInputs from '@_components/FormikInput/PlayerScoreInputs'
 import { ProfileTabProps } from '..'
-import { EditablePlayer, PhysicalState, PlayerPosition, PlayerType } from '@_entities/Player'
+import { EditablePlayer, PlayerType } from '@_entities/Player'
 import { useSWRPlayers } from '@_swr/hooks'
+import { FutBobPalette } from '@_palette'
+import CustomDialog from '@_components/Dialog'
 
 const Player = (props: ProfileTabProps) => {
   const { item: { _id: userId, futsalPlayer, ...restOfUserData }, setIsLoading, mutate, openSnackbar } = props
   const { mutate: mutatePlayerList } = useSWRPlayers({ revalidateOnMount: false })
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(null)
 
   const onSubmit = useCallback(
     async (values, { setSubmitting }) => {
@@ -109,6 +112,35 @@ const Player = (props: ProfileTabProps) => {
     return data
   }, [formik.values.score])
 
+  const onDelete = useCallback(
+    async () => {
+      setIsLoading(true)
+      try {
+        const done = await apiInstance.player_deletePlayer({
+          _id: futsalPlayer._id,
+          idUser: userId,
+          type: PlayerType.Futsal
+        })
+        if (!done) throw new Error()
+        mutatePlayerList(draft => {
+          if((draft || []).length){
+            draft.splice(draft.findIndex(player => player._id === futsalPlayer._id), 1)
+          }
+        })
+        mutate({ futsalPlayer: null })
+        openSnackbar({
+          variant: 'success',
+          message: 'Player deleted successfully!'
+        })
+      } catch (error) {
+        openSnackbar({
+          variant: 'error',
+          message: ServerMessage[error] || get(error, 'message', error)
+        })
+      }
+      setIsLoading(false)
+    }, [get(futsalPlayer, '_id', null), userId, mutatePlayerList, mutate, setIsLoading])
+
   return (
     <Grid container spacing={3}>
       <OverallScore style={{ margin: 'auto' }} value={parseInt(String(meanBy(scoreData, 'value')))} />
@@ -134,16 +166,42 @@ const Player = (props: ProfileTabProps) => {
           name='positions'
           {...formik} />
       </Grid>
-      <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button
-          style={{ minWidth: 150 }}
-          disabled={formik.isSubmitting || isEmpty(formik.touched)}
-          onClick={() => formik.handleSubmit()}
-          variant='contained'
-          color='primary'>
-          {futsalPlayer ? 'Update' : 'Create'}
-        </Button>
+      <Grid item container xs={12} justify='flex-end'>
+        {get(futsalPlayer, '_id', null) && <Grid item>
+          <Button
+            style={{ minWidth: 150, color: FutBobPalette.darkRed, marginRight: '1.5em', borderColor: FutBobPalette.darkRed }}
+            disabled={formik.isSubmitting}
+            onClick={() => setOpenConfirmDialog(true)}
+            variant='outlined'>
+        Delete
+          </Button>
+        </Grid>}
+        <Grid item>
+          <Button
+            style={{ minWidth: 150 }}
+            disabled={formik.isSubmitting || isEmpty(formik.touched)}
+            onClick={() => formik.handleSubmit()}
+            variant='contained'
+            color='primary'>
+            {futsalPlayer ? 'Update' : 'Create'}
+          </Button>
+        </Grid>
       </Grid>
+      <CustomDialog
+        open={!!openConfirmDialog}
+        fullScreen={false}
+        title='Attention!'
+        content={<Typography >You are about to delete <span style={{ fontWeight: 'bold', color: FutBobPalette.darkRed }}>Yourself</span>, continue and delete?</Typography>}
+        actions={
+          <Button
+            style={{ minWidth: 150, backgroundColor: FutBobPalette.darkRed }}
+            onClick={onDelete}
+            variant='contained'>
+          Delete
+          </Button>
+        }
+        onClose={() => setOpenConfirmDialog(false)}
+      />
     </Grid>
   )
 }

@@ -25,6 +25,9 @@ import { ServerMessage } from '@_utils/serverMessages'
 import { useSWRUser } from '@_swr/hooks'
 import { ThemeType } from '@_palette'
 import { apiInstance } from 'src/SDK'
+import "nprogress/nprogress.css";
+import dynamic from 'next/dynamic'
+const NProgress = dynamic(() => import("@_components/NProgress"), { ssr: false })
 
 const AS_PATH = 'FutBobLastPath' // eslint-disable-line
 
@@ -118,7 +121,11 @@ const MyApp = props => {
     openSnackbar
   } = useConfigStore()
 
-  useSWRUser()
+  const { trigger } = useSWRUser({ revalidateOnMount: false })
+  
+  useEffect(() => {
+    if(apiInstance.hasToken()) trigger()
+  }, [apiInstance.hasToken()])
 
   const router = useRouter()
 
@@ -163,7 +170,6 @@ const MyApp = props => {
       : ThemeType.light
     setIsLogged(!!isLogged)
     setTheme(_themeType)
-    window.localStorage.setItem('FutBobTheme', _themeType)
     const path: string = isLogged
       ? /\/login/.test(router.pathname)
         ? '/'
@@ -178,22 +184,6 @@ const MyApp = props => {
         .then(() => setFirstRun(false))
     }
   }, [])
-
-  useEffect(() => {
-    const handleRouteChangeStart = url => {
-      setIsLoading(true)
-    }
-    const handleRouteChangeEnd = url => {
-      setIsLoading(false)
-    }
-    if (isLogged) {
-      Router.events.on('routeChangeStart', handleRouteChangeStart)
-      Router.events.on('routeChangeComplete', handleRouteChangeEnd)
-    } else {
-      Router.events.off('routeChangeStart', handleRouteChangeStart)
-      Router.events.off('routeChangeComplete', handleRouteChangeEnd)
-    }
-  }, [isLogged])
 
   useEffect(() => {
     if (process.browser) {
@@ -215,7 +205,8 @@ const MyApp = props => {
         {isFirstRun
           ? <SplashScreen />
           : <div className={classes.wrapper}>
-            {isLoading && !isSmallScreen && <ProgressBar />}
+            {/* {isLoading && !isSmallScreen && <ProgressBar />} */}
+            <NProgress />
             {isLogged && <>{isSmallScreen ? <Navbar isLoading={isLoading} /> : <Menu />}</>}
             <div {...isLogged && { className: classes.content }}>
               {isLogged && <Title />}

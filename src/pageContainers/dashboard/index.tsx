@@ -29,7 +29,7 @@ const DashboardContainer = props => {
   return (
     <div className={classes.main}>
       <Typography className={classes.text} >It's gonna be lit!</Typography>
-      <img src='/assets/deadpool.png' className={classes.deadpool} />
+      {/* <img src='/assets/deadpool.png' className={classes.deadpool} /> */}
     </div>
   )
 }

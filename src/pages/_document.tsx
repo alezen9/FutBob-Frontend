@@ -67,6 +67,15 @@ export default class MyDocument extends Document {
               font-weight: bold;
             }
 
+            #nprogress .bar {
+              background: rgb(42, 156, 71) !important;
+              background-color: rgb(42, 156, 71) !important;
+            }
+
+            #nprogress .spinner {
+              display: none;
+            }
+
             ::-webkit-scrollbar {
               /* width: 4px; */
               width: 0;

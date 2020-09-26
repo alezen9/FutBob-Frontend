@@ -110,6 +110,7 @@ const PlayersContainer = () => {
       <CustomDialog
         open={!!currentItem}
         title='Attention!'
+        fullScreen={false}
         content={<Typography >You are about to delete <span style={{ fontWeight: 'bold' }}>{`${get(currentItem, 'user.surname', '')} ${get(currentItem, 'user.name', '')}`}</span>, continue and delete?</Typography>}
         actions={
           <Button

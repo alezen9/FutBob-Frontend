@@ -31,9 +31,11 @@ const PlayerDetail = () => {
   const router = useRouter()
   const { id }: { id?: string } = router.query
 
-  const { trigger: triggerGetPlayers } = useSWRPlayers({ revalidateOnMount: false, initialData: [] })
+  const { trigger: triggerGetPlayers, mutate: mutatePlayerList } = useSWRPlayers({ revalidateOnMount: false, initialData: [] })
   const { item: playerItem, trigger } = useSWRPlayer(id)
-  const { item: userConnectedItem, trigger: triggerUserConnected } = useSWRUser({ revalidateOnMount: false })
+  const { item: userConnectedItem, trigger: triggerUserConnected, mutate: mutateUserConnected } = useSWRUser({ revalidateOnMount: false })
+
+  const isUserConnected = useMemo(() => get(playerItem, 'user._id', null) === get(userConnectedItem, '_id', null), [get(playerItem, 'user._id', null), get(userConnectedItem, '_id', null)])
 
   const { setIsLoading, openSnackbar, pageTitle, setPageTitle } = useConfigStore(stateSelector)
   const [openConfirmDialog, setOpenConfirmDialog] = useState(null)
@@ -162,7 +164,14 @@ const PlayerDetail = () => {
           type: 1
         })
         if (!done) throw new Error()
-        if (get(playerItem, 'user._id', null) === get(userConnectedItem, '_id', null)) triggerUserConnected()
+        mutatePlayerList(draft => {
+          draft.splice(draft.findIndex(player => player._id === playerItem._id), 1)
+        })
+        if (get(playerItem, 'user._id', null) === get(userConnectedItem, '_id', null)){
+          mutateUserConnected(user => {
+            user.futsalPlayer = null
+          })
+        }
         router.replace('/players')
         openSnackbar({
           variant: 'success',
@@ -175,7 +184,7 @@ const PlayerDetail = () => {
         })
       }
       setIsLoading(false)
-    }, [playerItem, triggerUserConnected, userConnectedItem, setIsLoading])
+    }, [playerItem, get(userConnectedItem, '_id', null), mutatePlayerList, mutateUserConnected, setIsLoading])
 
   const formik = useFormik({
     initialValues: {
@@ -311,6 +320,7 @@ const PlayerDetail = () => {
       </Grid>
       <CustomDialog
         open={!!openConfirmDialog}
+        fullScreen={false}
         title='Attention!'
         content={<Typography >You are about to delete <span style={{ fontWeight: 'bold' }}>{pageTitle}</span>, continue and delete?</Typography>}
         actions={

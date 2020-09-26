@@ -1,47 +1,34 @@
-import React, { useCallback } from 'react'
-import { makeStyles, Switch } from '@material-ui/core'
+import React from 'react'
+import { makeStyles, Switch, Theme } from '@material-ui/core'
 import { useConfigStore } from '@_zustand/configStore'
-import { ThemeType } from '../../../palette'
+import Brightness2RoundedIcon from '@material-ui/icons/Brightness2Rounded'
+import { ConfigStore } from '@_zustand/helpers'
 
-const useStyles = makeStyles(theme => ({
-  toggleThumb: {
-    position: 'relative',
-    '&:after': {
-      opacity: theme.type === 'light'
-        ? 0
-        : 1,
-      transition: 'opacity .2s ease',
-      position: 'absolute',
-      top: '-.2em',
-      left: '.25em',
-      clipPath: 'circle(17px at bottom left)',
-      width: '100%',
-      height: '100%',
-      content: '""',
-      borderRadius: '50%',
-      backgroundColor: '#111'
+const useStyles = makeStyles((theme: Theme) => ({
+  moon: {
+    transform: 'rotateZ(145deg) translateY(0.1em) scale(1.1)',
+    color: 'rgba(255,255,255,.75)',
+    filter: 'drop-shadow(0px 0px 5px rgba(255,255,205,.75))',
+    [theme.breakpoints.down('xs')]: {
+      transform: 'rotateZ(145deg) translateY(0.1em)',
     }
   }
 }))
 
-const ThemeSwitch = () => {
-  const { setTheme, themeType } = useConfigStore(state => ({
-    themeType: state.themeType,
-    setTheme: state.setTheme
-  }))
-  const classes = useStyles()
+const stateSelector = (state: ConfigStore) => ({
+  themeType: state.themeType,
+  toggleTheme: state.toggleTheme
+})
 
-  const toggleTheme = useCallback(() => {
-    setTheme(themeType === ThemeType.light
-      ? ThemeType.dark
-      : ThemeType.light)
-  }, [setTheme, themeType])
+const ThemeSwitch = () => {
+  const { toggleTheme, themeType } = useConfigStore(stateSelector)
+  const classes = useStyles()
 
   return (
     <Switch
-      classes={{ thumb: classes.toggleThumb }}
       checked={themeType === 'dark'}
       color='primary'
+      checkedIcon={<Brightness2RoundedIcon className={classes.moon} />}
       onChange={toggleTheme} />
   )
 }

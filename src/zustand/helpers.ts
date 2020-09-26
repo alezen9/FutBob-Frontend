@@ -21,6 +21,7 @@ export type ConfigStore = {
     setIsLogged: (bool: boolean) => void
     toggleMenu: VoidFunction
     setTheme: (type: ThemeType, onlyType?: boolean) => void
+    toggleTheme: VoidFunction
     setIsLoading: (isLoading: boolean) => void
 }
 

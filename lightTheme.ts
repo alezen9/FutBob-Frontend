@@ -1,4 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles'
+import createBreakpoints from '@material-ui/core/styles/createBreakpoints'
 import { ThemeType } from './palette'
 
 declare module '@material-ui/core/styles/createMuiTheme' {
@@ -10,6 +11,8 @@ declare module '@material-ui/core/styles/createMuiTheme' {
     type: ThemeType
   }
 }
+
+const breakpoints = createBreakpoints({})
 
 const subtitleGrey = '#686868'
 const lightGrey = '#c1c1c1'
@@ -217,12 +220,20 @@ const lightTheme = createMuiTheme({
         boxShadow: '0 18px 38px 0 #e1eafc'
       },
       paper: {
-        borderRadius: 15
+        borderRadius: 7,
+        [breakpoints.down('xs')]: {
+          margin: 0
+        }
       },
       paperFullScreen: {
         width: '95%',
         height: '95%',
-        borderRadius: 15
+        borderRadius: 7
+      },
+      paperFullWidth: {
+        [breakpoints.down('xs')]: {
+          width: 'calc(100% - 32px)'
+        }
       }
     },
     MuiDialogTitle: {
