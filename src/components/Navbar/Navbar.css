@@ -157,6 +157,7 @@
   top: 0;
   left: 0;
   z-index: 2;
+  border-radius: 0;
   -webkit-transition: all 0.2s ease-in, background 0.2s ease-in;
   transition: all 0.2s ease-in, background 0.2s ease-in;
   /* -webkit-transition-delay: 0.25s;
