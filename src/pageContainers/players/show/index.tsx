@@ -1,5 +1,5 @@
 import React, { useMemo, useCallback, useState } from 'react'
-import { Grid, Button, Typography, Hidden } from '@material-ui/core'
+import { Grid, Button, Typography, Hidden, useMediaQuery, useTheme } from '@material-ui/core'
 import FormikInput from '@_components/FormikInput'
 import { useFormik } from 'formik'
 import { isEmpty, meanBy, get, isEqual } from 'lodash'
@@ -34,8 +34,8 @@ const PlayerDetail = () => {
   const { trigger: triggerGetPlayers, mutate: mutatePlayerList } = useSWRPlayers({ revalidateOnMount: false, initialData: [] })
   const { item: playerItem, trigger } = useSWRPlayer(id)
   const { item: userConnectedItem, trigger: triggerUserConnected, mutate: mutateUserConnected } = useSWRUser({ revalidateOnMount: false })
-
-  const isUserConnected = useMemo(() => get(playerItem, 'user._id', null) === get(userConnectedItem, '_id', null), [get(playerItem, 'user._id', null), get(userConnectedItem, '_id', null)])
+  const theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'))
 
   const { setIsLoading, openSnackbar, pageTitle, setPageTitle } = useConfigStore(stateSelector)
   const [openConfirmDialog, setOpenConfirmDialog] = useState(null)
@@ -296,7 +296,7 @@ const PlayerDetail = () => {
             name='positions'
             {...formik} />
         </Grid>
-        <Grid item container xs={12} justify='flex-end'>
+      <Grid item container xs={12} justify={isSmallScreen ? 'space-evenly' : 'flex-end'}>
           {playerItem._id && <Grid item>
             <Button
               style={{ minWidth: 150, color: FutBobPalette.darkRed, marginRight: '1.5em', borderColor: FutBobPalette.darkRed }}

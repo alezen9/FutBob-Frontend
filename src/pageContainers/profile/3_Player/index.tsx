@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { Grid, Button, Typography } from '@material-ui/core'
+import { Grid, Button, Typography, useTheme, useMediaQuery } from '@material-ui/core'
 import { get, meanBy, isEmpty } from 'lodash'
 import FutsalField from '@_components/FutsalField'
 import { useFormik } from 'formik'
@@ -21,6 +21,8 @@ const Player = (props: ProfileTabProps) => {
   const { item: { _id: userId, futsalPlayer, ...restOfUserData }, setIsLoading, mutate, openSnackbar } = props
   const { mutate: mutatePlayerList } = useSWRPlayers({ revalidateOnMount: false })
   const [openConfirmDialog, setOpenConfirmDialog] = useState(null)
+  const theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'))
 
   const onSubmit = useCallback(
     async (values, { setSubmitting }) => {
@@ -166,10 +168,10 @@ const Player = (props: ProfileTabProps) => {
           name='positions'
           {...formik} />
       </Grid>
-      <Grid item container xs={12} justify='flex-end'>
+      <Grid item container xs={12} justify={isSmallScreen ? 'space-evenly' : 'flex-end'}>
         {get(futsalPlayer, '_id', null) && <Grid item>
           <Button
-            style={{ minWidth: 150, color: FutBobPalette.darkRed, marginRight: '1.5em', borderColor: FutBobPalette.darkRed }}
+            style={{ minWidth: 130, color: FutBobPalette.darkRed, marginRight: '1.5em', borderColor: FutBobPalette.darkRed }}
             disabled={formik.isSubmitting}
             onClick={() => setOpenConfirmDialog(true)}
             variant='outlined'>
@@ -178,7 +180,7 @@ const Player = (props: ProfileTabProps) => {
         </Grid>}
         <Grid item>
           <Button
-            style={{ minWidth: 150 }}
+            style={{ minWidth: 130 }}
             disabled={formik.isSubmitting || isEmpty(formik.touched)}
             onClick={() => formik.handleSubmit()}
             variant='contained'
