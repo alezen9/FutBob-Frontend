@@ -6,13 +6,14 @@ import AccessTimeRoundedIcon from '@material-ui/icons/AccessTimeRounded'
 import RemoveCircleOutlineRoundedIcon from '@material-ui/icons/RemoveCircleOutlineRounded'
 import { Tooltip, IconButton } from '@material-ui/core'
 import { sections } from './routes'
-import { find, isObject, uniqueId, reduce, transform, isEqual, isUndefined, keys, entries, isObjectLike, get, has, set } from 'lodash'
+import { find, isObject, uniqueId, reduce, transform, isEqual, isUndefined, keys, entries, isObjectLike, get, has, set, map, compact } from 'lodash'
 import { FutBobPalette } from '../../palette'
 import { TopFormIcon, InjuredIcon, RecoveryIcon } from '../assets/CustomIcon'
 import ExpandLessRoundedIcon from '@material-ui/icons/ExpandLessRounded'
 import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
 import cleanDeep from 'clean-deep'
 import { PlayerScore } from '@_entities/Player'
+import { OptionType } from '@_components/FormikInput'
 
 export const getTitleFromPathname = (pathname: string) => {
   const routeInfo: any = find(sections, ['path', pathname])
@@ -312,3 +313,7 @@ export const getMultipleInitValue = (vals = [], options = []) => {
     return acc
   }, []))
 }
+
+export const getOptionsByEnum = (entity): OptionType[] => compact(map(entity, (el, i) => el && typeof el === 'string'
+   ? { label: decamelize(el), value: parseInt(i) }
+   : null))

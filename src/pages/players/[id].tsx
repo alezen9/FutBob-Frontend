@@ -2,12 +2,13 @@ import React, { useRef, useEffect, useCallback } from 'react'
 import PageTransition from '@_components/PageTransition'
 import PlayerDetail from '@_page-containers/players/show'
 import { useConfigStore } from '@_zustand/configStore'
-import { get, isEmpty } from 'lodash'
+import { get } from 'lodash'
 import { useRouter } from 'next/router'
 import GoBack from '@_components/GoBack'
 import FaceRoundedIcon from '@material-ui/icons/FaceRounded'
-import { useSWRUser, useSWRPlayer } from '@_swr/hooks'
 import { User } from '@_entities/User'
+import { useSWRPlayer } from '@_swr/Players'
+import { useSWRUser } from '@_swr/User'
 
 export const getPlayerPageTitle = (user: User, isUser: boolean = false) => {
   const { name, surname } = user
@@ -25,7 +26,7 @@ const Player = () => {
   const { id }: { id?: string } = router.query
   const setPageTitle = useConfigStore(state => state.setPageTitle)
 
-  const { item: playerItem, mutate } = useSWRPlayer(id, { fromCache: true })
+  const { item: playerItem } = useSWRPlayer(id, { fromCache: true })
   const { item: userItem } = useSWRUser({ fromCache: true, revalidateOnMount: false })
 
   useEffect(() => {

@@ -22,12 +22,12 @@ import { isEmpty, get } from 'lodash'
 import { cleanQueryParams } from '@_utils/helpers'
 import { SWRConfig } from 'swr'
 import { ServerMessage } from '@_utils/serverMessages'
-import { useSWRUser } from '@_swr/hooks'
 import { ThemeType } from '@_palette'
 import { apiInstance } from 'src/SDK'
 import "nprogress/nprogress.css";
 import dynamic from 'next/dynamic'
 import { ConfigStore } from '@_zustand/helpers'
+import { useSWRUser } from '@_swr/User'
 const NProgress = dynamic(() => import("@_components/NProgress"), { ssr: false })
 
 const AS_PATH = 'FutBobLastPath' // eslint-disable-line

@@ -6,8 +6,9 @@ import Private from './2_Private'
 import Player from './3_Player'
 import { EditableUser, User } from '@_entities/User'
 import { setSnackbarData } from '@_zustand/helpers'
-import { DirectMutationImmer, useSWRUser } from '@_swr/hooks'
 import { Player as PlayerEntity } from '@_entities/Player'
+import { DirectMutationImmer } from '@_swr/helpers'
+import { useSWRUser } from '@_swr/User'
 
 export type ProfileTabProps = {
   item: User

@@ -183,6 +183,7 @@ const lightTheme = createMuiTheme({
     },
     MuiButton: {
       root: {
+         minWidth: 120,
         textTransform: 'none',
         boxShadow: 'none !important',
         fontSize: '17px !important',
@@ -209,6 +210,11 @@ const lightTheme = createMuiTheme({
       root: {
         backgroundColor: `${darkGreen} !important`
       }
+    },
+    MuiBackdrop: {
+       root: {
+          backdropFilter: 'blur(12px)'
+       }
     },
     MuiIconButton: {
       root: {

@@ -1,16 +1,14 @@
-import { apiInstance } from '../SDK'
 import { get } from 'lodash'
-import { User } from '@_entities/User'
 import { Player } from '@_entities/Player'
-import { allUserFields, allPlayerFields } from '../SDK/allFields'
+import { apiInstance } from 'src/SDK'
+import { allPlayerFields } from 'src/SDK/allFields'
 
-const swrFetchers = Object.freeze({
-  profileFetcher: (key: string): Promise<User> => apiInstance.user_getUserConnected(allUserFields),
+const swrPlayersFetchers = Object.freeze({
   playersFetcher: (key: string): Promise<Player[]> => apiInstance.player_getPlayers({}, allPlayerFields),
   playerFetcher: (key: string, _id: string | null): Promise<Player> => _id
     ? apiInstance.player_getPlayers({ ..._id && { ids: [_id] } }, allPlayerFields)
-        .then(res => res ? get(res, '0', {}) as Player : {} as Player)
+         .then(res => res ? get(res, '0', {}) as Player : {} as Player)
     : Promise.resolve({} as Player)
 })
 
-export default swrFetchers
+export default swrPlayersFetchers

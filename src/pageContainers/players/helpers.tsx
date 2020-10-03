@@ -1,7 +1,7 @@
 import React from 'react'
-import { get, mean } from 'lodash'
+import { compact, get, map, mean } from 'lodash'
 import { OverallScore } from '@_icons'
-import { playerPhysicalStateOptions, getLabelsByValues, futsalPositionsOptions, initialScoreValues } from '@_utils/helpers'
+import { playerPhysicalStateOptions, getLabelsByValues, futsalPositionsOptions, initialScoreValues, getOptionsByEnum } from '@_utils/helpers'
 import moment from 'moment'
 import NavigateNextRoundedIcon from '@material-ui/icons/NavigateNextRounded'
 import ListField from '@_components/ListField'
@@ -11,11 +11,12 @@ import { InputAdornment } from '@material-ui/core'
 import { useFormik } from 'formik'
 import FormikInput from '@_components/FormikInput'
 import { getMeanScoreField } from '@_components/FormikInput/PlayerScoreInputs/SingleScore'
-import { Player, PlayerScore } from '@_entities/Player'
+import { Player, PlayerPosition, PlayerPositionFutsal, PlayerScore } from '@_entities/Player'
+import { Filter } from '@_components/Filters/Inputs'
 
 export const headers = [
   { name: 'Name', style: { minWidth: 230 } },
-  { name: 'Physical state', style: { minWidth: 130, textAlign: 'left' } },
+  { name: 'Physical state', style: { minWidth: 130, textAlign: 'center' } },
   { name: 'Positions', style: { minWidth: 100, textAlign: 'center' } },
   { name: 'Country', style: { maxWidth: 50, textAlign: 'center' } },
   { name: 'Age', style: { maxWidth: 70, textAlign: 'center' } },
@@ -72,62 +73,17 @@ const getPlayersPositionLabelListString = positions => {
   return list
 }
 
-const SearchAdornment = () => <InputAdornment position='end' >
-  <SearchRoundedIcon />
-</InputAdornment>
-
-export const filters = [
+export const playerFilters: Filter[] = [
   {
-    type: 'text',
-    name: 'searchText',
-    label: 'Search',
-    sm: 6,
-    lg: 4,
-    inputProps: {
-      endAdornment: <SearchAdornment />
-    }
+    type: 'select',
+    name: 'state',
+    label: 'Physical state',
+    options: playerPhysicalStateOptions
+  },
+  {
+   type: 'select',
+    name: 'position',
+    label: 'Position',
+    options: getOptionsByEnum(PlayerPositionFutsal)
   }
-  // {
-  //   type: 'selectMultiple',
-  //   name: 'state',
-  //   label: 'Stato su Condexo',
-  //   initialValue: [{ label: 'Tutti', value: -1 }],
-  //   sm: 6,
-  //   lg: 3,
-  //   options: UserStato
-  // }
 ]
-
-
-
-/**
- * TEMPORARY
- */
-
-type SearchBoxProps = {
-  onTextChange: (v: any) => void
-}
-
-export const SearchBox = React.memo((props: SearchBoxProps) => {
-  const { onTextChange } = props
-
-  const formik = useFormik({
-    initialValues: { searchText: '' },
-    onSubmit: onTextChange
-  })
-
-  return (
-    <FormikInput
-      xs={12}
-      sm={6}
-      lg={4}
-      name='searchText'
-      label='Search'
-      inputProps={{
-        endAdornment: <SearchAdornment />
-      }}
-      supplementaryOnChange={onTextChange}
-      {...formik}
-    />
-  )
-})

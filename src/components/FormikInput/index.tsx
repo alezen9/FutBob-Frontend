@@ -88,6 +88,8 @@ type Props = FormikEssentials & GridWrapperProps & {
   large?: boolean
 }
 
+export type FormikInputProps = Props
+
 const FormikInput = (props: Props) => {
   const { formControl, textField, chipClass } = useStyles()
   const [show, toggleShow] = useState(false)

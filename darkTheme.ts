@@ -179,6 +179,16 @@ const darkTheme = createMuiTheme({
         }
       }
     },
+    MuiDivider: {
+      root: {
+        backgroundColor: 'rgba(255,255,255,.3)'
+      }
+    },
+    MuiBackdrop: {
+      root: {
+        backdropFilter: 'blur(12px)'
+      }
+    },
     MuiButtonBase: {
       root: {
         '&$disabled': {
@@ -189,6 +199,7 @@ const darkTheme = createMuiTheme({
     },
     MuiButton: {
       root: {
+        minWidth: 120,
         textTransform: 'none',
         boxShadow: 'none !important',
         fontSize: '17px !important',

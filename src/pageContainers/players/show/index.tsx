@@ -15,10 +15,11 @@ import CustomDialog from '@_components/Dialog'
 import { getMeanScoreField } from '@_components/FormikInput/PlayerScoreInputs/SingleScore'
 import PlayerScoreInputs from '@_components/FormikInput/PlayerScoreInputs'
 import { CountryOptions } from '@_utils/nationalities'
-import { useSWRPlayer, useSWRUser } from '@_swr/hooks'
 import { getPlayerPageTitle } from 'src/pages/players/[id]'
 import { ConfigStore } from '@_zustand/helpers'
 import { PlayerType } from '@_entities/Player'
+import { useSWRUser } from '@_swr/User'
+import { useSWRPlayer } from '@_swr/Players'
 
 const stateSelector = (state: ConfigStore) => ({
     setIsLoading: state.setIsLoading,

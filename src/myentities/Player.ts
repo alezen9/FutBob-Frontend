@@ -1,5 +1,14 @@
 import { User } from "./User"
 
+export enum PlayerPositionFutsal {
+   FutsalGoalKeeper,
+   FutsalBack,
+   FutsalLeftWing,
+   FutsalRightWing,
+   FutsalForward,
+   Goalkeeper
+}
+
 export enum PlayerPosition {
     FutsalGoalKeeper,
     FutsalBack,

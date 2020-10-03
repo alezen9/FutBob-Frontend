@@ -4,16 +4,19 @@ import { get, isEqual } from 'lodash'
 import { useConfigStore } from '@_zustand/configStore'
 import { ServerMessage } from '@_utils/serverMessages'
 import FutBobTable from '@_components/Table'
-import { getPlayerDataRow, headers, SearchBox } from './helpers'
+import { getPlayerDataRow, headers, playerFilters } from './helpers'
 import { useRouter } from 'next/router'
 import AddRoundedIcon from '@material-ui/icons/AddRounded'
 import CustomDialog from '@_components/Dialog'
 import { FutBobPalette } from '@_palette'
-import { useSWRPlayers, useSWRUser } from '@_swr/hooks'
 import { cache } from 'swr'
-import SwrKey from '@_swr/keys'
 import { Player } from '@_entities/Player'
 import { ConfigStore } from '@_zustand/helpers'
+import { useSWRUser } from '@_swr/User'
+import { useSWRPlayers } from '@_swr/Players'
+import { SwrKey } from '@_swr/helpers'
+import Filters from '@_components/Filters'
+import { Action } from '@_components/Filters/Actions'
 
 const stateSelector = (state: ConfigStore) => ({
   openSnackbar: state.openSnackbar,
@@ -84,19 +87,29 @@ const PlayersContainer = () => {
       : data
   }, [JSON.stringify(list), goToDetails, searchText, openDialog, get(userConnectedItem, '_id', null)])
 
+
+  const actions: Action[] = [
+    {
+      type: 'button',
+      variant: 'outlined',
+      icon: <AddRoundedIcon style={{ marginRight: '.5em' }} />,
+      title: 'Create',
+      onClick: goToCreate,
+    }
+  ]
+
   return (
     <>
-      <Grid container justify='space-between' alignItems='center' style={{ marginBottom: '1em' }}>
-        <SearchBox onTextChange={v => setSearchText(v)} />
-        <Grid item xs={12} sm={6} lg={8} style={{ textAlign: 'right' }}>
-          <Button
-            onClick={goToCreate}
-            variant='outlined'>
-            <AddRoundedIcon style={{ marginRight: '.5em' }} />
-            Create
-          </Button>
-        </Grid>
-      </Grid>
+      <Filters
+      withSearch
+      onSearchSubmit={v => setSearchText(v)}
+      // excludeSearchBoxFromFilters
+      actions={actions}
+      filters={playerFilters}
+      formikConfig={{
+        
+      }}
+      />
       <FutBobTable
         withActions
         isFetching={false}
