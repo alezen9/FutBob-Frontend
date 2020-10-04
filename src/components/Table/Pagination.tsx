@@ -26,16 +26,17 @@ const useStyles = makeStyles(theme => ({
 }))
 
 type Props = {
-  totalCount: number
-  currentPage: number
-  onChangePage: (e: any, newPage: number) => void
+   limit?: number,
+   totalCount: number
+   currentPage: number
+   onChangePage: (e: any, newPage: number) => void
 }
 
-const CondexoPagination = (props: Props) => {
-  const { totalCount = 20, currentPage = 1, onChangePage } = props
+const FutbobPagination = (props: Props) => {
+  const { limit = 10, totalCount = 10, currentPage = 1, onChangePage } = props
   const classes = useStyles()
 
-  const count = useMemo(() => Math.ceil(totalCount / 20), [totalCount])
+  const count = useMemo(() => Math.ceil(totalCount / limit), [totalCount])
 
   return (
     <div className={classes.root}>
@@ -53,4 +54,4 @@ const CondexoPagination = (props: Props) => {
   )
 }
 
-export default React.memo(CondexoPagination)
+export default React.memo(FutbobPagination)

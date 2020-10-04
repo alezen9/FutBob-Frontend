@@ -1,5 +1,5 @@
 import useSWR, { cache, trigger, mutate as mutateCache } from 'swr'
-import produce, { Draft } from 'immer'
+import produce from 'immer'
 import { useConfigStore } from '@_zustand/configStore'
 import { useEffect, useCallback, useState } from 'react'
 import { Player } from '@_entities/Player'
@@ -71,21 +71,6 @@ export const useSWRUser = <T extends MoreOptions>(options?: T) => {
         draft.futsalPlayer = futsalPlayer
       }, false)
       mutateCache([SwrKey.PLAYER, _player._id], _player, false)
-      mutateCache(SwrKey.PLAYERS, ((current: Player[]|undefined) => {
-        if(!current) return current
-        const { edited, data } = current.reduce((acc, val) => {
-          if(val._id === _player._id) {
-            acc.data.push(_player as Player)
-            acc.edited = true
-          }
-          else {
-            acc.data.push(val)
-          }
-          return acc
-        }, { edited: false, data: [] })
-        if(edited) return data
-        return [...data, _player as Player]
-      }), false)
       return true
     } catch(error){
       return false
@@ -103,10 +88,6 @@ export const useSWRUser = <T extends MoreOptions>(options?: T) => {
       if (!deleted) throw new Error()
       mutateThis(draft => {
         draft.futsalPlayer = null
-      }, false)
-      mutateCache(SwrKey.PLAYERS, (current: Player[]|undefined) => {
-        if(current) current.splice(current.findIndex(player => player._id === get(data, 'futsalPlayer._id', null)), 1)
-        return current
       }, false)
         return true
       } catch (error) {

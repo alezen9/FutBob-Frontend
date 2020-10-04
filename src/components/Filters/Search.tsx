@@ -42,7 +42,7 @@ export const SearchBox = React.memo((props: SearchBoxProps) => {
 
    const handleSubmit = useCallback(({ searchText }) => {
       if(onSearchSubmit) onSearchSubmit(searchText)
-      if(!excludeSearchBoxFromFilters) formik.handleSubmit
+      if(!excludeSearchBoxFromFilters) formik.handleSubmit()
    }, [onSearchSubmit, formik.handleSubmit])
 
   const localFormik = useFormik({

@@ -217,8 +217,7 @@ const MyApp = props => {
         {isFirstRun
           ? <SplashScreen />
           : <div className={classes.wrapper}>
-            {/* {isLoading && !isSmallScreen && <ProgressBar />} */}
-            <NProgress />
+            {isLoading && !isSmallScreen ? <ProgressBar /> : <NProgress />}
             {isLogged && <>{isSmallScreen ? <Navbar isLoading={isLoading} /> : <Menu />}</>}
             <div {...isLogged && { className: classes.content }}>
               {isLogged && <Title />}

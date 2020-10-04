@@ -33,3 +33,9 @@ export interface MoreOptions {
   revalidateOnMount?: boolean
   shouldRetryOnError?: boolean
 }
+
+export interface ListOf<T> {
+    totalCount: number,
+    result: T[],
+    currentCount: number|undefined
+}

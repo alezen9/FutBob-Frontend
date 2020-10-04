@@ -32,7 +32,7 @@ export const sections: Section[] = [
   {
     title: 'Players',
     icon: <JerseyIcon />,
-    path: '/players'
+    path: '/players?page=1'
   },
   // {
   //   title: 'Fields',

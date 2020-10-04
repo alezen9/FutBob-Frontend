@@ -91,8 +91,8 @@ class FutBobServer {
     window.localStorage.setItem(this.localStorageToken, token)
   }
 
-  hasToken () {
-    return get(this._self, 'defaults.headers.common.Authorization', undefined) || (process.browser && window.localStorage.getItem(this.localStorageToken))
+  hasToken (): boolean {
+    return !!(get(this._self, 'defaults.headers.common.Authorization', undefined) || (process.browser && window.localStorage.getItem(this.localStorageToken)))
   }
 
   /**
@@ -262,7 +262,7 @@ class FutBobServer {
    * @param {any?} fields.user
    */
   async player_getPlayers (playerFilters, fields: GQL_PlayerType) { // eslint-disable-line
-    const strFields = FieldsToQuery(fields)
+    const strFields = FieldsToQuery(fields, true)
     const query = `
     query {
         getPlayers(playerFilters: ${paramsToString(playerFilters)}) ${strFields}

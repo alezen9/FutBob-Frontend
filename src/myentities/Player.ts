@@ -5,8 +5,7 @@ export enum PlayerPositionFutsal {
    FutsalBack,
    FutsalLeftWing,
    FutsalRightWing,
-   FutsalForward,
-   Goalkeeper
+   FutsalForward
 }
 
 export enum PlayerPosition {

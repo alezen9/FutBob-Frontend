@@ -216,7 +216,9 @@ const FormikInput = (props: Props) => {
     case 'select':
       const onChangeSelect = (e, d) => {
         if (props.multiple) {
-          const _v = { value: d.props.value, label: get(d, 'props.children.props.children.props.label', '-') }
+           const __value = d.props.value
+           const __label = get(d, 'props.children.props.children.props.label', get(d, 'props.children.props.children', '-'))
+          const _v = { value: __value, label: __label }
           if (_v.value === -1) {
             props.setFieldTouched(name, true, false)
             props.setFieldValue(name, [_v])
@@ -258,19 +260,18 @@ const FormikInput = (props: Props) => {
       )
     case 'autocomplete':
       const onChangeAutocomplete = (e, d) => {
-        const { component, ...rest } = d || {}
-        if (get(d, 'value', null)) {
-          props.setFieldTouched(name, true, false)
-          props.setFieldValue(name, rest)
-        } else if (!get(d, 'value', null)) {
-          props.setFieldTouched(name, true, false)
+        if (![undefined, null].includes(true)) {
+          props.setFieldValue(name, d)
+            .then(() => props.setFieldTouched(name, true, false))
+        } else {
           props.setFieldValue(name, props.multiple ? [] : null)
+            .then(() => props.setFieldTouched(name, true, false))
         }
       }
 
       const handleChipDeleteAutoCompleteMultiple = (v) => () => {
-        props.setFieldTouched(name, true, false)
         props.setFieldValue(name, [...get(values, name, []).filter(val => val.value !== v)])
+         .then(() => props.setFieldTouched(name, true, false))
       }
 
       const renderChipsAutoCompleteMultiple = () => get(values, name, []).map((chip, i) => {

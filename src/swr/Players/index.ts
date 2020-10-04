@@ -8,20 +8,20 @@ import { apiInstance } from 'src/SDK'
 import { DirectMutationImmer, MoreOptions, mutateDraft, stateSelector, SwrKey } from '@_swr/helpers'
 import swrPlayersFetchers from './fetchers'
 
-export const useSWRPlayers = <T extends MoreOptions>(options?: T) => {
-  const { fromCache = true, ...restOfOpts } = options || {}
+interface PlayersMoreOptions extends MoreOptions {
+   filters?: object
+}
+
+export const useSWRPlayers = <T extends PlayersMoreOptions>(options?: T) => {
+  const { filters = {}, ...restOfOpts } = options || {}
   const hasToken = apiInstance.hasToken()
+  const filtersKey = JSON.stringify(filters)
   const { setIsLoading } = useConfigStore(stateSelector)
-  const initialData = fromCache
-    ? cache.get(SwrKey.PLAYERS)
-    : undefined
-  const [revalidateOnMount, setRevalidateOnMount] = useState(fromCache && initialData ? false : hasToken)
   const { data, mutate, isValidating } = useSWR(
-    SwrKey.PLAYERS,
+    [SwrKey.PLAYERS, filtersKey],
     swrPlayersFetchers.playersFetcher,
     {
-      initialData,
-      revalidateOnMount,
+      revalidateOnMount: hasToken,
       shouldRetryOnError: false,
       revalidateOnFocus: false,
       ...restOfOpts || {}
@@ -29,23 +29,13 @@ export const useSWRPlayers = <T extends MoreOptions>(options?: T) => {
   )
 
   useEffect(() => {
-    if(data && !revalidateOnMount) setRevalidateOnMount(hasToken)
-  }, [(data || []).length, revalidateOnMount, hasToken])
-
-  useEffect(() => {
     setIsLoading(isValidating)
   }, [isValidating])
 
   const triggerThis = useCallback(
     (shouldRevalidate: boolean = true) => {
-      return trigger(SwrKey.PLAYERS, shouldRevalidate)
+      return trigger([SwrKey.PLAYERS, filtersKey], shouldRevalidate)
     }, [trigger])
-
-  const mutateThis = useCallback(
-    (data: Player[]|DirectMutationImmer<Player[]>, shouldRevalidate: boolean = false) => {
-      if(typeof data === 'function') return mutate(produce(data), shouldRevalidate)
-      else return mutate(produce(mutateDraft(data)), shouldRevalidate)
-    }, [mutate])
 
   const deletePlayer = useCallback(
     async (playerId: string, userId: string): Promise<boolean> => {
@@ -63,21 +53,19 @@ export const useSWRPlayers = <T extends MoreOptions>(options?: T) => {
           draft.futsalPlayer = null
         }), false)
       }
-      mutateCache(SwrKey.PLAYERS, (current: Player[]|undefined) => {
-        if(current) current.splice(current.findIndex(player => player._id === playerId), 1)
-        return current
-      }, false)
+      triggerThis()
         return true
       } catch (error) {
         return false
       }
-    }, [mutateThis])
+    }, [triggerThis])
 
   return {
-    list: data as Player[] || [] as Player[],
-    mutate: mutateThis,
+    list: get(data, 'result', []) as Player[] || [] as Player[],
+    totalCount: get(data, 'totalCount', 0),
     trigger: triggerThis,
-    deletePlayer
+    deletePlayer,
+    isValidating
   }
 }
 
@@ -155,21 +143,6 @@ export const useSWRPlayer = <T extends MoreOptions>(_id: string|null|undefined, 
           draft.futsalPlayer = futsalPlayer
         }), false)
       }
-      mutateCache(SwrKey.PLAYERS, (current: Player[]|undefined) => {
-        if(!current) return current
-        const { edited, data } = current.reduce((acc, val) => {
-          if(val._id === _player._id) {
-            acc.data.push(_player as Player)
-            acc.edited = true
-          }
-          else {
-            acc.data.push(val)
-          }
-          return acc
-        }, { edited: false, data: [] })
-        if(edited) return data
-        return [...data, _player as Player]
-      }, false)
       return _player._id
     } catch(error){
       return false
@@ -192,10 +165,6 @@ export const useSWRPlayer = <T extends MoreOptions>(_id: string|null|undefined, 
           draft.futsalPlayer = null
         }), false)
       }
-      mutateCache(SwrKey.PLAYERS, (current: Player[]|undefined) => {
-        if(current) current.splice(current.findIndex(player => player._id === get(data, '_id', null)), 1)
-        return current
-      }, false)
         return true
       } catch (error) {
         return false

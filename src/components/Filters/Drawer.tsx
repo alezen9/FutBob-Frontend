@@ -67,9 +67,15 @@ const FiltersDrawer = (props: Props) => {
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
     const handleSubmit = useCallback(() => {
-       formik.handleSubmit()
-       toggleDrawer()
+      toggleDrawer()
+      formik.handleSubmit()
     }, [formik.handleSubmit, toggleDrawer])
+
+   const handleReset = useCallback(() => {
+      toggleDrawer()
+      formik.handleReset()
+      formik.handleSubmit()
+    }, [formik.handleSubmit, formik.handleReset, toggleDrawer])
 
   return (
     <SwipeableDrawer
@@ -109,7 +115,7 @@ const FiltersDrawer = (props: Props) => {
                       ? <IconButton color='primary'>
                            <BackspaceRoundedIcon />
                         </IconButton>
-                     : <Button onClick={formik.handleReset} variant='outlined' color='primary'>Reset</Button>}
+                     : <Button onClick={handleReset} variant='outlined' color='primary'>Reset</Button>}
                     </Grid>
                     <Divider style={{ margin: 'auto .5em', height: '55%' }} orientation="vertical" flexItem />
                     <Grid item>

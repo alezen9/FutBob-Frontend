@@ -13,6 +13,7 @@ import FormikInput from '@_components/FormikInput'
 import { getMeanScoreField } from '@_components/FormikInput/PlayerScoreInputs/SingleScore'
 import { Player, PlayerPosition, PlayerPositionFutsal, PlayerScore } from '@_entities/Player'
 import { Filter } from '@_components/Filters/Inputs'
+import { CountryOptions } from '@_utils/nationalities'
 
 export const headers = [
   { name: 'Name', style: { minWidth: 230 } },
@@ -75,15 +76,24 @@ const getPlayersPositionLabelListString = positions => {
 
 export const playerFilters: Filter[] = [
   {
-    type: 'select',
-    name: 'state',
-    label: 'Physical state',
-    options: playerPhysicalStateOptions
+   type: 'select',
+   name: 'states',
+   label: 'Physical state',
+   options: playerPhysicalStateOptions,
+   multiple: true
   },
   {
    type: 'select',
-    name: 'position',
-    label: 'Position',
-    options: getOptionsByEnum(PlayerPositionFutsal)
+   name: 'positions',
+   label: 'Position',
+   options: getOptionsByEnum(PlayerPositionFutsal),
+   multiple: true
+  },
+  {
+   type: 'autocomplete',
+   name: 'countries',
+   label: 'Nationality',
+   options: CountryOptions,
+   multiple: true
   }
 ]

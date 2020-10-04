@@ -1,6 +1,6 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Button, Grid, Typography } from '@material-ui/core'
-import { get, isEqual } from 'lodash'
+import { get, isEmpty, isEqual } from 'lodash'
 import { useConfigStore } from '@_zustand/configStore'
 import { ServerMessage } from '@_utils/serverMessages'
 import FutBobTable from '@_components/Table'
@@ -17,20 +17,22 @@ import { useSWRPlayers } from '@_swr/Players'
 import { SwrKey } from '@_swr/helpers'
 import Filters from '@_components/Filters'
 import { Action } from '@_components/Filters/Actions'
+import FutbobPagination from '@_components/Table/Pagination'
 
 const stateSelector = (state: ConfigStore) => ({
   openSnackbar: state.openSnackbar,
   setIsLoading: state.setIsLoading
 })
 
+const LIMIT = 10
+
 const PlayersContainer = () => {
-  const { list = [], deletePlayer } = useSWRPlayers()
+  const [_filters, setFilters] = useState({})
+  const [currentPage, setCurrentPage] = useState(1)
+  const [currentItem, setCurrentItem]: [Player|null, any] = useState(null)
+   const { list = [], totalCount, deletePlayer, isValidating } = useSWRPlayers({ filters: { ..._filters, pagination: { skip: (currentPage - 1) * LIMIT, limit: LIMIT } } })
   const { item: userConnectedItem} = useSWRUser()
   const { openSnackbar, setIsLoading } = useConfigStore(stateSelector)
-
-  const [_filters, setFilters] = useState({})
-  const [searchText, setSearchText] = useState('')
-  const [currentItem, setCurrentItem]: [Player|null, any] = useState(null)
   const router = useRouter()
 
   const playerName = useMemo(() => {
@@ -80,15 +82,26 @@ const PlayersContainer = () => {
       await router.push('/players/create')
     }, [])
 
-  const tableData = useMemo(() => {
-    const data = list.map(getPlayerDataRow({ goToDetails, openDialog, userConnectedId: get(userConnectedItem, '_id', null) }))
-    return searchText
-      ? data.filter(({ fullName }) => (`${fullName}`.toLowerCase()).includes(searchText.toLowerCase()))
-      : data
-  }, [JSON.stringify(list), goToDetails, searchText, openDialog, get(userConnectedItem, '_id', null)])
+  const handleChangePage = useCallback(
+      (e: any, newPage: number) => {
+         setCurrentPage(newPage)
+         const newPath = `${router.pathname}?page=${newPage}`
+         router.replace(newPath)
+   }, [router])
 
 
-  const actions: Action[] = [
+   const onFiltersSubmit = useCallback(
+      (values) => {
+         handleChangePage(null, 1)
+         setFilters(values)
+   }, [])
+
+  useEffect(() => {
+     if(isEmpty(_filters)) setCurrentPage
+  }, [JSON.stringify(_filters)])
+
+
+  const actions: Action[] = useMemo(() => [
     {
       type: 'button',
       variant: 'outlined',
@@ -96,25 +109,34 @@ const PlayersContainer = () => {
       title: 'Create',
       onClick: goToCreate,
     }
-  ]
+  ], [goToCreate])
+
+   const tableData = useMemo(() => {
+      const data = list.map(getPlayerDataRow({ goToDetails, openDialog, userConnectedId: get(userConnectedItem, '_id', null) }))
+      return data
+  }, [JSON.stringify(list), goToDetails, openDialog, get(userConnectedItem, '_id', null)])
 
   return (
     <>
       <Filters
-      withSearch
-      onSearchSubmit={v => setSearchText(v)}
-      // excludeSearchBoxFromFilters
-      actions={actions}
-      filters={playerFilters}
-      formikConfig={{
-        
-      }}
+         withSearch
+         actions={actions}
+         filters={playerFilters}
+         formikConfig={{
+         onSubmit: onFiltersSubmit
+         }}
       />
       <FutBobTable
-        withActions
-        isFetching={false}
-        headers={headers}
-        data={tableData}
+         withMask
+         isFetching={isValidating}
+         withActions
+         headers={headers}
+         data={tableData}
+         pagination={<FutbobPagination
+            totalCount={totalCount}
+            currentPage={currentPage}
+            onChangePage={handleChangePage}
+         />}
       />
       <CustomDialog
         open={!!currentItem}

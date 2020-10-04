@@ -8,6 +8,7 @@ import Actions, { Action } from './Actions'
 import { FutBobPalette } from '@_palette'
 import { Filter } from './Inputs'
 import cleanDeep from 'clean-deep'
+import { formatValuesFormikFilters } from './helpers'
 
 const useStyles = makeStyles(theme => ({
 	mainContainer: {
@@ -26,7 +27,8 @@ type Props = {
     excludeSearchBoxFromFilters?: boolean
 	 actions?: Action[]
 	 filters?: Filter[]
-	 formikConfig?: Partial<FormikConfig<FormikValues>>
+    formikConfig?: Partial<FormikConfig<FormikValues>>
+    autoFormatValuesOnSubmit?: boolean
 }
 
 const Filters = (props: Props) => {
@@ -37,8 +39,10 @@ const Filters = (props: Props) => {
       excludeSearchBoxFromFilters = false,
 		filters = [],
 		actions = [],
-		formikConfig = {}
-	} = props
+      formikConfig = {},
+      autoFormatValuesOnSubmit = true
+   } = props
+   const { onSubmit, ...restOfConfig } = formikConfig
 	const classes = useStyles()
    const [isDrawerOpen, setIsDrawerOpen] = useState(false)
    const [numActiveFilters, setNumActiveFilters] = useState(0)
@@ -46,12 +50,20 @@ const Filters = (props: Props) => {
 	const toggleDrawer = useCallback((e?: any) => {
 		if (e && e.type === 'keydown' && ((e as React.KeyboardEvent).key === 'Tab' || (e as React.KeyboardEvent).key === 'Shift')) return
 		setIsDrawerOpen(state => !state)
-	}, [])
+   }, [])
+   
+   const localOnSubmit = useCallback((values, helpers) => {
+      let _values = autoFormatValuesOnSubmit
+         ? formatValuesFormikFilters(values)
+         : values
+      if(onSubmit) return onSubmit(_values, helpers)
+      else console.log(_values)
+   }, [onSubmit, autoFormatValuesOnSubmit])
 
 	const formik = useFormik({
 		initialValues: {},
-		onSubmit: vals => console.log(vals),
-		...formikConfig
+		onSubmit: localOnSubmit,
+		...restOfConfig
    })
    
    useEffect(() => {

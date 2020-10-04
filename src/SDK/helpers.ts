@@ -1,6 +1,8 @@
 import { isObject } from 'lodash'
 
-export const FieldsToQuery = (fields: object): string => `{ ${FieldsToQueryHelper(fields)}}`
+export const FieldsToQuery = (fields: object, isList: boolean = false): string => isList
+   ? `{ totalCount, result { ${FieldsToQueryHelper(fields)}} }`
+   : `{ ${FieldsToQueryHelper(fields)}}`
 
 const FieldsToQueryHelper = (o: object) => {
   let str = ''

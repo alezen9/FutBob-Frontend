@@ -314,6 +314,6 @@ export const getMultipleInitValue = (vals = [], options = []) => {
   }, []))
 }
 
-export const getOptionsByEnum = (entity): OptionType[] => compact(map(entity, (el, i) => el && typeof el === 'string'
-   ? { label: decamelize(el), value: parseInt(i) }
+export const getOptionsByEnum = (entity): OptionType[] => compact(map(entity, (el, i) => !isNaN(el)
+   ? { label: decamelize(i), value: parseInt(el) }
    : null))
