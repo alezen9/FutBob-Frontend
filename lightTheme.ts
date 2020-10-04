@@ -254,14 +254,6 @@ const lightTheme = createMuiTheme({
         height: 'none'
       }
     },
-    MuiTypography: {
-      // warning, scritta piccola (ad esempio in fondo ad una card)
-      caption: {
-        fontSize: 13,
-        color: typographyGrey,
-        width: '80%'
-      }
-    },
     MuiTableHead: {
       root: {
         backgroundColor: 'rgba(0,0,0,.1)'

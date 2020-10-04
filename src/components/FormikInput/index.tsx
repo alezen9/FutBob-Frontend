@@ -362,7 +362,7 @@ const FormikInput = (props: Props) => {
               error={!!get(errors, name, false)}
               variant={variant}
             />
-            {get(errors, name, false) && <FormHelperText margin='dense' style={{ color: 'red' }} id={`${id}_error`}>{errors[name]}</FormHelperText>}
+            {get(errors, name, false) && <FormHelperText margin='dense' style={{ color: 'red' }} id={`${id}_error`}>{get(errors, name, '')}</FormHelperText>}
           </FormControl>
         </GridWrapper>
       )
@@ -395,7 +395,7 @@ const FormikInput = (props: Props) => {
           multiline={multiline}
           rows={rows}
         />
-        {get(errors, name, false) && <FormHelperText margin='dense' style={{ color: 'red' }} id={`${id}_error`}>{errors[name]}</FormHelperText>}
+        {get(errors, name, false) && <FormHelperText margin='dense' style={{ color: 'red' }} id={`${id}_error`}>{get(errors, name, '')}</FormHelperText>}
       </FormControl>
     </GridWrapper>
   )

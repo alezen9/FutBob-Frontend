@@ -20,6 +20,7 @@ import { ConfigStore } from '@_zustand/helpers'
 import { PlayerType } from '@_entities/Player'
 import { useSWRUser } from '@_swr/User'
 import { useSWRPlayer } from '@_swr/Players'
+import { createEditPlayerValidationSchema } from './validations'
 
 const stateSelector = (state: ConfigStore) => ({
     setIsLoading: state.setIsLoading,
@@ -117,6 +118,7 @@ const PlayerDetail = () => {
       score: get(playerItem, 'score', initialScoreValues)
     },
     enableReinitialize: true,
+    validationSchema: createEditPlayerValidationSchema,
     onSubmit
   })
 

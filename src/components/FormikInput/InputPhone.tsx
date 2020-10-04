@@ -82,7 +82,7 @@ const InputPhone = (props: Props) => {
         disabled={disabled}
         name={name}
       />
-      {!isEmpty(get(errors, name, false)) && <FormHelperText margin='dense' style={{ color: 'red', margin: '12px 14px 0 14px' }} id={`${uniqueId('phone-')}_error`}>{get(errors, name, null)}</FormHelperText>}
+      {!isEmpty(get(errors, name, false)) && <FormHelperText margin='dense' style={{ color: 'red', margin: '12px 14px 0 14px' }} id={`${uniqueId('phone-')}_error`}>{get(errors, name, '')}</FormHelperText>}
     </>
   )
 }

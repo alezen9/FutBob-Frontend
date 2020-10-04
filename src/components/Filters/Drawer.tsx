@@ -86,7 +86,6 @@ const FiltersDrawer = (props: Props) => {
       disableBackdropTransition={!iOS}
       disableDiscovery
       disableSwipeToOpen
-      transitionDuration={80}
       classes={{
           paper: classes.paper
       }}

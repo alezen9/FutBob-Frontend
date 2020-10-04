@@ -38,7 +38,7 @@ const Player = () => {
   return (
     <PageTransition>
       <>
-        <GoBack route='/players' />
+        <GoBack route='/players?page=1' />
         <PlayerDetail />
       </>
     </PageTransition>

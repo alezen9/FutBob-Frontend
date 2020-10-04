@@ -21,7 +21,7 @@ const CreatePlayer = props => {
   return (
     <PageTransition>
       <>
-        <GoBack route='/players' />
+        <GoBack route='/players?page=1' />
         <PlayerDetail
           {...props}
           isMounted={isMounted.current} />
