@@ -261,6 +261,18 @@ const darkTheme = createMuiTheme({
         }
       }
     },
+    // @ts-ignore
+    MuiPaginationItem: {
+      root: {
+        color: typographyGrey,
+        '&$disabled': {
+          color: typographyGrey
+        }
+      },
+      outlined: {
+        border: '1px solid rgba(255,255,255,.1)'
+      }
+    },
     MuiDialogTitle: {
       root: {
         color: subtitleGrey,
