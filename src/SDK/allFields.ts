@@ -1,4 +1,4 @@
-import { GQL_PlayerType, GQL_UserType, GQL_ScoreType } from './types'
+import { GQL_PlayerType, GQL_UserType, GQL_ScoreType, GQL_FieldType } from './types/generic'
 
 const allScoreFields: GQL_ScoreType = {
     pace: {
@@ -79,4 +79,20 @@ export const allPlayerFields: GQL_PlayerType = {
     positions: true,
     state: true,
     score: allScoreFields
+}
+
+export const allFieldFields: GQL_FieldType = {
+    _id: true,
+    state: true,
+    name: true,
+    cost: true,
+    type: true,
+    location: {
+       type: true,
+       coordinates: true
+    },
+    measurements: {
+       width: true,
+       height: true
+    }
 }

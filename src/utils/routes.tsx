@@ -34,11 +34,11 @@ export const sections: Section[] = [
     icon: <JerseyIcon />,
     path: '/players?page=1'
   },
-  // {
-  //   title: 'Fields',
-  //   icon: <FieldIcon />,
-  //   path: '/fields'
-  // },
+  {
+    title: 'Fields',
+    icon: <FieldIcon />,
+    path: '/fields'
+  },
   // {
   //   title: 'Matches',
   //   icon: <SportsSoccerRoundedIcon />,

@@ -9,5 +9,6 @@ export const ServerMessage = Object.freeze({
   player_user_not_specified: 'User not specified!',
   player_update_not_possible: 'Player update is not possible',
   player_fields_required: 'Positions and physical state are required!',
+  field_update_not_possible: 'Field update is not possible',
   generic: 'Server fu***d up...'
 })

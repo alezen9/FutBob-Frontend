@@ -1,23 +1,22 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Button, Grid, Typography } from '@material-ui/core'
-import { get, isEmpty, isEqual } from 'lodash'
+import { Button, Typography } from '@material-ui/core'
+import { get, isEmpty } from 'lodash'
 import { useConfigStore } from '@_zustand/configStore'
 import { ServerMessage } from '@_utils/serverMessages'
 import FutBobTable from '@_components/Table'
-import { getPlayerDataRow, headers, playerFilters } from './helpers'
+import { fieldsFilters, getFieldDataRow, headers } from './helpers'
 import { useRouter } from 'next/router'
 import AddRoundedIcon from '@material-ui/icons/AddRounded'
 import CustomDialog from '@_components/Dialog'
 import { FutBobPalette } from '@_palette'
 import { cache } from 'swr'
-import { Player } from '@_entities/Player'
 import { ConfigStore } from '@_zustand/helpers'
-import { useSWRUser } from '@_swr/User'
-import { useSWRPlayers } from '@_swr/Players'
 import { SwrKey } from '@_swr/helpers'
 import Filters from '@_components/Filters'
 import { Action } from '@_components/Filters/Actions'
 import FutbobPagination from '@_components/Table/Pagination'
+import { useSWRFields } from '@_swr/Fields'
+import { Field } from '@_entities/Fields'
 
 const stateSelector = (state: ConfigStore) => ({
   openSnackbar: state.openSnackbar,
@@ -26,19 +25,13 @@ const stateSelector = (state: ConfigStore) => ({
 
 const LIMIT = 10
 
-const PlayersContainer = () => {
+const FieldsContainer = () => {
   const [_filters, setFilters] = useState({})
   const [currentPage, setCurrentPage] = useState(1)
-  const [currentItem, setCurrentItem]: [Player|null, any] = useState(null)
-   const { list = [], totalCount, deletePlayer, isValidating } = useSWRPlayers({ filters: { ..._filters, pagination: { skip: (currentPage - 1) * LIMIT, limit: LIMIT } } })
-  const { item: userConnectedItem} = useSWRUser()
+  const [currentItem, setCurrentItem] = useState<Field|null>(null)
+  const { list = [], totalCount, deleteField, isValidating } = useSWRFields({ filters: { ..._filters, pagination: { skip: (currentPage - 1) * LIMIT, limit: LIMIT } } })
   const { openSnackbar, setIsLoading } = useConfigStore(stateSelector)
   const router = useRouter()
-
-  const playerName = useMemo(() => {
-    if(get(currentItem, 'user._id', null) === userConnectedItem._id) return <span style={{ color: FutBobPalette.darkRed }}>yourself</span>
-    return `${get(currentItem, 'user.surname', '')} ${get(currentItem, 'user.name', '')}`
-  }, [currentItem, userConnectedItem._id])
 
   const openDialog = useCallback(
     item => () => {
@@ -54,11 +47,11 @@ const PlayersContainer = () => {
     async () => {
       setIsLoading(true)
       try {
-        const done = await deletePlayer(currentItem._id, currentItem.user._id)
+        const done = await deleteField(currentItem._id)
         if (!done) throw new Error()
         openSnackbar({
           variant: 'success',
-          message: 'Player deleted successfully!'
+          message: 'Field deleted successfully!'
         })
       } catch (error) {
         openSnackbar({
@@ -68,18 +61,18 @@ const PlayersContainer = () => {
       }
       closeDialog()
       setIsLoading(false)
-    }, [deletePlayer, currentItem, closeDialog, setIsLoading])
+    }, [deleteField, currentItem, closeDialog, setIsLoading])
 
 
   const goToDetails = useCallback(
     item => async () => {
-      cache.set([SwrKey.PLAYER, item._id], item)
-      await router.push('/players/[id]', `/players/${item._id}`)
+      cache.set([SwrKey.FIELD, item._id], item)
+      await router.push('/fields/[id]', `/fields/${item._id}`)
     }, [])
 
   const goToCreate = useCallback(
     async () => {
-      await router.push('/players/create')
+      await router.push('/fields/create')
     }, [])
 
   const handleChangePage = useCallback(
@@ -112,18 +105,19 @@ const PlayersContainer = () => {
   ], [goToCreate])
 
    const tableData = useMemo(() => {
-      const data = list.map(getPlayerDataRow({ goToDetails, openDialog, userConnectedId: get(userConnectedItem, '_id', null) }))
+      const data = list.map(getFieldDataRow({ goToDetails, openDialog }))
       return data
-  }, [JSON.stringify(list), goToDetails, openDialog, get(userConnectedItem, '_id', null)])
+  }, [JSON.stringify(list), goToDetails, openDialog])
 
   return (
     <>
       <Filters
          withSearch
          actions={actions}
-         filters={playerFilters}
+         filters={fieldsFilters}
+         autoFormatValuesOnSubmit
          formikConfig={{
-         onSubmit: onFiltersSubmit
+            onSubmit: onFiltersSubmit
          }}
       />
       <FutBobTable
@@ -142,7 +136,7 @@ const PlayersContainer = () => {
         open={!!currentItem}
         title='Attention!'
         fullScreen={false}
-        content={<Typography >You are about to delete <span style={{ fontWeight: 'bold' }}>{playerName}</span>, continue and delete?</Typography>}
+        content={<Typography >You are about to delete <span style={{ fontWeight: 'bold' }}>{get(currentItem, 'name', 'Unknown field')}</span>, continue and delete?</Typography>}
         actions={
           <Button
             style={{ minWidth: 150, backgroundColor: FutBobPalette.darkRed }}
@@ -157,4 +151,4 @@ const PlayersContainer = () => {
   )
 }
 
-export default React.memo(PlayersContainer)
+export default React.memo(FieldsContainer)

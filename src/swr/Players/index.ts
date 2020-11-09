@@ -7,6 +7,7 @@ import { get, isEqual } from 'lodash'
 import { apiInstance } from 'src/SDK'
 import { DirectMutationImmer, MoreOptions, mutateDraft, stateSelector, SwrKey } from '@_swr/helpers'
 import swrPlayersFetchers from './fetchers'
+import { UpdatePlayerInput } from 'src/SDK/types/Players'
 
 interface PlayersMoreOptions extends MoreOptions {
    filters?: object
@@ -129,7 +130,7 @@ export const useSWRPlayer = <T extends MoreOptions>(_id: string|null|undefined, 
         let playerUpdated = true
         let userUpdated = true
         if(!isEqual(thisFutsalPlayer, futsalPlayer)){
-          playerUpdated = await apiInstance.player_updatePlayer(bodyUpdate)
+          playerUpdated = await apiInstance.player_updatePlayer(bodyUpdate as UpdatePlayerInput)
         }
         if(!isEqual(thisUser, user)){
           userUpdated = await apiInstance.user_updateUser(user)

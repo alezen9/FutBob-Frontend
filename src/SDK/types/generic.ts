@@ -64,3 +64,26 @@ export type GQL_PlayerType = {
     type?: boolean,
     score?: GQL_ScoreType
 }
+
+type GQL_GeoPoint = {
+   type?: boolean
+   coordinates?: boolean
+}
+
+export type GQL_FieldType = {
+   _id?: boolean
+   type?: boolean
+   name?: boolean
+   measurements?: {
+      width?: boolean
+      height?: boolean
+   },
+   state?: boolean
+   cost?: boolean
+   location?: GQL_GeoPoint
+}
+
+export type Pagination = {
+   skip?: number
+   limit?: number
+}

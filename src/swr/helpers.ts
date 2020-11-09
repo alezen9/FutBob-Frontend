@@ -5,7 +5,9 @@ import { isObject } from "lodash"
 export enum SwrKey {
   USER = 'USER',
   PLAYERS = 'PLAYERS',
-  PLAYER = 'PLAYER'
+  PLAYER = 'PLAYER',
+  FIELDS = 'FIELDS',
+  FIELD = 'FIELD'
 }
 
 

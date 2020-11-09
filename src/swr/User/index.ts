@@ -8,6 +8,7 @@ import { get } from 'lodash'
 import { apiInstance } from 'src/SDK'
 import { DirectMutationImmer, MoreOptions, mutateDraft, stateSelector, SwrKey } from '@_swr/helpers'
 import swrUserFetchers from './fetchers'
+import { UpdateUserInput } from 'src/SDK/types/Users'
 
 export const useSWRUser = <T extends MoreOptions>(options?: T) => {
   const { fromCache = true, ...restOfOpts } = options || {}
@@ -64,7 +65,7 @@ export const useSWRUser = <T extends MoreOptions>(options?: T) => {
         _player._id = playerId
       } else {
         const { type, matches, ...bodyUpdate } = futsalPlayer
-        const updated = await apiInstance.player_updatePlayer(bodyUpdate)
+        const updated = await apiInstance.player_updatePlayer(bodyUpdate as UpdateUserInput)
         if(!updated) throw new Error()
       }
       mutateThis(draft => {
