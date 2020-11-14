@@ -1,6 +1,6 @@
 import React from 'react'
 import { makeStyles, Switch } from '@material-ui/core'
-import { FutBobPalette } from '../../../palette'
+import { ZenPalette } from '../../../palette'
 import { get } from 'lodash'
 
 const useStyles = makeStyles(theme => ({
@@ -9,7 +9,7 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center'
   },
   rootCheckbox: {
-    color: FutBobPalette.typographyGrey
+    color: ZenPalette.typographyGrey
   },
   track: {
     ...theme.type === 'dark' && {

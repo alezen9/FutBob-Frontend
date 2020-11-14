@@ -5,7 +5,7 @@ import { SearchBox } from './Search'
 import FiltersDrawer from './Drawer'
 import { FormikConfig, FormikValues, useFormik } from 'formik'
 import Actions, { Action } from './Actions'
-import { FutBobPalette } from '@_palette'
+import { ZenPalette } from '@_palette'
 import { Filter } from './Inputs'
 import cleanDeep from 'clean-deep'
 import { formatValuesFormikFilters } from './helpers'
@@ -87,7 +87,7 @@ const Filters = (props: Props) => {
 					? <Grid item>
 						<IconButton onClick={toggleDrawer}>
 							<Badge badgeContent={numActiveFilters > 0 ? numActiveFilters : null} color="primary">
-								<FilterListRoundedIcon style={{color: FutBobPalette.typographyGrey}} />
+								<FilterListRoundedIcon style={{color: ZenPalette.typographyGrey}} />
 							</Badge>
 						</IconButton>
 					</Grid>

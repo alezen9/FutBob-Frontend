@@ -3,15 +3,16 @@ import { get } from 'lodash'
 import { decamelize, getOptionsByEnum } from '@_utils/helpers'
 import NavigateNextRoundedIcon from '@material-ui/icons/NavigateNextRounded'
 import DeleteForeverRoundedIcon from '@material-ui/icons/DeleteForeverRounded'
-import { Filter } from '@_components/Filters/Inputs'
 import { Field, FieldState, FieldType } from '@_entities/Fields'
+import { TableHeaderData } from '@_components/ZenTable/helpers'
+import { Filter } from '@_components/Filters/Inputs'
 
-export const headers = [
-  { name: 'Name', style: { minWidth: 230 } },
+export const headers: TableHeaderData[] = [
+  { name: 'Name', style: { minWidth: 230 }, sticky: true },
   { name: 'Type', style: { maxWidth: 70, textAlign: 'center' } },
   { name: 'Cost', style: { minWidth: 130, textAlign: 'center' } },
-  { name: 'State', style: { minWidth: 100, textAlign: 'center' } },
-  { name: 'Dimensions', style: { maxWidth: 50, textAlign: 'center' } },
+  { name: 'State', style: { minWidth: 200, textAlign: 'center' } },
+  { name: 'Dimensions', style: { maxWidth: 200, textAlign: 'center' } }
 ]
 
 export const getFieldDataRow = ({ openDialog, goToDetails }) => (fieldData: Field) => {
@@ -21,7 +22,6 @@ export const getFieldDataRow = ({ openDialog, goToDetails }) => (fieldData: Fiel
     cost: get(fieldData, 'cost', 0) / 100,
     state: decamelize(FieldState[get(fieldData, 'state', 0)]),
     dimensions: `${get(fieldData, 'measurements.height', 0)}x${get(fieldData, 'measurements.width', 0)} m`,
-
     actions: [
       {
         icon: <NavigateNextRoundedIcon />,

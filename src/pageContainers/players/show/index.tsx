@@ -9,9 +9,8 @@ import { OverallScore } from '@_icons'
 import RadarChart from '@_components/Charts/Radar'
 import { useConfigStore } from '@_zustand/configStore'
 import { ServerMessage } from '@_utils/serverMessages'
-import { FutBobPalette } from '@_palette'
+import { ZenPalette } from '@_palette'
 import { useRouter } from 'next/router'
-import CustomDialog from '@_components/Dialog'
 import { getMeanScoreField } from '@_components/FormikInput/PlayerScoreInputs/SingleScore'
 import PlayerScoreInputs from '@_components/FormikInput/PlayerScoreInputs'
 import { CountryOptions } from '@_utils/nationalities'
@@ -21,6 +20,7 @@ import { PlayerType } from '@_entities/Player'
 import { useSWRUser } from '@_swr/User'
 import { useSWRPlayer } from '@_swr/Players'
 import { createEditPlayerValidationSchema } from './validations'
+import WarningDeleteDialog from '@_components/WarningDeleteDialog'
 
 const stateSelector = (state: ConfigStore) => ({
     setIsLoading: state.setIsLoading,
@@ -132,7 +132,7 @@ const PlayerDetail = () => {
   }, [formik.values.score])
 
   const playerName = useMemo(() => {
-    if(get(playerItem, 'user._id', null) === userConnectedItem._id) return <span style={{ color: FutBobPalette.darkRed }}>yourself</span>
+    if(get(playerItem, 'user._id', null) === userConnectedItem._id) return <span style={{ color: ZenPalette.darkRed }}>yourself</span>
     return `${get(playerItem, 'user.surname', '')} ${get(playerItem, 'user.name', '')}`
   }, [playerItem, userConnectedItem._id])
 
@@ -227,7 +227,7 @@ const PlayerDetail = () => {
       <Grid item container xs={12} justify={isSmallScreen ? 'space-evenly' : 'flex-end'}>
           {playerItem._id && <Grid item>
             <Button
-              style={{ minWidth: 150, color: FutBobPalette.darkRed, marginRight: '1.5em', borderColor: FutBobPalette.darkRed }}
+              style={{ minWidth: 150, color: ZenPalette.darkRed, marginRight: '1.5em', borderColor: ZenPalette.darkRed }}
               disabled={formik.isSubmitting}
               onClick={() => setOpenConfirmDialog(true)}
               variant='outlined'>
@@ -246,20 +246,11 @@ const PlayerDetail = () => {
           </Grid>
         </Grid>
       </Grid>
-      <CustomDialog
-        open={!!openConfirmDialog}
-        fullScreen={false}
-        title='Attention!'
-        content={<Typography >You are about to delete <span style={{ fontWeight: 'bold' }}>{playerName}</span>, continue and delete?</Typography>}
-        actions={
-          <Button
-            style={{ minWidth: 150, backgroundColor: FutBobPalette.darkRed }}
-            onClick={onDelete}
-            variant='contained'>
-          Delete
-          </Button>
-        }
-        onClose={() => setOpenConfirmDialog(false)}
+      <WarningDeleteDialog
+         open={!!openConfirmDialog}
+         text={<>You are about to delete <span style={{ fontWeight: 'bold' }}>{playerName}</span>, continue and delete?</>}
+         onClose={() => setOpenConfirmDialog(false)}
+         onDelete={onDelete}
       />
     </>
   )

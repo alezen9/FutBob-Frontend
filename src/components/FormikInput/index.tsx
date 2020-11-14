@@ -14,8 +14,14 @@ import InputSwitch from './InputSwitch'
 import moment from 'moment'
 import InputAutocomplete from './InputAutocomplete'
 import InputSlider from './InputSlider'
+import { ZenPalette } from '@_palette'
 
 const useStyles = makeStyles(theme => ({
+  gridWrapper: {
+    '& textarea': {
+      overflow: 'auto'
+    }
+  },
   formControl: {
     width: '100%',
     marginBottom: 10
@@ -23,11 +29,19 @@ const useStyles = makeStyles(theme => ({
   textField: {
     width: '100%'
   },
-  chipClass: {
+  checkSwitchLabel: {
+    fontSize: '.85em'
+  },
+  chipClass: (props: any) => ({
     margin: '.5em',
     borderRadius: 5,
-    maxWidth: 'calc(100% - 1em)'
-  }
+    maxWidth: 'calc(100% - 1em)',
+    opacity: .9,
+    ...props.fullWidthChip && {
+      width: '100%',
+      justifyContent: 'space-between'  
+    }
+  })
 }))
 
 const labelPlacementAccepted = ['top', 'bottom', 'start', 'end']
@@ -42,7 +56,7 @@ type GridWrapperProps = {
   xl?: GridSize
   container?: boolean
   spacing?: GridSpacing
-  style?: any
+  gridStyle?: any
   children?: any | any[]
 }
 
@@ -59,13 +73,17 @@ export type FormikEssentials = {
   setFieldTouched: any
   setFieldValue: any
   setFieldError: any
+  setValues?: any
+  handleSubmit?: any
+  setTouched?: any
+  resetForm?: any
 }
 
 
 type Props = FormikEssentials & GridWrapperProps & {
   id?: any
   name: string
-  label: string
+  label: any
   type?: 'text'|'password'|'phone'|'checkbox'|'switch'|'select'|'autocomplete'|'asyncAutocomplete'|'date'|'address'|'slider'
   handleChange?: any
   helperText?: string
@@ -80,18 +98,24 @@ type Props = FormikEssentials & GridWrapperProps & {
   labelPlacement?: 'bottom'|'top'|'end'|'start'
   inputProps?: any
   multiple?: boolean
-  onSearchText?: (v: string) => void
+  onSearchText?: (v: string) => Promise<OptionType[]>
   loading?: boolean
   sortByLabel?: boolean
   autoWidth?: boolean
   options?: OptionType[]
   large?: boolean
+  showExpandButton?: boolean
+  icon?: React.ReactNode
+  checkedIcon?: React.ReactNode
+  fullWidthChip?: boolean
+  valuesToexcludeFromOptions?: string[]
+  placeholder?: string
 }
 
 export type FormikInputProps = Props
 
 const FormikInput = (props: Props) => {
-  const { formControl, textField, chipClass } = useStyles()
+  const { formControl, textField, chipClass, checkSwitchLabel } = useStyles({ fullWidthChip: !!props.fullWidthChip })
   const [show, toggleShow] = useState(false)
   const {
     id = `${props.name}_${Math.round(Math.random() * 100)}`,
@@ -110,7 +134,8 @@ const FormikInput = (props: Props) => {
     grouped = false,
     required = false,
     supplementaryOnChange,
-    style = {}
+    style = {},
+    placeholder = ''
   } = props
 
   const labelPlacementCorrected = useMemo(() => {
@@ -136,7 +161,7 @@ const FormikInput = (props: Props) => {
 
   let inputProps = {}
 
-  const hasChips = get(values, `${name}.0`, false)
+  const hasChips = get(values, `${name}.0.label`, false)
 
   switch (type) {
     case 'slider':
@@ -145,7 +170,7 @@ const FormikInput = (props: Props) => {
         props.setFieldValue(name, d, true)
       }
       return (
-        <GridWrapper {...props} container spacing={2} style={{ margin: '0 0 10px 0', padding: 0 }}>
+        <GridWrapper {...props} container spacing={2} gridStyle={{ margin: '0 0 10px 0', padding: 0 }}>
           <InputSlider {...defaultProps} onChange={onSliderChange} />
         </GridWrapper>
       )
@@ -155,7 +180,7 @@ const FormikInput = (props: Props) => {
         props.setFieldValue(name, v, true)
       }
       return (
-        <GridWrapper {...props} container spacing={2} style={{ margin: '0 0 10px 0', padding: 0 }}>
+        <GridWrapper {...props} container spacing={2} gridStyle={{ margin: '0 0 10px 0', padding: 0 }}>
           <InputAddress {...defaultProps} onChange={onAddressChange} />
         </GridWrapper>
       )
@@ -181,10 +206,14 @@ const FormikInput = (props: Props) => {
       const onChangeCheckbox = (e, d: boolean) => {
         props.setFieldTouched(name, true, false)
         props.setFieldValue(name, d, true)
+        if (supplementaryOnChange) supplementaryOnChange(e, e.target.checked)
       }
       return (
         <GridWrapper {...props}>
           <FormControlLabel
+            classes={{
+              label: checkSwitchLabel
+            }}
             style={{ marginTop: 16, ...style }}
             onChange={onChangeCheckbox}
             value={get(values, name, false)}
@@ -203,6 +232,9 @@ const FormikInput = (props: Props) => {
       return (
         <GridWrapper {...props}>
           <FormControlLabel
+            classes={{
+              label: checkSwitchLabel
+            }}
             style={{ marginTop: 16, ...style }}
             onChange={onChangeSwitch}
             value={get(values, name, false)}
@@ -260,11 +292,14 @@ const FormikInput = (props: Props) => {
       )
     case 'autocomplete':
       const onChangeAutocomplete = (e, d) => {
-        if (![undefined, null].includes(true)) {
-          props.setFieldValue(name, d)
-            .then(() => props.setFieldTouched(name, true, false))
+        if(props.multiple) {
+          const selectedAValue = get(e, 'target.value', null) === 0 // 0 for selected value
+          if(selectedAValue) {
+            props.setFieldValue(name, d || [])
+              .then(() => props.setFieldTouched(name, true, false))
+          }
         } else {
-          props.setFieldValue(name, props.multiple ? [] : null)
+          props.setFieldValue(name, d)
             .then(() => props.setFieldTouched(name, true, false))
         }
       }
@@ -296,12 +331,13 @@ const FormikInput = (props: Props) => {
     case 'asyncAutocomplete':
       const onChangeAsyncAutocomplete = (e, d) => {
         if (props.multiple) {
-          const currentValue = get(values, name, [])
-          props.setFieldTouched(name, true, false)
-          props.setFieldValue(name, compact(uniqBy([...currentValue, d], 'value')))
+          const currentVals = get(values, name, [])
+          const newVals = compact(uniqBy([...currentVals, ...d], 'value'))
+          props.setFieldValue(name, newVals)
+            .then(() => props.setFieldTouched(name, true))
         } else {
-          props.setFieldTouched(name, true, false)
           props.setFieldValue(name, d)
+            .then(() => props.setFieldTouched(name, true))
         }
       }
 
@@ -379,6 +415,7 @@ const FormikInput = (props: Props) => {
           name={name}
           label={label}
           type={type}
+          placeholder={placeholder}
           className={textField}
           value={get(values, name, '') || ''}
           onChange={e => {
@@ -403,7 +440,8 @@ const FormikInput = (props: Props) => {
 
 const GridWrapper = React.memo((props: GridWrapperProps) => {
   const { xs = 12, sm, md, lg, xl, container, spacing } = props
-  return <Grid item {...container && { container: true, spacing: spacing || 1 }} style={{ ...props.style || {} }} xs={xs} sm={sm || xs} md={md || sm || xs} lg={lg || sm || xs} xl={xl || lg || sm || xs}>
+  const classes = useStyles()
+  return <Grid className={classes.gridWrapper} item {...container && { container: true, spacing: spacing || 1 }} style={{ ...props.gridStyle || {} }} xs={xs} sm={sm || xs} md={md || sm || xs} lg={lg || sm || xs} xl={xl || lg || sm || xs}>
     {props.children || <></>}
   </Grid>
 })

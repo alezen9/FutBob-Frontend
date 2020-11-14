@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { useConfigStore } from '@_zustand/configStore'
-import FutBobTabs, { FutBobTab } from '../../components/Tabs'
+import ZenTabs, { ZenTab } from '@_components/ZenTabs'
 import General from './1_General'
 import Private from './2_Private'
 import Player from './3_Player'
@@ -37,20 +37,20 @@ const ProfileContainer = () => {
   }), [item, openSnackbar, setIsLoading, mutate, createEditPlayer, deletePlayer])
 
   return (
-    <FutBobTabs>
-      <FutBobTab
+    <ZenTabs>
+      <ZenTab
         title='General'
         component={<General {...tabProps} />}
       />
-      <FutBobTab
+      <ZenTab
         title='Private'
         component={<Private {...tabProps} />}
       />
-      <FutBobTab
+      <ZenTab
         title='Player'
         component={<Player {...tabProps} />}
       />
-    </FutBobTabs>
+    </ZenTabs>
   )
 }
 

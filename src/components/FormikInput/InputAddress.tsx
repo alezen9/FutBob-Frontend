@@ -12,7 +12,7 @@ import RoomRoundedIcon from '@material-ui/icons/RoomRounded'
 import InfoRoundedIcon from '@material-ui/icons/InfoRounded'
 import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
 import ExpandLessRoundedIcon from '@material-ui/icons/ExpandLessRounded'
-import { FutBobPalette } from '../../../palette'
+import { ZenPalette } from '@_palette'
 
 /**
  * ADDRESS
@@ -89,7 +89,7 @@ const useStyles = makeStyles(theme => ({
   popoverClass: {
     width: 250,
     padding: 16,
-    color: FutBobPalette.typographyGrey
+    color: ZenPalette.typographyGrey
   }
 }))
 
@@ -98,11 +98,8 @@ const useStylesAutocomplete = makeStyles(theme => ({
     '& > div > label': {
       color: (props: any) => props.error
         ? '#ff443a'
-        : FutBobPalette.borderColor
+        : ZenPalette.borderColor
     }
-  },
-  paper: {
-    boxShadow: theme.shadows[24]
   },
   listbox: {
     padding: '.5em'
@@ -138,13 +135,13 @@ const useStylesAutocomplete = makeStyles(theme => ({
       : '#111'
   },
   noOptions: {
-    color: FutBobPalette.typographyGrey
+    color: ZenPalette.typographyGrey
   },
   inputRoot: {
     '& > fieldset': {
       borderColor: (props: any) => props.error
         ? '#ff443a'
-        : FutBobPalette.borderColor
+        : ZenPalette.borderColor
     }
   }
 }))
@@ -350,6 +347,9 @@ const InputAddressAutoComplete = (props: Props) => {
                 freeSolo
                 inputValue={addressValue}
                 onChange={handleSelectAutocomplete}
+                onInputChange={(e,d) => {
+                  if(!d && e) onChange({})
+                }}
                 options={suggestions.map(({ description, placeId }) => ({ label: description, value: placeId }))}
                 getOptionLabel={option => option.label}
                 renderOption={(option, state) => <OptionRenderer {...option} />}

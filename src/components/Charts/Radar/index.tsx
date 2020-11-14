@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { ResponsiveRadar } from '@nivo/radar'
 import { useTheme, makeStyles } from '@material-ui/core'
-import { FutBobPalette } from '../../../../palette'
+import { ZenPalette } from '@_palette'
 
 const useStyles = makeStyles(theme => ({
   main: {
@@ -10,16 +10,16 @@ const useStyles = makeStyles(theme => ({
     '& svg': {
       '& + div': {
         '& > div': {
-          color: `${FutBobPalette.typographyGrey} !important`,
+          color: `${ZenPalette.typographyGrey} !important`,
           backgroundColor: theme.type === 'dark'
             ? '#222 !important'
-            : `${FutBobPalette.backgroundColor} !important`,
+            : `${ZenPalette.backgroundColor} !important`,
           borderRadius: '10px !important',
           boxShadow: `0 10px 15px rgba(0,0,0,.2) !important`
         }
       },
       '& text': {
-        fill: `${FutBobPalette.typographyGrey} !important`
+        fill: `${ZenPalette.typographyGrey} !important`
       }
     }
   }

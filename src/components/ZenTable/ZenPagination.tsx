@@ -32,7 +32,7 @@ type Props = {
    onChangePage: (e: any, newPage: number) => void
 }
 
-const FutbobPagination = (props: Props) => {
+const ZenPagination = (props: Props) => {
   const { limit = 10, totalCount = 10, currentPage = 1, onChangePage } = props
   const classes = useStyles()
 
@@ -54,4 +54,4 @@ const FutbobPagination = (props: Props) => {
   )
 }
 
-export default React.memo(FutbobPagination)
+export default React.memo(ZenPagination)

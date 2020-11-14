@@ -1,15 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TextField from '@material-ui/core/TextField'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import { get } from 'lodash'
 import { makeStyles, FormHelperText, InputAdornment, CircularProgress } from '@material-ui/core'
-import { FutBobPalette } from '../../../palette'
+import { ZenPalette } from '@_palette'
 import { OptionType } from '.'
+import { matchSorter } from 'match-sorter'
 
 const useStyles = makeStyles(theme => ({
-  paper: {
-    boxShadow: theme.shadows[24]
-  },
   listbox: {
     padding: '.5em'
   },
@@ -44,13 +42,13 @@ const useStyles = makeStyles(theme => ({
       : '#111'
   },
   noOptions: {
-    color: FutBobPalette.typographyGrey
+    color: ZenPalette.typographyGrey
   },
   inputRoot: {
     '& > fieldset': {
       borderColor: (props: any) => props.error
         ? '#ff443a'
-        : FutBobPalette.borderColor
+        : ZenPalette.borderColor
     }
   }
 }))
@@ -63,6 +61,8 @@ const inputProps = {
   endAdornment: <Adornment />
 }
 
+const filterOptions = (options: OptionType[], { inputValue }) => matchSorter(options, inputValue, { keys: ['label'] })
+
 type Props = {
   options?: OptionType[]
   label: string
@@ -72,36 +72,66 @@ type Props = {
   disabled?: boolean
   errors: any
   onChange: (e: any, d: any) => void
-  onSearchText?: (v: string) => void
-  multiple?: boolean 
+  onSearchText?: (v: string) => Promise<OptionType[]>
+  multiple?: boolean
   loading?: boolean
+  values: any
+  valuesToexcludeFromOptions?: string[]
 }
 
 const InputAsyncAutocomplete = (props: Props) => {
-  const { options = [], label, id, name, disabled, errors, onChange, onSearchText, multiple = false, loading = false } = props
+  const { label, id, name, disabled, errors, onChange, onSearchText, multiple = false, values, valuesToexcludeFromOptions = [] } = props
   const classes = useStyles({ error: !!get(errors, name, false) })
-  const [inputValue, setInputValue] = useState('')
+  const [inputValue, setInputValue] = useState(multiple ? '' : get(values, `${name}.label`, ''))
+  const [shouldFetch, setShouldFetch] = useState(false)
+  const [opts, setOpts] = useState([])
+  const [isFetching, setIsFetching] = useState(false)
+
+  useEffect(() => {
+    let mounted = true
+    if(onSearchText && inputValue && shouldFetch){
+      setIsFetching(true)
+      onSearchText(inputValue)
+        .then(res => {
+          if(mounted) {
+            setOpts(res.filter(({ value }) => !valuesToexcludeFromOptions.includes(value)))
+            setIsFetching(false)
+          }
+        })
+        .catch(err => {})
+    }
+    return () => {
+      mounted = false
+    }
+  }, [onSearchText, inputValue, shouldFetch, JSON.stringify(valuesToexcludeFromOptions)])
 
   return (
     <>
       <Autocomplete
         id={id}
         freeSolo
-        loading={loading}
+        loading={isFetching}
         multiple={multiple}
         disabled={disabled}
         classes={classes}
-        options={options}
+        defaultValue={multiple ? [] : null}
         onChange={onChange}
+        options={opts}
         ChipProps={{ style: { display: 'none' } }}
         getOptionLabel={option => option.label || ''}
         inputValue={inputValue}
+        filterOptions={filterOptions}
+        filterSelectedOptions
+        loadingText={`N'attimo...`}
+        noOptionsText='Nessun risultato'
         onInputChange={(e, d) => {
-          setInputValue(d || '')
-          const shoudFetch = e.type === 'change'
-          if (shoudFetch && d && d !== '') onSearchText(d)
+          if(e && (e.type === 'change' || e.type === 'click')) {
+            if(e.type === 'click' && !d && !multiple) onChange(e, null)
+            setInputValue(d)
+            setShouldFetch(e && e.type === 'change')
+          }          
         }}
-        renderInput={params => <TextField {...params} {...loading && { InputProps: inputProps }} label={label} variant='outlined' />}
+        renderInput={params => <TextField {...params} {...isFetching && { InputProps: inputProps }} placeholder='Cerca . . .' label={label} variant='outlined' />}
       />
       {get(errors, name, false) && <FormHelperText margin='dense' style={{ color: 'red', margin: '12px 14px 0 14px' }} id={`${id}_error`}>{get(errors, name, '')}</FormHelperText>}
     </>

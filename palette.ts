@@ -16,6 +16,19 @@ class ColorPalette {
   typographyGrey: string
   borderColor: string
   border: string
+  borderWithOpacity: string
+  successColor: string
+  warningColor: string
+  infoColor: string
+  oddListStandOut: string
+  evenListStandout: string
+  dividerColor: string
+  draggableSteadyBackground: string
+  draggableDraggingBackground: string
+  backgroundColorInverted: string
+  backgroundColorStandOut: string
+  tableCellBackground: string
+  tableHeaderCellBackground: string
 
 
   constructor (themeType: ThemeType = ThemeType.light) {
@@ -53,7 +66,44 @@ class ColorPalette {
     this.userTableRowBackgroundColor = this.themeType === ThemeType.dark
       ? '#222'
       : 'rgba(0,0,0,.1)'
+   this.borderWithOpacity = this.themeType === ThemeType.dark
+      ? '1px solid rgba(179, 179, 179, .3)'
+      : '1px solid rgba(0, 0, 0, 0.1)'
+    this.boxShadow = this.themeType === ThemeType.dark
+      ? '0 19px 38px rgba(0,0,0,0.15), 0 15px 12px rgba(0,0,0,0.22)'
+      : '0 10px 20px rgba(0,0,0,0.1), 0 6px 6px rgba(0,0,0,0.03)'
+    this.userTableRowBackgroundColor = this.themeType === ThemeType.dark
+      ? '#222'
+      : 'rgba(0,0,0,.1)'
+    this.tableCellBackground = this.themeType === ThemeType.dark
+      ? '#111'
+      : '#fafafa'
+    this.tableHeaderCellBackground = this.themeType === ThemeType.dark
+      ? '#383838'
+      : '#BEBEBE'
+    this.successColor = this.themeType === ThemeType.dark
+      ? 'rgb(48, 209, 88)'
+      : 'rgb(52, 199, 89)'
+    this.backgroundColorStandOut = this.themeType === ThemeType.dark
+      ? '#181818'
+      : '#f2f2f2'
+    this.oddListStandOut = this.themeType === ThemeType.dark
+      ? 'rgba(255,255,255,.03)'
+      : 'rgba(0,0,0,.03)'
+    // TO DEFINE
+    this.evenListStandout = this.themeType === ThemeType.dark
+      ? 'orange'
+      : 'orange'
+    this.dividerColor = this.themeType === ThemeType.dark
+      ? '#5E5E5E'
+      : '#D5D5D5'
+    this.draggableSteadyBackground = this.themeType === ThemeType.dark
+      ? '#303030'
+      : '#e3e3e3'
+    this.draggableDraggingBackground = this.themeType === ThemeType.dark
+      ? '#575757'
+      : '#b5b5b5'
   }
 }
 
-export const FutBobPalette: ColorPalette = new ColorPalette()
+export const ZenPalette: ColorPalette = new ColorPalette()

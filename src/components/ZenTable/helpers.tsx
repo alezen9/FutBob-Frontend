@@ -1,6 +1,6 @@
 import React, { useState, useMemo, Fragment, useCallback, ReactNode, ReactElement } from 'react'
 import { Button, Grid, Tooltip, IconButton, Menu, MenuItem, makeStyles, TableCell, Collapse, TableRow, useTheme, useMediaQuery } from '@material-ui/core'
-import { camelize } from '../../utils/helpers'
+import { camelize } from '@_utils/helpers'
 import { uniqueId, get } from 'lodash'
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
 import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
@@ -9,7 +9,8 @@ import TypographyLabel from '../TypographyLabel'
 
 const useStyles = makeStyles(theme => ({
   menu: {
-    padding: '.3em'
+    padding: '.3em',
+    minWidth: 170
   },
   mainMobileRow: {
     borderBottom: 'unset',
@@ -42,6 +43,7 @@ export type TableHeaderData = {
   main?: any
   name: string
   style?: any
+  sticky?: boolean
 }
 
 export type TableRowData = {
@@ -188,14 +190,12 @@ const ActionsMenu= React.memo((props: ActionProps) => {
 
   return (
     <>
-      <Tooltip title='Open menu'>
-        <IconButton
-          onClick={handleClick}
-          aria-haspopup='true'
-          aria-label='open menu'>
-          <MoreVertOutlinedIcon />
-        </IconButton>
-      </Tooltip>
+      <IconButton
+        onClick={handleClick}
+        aria-haspopup='true'
+        aria-label='open menu'>
+        <MoreVertOutlinedIcon />
+      </IconButton>
       <Menu
         classes={{
           list: classes.menu
@@ -314,3 +314,13 @@ export const MobileRowCell = React.memo((props: MobileRowCellProps) => {
     </>
   )
 })
+
+
+export const getLastStickyIndex = _headers => {
+  const idx = _headers.reduce((acc, header, i) => {
+    const { sticky } = header
+    if(sticky) acc = i
+    return acc
+  }, 0)
+  return idx
+}

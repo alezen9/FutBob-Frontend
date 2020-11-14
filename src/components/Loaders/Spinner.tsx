@@ -1,6 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core'
-import { FutBobPalette } from '../../../palette'
+import { ZenPalette } from '../../../palette'
 
 const useStyles = makeStyles({
   ldsEllipsis: {
@@ -14,7 +14,7 @@ const useStyles = makeStyles({
       width: 10,
       height: 10,
       borderRadius: '50%',
-      background: FutBobPalette.typographyGrey,
+      background: ZenPalette.typographyGrey,
       animationTimingFunction: 'cubic-bezier(0, 1, 1, 0)'
     },
     '& div:nth-child(1)': {

@@ -2,7 +2,7 @@ import React, { useRef, useCallback } from 'react'
 import { get, sortBy, last, find } from 'lodash'
 import { Select, MenuItem, InputLabel, FormHelperText, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { FutBobPalette } from '../../../palette'
+import { ZenPalette } from '../../../palette'
 import { OptionType } from '.'
 
 const useStyles = makeStyles(theme => ({
@@ -18,13 +18,13 @@ const useStyles = makeStyles(theme => ({
     '& fieldset': {
       borderColor: (props: any) => props.error
         ? '#ff443a'
-        : FutBobPalette.borderColor
+        : ZenPalette.borderColor
     }
   },
   labelClass: {
     color: (props: any) => props.error
       ? '#ff443a'
-      : FutBobPalette.typographyGrey
+      : ZenPalette.typographyGrey
   }
 }))
 
@@ -93,11 +93,11 @@ const InputSelect = (props: Props) => {
   const labelWidth = labelRef.current ? labelRef.current.offsetWidth : measureText(label).width
 
   const Options = useCallback(
-    options => {
-      if (options && options.length) {
+    _options => {
+      if (_options && _options.length) {
         const opt = multiple
-          ? options.filter(opt => !find(get(values, name, []), ['value', opt.value]))
-          : options
+          ? _options.filter(opt => !find(get(values, name, []), ['value', opt.value]))
+          : _options
         return promoteItem({
           arr: sortByLabel
             ? sortBy(opt, ['label'])
@@ -110,7 +110,7 @@ const InputSelect = (props: Props) => {
       }
       return []
     }
-    , [options, get(values, name, [])])
+    , [JSON.stringify(options), get(values, name, []), sortByLabel])
 
   const renderValue = useCallback(
     (val: OptionType) => {
@@ -123,7 +123,7 @@ const InputSelect = (props: Props) => {
         const v = options.find(({ value }) => val === value)
         return <Typography style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>{get(v, 'component', v.label)}</Typography>
       }
-    }, [multiple, options])
+    }, [multiple, JSON.stringify(options)])
 
   return (
     <>

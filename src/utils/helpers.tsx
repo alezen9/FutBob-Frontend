@@ -5,18 +5,20 @@ import BlockRoundedIcon from '@material-ui/icons/BlockRounded'
 import AccessTimeRoundedIcon from '@material-ui/icons/AccessTimeRounded'
 import RemoveCircleOutlineRoundedIcon from '@material-ui/icons/RemoveCircleOutlineRounded'
 import { Tooltip, IconButton } from '@material-ui/core'
-import { sections } from './routes'
-import { find, isObject, uniqueId, reduce, transform, isEqual, isUndefined, keys, entries, isObjectLike, get, has, set, map, compact } from 'lodash'
-import { FutBobPalette } from '../../palette'
-import { TopFormIcon, InjuredIcon, RecoveryIcon } from '../assets/CustomIcon'
+import { routes } from './routes'
+import { isObject, uniqueId, reduce, map, compact } from 'lodash'
+import { ZenPalette } from '@_palette'
+import { TopFormIcon, InjuredIcon, RecoveryIcon } from '@_icons'
 import ExpandLessRoundedIcon from '@material-ui/icons/ExpandLessRounded'
 import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
 import cleanDeep from 'clean-deep'
 import { PlayerScore } from '@_entities/Player'
 import { OptionType } from '@_components/FormikInput'
 
+export const cleanPathname = (path: string = '') => path.split('?')[0]
+
 export const getTitleFromPathname = (pathname: string) => {
-  const routeInfo: any = find(sections, ['path', pathname])
+  const routeInfo: any = routes.find(({ path }) => cleanPathname(path) === pathname)
   if (!routeInfo) return 'Dashboard'
   return routeInfo.title
 }
@@ -41,7 +43,7 @@ const defaultStyleIcons = {
 const defaultStyleIconsTooltips = {
   fontSize: '0',
   transform: 'scale(.7)',
-  color: FutBobPalette.typographyGrey
+  color: ZenPalette.typographyGrey
 }
 
 export const paramsToString = params => {
@@ -301,9 +303,9 @@ export const cleanQueryParams = query => {
 export const getScoreColor = (value: number) => {
   if (value < 40) return 'crimson'
   if (value < 65) return 'orange'
-  if (value < 85) return FutBobPalette.darkGreen
+  if (value < 85) return ZenPalette.darkGreen
   if (value <= 100) return '#B29600'
-  return FutBobPalette.typographyGrey
+  return ZenPalette.typographyGrey
 }
 
 export const getMultipleInitValue = (vals = [], options = []) => {

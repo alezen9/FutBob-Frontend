@@ -1,19 +1,18 @@
 import React, { useCallback, useState } from 'react'
-import { Grid, Button, Typography, useMediaQuery, useTheme } from '@material-ui/core'
+import { Grid, Button, useMediaQuery, useTheme } from '@material-ui/core'
 import FormikInput from '@_components/FormikInput'
 import { useFormik } from 'formik'
 import { isEmpty, get } from 'lodash'
 import { getOptionsByEnum } from '@_utils/helpers'
 import { useConfigStore } from '@_zustand/configStore'
 import { ServerMessage } from '@_utils/serverMessages'
-import { FutBobPalette } from '@_palette'
+import { ZenPalette } from '@_palette'
 import { useRouter } from 'next/router'
-import CustomDialog from '@_components/Dialog'
 import { ConfigStore } from '@_zustand/helpers'
 import { createEditFieldValidationSchema } from './validations'
 import { useSWRField } from '@_swr/Fields'
 import { FieldState, FieldType } from '@_entities/Fields'
-import cleanDeep from 'clean-deep'
+import WarningDeleteDialog from '@_components/WarningDeleteDialog'
 
 const stateSelector = (state: ConfigStore) => ({
     setIsLoading: state.setIsLoading,
@@ -175,7 +174,7 @@ const FieldDetail = () => {
       <Grid item container xs={12} justify={isSmallScreen ? 'space-evenly' : 'flex-end'}>
           {item._id && <Grid item>
             <Button
-              style={{ minWidth: 150, color: FutBobPalette.darkRed, marginRight: '1.5em', borderColor: FutBobPalette.darkRed }}
+              style={{ minWidth: 150, color: ZenPalette.darkRed, marginRight: '1.5em', borderColor: ZenPalette.darkRed }}
               disabled={formik.isSubmitting}
               onClick={() => setOpenConfirmDialog(true)}
               variant='outlined'>
@@ -194,20 +193,11 @@ const FieldDetail = () => {
           </Grid>
         </Grid>
       </Grid>
-      <CustomDialog
-        open={!!openConfirmDialog}
-        fullScreen={false}
-        title='Attention!'
-        content={<Typography >You are about to delete <span style={{ fontWeight: 'bold' }}>{get(item, 'name', 'Unknown field')}</span>, continue and delete?</Typography>}
-        actions={
-          <Button
-            style={{ minWidth: 150, backgroundColor: FutBobPalette.darkRed }}
-            onClick={onDelete}
-            variant='contained'>
-          Delete
-          </Button>
-        }
-        onClose={() => setOpenConfirmDialog(false)}
+      <WarningDeleteDialog
+         open={!!openConfirmDialog}
+         text={<>You are about to delete <span style={{ fontWeight: 'bold' }}>{get(item, 'name', 'Unknown field')}</span>, continue and delete?</>}
+         onClose={() => setOpenConfirmDialog(false)}
+         onDelete={onDelete}
       />
     </>
   )

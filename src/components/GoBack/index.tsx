@@ -2,6 +2,7 @@ import React, { useCallback } from 'react'
 import { Grid, Button, Typography } from '@material-ui/core'
 import NavigateBeforeRoundedIcon from '@material-ui/icons/NavigateBeforeRounded'
 import { useRouter } from 'next/router'
+import { ZenPalette } from '@_palette'
 
 type Props = {
   label?: any
@@ -21,16 +22,17 @@ const GoBack = (props: Props) => {
     }, [route, as])
 
   return (
-    <Grid item {...margin && { style: { marginBottom: '2em' } }}>
-      <Button
-        variant='outlined'
-        onClick={goBack}>
-        <NavigateBeforeRoundedIcon style={{ marginRight: '.2em', fontSize: '1em' }} />
-        <Typography variant='caption' style={{ marginRight: '.5em' }}>
-          {label || 'Back'}
-        </Typography>
-      </Button>
-    </Grid>
+      <Grid item {...margin && { style: { marginBottom: '2em' } }}>
+         <Button
+            style={{ color: ZenPalette.typographyGrey }}
+            variant='text'
+            startIcon={<NavigateBeforeRoundedIcon />}
+            onClick={goBack}>
+         <Typography variant='caption'>
+            {label || 'Back'}
+         </Typography>
+         </Button>
+      </Grid>
   )
 }
 

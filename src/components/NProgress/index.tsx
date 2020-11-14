@@ -38,4 +38,6 @@ window.fetch = async (...args) => {
   }
 }
 
-export default () => null
+const FakeExport = () => null
+
+export default FakeExport

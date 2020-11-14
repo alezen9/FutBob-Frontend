@@ -1,3 +1,4 @@
+import { LSToken } from '@_utils/LSVariables'
 import axios, { AxiosInstance, AxiosResponse } from 'axios'
 import { get } from 'lodash'
 import getConfig from 'next/config'
@@ -25,8 +26,6 @@ const LogRequest = ({name, response, params, fields, isError = false}) => {
     }
   }
 }
-
-export const LSToken = 'FutBobToken'
 
 class FutBobServer {
   localStorageToken: string

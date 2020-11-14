@@ -3,7 +3,7 @@ import React, { useState, ReactNode, ReactElement } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { AppBar, Tabs, Tab, useMediaQuery, Box } from '@material-ui/core'
 // utils
-import { get } from 'lodash'
+import { compact, get } from 'lodash'
 import cleanDeep from 'clean-deep'
 
 type Props = {
@@ -78,7 +78,7 @@ const tabProps: any = (index: number) => {
   }
 }
 
-const FutBobTabs = (props: Props) => {
+const ZenTabs = (props: Props) => {
   const { children, safeGuard } = props
   const { wrapper, appBar, tabs, indicatorClass, box, outercomponentBox } = useStyles()
   const [value, setValue] = useState(0)
@@ -102,13 +102,16 @@ const FutBobTabs = (props: Props) => {
           indicatorColor='primary'
           classes={{ root: tabs, indicator: indicatorClass }}
         >
-          {React.Children.map(cleanDeep(children), (child, i) =>
-            <Tab
+          {React.Children.map(compact(children), (child, i) => {
+            return <Tab
               disableRipple
+              disabled={get(child, 'props.disabled', false)}
               key={`tab-${i}`}
-              label={get(child, 'props.title' , '-')}
+              {...isSmallScreen && get(child, 'props.icon' , null) && { icon: get(child, 'props.icon' , <></>) }}
+              {...((!isSmallScreen && get(child, 'props.title' , null)) || !get(child, 'props.icon', null)) && { label: get(child, 'props.title' , '-') }}
               {...tabProps(i)}
             />
+          }
           )}
         </Tabs>
       </AppBar>
@@ -134,12 +137,15 @@ const FutBobTabs = (props: Props) => {
   )
 }
 
-export default React.memo(FutBobTabs)
+export default React.memo(ZenTabs)
 
 type TabProps = {
   title: string
+  icon?: ReactNode
+  disabled?: boolean
   component: ReactNode
   outercomponent?: ReactNode
 }
 
-export const FutBobTab = (props: TabProps) => <div {...props} />
+// @ts-ignore
+export const ZenTab = (props: TabProps) => <div {...props} />

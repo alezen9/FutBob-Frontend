@@ -1,16 +1,24 @@
-import React, { useMemo, useRef } from 'react'
+import React, { useMemo } from 'react'
 import TextField from '@material-ui/core/TextField'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import { sortBy, get } from 'lodash'
-import { makeStyles, FormHelperText, useTheme, useMediaQuery, ListSubheader } from '@material-ui/core'
-import { FutBobPalette } from '../../../palette'
+import { makeStyles, FormHelperText, ListSubheader } from '@material-ui/core'
+import { ZenPalette } from '@_palette'
 import { VariableSizeList } from 'react-window'
 import { OptionType } from '.'
+import { matchSorter } from 'match-sorter'
+// import VisibilityOffOutlinedIcon from '@material-ui/icons/VisibilityOffOutlined'
+
+// const IGNORE_OPTION: OptionType = {
+//   value: '_ignoreField',
+//   label: 'Ignora campo',
+//   component: <span style={{ display: 'flex', alignItems: 'center', color: 'darkred' }}>
+//     <VisibilityOffOutlinedIcon style={{ marginRight: '1em' }} />
+//     Ignora campo
+//   </span>
+// }
 
 const useStyles = makeStyles(theme => ({
-  paper: {
-    boxShadow: theme.shadows[24]
-  },
   listbox: (props: any) => ({
     padding: '.5em',
     ...props.large && {
@@ -50,13 +58,13 @@ const useStyles = makeStyles(theme => ({
       : '#111'
   },
   noOptions: {
-    color: FutBobPalette.typographyGrey
+    color: ZenPalette.typographyGrey
   },
   inputRoot: {
     '& > fieldset': {
       borderColor: (props: any) => props.error
         ? '#ff443a'
-        : FutBobPalette.borderColor
+        : ZenPalette.borderColor
     }
   }
 }))
@@ -77,6 +85,9 @@ type Props = {
   values: any
 }
 
+const filterOptions = (options: OptionType[], { inputValue }) => matchSorter(options, inputValue, { keys: ['label'] })
+
+
 const InputAutocomplete = (props: Props) => {
   const {
     options = [],
@@ -93,15 +104,15 @@ const InputAutocomplete = (props: Props) => {
     large = false
   } = props
   const classes = useStyles({ error: !!get(errors, name, false), large })
-  const optionsRef = useRef(options)
+
   const optionsToRender = useMemo(() => {
     const valuesKeys = multiple
       ? (get(values, name, []) || []).map(({ value }) => value)
       : [get(values, `${name}.value`, null)]
     return sortByLabel
-      ? sortBy(optionsRef.current.filter(({ value }) => !valuesKeys.includes(value)), ['label'])
-      : optionsRef.current.filter(({ value }) => !valuesKeys.includes(value))
-  }, [get(values, name, null), multiple])
+      ? sortBy(options.filter(({ value }) => !valuesKeys.includes(value)), ['label'])
+      : options.filter(({ value }) => !valuesKeys.includes(value))
+  }, [JSON.stringify(get(values, name, null)), JSON.stringify(options), multiple, sortByLabel])
 
   return (
     <>
@@ -118,11 +129,12 @@ const InputAutocomplete = (props: Props) => {
         value={get(values, name, multiple ? [] : null)}
         options={optionsToRender}
         onChange={onChange}
+        filterOptions={filterOptions}
         ChipProps={{ style: { display: 'none' } }}
         getOptionLabel={option => option.label || ''}
         renderOption={option => get(option, 'component', option.label || '')}
         {...large && { ListboxComponent }}
-        renderInput={params => <TextField {...params} label={label} variant='outlined' />}
+        renderInput={params => <TextField {...params} placeholder='Cerca . . .' label={label} variant='outlined' />}
       />
       {get(errors, name, false) && <FormHelperText margin='dense' style={{ color: 'red', margin: '12px 14px 0 14px' }} id={`${id}_error`}>{get(errors, name, '')}</FormHelperText>}
     </>

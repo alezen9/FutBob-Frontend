@@ -1,6 +1,6 @@
 import React from 'react'
 import { Grid, makeStyles, Typography } from '@material-ui/core'
-import { FutBobPalette } from '../../palette'
+import { ZenPalette } from '@_palette'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
   verticalDivider: {
     width: 2,
     height: '3.7rem',
-    backgroundColor: FutBobPalette.typographyGrey,
+    backgroundColor: ZenPalette.typographyGrey,
     opacity: '.5',
     margin: '0 1em'
   }

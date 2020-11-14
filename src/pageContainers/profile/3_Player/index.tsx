@@ -12,8 +12,8 @@ import { getMeanScoreField } from '@_components/FormikInput/PlayerScoreInputs/Si
 import PlayerScoreInputs from '@_components/FormikInput/PlayerScoreInputs'
 import { ProfileTabProps } from '..'
 import { PlayerType } from '@_entities/Player'
-import { FutBobPalette } from '@_palette'
-import CustomDialog from '@_components/Dialog'
+import { ZenPalette } from '@_palette'
+import ZenDialog from '@_components/ZenDialog'
 
 const Player = (props: ProfileTabProps) => {
   const { item, setIsLoading, openSnackbar, createEditPlayer, deletePlayer } = props
@@ -131,7 +131,7 @@ const Player = (props: ProfileTabProps) => {
       <Grid item container xs={12} justify={isSmallScreen ? 'space-evenly' : 'flex-end'}>
         {get(futsalPlayer, '_id', null) && <Grid item>
           <Button
-            style={{ minWidth: 130, color: FutBobPalette.darkRed, marginRight: '1.5em', borderColor: FutBobPalette.darkRed }}
+            style={{ minWidth: 130, color: ZenPalette.darkRed, marginRight: '1.5em', borderColor: ZenPalette.darkRed }}
             disabled={formik.isSubmitting}
             onClick={() => setOpenConfirmDialog(true)}
             variant='outlined'>
@@ -149,14 +149,14 @@ const Player = (props: ProfileTabProps) => {
           </Button>
         </Grid>
       </Grid>
-      <CustomDialog
+      <ZenDialog
         open={!!openConfirmDialog}
         fullScreen={false}
         title='Attention!'
-        content={<Typography >You are about to delete <span style={{ fontWeight: 'bold', color: FutBobPalette.darkRed }}>Yourself</span>, continue and delete?</Typography>}
+        content={<Typography >You are about to delete <span style={{ fontWeight: 'bold', color: ZenPalette.darkRed }}>Yourself</span>, continue and delete?</Typography>}
         actions={
           <Button
-            style={{ minWidth: 150, backgroundColor: FutBobPalette.darkRed }}
+            style={{ minWidth: 150, backgroundColor: ZenPalette.darkRed }}
             onClick={onDelete}
             variant='contained'>
           Delete

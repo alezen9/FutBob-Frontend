@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Button, Divider, Grid, IconButton, SwipeableDrawer, Typography, useMediaQuery, useTheme } from '@material-ui/core'
 import { FormikEssentials } from '@_components/FormikInput'
-import { FutBobPalette } from '@_palette'
+import { ZenPalette } from '@_palette'
 import Inputs, { Filter } from './Inputs'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
       height: 4,
       borderRadius: 5,
       margin: '.2em auto .5em auto',
-      backgroundColor: FutBobPalette.typographyGrey
+      backgroundColor: ZenPalette.typographyGrey
   },
   container: {
       height: '100%',

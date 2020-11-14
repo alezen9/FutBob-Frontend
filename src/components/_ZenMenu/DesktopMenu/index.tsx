@@ -1,10 +1,12 @@
 import React from 'react'
 import { makeStyles, IconButton } from '@material-ui/core'
-import NavList from './NavList'
+import ItemList from './ItemList'
 import MenuRoundedIcon from '@material-ui/icons/MenuRounded'
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded'
-import ThemeSwitch from '../ThemeModeSwitch'
+import ThemeSwitch from '@_components/ThemeModeSwitch'
 import { useConfigStore } from '@_zustand/configStore'
+import { RouteItem } from '..'
+import { ConfigStore } from '@_zustand/helpers'
 
 const useStyles = makeStyles(theme => ({
   relativeWrapper: {
@@ -62,30 +64,37 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const Menu = () => {
-  const { menuOpen, toggleMenu } = useConfigStore(state => ({
-    menuOpen: state.menuOpen,
-    toggleMenu: state.toggleMenu
-  }))
-  const classes = useStyles({ menuOpen })
+const stateSelector = (state: ConfigStore) => ({
+   menuOpen: state.menuOpen,
+   toggleMenu: state.toggleMenu
+})
 
-  return (
-    <div className={classes.relativeWrapper}>
-      <div className={classes.fixed}>
-        <IconButton
-          className={classes.toggleMenu}
-          onClick={toggleMenu}>
-          {menuOpen
-            ? <CloseRoundedIcon />
-            : <MenuRoundedIcon />}
-        </IconButton>
-        <div className={classes.themeToggleClass}>
-          <ThemeSwitch />
-        </div>
-        <NavList />
-      </div>
-    </div>
-  )
+type Props = {
+   items: RouteItem[]
 }
 
-export default React.memo(Menu)
+const DesktopMenu = (props: Props) => {
+   const { items } = props
+   const { menuOpen, toggleMenu } = useConfigStore(stateSelector)
+   const classes = useStyles({ menuOpen })
+
+   return (
+      <div className={classes.relativeWrapper}>
+         <div className={classes.fixed}>
+         <IconButton
+            className={classes.toggleMenu}
+            onClick={toggleMenu}>
+            {menuOpen
+               ? <CloseRoundedIcon />
+               : <MenuRoundedIcon />}
+         </IconButton>
+         <div className={classes.themeToggleClass}>
+            <ThemeSwitch />
+         </div>
+         <ItemList items={items} />
+         </div>
+      </div>
+   )
+}
+
+export default React.memo(DesktopMenu)

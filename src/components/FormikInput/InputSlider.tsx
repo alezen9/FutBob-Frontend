@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Slider from '@material-ui/core/Slider'
 import Typography from '@material-ui/core/Typography'
 import { get } from 'lodash'
-import { FutBobPalette } from '../../../palette'
+import { ZenPalette } from '../../../palette'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
   },
   thumb: {
     '& > span > span': {
-      color: `${FutBobPalette.typographyGrey}`,
+      color: `${ZenPalette.typographyGrey}`,
       backgroundColor: theme.type === 'dark'
         ? '#333'
         : `currentColor`

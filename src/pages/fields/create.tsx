@@ -1,8 +1,8 @@
 import React, { useRef, useEffect } from 'react'
-import PageTransition from '../../components/PageTransition'
-import FieldDetail from '../../pageContainers/fields/show'
+import PageTransition from '@_components/PageTransition'
+import FieldDetail from '@_page-containers/fields/show'
 import { useConfigStore } from '@_zustand/configStore'
-import GoBack from '../../components/GoBack'
+import GoBack from '@_components/GoBack'
 
 const CreateField = props => {
   const isMounted = useRef(true)

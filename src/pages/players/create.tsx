@@ -1,8 +1,8 @@
 import React, { useRef, useEffect } from 'react'
-import PageTransition from '../../components/PageTransition'
-import PlayerDetail from '../../pageContainers/players/show'
+import PageTransition from '@_components/PageTransition'
+import PlayerDetail from '@_page-containers/players/show'
 import { useConfigStore } from '@_zustand/configStore'
-import GoBack from '../../components/GoBack'
+import GoBack from '@_components/GoBack'
 
 const CreatePlayer = props => {
   const isMounted = useRef(true)

@@ -1,8 +1,8 @@
-import React, { ReactChild, ReactChildren } from 'react'
+import React from 'react'
 import { Grid, Button } from '@material-ui/core'
 import FormikInput, { FormikEssentials } from '..'
 import { get } from 'lodash'
-import { decamelize } from '../../../utils/helpers'
+import { decamelize } from '@_utils/helpers'
 
 const scoreProperties = {
   pace: [

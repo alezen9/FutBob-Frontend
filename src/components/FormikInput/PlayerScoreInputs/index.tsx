@@ -2,8 +2,7 @@ import React, { useMemo } from 'react'
 import { Grid, GridProps } from '@material-ui/core'
 import { get, reduce } from 'lodash'
 import SingleScore from './SingleScore'
-import { decamelize } from '../../../utils/helpers'
-import { FormikBag } from 'formik'
+import { decamelize } from '@_utils/helpers'
 import { FormikEssentials } from '..'
 
 type Props = {

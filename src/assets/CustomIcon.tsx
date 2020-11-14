@@ -3,8 +3,8 @@ import SvgIcon from '@material-ui/core/SvgIcon'
 import { makeStyles } from '@material-ui/core'
 import ExpandLessRoundedIcon from '@material-ui/icons/ExpandLessRounded'
 import CancelRoundedIcon from '@material-ui/icons/CancelRounded'
-import { FutBobPalette } from '../../palette'
-import { getScoreColor } from '../utils/helpers'
+import { ZenPalette } from '@_palette'
+import { getScoreColor } from '@_utils/helpers'
 
 const useStyles = makeStyles(theme => ({
   topFormIcon: {
@@ -123,7 +123,7 @@ export const InjuredIcon = props => {
 export const OverallScore = props => {
   const { value = 0, autoColor = true, ...rest } = props
   const color = useMemo(() => {
-    if (!autoColor) return FutBobPalette.typographyGrey
+    if (!autoColor) return ZenPalette.typographyGrey
     return getScoreColor(value)
   }, [value, autoColor])
 

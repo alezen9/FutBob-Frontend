@@ -1,16 +1,16 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react'
 import { Grid, Typography, makeStyles } from '@material-ui/core'
 import { get, reduce } from 'lodash'
-import { FutBobPalette } from '../../../../palette'
-import CustomDialog from '../../Dialog'
+import { ZenPalette } from '@_palette'
 import { SlidersDialogContent, SlidersDialogActions } from './helpers'
-import { getScoreColor } from '../../../utils/helpers'
-import { DefenseIcon, PhysicalIcon } from '../../../assets/CustomIcon'
+import { getScoreColor } from '@_utils/helpers'
+import { DefenseIcon, PhysicalIcon } from '@_icons'
 import FlashOnIcon from '@material-ui/icons/FlashOn'
 import TimelineOutlinedIcon from '@material-ui/icons/TimelineOutlined'
 import GpsFixedOutlinedIcon from '@material-ui/icons/GpsFixedOutlined'
 import AllInclusiveIcon from '@material-ui/icons/AllInclusive'
 import { FormikEssentials } from '..'
+import ZenDialog from '@_components/ZenDialog'
 
 const iconProps = {
   style: {
@@ -47,9 +47,9 @@ const useStyles = makeStyles(theme => ({
   main: {
     borderRadius: 10,
     padding: theme.spacing(2),
-    boxShadow: FutBobPalette.boxShadow,
+    boxShadow: ZenPalette.boxShadow,
     cursor: 'pointer',
-    backgroundColor: FutBobPalette.paperBackgroundColor
+    backgroundColor: ZenPalette.paperBackgroundColor
   }
 }))
 
@@ -108,7 +108,7 @@ const SingleScore = (props: Props) => {
             </Grid>
           </Grid>
         </Grid>
-        <CustomDialog
+        <ZenDialog
           open={openSliders}
           onClose={toggleSliders()}
           title={title}

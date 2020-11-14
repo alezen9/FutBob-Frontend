@@ -1,6 +1,7 @@
-import { FutBobPalette, ThemeType } from '../../palette'
+import { ZenPalette, ThemeType } from '../../palette'
 import create, { UseStore } from 'zustand'
 import { _immer, ConfigStore, setSnackbarData } from './helpers'
+import { LSTheme } from '@_utils/LSVariables'
 
 export const useConfigStore: UseStore<ConfigStore> = create(_immer((set: any, get: any, api: any) => ({
   themeType: ThemeType.light,
@@ -39,8 +40,8 @@ export const useConfigStore: UseStore<ConfigStore> = create(_immer((set: any, ge
       state.themeType = type
     })
     if (!onlyType) {
-      window.localStorage.setItem('FutBobTheme', type)
-      FutBobPalette.switchTheme(type)
+      window.localStorage.setItem(LSTheme, type)
+      ZenPalette.switchTheme(type)
     }
   },
   toggleTheme: () => {
@@ -50,8 +51,8 @@ export const useConfigStore: UseStore<ConfigStore> = create(_immer((set: any, ge
     set((state: ConfigStore) => {
       state.themeType = newType
     })
-    window.localStorage.setItem('FutBobTheme', newType)
-    FutBobPalette.switchTheme(newType)
+    window.localStorage.setItem(LSTheme, newType)
+    ZenPalette.switchTheme(newType)
   },
   setIsLoading: (bool: boolean) => {
     set((state: ConfigStore) => {

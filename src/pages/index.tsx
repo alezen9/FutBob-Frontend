@@ -1,6 +1,6 @@
 import React from 'react'
-import DashboardContainer from '../pageContainers/dashboard'
-import PageTransition from '../components/PageTransition'
+import DashboardContainer from '@_page-containers/dashboard'
+import PageTransition from '@_components/PageTransition'
 
 const Index = props => {
   return (

@@ -1,22 +1,20 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Button, Typography } from '@material-ui/core'
 import { get, isEmpty } from 'lodash'
 import { useConfigStore } from '@_zustand/configStore'
 import { ServerMessage } from '@_utils/serverMessages'
-import FutBobTable from '@_components/Table'
 import { fieldsFilters, getFieldDataRow, headers } from './helpers'
 import { useRouter } from 'next/router'
 import AddRoundedIcon from '@material-ui/icons/AddRounded'
-import CustomDialog from '@_components/Dialog'
-import { FutBobPalette } from '@_palette'
 import { cache } from 'swr'
 import { ConfigStore } from '@_zustand/helpers'
 import { SwrKey } from '@_swr/helpers'
+import { Field } from '@_entities/Fields'
+import { useSWRFields } from '@_swr/Fields'
 import Filters from '@_components/Filters'
 import { Action } from '@_components/Filters/Actions'
-import FutbobPagination from '@_components/Table/Pagination'
-import { useSWRFields } from '@_swr/Fields'
-import { Field } from '@_entities/Fields'
+import ZenPagination from '@_components/ZenTable/ZenPagination'
+import ZenTable from '@_components/ZenTable'
+import WarningDeleteDialog from '@_components/WarningDeleteDialog'
 
 const stateSelector = (state: ConfigStore) => ({
   openSnackbar: state.openSnackbar,
@@ -120,32 +118,23 @@ const FieldsContainer = () => {
             onSubmit: onFiltersSubmit
          }}
       />
-      <FutBobTable
+      <ZenTable
          withMask
          isFetching={isValidating}
          withActions
          headers={headers}
          data={tableData}
-         pagination={<FutbobPagination
+         pagination={<ZenPagination
             totalCount={totalCount}
             currentPage={currentPage}
             onChangePage={handleChangePage}
          />}
       />
-      <CustomDialog
-        open={!!currentItem}
-        title='Attention!'
-        fullScreen={false}
-        content={<Typography >You are about to delete <span style={{ fontWeight: 'bold' }}>{get(currentItem, 'name', 'Unknown field')}</span>, continue and delete?</Typography>}
-        actions={
-          <Button
-            style={{ minWidth: 150, backgroundColor: FutBobPalette.darkRed }}
-            onClick={onDelete}
-            variant='contained'>
-          Delete
-          </Button>
-        }
-        onClose={closeDialog}
+      <WarningDeleteDialog
+         open={!!currentItem}
+         text={<>You are about to delete <span style={{ fontWeight: 'bold' }}>{get(currentItem, 'name', 'Unknown field')}</span>, continue and delete?</>}
+         onClose={closeDialog}
+         onDelete={onDelete}
       />
     </>
   )

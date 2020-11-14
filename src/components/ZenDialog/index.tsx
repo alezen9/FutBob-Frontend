@@ -26,7 +26,7 @@ type Props = {
   open: boolean
   onClose: any
   withTransition?: boolean
-  title?: string
+  title?: ReactNode
   content: ReactNode
   actions?: ReactNode
   maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
@@ -35,7 +35,7 @@ type Props = {
   fullScreen?: boolean
 }
 
-const CustomDialog = (props: Props) => {
+const ZenDialog = (props: Props) => {
   const {
     open,
     onClose,
@@ -94,4 +94,4 @@ const CustomDialog = (props: Props) => {
   )
 }
 
-export default React.memo(CustomDialog)
+export default React.memo(ZenDialog)

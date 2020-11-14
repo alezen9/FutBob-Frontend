@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { makeStyles, IconButton, Typography, Popover } from '@material-ui/core'
-import { FutBobPalette } from '../../../palette'
+import { ZenPalette } from '../../../palette'
 import DetailsRoundedIcon from '@material-ui/icons/DetailsRounded'
 import { uniqueId } from 'lodash'
 
@@ -8,7 +8,7 @@ const useStyles = makeStyles(theme => ({
   popoverClass: {
     padding: 8,
     minWidth: 130,
-    color: FutBobPalette.typographyGrey
+    color: ZenPalette.typographyGrey
   },
   showCondominiButton: {
     position: 'relative',

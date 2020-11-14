@@ -6,13 +6,13 @@ import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
-import CondexoTableCell from './Cell'
-import { uniqueId } from 'lodash'
-import { setData, MobileRowCell, TableHeaderData, TableRowData, SetDataOut } from './helpers'
-import CondexoLoadingMask from '../ContentLoader/LoadingMask'
+import ZenTableCell from './Cell'
+import { get, uniqueId } from 'lodash'
+import { setData, MobileRowCell, TableHeaderData, TableRowData, SetDataOut, getLastStickyIndex } from './helpers'
+import ZenLoadingMask from '../ContentLoader/LoadingMask'
 import { Typography, useTheme, useMediaQuery } from '@material-ui/core'
 import { camelize } from '../../utils/helpers'
-import { FutBobPalette } from '../../../palette'
+import { ZenPalette } from '../../../palette'
 
 const useStyles = makeStyles(theme => ({
   table: {
@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     }
   },
   userRow: {
-    backgroundColor: FutBobPalette.userTableRowBackgroundColor
+    backgroundColor: ZenPalette.userTableRowBackgroundColor
   }
 }))
 
@@ -38,12 +38,13 @@ type TableProps = {
   forceMobile?: boolean
 }
 
-const FutBobTable = React.memo((props: TableProps) => {
+const CustomTable = React.memo((props: TableProps) => {
   const { headers = [], data = [], withActions = false, pagination, forceMobile = false } = props
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'))
   const classes = useStyles()
   const [tableId] = useState(uniqueId('table-'))
+  const [lastStickyIndex, setLastStickyIndex] = useState(0)
 
 
   const { _headers = [], _data = [], _isUserIndexRow } = useMemo(():SetDataOut => {
@@ -54,7 +55,10 @@ const FutBobTable = React.memo((props: TableProps) => {
         _isUserIndexRow: undefined
       }
     }
-    return setData({ headers, data, withActions })
+    const res = setData({ headers, data, withActions })
+    const _lastStickyIndex = getLastStickyIndex(res._headers)
+    setLastStickyIndex(_lastStickyIndex)
+    return res
   }, [headers, data, withActions])
 
   const mainHeaders = useMemo(() => {
@@ -75,14 +79,16 @@ const FutBobTable = React.memo((props: TableProps) => {
                   {forceMobile || isSmallScreen
                     ? mainHeaders
                       ? mainHeaders.map((cell, i) => (
-                        <CondexoTableCell
+                        <ZenTableCell
                           key={`${tableId}-headerCell-${i}`}
                           align={i !== 0 ? 'right' : 'left'}
                           {...cell} />
                       ))
                       : <></>
                     : _headers.map((cell, i) => (
-                      <CondexoTableCell
+                      <ZenTableCell
+                        isHeader
+                        isLastStickyColumn={lastStickyIndex === i}
                         key={`${tableId}-headerCell-${i}`}
                         align={i !== 0 ? 'right' : 'left'}
                         {...cell} />
@@ -106,8 +112,12 @@ const FutBobTable = React.memo((props: TableProps) => {
                           const found = key === 'actions'
                             ? undefined
                             : headers.find(({ name, id }) => camelize(id || name) === camelize(key))
-                          return <CondexoTableCell
-                            {...found && found.style && { headerStyles: found.style }}
+                          return <ZenTableCell
+                            {...found && found.style && { 
+                              headerStyles: found.style,
+                              sticky: !!found.sticky, 
+                              isLastStickyColumn: lastStickyIndex === j
+                            }}
                             key={`${tableId}-bodyCell-${i}-${j}`}
                             align={j !== 0 ? 'right' : 'left'}
                             {...key === 'actions'
@@ -118,7 +128,7 @@ const FutBobTable = React.memo((props: TableProps) => {
                       </TableRow>
                   })
                   : <TableRow>
-                    <CondexoTableCell component={<Typography>Nessun dato</Typography>} />
+                    <ZenTableCell colSpan={_headers.length} component={<Typography>Nessun dato</Typography>} />
                   </TableRow>}
               </TableBody>
             </Table>
@@ -133,7 +143,7 @@ type WrapperProps = TableProps & {
   isFetching?: boolean
 }
 
-const WrapperTable = (props: WrapperProps) => {
+const ZenTable = (props: WrapperProps) => {
   const { withMask = false, isFetching = false } = props
   const [isFirstRun, setIsFirstRun] = useState(true)
 
@@ -147,11 +157,11 @@ const WrapperTable = (props: WrapperProps) => {
 
   return withMask
     ? <>
-      <CondexoLoadingMask isLoading={isFetching}>
-        <FutBobTable {...props} />
-      </CondexoLoadingMask>
+      <ZenLoadingMask isLoading={isFetching}>
+        <CustomTable {...props} />
+      </ZenLoadingMask>
       </>
-    : <FutBobTable {...props} />
+    : <CustomTable {...props} />
 }
 
-export default React.memo(WrapperTable)
+export default React.memo(ZenTable)
