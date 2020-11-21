@@ -79,7 +79,7 @@ export type GQL_FieldType = {
       height?: boolean
    },
    state?: boolean
-   cost?: boolean
+   price?: boolean
    location?: GQL_GeoPoint
 }
 

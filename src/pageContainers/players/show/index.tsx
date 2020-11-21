@@ -132,7 +132,7 @@ const PlayerDetail = () => {
   }, [formik.values.score])
 
   const playerName = useMemo(() => {
-    if(get(playerItem, 'user._id', null) === userConnectedItem._id) return <span style={{ color: ZenPalette.darkRed }}>yourself</span>
+    if(get(playerItem, 'user._id', null) === userConnectedItem._id) return <span style={{ color: ZenPalette.error }}>yourself</span>
     return `${get(playerItem, 'user.surname', '')} ${get(playerItem, 'user.name', '')}`
   }, [playerItem, userConnectedItem._id])
 
@@ -227,7 +227,7 @@ const PlayerDetail = () => {
       <Grid item container xs={12} justify={isSmallScreen ? 'space-evenly' : 'flex-end'}>
           {playerItem._id && <Grid item>
             <Button
-              style={{ minWidth: 150, color: ZenPalette.darkRed, marginRight: '1.5em', borderColor: ZenPalette.darkRed }}
+              style={{ minWidth: 150, color: ZenPalette.error, marginRight: '1.5em', borderColor: ZenPalette.error }}
               disabled={formik.isSubmitting}
               onClick={() => setOpenConfirmDialog(true)}
               variant='outlined'>

@@ -4,6 +4,7 @@ import Players from './Players'
 import { get } from 'lodash'
 import { Switch } from '@material-ui/core'
 import { FormikValues } from 'formik'
+import { FormikEssentials } from '@_components/FormikInput'
 
 const useStyles = makeStyles(theme => {
   const indoorLineColor: string = 'rgb(0, 0, 138, 1)'
@@ -39,13 +40,14 @@ const useStyles = makeStyles(theme => {
       position: 'relative',
       width: '100%',
       height: '100%',
+      borderRadius: 7,
       backgroundImage: (props: any) => `url("${props.indoor ? '/assets/parquet.jpg' : '/assets/grass.jpg'}")`,
       backgroundRepeat: 'repeat',
       backgroundSize: 75,
       backgroundPosition: -20,
       transform: 'rotateX(30deg)',
       transformStyle: 'preserve-3d',
-      boxShadow: `-0 15px 20px ${theme.type === 'dark' ? 'none' : 'rgba(0, 0, 0, 0.5)'}`,
+      boxShadow: `-0 15px 20px ${theme.type === 'dark' ? 'rgba(0,0,0,.8)' : 'rgba(0, 0, 0, 0.3)'}`,
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
@@ -141,19 +143,18 @@ const useStyles = makeStyles(theme => {
   }
 })
 
-type Props = {
-  positions?: number[]
-  onPositionClick?: () => any
-  name: string
-  values: FormikValues
-  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
-  setFieldTouched: (field: string, isTouched?: boolean, shouldValidate?: boolean) => void
-  type: 'indoor'|'outdoor'
+type Props = Partial<FormikEssentials> & {
+   withPlayers?: boolean
+   positions?: number[]
+   onPositionClick?: () => any
+   onTypeChange?: (newType: string) => void
+   name?: string
+   type: 'indoor'|'outdoor'
 }
 
 const FutsalField = (props: Props) => {
-  const { positions = [], onPositionClick, name, values, setFieldValue, setFieldTouched, type = 'outdoor' } = props
-  const [outDoor, setOutDoor] = useState(true)
+  const { withPlayers = true, positions = [], onPositionClick, onTypeChange, name, values, setFieldValue, setFieldTouched, type = 'outdoor' } = props
+  const [outDoor, setOutDoor] = useState(type === 'outdoor')
   const { wrapper, typeSwitch, fieldWrapper, field, lines1, lines2, trackClass } = useStyles({ indoor: !outDoor })
 
   const vals: number[] = useMemo(() => get(values, name, positions) || [], [name, positions, values])
@@ -173,7 +174,16 @@ const FutsalField = (props: Props) => {
       setVal(newVals)
     }, [vals, setVal])
 
-  const toggleField = useCallback(() => setOutDoor(state => !state), [])
+  const toggleField = useCallback(() => {
+     let newType = 'outdoor'
+     setOutDoor(state => {
+        newType = state
+         ? 'indoor'
+         : 'outdoor'
+      return !state
+     })
+     if(onTypeChange) onTypeChange(newType)
+  }, [onTypeChange])
 
   return (
     <div className={wrapper}>
@@ -181,7 +191,7 @@ const FutsalField = (props: Props) => {
         <div className={field}>
           <div className={lines1} />
           <div className={lines2} />
-          <Players values={vals} onClick={onPositionClickFormik || onPositionClick} />
+          {withPlayers && <Players values={vals} onClick={onPositionClickFormik || onPositionClick} />}
         </div>
         <div className={typeSwitch}>
           <Switch classes={{ track: trackClass }} color='primary' checked={outDoor} onChange={toggleField} />

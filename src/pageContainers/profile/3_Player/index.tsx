@@ -131,7 +131,7 @@ const Player = (props: ProfileTabProps) => {
       <Grid item container xs={12} justify={isSmallScreen ? 'space-evenly' : 'flex-end'}>
         {get(futsalPlayer, '_id', null) && <Grid item>
           <Button
-            style={{ minWidth: 130, color: ZenPalette.darkRed, marginRight: '1.5em', borderColor: ZenPalette.darkRed }}
+            style={{ minWidth: 130, color: ZenPalette.error, marginRight: '1.5em', borderColor: ZenPalette.error }}
             disabled={formik.isSubmitting}
             onClick={() => setOpenConfirmDialog(true)}
             variant='outlined'>
@@ -153,10 +153,10 @@ const Player = (props: ProfileTabProps) => {
         open={!!openConfirmDialog}
         fullScreen={false}
         title='Attention!'
-        content={<Typography >You are about to delete <span style={{ fontWeight: 'bold', color: ZenPalette.darkRed }}>Yourself</span>, continue and delete?</Typography>}
+        content={<Typography >You are about to delete <span style={{ fontWeight: 'bold', color: ZenPalette.error }}>Yourself</span>, continue and delete?</Typography>}
         actions={
           <Button
-            style={{ minWidth: 150, backgroundColor: ZenPalette.darkRed }}
+            style={{ minWidth: 150, backgroundColor: ZenPalette.error }}
             onClick={onDelete}
             variant='contained'>
           Delete

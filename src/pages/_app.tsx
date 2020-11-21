@@ -1,15 +1,25 @@
-import React, { useEffect, useCallback } from 'react'
-import '@_components/Navbar/Navbar.css'
-import { FutBobLogo } from '@_icons'
+import React, { useCallback, useEffect } from 'react'
 import { useConfigStore } from '@_zustand/configStore'
 import { get } from 'lodash'
 import { ServerMessage } from '@_utils/serverMessages'
-import { apiInstance } from 'src/SDK'
-import "nprogress/nprogress.css"
 import { ConfigStore } from '@_zustand/helpers'
-import { useSWRUser } from '@_swr/User'
 import { AS_PATH, LSTheme, LSToken } from '@_utils/LSVariables'
 import ZenApp from '@_components/_ZenApp'
+import { AppProps } from 'next/app'
+import { useSWRUser } from '@_swr/User'
+import { apiInstance } from 'src/SDK'
+import { FutBobLogo } from '@_icons'
+import { setLocale } from 'yup'
+// css
+import "nprogress/nprogress.css"
+import '@_components/_ZenMenu/MobileMenu/Navbar/Navbar.css'
+
+setLocale({ mixed: { 
+   notType: ({ path, type, value, originalValue }) => {
+      if(['string', 'number'].includes(type)) return 'Invalid input'
+   },
+   required: ''
+ } })
 
 
 const stateSelector = (state: ConfigStore) => ({
@@ -17,7 +27,7 @@ const stateSelector = (state: ConfigStore) => ({
   openSnackbar: state.openSnackbar,
 })
 
-const MyApp = props => {
+const MyApp = (props: AppProps) => {
   const { Component, pageProps } = props
   const { isLoading, openSnackbar } = useConfigStore(stateSelector)
 
@@ -33,7 +43,7 @@ const MyApp = props => {
         variant: 'error',
         message: ServerMessage[error] || get(error, 'message', error)
       })
-    }, [])
+    }, [openSnackbar])
 
   return <>
    <ZenApp

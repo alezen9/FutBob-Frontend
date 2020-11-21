@@ -1,9 +1,5 @@
-import React, { useState, useEffect, useCallback, ReactElement } from 'react'
-import { makeStyles, List, ListItemIcon, ListItem, ListItemText, Collapse } from '@material-ui/core'
-import ArrowDropDownRoundedIcon from '@material-ui/icons/ArrowDropDownRounded'
-import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded'
-import KeyboardArrowRightRoundedIcon from '@material-ui/icons/KeyboardArrowRightRounded'
-import { compact, take } from 'lodash'
+import React, { useEffect, useCallback } from 'react'
+import { makeStyles, List } from '@material-ui/core'
 import { useRouter } from 'next/router'
 import ExitToAppRoundedIcon from '@material-ui/icons/ExitToAppRounded'
 import { apiInstance } from 'src/SDK'
@@ -58,10 +54,11 @@ const ItemList = (props: Props) => {
       router.push(path)
    }, [])
 
-   const afterLogout = useCallback(
-      async () => {
-      await router.push('/login')
-      setIsLogged(false)
+   const afterLogout = useCallback(() => {
+      router.push('/login')
+         .then(() => {
+            setIsLogged(false)
+         })
    },[])
 
    const logout = useCallback(
@@ -70,19 +67,15 @@ const ItemList = (props: Props) => {
       apiInstance.user_logout(afterLogout)
    }, [])
 
-   const routeBuilder = () => {
-      return items.map((item: RouteItem, i: number) => {
-         return !item.subpaths || (item.subpaths && !item.subpaths.length)
-         ? <SingleItem key={`main-path-${i}`} item={item} handleRoute={handleRoute} />
-         : <ExpandableItem key={`main-path-${i}`} item={item} handleRoute={handleRoute} />
-      })
-   }
-
    return (
       <>
          <div className={classes.list} >
          <List className={classes.root}>
-            {routeBuilder()}
+            {items.map((item: RouteItem, i: number) => {
+               return !item.subpaths || (item.subpaths && !item.subpaths.length)
+               ? <SingleItem key={`main-path-${i}`} item={item} handleRoute={handleRoute} />
+               : <ExpandableItem key={`main-path-${i}`} item={item} handleRoute={handleRoute} />
+            })}
          </List>
          </div>
          <div className={classes.logout}>

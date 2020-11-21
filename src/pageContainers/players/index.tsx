@@ -35,7 +35,7 @@ const PlayersContainer = () => {
   const router = useRouter()
 
   const playerName = useMemo(() => {
-    if(get(currentItem, 'user._id', null) === userConnectedItem._id) return <span style={{ color: ZenPalette.darkRed }}>yourself</span>
+    if(get(currentItem, 'user._id', null) === userConnectedItem._id) return <span style={{ color: ZenPalette.error }}>yourself</span>
     return `${get(currentItem, 'user.surname', '')} ${get(currentItem, 'user.name', '')}`
   }, [currentItem, userConnectedItem._id])
 

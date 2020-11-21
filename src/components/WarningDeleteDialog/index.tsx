@@ -21,7 +21,7 @@ const WarningDeleteDialog = (props: Props) => {
          content={<Typography >{text}</Typography>}
          actions={
          <Button
-            style={{ minWidth: 150, backgroundColor: ZenPalette.darkRed }}
+            style={{ minWidth: 150, backgroundColor: ZenPalette.error }}
             onClick={onDelete}
             variant='contained'>
             Delete

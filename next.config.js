@@ -18,7 +18,9 @@ module.exports = withPWA({
     API_URL: getApiUrl('server')
   },
   publicRuntimeConfig: {
-    API_URL: getApiUrl('public')
+    API_URL: getApiUrl('public'),
+    NODE_ENV: process.env.NODE_ENV,
+    ENV: process.env.ENV
   },
   devIndicators: {
     autoPrerender: false

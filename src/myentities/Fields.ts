@@ -22,6 +22,6 @@ export type Field = {
    name: string
    measurements: Measurements
    state: FieldState
-   cost: number
+   price: number
    location: GeoPoint
 }

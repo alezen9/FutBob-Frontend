@@ -1,6 +1,6 @@
 import { createMuiTheme } from '@material-ui/core/styles'
 import createBreakpoints from '@material-ui/core/styles/createBreakpoints'
-import { ThemeType } from './palette'
+import { ThemeType, configColors } from './palette'
 
 declare module '@material-ui/core/styles/createMuiTheme' {
   interface Theme {
@@ -16,14 +16,7 @@ const breakpoints = createBreakpoints({})
 
 const subtitleGrey = '#686868'
 const lightGrey = '#c1c1c1'
-const pinkLight = 'rgb(255,45,85)'
-const azureLight = 'rgb(0,122,255)'
-const azureDark = 'rgb(10,132,255)'
-const darkGreen = 'rgb(42, 156, 71)'
-const lightRed = 'rgb(255,59,48)'
-const darkRed = 'rgb(255,69,58)'
 const backgroundColor = '#fafafa'
-const typographyGrey = '#717171'
 const borderColor = 'rgba(0, 0, 0, 0.23)'
 const borderRadius = 7
 
@@ -31,74 +24,59 @@ const lightTheme = createMuiTheme({
   // @ts-ignore
   type: ThemeType.light,
   palette: {
-    primary: {
-      light: pinkLight,
-      main: darkGreen,
-      dark: darkGreen,
-      contrastText: '#fff'
-    },
-    secondary: {
-      light: azureLight,
-      main: azureDark,
-      dark: azureDark,
-      contrastText: '#fff'
-    },
-    error: {
-      light: lightRed,
-      main: darkRed,
-      dark: darkRed,
-      contrastText: '#fff'
-    }
+    primary: configColors.primary.light,
+    secondary: configColors.secondary.light,
+    error: configColors.error.light
   },
   typography: {
     fontFamily: "'Poppins', sans-serif",
     h1: {
       padding: 0,
       fontSize: '25pt',
-      color: typographyGrey
+      color: configColors.typographyColor.light
     },
     h2: {
       padding: 0,
       fontSize: '23pt',
-      color: typographyGrey
+      color: configColors.typographyColor.light
     },
     h3: {
       padding: 0,
       fontSize: '21pt',
-      color: typographyGrey
+      color: configColors.typographyColor.light
     },
     h4: {
       padding: 0,
       fontSize: '15pt',
-      color: typographyGrey,
+      color: configColors.typographyColor.light,
       fontWeight: 500
     },
     h5: {
       padding: 0,
       fontSize: '13pt',
-      color: typographyGrey
+      color: configColors.typographyColor.light
     },
     h6: {
       padding: 0,
       fontSize: '13pt',
       fontWeight: 'bold',
-      color: typographyGrey
+      color: configColors.typographyColor.light
     },
     body1: {
       padding: 0,
       fontSize: '12pt',
-      color: typographyGrey
+      color: configColors.typographyColor.light
     },
     body2: {
       padding: 0,
       fontSize: '12pt',
       fontWeight: 500,
-      color: typographyGrey
+      color: configColors.typographyColor.light
     },
     caption: {
       padding: 0,
       fontSize: '10pt',
-      color: typographyGrey
+      color: configColors.typographyColor.light
     }
 
   },
@@ -123,7 +101,7 @@ const lightTheme = createMuiTheme({
     },
     MuiInputBase: {
       root: {
-        color: typographyGrey,
+        color: configColors.typographyColor.light,
         '&$disabled': {
           color: lightGrey,
           opacity: 0.7
@@ -144,7 +122,7 @@ const lightTheme = createMuiTheme({
     },
     MuiInput: {
       root: {
-        color: typographyGrey,
+        color: configColors.typographyColor.light,
         '&$disabled': {
           color: lightGrey
         }
@@ -152,7 +130,7 @@ const lightTheme = createMuiTheme({
       inputMultiline: {
         boxSizing: 'border-box',
         borderRadius: 0,
-        border: `1px solid ${darkGreen}`,
+        border: `1px solid ${configColors.primary.light.main}`,
         background: 'transparent',
         backgroundColor: 'transparent',
         height: 'auto',
@@ -177,7 +155,7 @@ const lightTheme = createMuiTheme({
     },
     MuiInputLabel: {
       root: {
-        color: typographyGrey,
+        color: configColors.typographyColor.light,
         opacity: '.6'
       }
     },
@@ -200,7 +178,7 @@ const lightTheme = createMuiTheme({
         }
       },
       outlined: {
-        color: typographyGrey,
+        color: configColors.typographyColor.light,
         borderRadius,
         fontSize: 14,
         borderColor
@@ -208,7 +186,7 @@ const lightTheme = createMuiTheme({
     },
     MuiAvatar: {
       root: {
-        backgroundColor: `${darkGreen} !important`
+        backgroundColor: `${configColors.primary.light.main} !important`
       }
     },
     MuiBackdrop: {
@@ -218,7 +196,7 @@ const lightTheme = createMuiTheme({
     },
     MuiIconButton: {
       root: {
-        color: darkGreen
+        color: configColors.primary.light.main
       }
     },
     MuiDialog: {
@@ -295,7 +273,7 @@ const lightTheme = createMuiTheme({
         },
         '&$selected': {
           '&>p': {
-            color: darkGreen
+            color: configColors.primary.light.main
           }
         }
       }

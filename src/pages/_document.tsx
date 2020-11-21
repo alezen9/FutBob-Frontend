@@ -46,18 +46,21 @@ export default class MyDocument extends Document {
             @font-face {
               font-family: Poppins;
               src: url('/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+              font-display: swap;
             }
             
             @font-face {
               font-family: Poppins;
               src: url('/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
               font-weight: bold;
+              font-display: swap;
             }
             
             @font-face {
               font-family: Poppins;
               src: url('/fonts/Poppins/Poppins-Italic.ttf') format('truetype');
               font-style: italic;
+              font-display: swap;
             }
             
             @font-face {
@@ -65,6 +68,7 @@ export default class MyDocument extends Document {
               src: url('/fonts/Poppins/Poppins-BoldItalic.ttf') format('truetype');
               font-style: italic;
               font-weight: bold;
+              font-display: swap;
             }
 
             #nprogress .bar {

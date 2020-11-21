@@ -15,7 +15,7 @@ export type UpdateFieldInput = {
     state?: FieldState,
     type?: FieldType,
     name?: string,
-    cost?: number,
+    price?: number,
     measurements?: Measurements,
     location?: GeoPoint
 }

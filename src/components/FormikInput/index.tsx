@@ -260,6 +260,7 @@ const FormikInput = (props: Props) => {
             props.setFieldValue(name, newValues.filter(({ value }) => value !== -1))
           }
         } else {
+           console.log(d)
           props.setFieldTouched(name, true, false)
           props.setFieldValue(name, e.target.value, true)
         }

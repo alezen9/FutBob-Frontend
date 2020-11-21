@@ -85,7 +85,7 @@ export const allFieldFields: GQL_FieldType = {
     _id: true,
     state: true,
     name: true,
-    cost: true,
+    price: true,
     type: true,
     location: {
        type: true,

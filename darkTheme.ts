@@ -1,16 +1,9 @@
 import { createMuiTheme } from '@material-ui/core/styles'
 import createBreakpoints from '@material-ui/core/styles/createBreakpoints'
-import { ThemeType } from './palette'
+import { ThemeType, configColors } from './palette'
 
 const subtitleGrey = '#686868'
 const lightGrey = '#c1c1c1'
-const azureLight = 'rgb(0,122,255)'
-const azureDark = 'rgb(10,132,255)'
-const lightGreen = 'rgb(52,199,89)'
-const darkGreen = 'rgb(42, 156, 71)'
-const lightRed = 'rgb(255,59,48)'
-const darkRed = 'rgb(255,69,58)'
-const typographyGrey = '#b3b3b3'
 const borderColor = '#b3b3b3'
 const borderRadius = 7
 
@@ -20,74 +13,59 @@ const darkTheme = createMuiTheme({
   // @ts-ignore
   type: ThemeType.dark,
   palette: {
-    primary: {
-      light: lightGreen,
-      main: darkGreen,
-      dark: darkGreen,
-      contrastText: '#fff'
-    },
-    secondary: {
-      light: azureLight,
-      main: azureDark,
-      dark: azureDark,
-      contrastText: '#fff'
-    },
-    error: {
-      light: lightRed,
-      main: darkRed,
-      dark: darkRed,
-      contrastText: '#fff'
-    }
+    primary: configColors.primary.dark,
+    secondary: configColors.secondary.dark,
+    error: configColors.error.dark
   },
   typography: {
     fontFamily: "'Poppins', sans-serif",
     h1: {
       padding: 0,
       fontSize: '25pt',
-      color: typographyGrey
+      color: configColors.typographyColor.dark
     },
     h2: {
       padding: 0,
       fontSize: '23pt',
-      color: typographyGrey
+      color: configColors.typographyColor.dark
     },
     h3: {
       padding: 0,
       fontSize: '21pt',
-      color: typographyGrey
+      color: configColors.typographyColor.dark
     },
     h4: {
       padding: 0,
       fontSize: '15pt',
-      color: typographyGrey,
+      color: configColors.typographyColor.dark,
       fontWeight: 500
     },
     h5: {
       padding: 0,
       fontSize: '13pt',
-      color: typographyGrey
+      color: configColors.typographyColor.dark
     },
     h6: {
       padding: 0,
       fontSize: '13pt',
       fontWeight: 'bold',
-      color: typographyGrey
+      color: configColors.typographyColor.dark
     },
     body1: {
       padding: 0,
       fontSize: '12pt',
-      color: typographyGrey
+      color: configColors.typographyColor.dark
     },
     body2: {
       padding: 0,
       fontSize: '12pt',
       fontWeight: 500,
-      color: typographyGrey
+      color: configColors.typographyColor.dark
     },
     caption: {
       padding: 0,
       fontSize: '10pt',
-      color: typographyGrey
+      color: configColors.typographyColor.dark
     }
 
   },
@@ -111,7 +89,7 @@ const darkTheme = createMuiTheme({
     },
     MuiInputBase: {
       root: {
-        color: typographyGrey,
+        color: configColors.typographyColor.dark,
         '&$disabled': {
           color: lightGrey
         }
@@ -130,7 +108,7 @@ const darkTheme = createMuiTheme({
     },
     MuiInput: {
       root: {
-        color: typographyGrey,
+        color: configColors.typographyColor.dark,
         '&$disabled': {
           color: lightGrey
         }
@@ -138,7 +116,7 @@ const darkTheme = createMuiTheme({
       inputMultiline: {
         boxSizing: 'border-box',
         borderRadius: 0,
-        border: `1px solid ${darkGreen}`,
+        border: `1px solid ${configColors.primary.dark.main}`,
         background: 'transparent',
         backgroundColor: 'transparent',
         height: 'auto',
@@ -172,7 +150,7 @@ const darkTheme = createMuiTheme({
     },
     MuiInputLabel: {
       root: {
-        color: typographyGrey,
+        color: configColors.typographyColor.dark,
         opacity: '.6',
         '&$disabled': {
           color: 'rgba(255,255,255,.3)'
@@ -224,7 +202,7 @@ const darkTheme = createMuiTheme({
         }
       },
       outlined: {
-        color: typographyGrey,
+        color: configColors.typographyColor.dark,
         borderRadius,
         fontSize: 14,
         borderColor: borderColor
@@ -232,12 +210,12 @@ const darkTheme = createMuiTheme({
     },
     MuiAvatar: {
       root: {
-        backgroundColor: `${darkGreen} !important`
+        backgroundColor: `${configColors.primary.dark.main} !important`
       }
     },
     MuiIconButton: {
       root: {
-        color: darkGreen
+        color: configColors.primary.dark.main
       }
     },
     MuiDialog: {
@@ -264,9 +242,9 @@ const darkTheme = createMuiTheme({
     // @ts-ignore
     MuiPaginationItem: {
       root: {
-        color: typographyGrey,
+        color: configColors.typographyColor.dark,
         '&$disabled': {
-          color: typographyGrey
+          color: configColors.typographyColor.dark
         }
       },
       outlined: {
@@ -291,7 +269,7 @@ const darkTheme = createMuiTheme({
         height: 'none'
       },
       iconOutlined: {
-        color: typographyGrey
+        color: configColors.typographyColor.dark
       }
     },
     MuiTable: {
@@ -315,7 +293,7 @@ const darkTheme = createMuiTheme({
     MuiTableCell: {
       head: {
         fontWeight: 600,
-        color: typographyGrey,
+        color: configColors.typographyColor.dark,
         borderBottom: 'none',
         minWidth: 100
       },
@@ -349,7 +327,7 @@ const darkTheme = createMuiTheme({
             backgroundColor: '#444'
           },
           '&>p': {
-            color: darkGreen
+            color: configColors.primary.dark.main
           }
         }
       }

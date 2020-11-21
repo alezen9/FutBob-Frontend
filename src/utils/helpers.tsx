@@ -319,3 +319,14 @@ export const getMultipleInitValue = (vals = [], options = []) => {
 export const getOptionsByEnum = (entity): OptionType[] => compact(map(entity, (el, i) => !isNaN(el)
    ? { label: decamelize(i), value: parseInt(el) }
    : null))
+
+export const formatter = new Intl.NumberFormat('it-IT', {
+  style: 'currency',
+  currency: 'EUR',
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2
+})
+
+export const eurosToCents = (euros: number) => Math.trunc(euros * 100)
+
+export const centsToEuros = (cents: number) => formatter.format(cents / 100)

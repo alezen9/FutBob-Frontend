@@ -1,16 +1,16 @@
 import * as yup from 'yup'
 
 export const createEditFieldValidationSchema = yup.object().shape({
-  name: yup.string().required('Required!'),
-  type: yup.number().required('Required!'),
-  state: yup.number().required('Required!'),
-  cost: yup.number().required('Required!'),
+  name: yup.string().required(),
+  type: yup.number().required(),
+  state: yup.number().required(),
+  price: yup.number().required(),
   measurements: yup.object().shape({
-    width: yup.number().required('Required!'),
-    height: yup.number().required('Required!')
-  }).required('Required!'),
+    width: yup.number().required(),
+    height: yup.number().required()
+  }).required(),
   location: yup.object().shape({
-    type: yup.string().required('Required!'),
-    coordinates: yup.array(yup.number().nullable()).required('Required!')
-  }).required('Required!')
+    type: yup.string().required(),
+    coordinates: yup.array().of(yup.number().nullable().strict().required())
+  }).required()
 })

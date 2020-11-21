@@ -19,50 +19,50 @@ const NProgress = dynamic(() => import("@_components/NProgress"), { ssr: false }
 
 
 const useStyles = makeStyles(theme => ({
-  snackbar: {
-    [theme.breakpoints.down('xs')]: {
-      bottom: 85
-    }
-  },
-  rootAlert: {
-    display: 'flex',
-    alignItems: 'center',
-    borderRadius: 12,
-    [theme.breakpoints.down('xs')]: {
-      width: '100%'
-    }
-  },
-  alertMessage: {
-    padding: 0,
-    fontSize: '11pt',
-    display: '-webkit-box',
-    WebkitLineClamp: 1,
-    WebkitBoxOrient: 'vertical',
-    overflow: 'hidden',
-    [theme.breakpoints.down('xs')]: {
-      width: '100%'
-    }
-  },
-  content: {
-    width: (props: any) => !props.isLogged ? '100vw' : `calc(100vw - ${props.menuOpen ? 250 : 60}px)`,
-    transition: 'width .2s ease',
-    overflow: 'hidden auto',
-    minHeight: '100vh',
-    padding: '1.5em',
-    float: 'right',
-    [theme.breakpoints.down('sm')]: {
-      position: 'relative',
-      marginTop: '5em',
-      width: '100vw !important',
-      padding: '1em 1em 90px 1em'
-    }
-  },
-  wrapper: {
-    display: 'flex',
-    width: '100vw',
-    minHeight: '100vh',
-    overflow: 'hidden auto'
-  }
+   snackbar: {
+      [theme.breakpoints.down('xs')]: {
+         bottom: 85
+      }
+   },
+   rootAlert: {
+      display: 'flex',
+      alignItems: 'center',
+      borderRadius: 12,
+      [theme.breakpoints.down('xs')]: {
+         width: '100%'
+      }
+   },
+   alertMessage: {
+      padding: 0,
+      fontSize: '11pt',
+      display: '-webkit-box',
+      WebkitLineClamp: 1,
+      WebkitBoxOrient: 'vertical',
+      overflow: 'hidden',
+      [theme.breakpoints.down('xs')]: {
+         width: '100%'
+      }
+   },
+   content: {
+   // width: (props: any) => !props.isLogged ? '100vw' : `calc(100vw - ${props.menuOpen ? 250 : 60}px)`,
+      width: '100%',
+      overflow: 'hidden auto',
+      minHeight: '100vh',
+      padding: '1.5em',
+      transition: 'width .2s ease',
+      [theme.breakpoints.down('sm')]: {
+         position: 'relative',
+         marginTop: '5em',
+         width: '100vw !important',
+         padding: '1em 1em 90px 1em'
+      }
+   },
+   wrapper: {
+      display: 'flex',
+      width: '100vw',
+      minHeight: '100vh',
+      overflow: 'hidden auto'
+   }
 }))
 
 const Alert = props => {
