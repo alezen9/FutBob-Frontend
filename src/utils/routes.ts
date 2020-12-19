@@ -2,7 +2,10 @@ export enum ZenRouteID {
    DASHBOARD = 'DASHBOARD',
    PROFILE = 'PROFILE',
    PLAYERS = 'PLAYERS',
-   FIELDS = 'FIELDS'
+   FREE_AGENT = 'FREE_AGENT',
+   FIELDS = 'FIELDS',
+   APPOINTMENTS = 'APPOINTMENTS',
+   STATISTICS = 'STATISTICS'
 }
 
 export type ZenSubRoute = {
@@ -33,19 +36,24 @@ export const routes: ZenRoute[] = [
       title: 'Players',
       path: '/players?page=1'
    },
+   // {
+   //    _id: ZenRouteID.FREE_AGENT,
+   //    title: 'Free agent',
+   //    path: '/players?page=1'
+   // },
    {
       _id: ZenRouteID.FIELDS,
       title: 'Fields',
       path: '/fields?page=1'
    },
-  // {
-  //   title: 'Matches',
-  //   icon: <SportsSoccerRoundedIcon />,
-  //   path: '/matches'
-  // },
-  // {
-  //   title: 'Stats',
-  //   icon: <BarChartRoundedIcon />,
-  //   path: '/statistics'
-  // }
+//    {
+//       _id: ZenRouteID.APPOINTMENTS,
+//       title: 'Appointments',
+//       path: '/fields?page=1'
+//    },
+//   {
+//       _id: ZenRouteID.STATISTICS,
+//       title: 'Statistics',
+//       path: '/players?page=1'
+//   }
 ]

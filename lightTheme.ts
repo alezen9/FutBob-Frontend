@@ -232,6 +232,19 @@ const lightTheme = createMuiTheme({
         height: 'none'
       }
     },
+    MuiListItem: {
+      root: {
+        '&:hover': {
+          backgroundColor: 'rgba(0,0,0, .03) !important'
+        }
+      }
+    },
+    MuiListItemIcon: {
+      root: {
+        color: 'unset',
+        transition: 'color .3s ease'
+      }
+    },
     MuiTableHead: {
       root: {
         backgroundColor: 'rgba(0,0,0,.1)'

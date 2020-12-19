@@ -3,9 +3,9 @@ import { useMediaQuery, useTheme } from '@material-ui/core'
 import { routes, ZenRoute, ZenRouteID } from '@_utils/routes'
 // icons
 import DashboardRoundedIcon from '@material-ui/icons/DashboardRounded'
-// import SportsSoccerRoundedIcon from '@material-ui/icons/SportsSoccerRounded'
+import SportsSoccerRoundedIcon from '@material-ui/icons/SportsSoccerRounded'
 import FaceRoundedIcon from '@material-ui/icons/FaceRounded'
-// import BarChartRoundedIcon from '@material-ui/icons/BarChartRounded'
+import BarChartRoundedIcon from '@material-ui/icons/BarChartRounded'
 import { FieldIcon, JerseyIcon } from '@_icons'
 import DesktopMenu from './DesktopMenu'
 import MobileMenu from './MobileMenu'
@@ -14,7 +14,10 @@ const iconMap = {
   [ZenRouteID.DASHBOARD]: <DashboardRoundedIcon />,
   [ZenRouteID.PROFILE]: <FaceRoundedIcon />,
   [ZenRouteID.PLAYERS]: <JerseyIcon />,
-  [ZenRouteID.FIELDS]: <FieldIcon />
+  [ZenRouteID.FREE_AGENT]: <JerseyIcon />,
+  [ZenRouteID.FIELDS]: <FieldIcon />,
+  [ZenRouteID.APPOINTMENTS]: <SportsSoccerRoundedIcon />,
+  [ZenRouteID.STATISTICS]: <BarChartRoundedIcon />
 }
 
 export type RouteItem = ZenRoute & {

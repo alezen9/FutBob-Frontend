@@ -157,6 +157,34 @@ const darkTheme = createMuiTheme({
         }
       }
     },
+    MuiStepper: {
+      root: {
+        background: 'transparent'
+      }
+    },
+    MuiStepIcon: {
+      root: {
+        color: 'rgba(255,255,255,.1)'
+      },
+      active: {
+        color: 'currentColor'
+      }
+    },
+    MuiStepLabel: {
+      root: {
+        '&$disabled': {
+          opacity: 0.3
+        }
+      }
+    },
+    MuiMobileStepper: {
+      dotActive: {
+        backgroundColor: configColors.primary.dark.dark
+      },
+      dot: {
+        backgroundColor: 'rgba(255,255,255,.2)'
+      }
+    },
     MuiDivider: {
       root: {
         backgroundColor: 'rgba(255,255,255,.3)'
@@ -206,6 +234,11 @@ const darkTheme = createMuiTheme({
         borderRadius,
         fontSize: 14,
         borderColor: borderColor
+      },
+      text: {
+        '&:hover': {
+          backgroundColor: 'rgba(255,255,255,.05)'
+        }
       }
     },
     MuiAvatar: {
@@ -215,7 +248,13 @@ const darkTheme = createMuiTheme({
     },
     MuiIconButton: {
       root: {
-        color: configColors.primary.dark.main
+        color: configColors.primary.dark.main,
+        '&$disabled': {
+          color: 'rgba(255,255,255,.07)'
+        },
+        '&:hover': {
+          backgroundColor: 'rgba(255,255,255,.05)'
+        }
       }
     },
     MuiDialog: {
@@ -258,6 +297,13 @@ const darkTheme = createMuiTheme({
         fontSize: 20
       }
     },
+    MuiListItem: {
+      root: {
+        '&:hover': {
+          backgroundColor: 'rgba(255,255,255, .03) !important'
+        }
+      }
+    },
     MuiListItemIcon: {
       root: {
         color: 'unset',
@@ -270,6 +316,21 @@ const darkTheme = createMuiTheme({
       },
       iconOutlined: {
         color: configColors.typographyColor.dark
+      }
+    },
+    MuiTab: {
+      textColorInherit: {
+        '&$disabled': {
+          color: '#fafafa',
+          opacity: 0.2,
+          background: `repeating-linear-gradient(
+            -55deg,
+            #222,
+            #222 10px,
+            #333 10px,
+            #333 20px
+          )`
+        }
       }
     },
     MuiTable: {

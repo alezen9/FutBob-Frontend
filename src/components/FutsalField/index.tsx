@@ -53,7 +53,7 @@ const useStyles = makeStyles(theme => {
       alignItems: 'center',
       border: (props: any) => `2px solid ${props.indoor ? indoorLineColor : outDoorLineColor}`,
       overflow: 'hidden',
-      transition: 'background-image .5s ease',
+      // transition: 'background-image .5s ease',
       '&:before': {
         position: 'absolute',
         top: -10,

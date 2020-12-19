@@ -175,8 +175,7 @@ class ColorPalette {
     this.oddListStandOut = this.themeType === ThemeType.dark
       ? 'rgba(255,255,255,.03)'
       : 'rgba(0,0,0,.03)'
-    // TO DEFINE
-    this.evenListStandout = this.themeType === ThemeType.dark
+    this.evenListStandout = this.themeType === ThemeType.dark     // TO DEFINE
       ? 'orange'
       : 'orange'
     this.dividerColor = this.themeType === ThemeType.dark

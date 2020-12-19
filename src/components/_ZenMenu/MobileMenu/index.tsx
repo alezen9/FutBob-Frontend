@@ -17,6 +17,7 @@ const MobileMenu = (props: Props) => {
    const isLoading = useConfigStore(stateSelector)
    return dropdown
       ? <Navbar items={items} isLoading={isLoading} />
+      // : <DrawerMenu /> // To be completed
       : <></>
 }
 
