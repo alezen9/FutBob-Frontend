@@ -5,42 +5,56 @@ import ExpandLessRoundedIcon from '@material-ui/icons/ExpandLessRounded'
 import CancelRoundedIcon from '@material-ui/icons/CancelRounded'
 import { ZenPalette } from '@_palette'
 import { getScoreColor } from '@_utils/helpers'
+import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded'
+import { relative } from 'path'
 
 const useStyles = makeStyles(theme => ({
-  topFormIcon: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: 24,
-    position: 'relative',
-    width: 24,
-    '& > svg': {
-      position: 'absolute',
-      left: ' 50%',
-      top: '-.2rem',
-      transform: 'translateX(-50%)'
-    },
-    '& > svg:last-of-type': {
-      top: '.2rem'
-    }
-  },
-  injured: {
-    transform: 'rotateZ(45deg)'
-  },
-  overallScore: {
-    position: 'relative',
-    color: (props: any) => props.color,
-    '& > svg': {
-      fontSize: '3em'
-    },
-    '& > span': {
-      position: 'absolute',
-      top: '35%',
-      left: '50%',
-      transform: 'translate(-50%, -35%)',
-      fontWeight: 'bold',
-      fontSize: '.8em'
-    }
-  }
+   topFormIcon: {
+      display: 'flex',
+      flexDirection: 'column',
+      height: 24,
+      position: 'relative',
+      width: 24,
+      '& > svg': {
+         position: 'absolute',
+         left: ' 50%',
+         top: '-.2rem',
+         transform: 'translateX(-50%)'
+      },
+      '& > svg:last-of-type': {
+         top: '.2rem'
+      }
+   },
+   injured: {
+      transform: 'rotateZ(45deg)'
+   },
+   overallScore: {
+      position: 'relative',
+      color: (props: any) => props.color,
+      '& > svg': {
+         fontSize: '3em'
+      },
+      '& > span': {
+         position: 'absolute',
+         top: '35%',
+         left: '50%',
+         transform: 'translate(-50%, -35%)',
+         fontWeight: 'bold',
+         fontSize: '.8em'
+      }
+   },
+   freeAgentIcon: {
+      position: 'relative',
+      '& > svg:last-of-type': {
+         position: 'absolute',
+         left: '25%',
+         bottom: 0,
+         background: '#fafafa',
+         borderRadius: '50%',
+         padding: '.05em',
+         transform: 'scale(.7)'
+      }
+   }
 }))
 
 export const FutBobLogo = props => {
@@ -224,4 +238,14 @@ export const RadiationIcon = props => {
          </g>
       </SvgIcon>
    )
+}
+
+export const FreeAgentIcon = props => {
+  const { freeAgentIcon } = useStyles()
+  return (
+    <span className={freeAgentIcon} {...props}>
+      <JerseyIcon />
+      <AddCircleOutlineRoundedIcon />
+    </span>
+  )
 }

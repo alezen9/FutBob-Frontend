@@ -6,7 +6,7 @@ import DashboardRoundedIcon from '@material-ui/icons/DashboardRounded'
 import SportsSoccerRoundedIcon from '@material-ui/icons/SportsSoccerRounded'
 import FaceRoundedIcon from '@material-ui/icons/FaceRounded'
 import BarChartRoundedIcon from '@material-ui/icons/BarChartRounded'
-import { FieldIcon, JerseyIcon } from '@_icons'
+import { FieldIcon, FreeAgentIcon, JerseyIcon } from '@_icons'
 import DesktopMenu from './DesktopMenu'
 import MobileMenu from './MobileMenu'
 import { useRouter } from 'next/router'
@@ -17,7 +17,7 @@ const iconMap = {
   [ZenRouteID.DASHBOARD]: <DashboardRoundedIcon />,
   [ZenRouteID.PROFILE]: <FaceRoundedIcon />,
   [ZenRouteID.PLAYERS]: <JerseyIcon />,
-  [ZenRouteID.FREE_AGENTS]: <JerseyIcon />,
+  [ZenRouteID.FREE_AGENTS]: <FreeAgentIcon />,
   [ZenRouteID.FIELDS]: <FieldIcon />,
   [ZenRouteID.APPOINTMENTS]: <SportsSoccerRoundedIcon />,
   [ZenRouteID.STATISTICS]: <BarChartRoundedIcon />
