@@ -6,7 +6,6 @@ import CancelRoundedIcon from '@material-ui/icons/CancelRounded'
 import { ZenPalette } from '@_palette'
 import { getScoreColor } from '@_utils/helpers'
 import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded'
-import { relative } from 'path'
 
 const useStyles = makeStyles(theme => ({
    topFormIcon: {
@@ -49,10 +48,11 @@ const useStyles = makeStyles(theme => ({
          position: 'absolute',
          left: '25%',
          bottom: 0,
-         background: '#fafafa',
+         backgroundColor: ZenPalette.backgroundColor,
+         transition: 'background .1s ease-out',
          borderRadius: '50%',
          padding: '.05em',
-         transform: 'scale(.7)'
+         transform: 'scale(.8)'
       }
    }
 }))
