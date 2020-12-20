@@ -7,7 +7,7 @@ import { apiInstance } from 'src/SDK'
 import { DirectMutationImmer, MoreOptions, mutateDraft, stateSelector, SwrKey } from '@_swr/helpers'
 import swrFieldsFetchers from './fetchers'
 import { Field } from '@_SDK_Field/entities'
-import { FieldFilters, UpdateFieldInput } from 'src/SDK/Modules/Field/types'
+import { FieldFilters, UpdateFieldInput } from '@_SDK_Field/types'
 
 interface FieldsMoreOptions extends MoreOptions {
    filters?: FieldFilters

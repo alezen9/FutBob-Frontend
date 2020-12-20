@@ -2,7 +2,7 @@ import { get } from 'lodash'
 import { Player } from '@_SDK_Player/entities'
 import { apiInstance } from 'src/SDK'
 import { ListOf } from '@_swr/helpers'
-import { player_allFields } from 'src/SDK/Modules/Player/gql_all'
+import { player_allFields } from '@_SDK_Player/gql_all'
 
 const swrPlayersFetchers = Object.freeze({
   playersFetcher: (key: string, filtersKey): Promise<ListOf<Player>> => apiInstance.player.getList(JSON.parse(filtersKey), player_allFields),

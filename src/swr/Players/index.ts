@@ -8,7 +8,7 @@ import { get, isEqual } from 'lodash'
 import { apiInstance } from 'src/SDK'
 import { DirectMutationImmer, MoreOptions, mutateDraft, stateSelector, SwrKey } from '@_swr/helpers'
 import swrPlayersFetchers from './fetchers'
-import { PlayerFilters, UpdatePlayerInput } from 'src/SDK/Modules/Player/types'
+import { PlayerFilters, UpdatePlayerInput } from '@_SDK_Player/types'
 
 interface PlayersMoreOptions extends MoreOptions {
    filters?: PlayerFilters
