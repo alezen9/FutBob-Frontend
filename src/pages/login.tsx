@@ -84,9 +84,8 @@ const SignIn = () => {
     setSubmitting(true)
     let _token
     try {
-      const { token } = await apiInstance.auth.login(values)
+      const token = await apiInstance.auth.login(values)
       if (token) _token = token
-      else throw new Error('Username o password errati')
     } catch (error) {
       openSnackbar({
         variant: 'error',
@@ -96,7 +95,6 @@ const SignIn = () => {
     setSubmitting(false)
     setIsLoading(false)
     if(_token){
-      apiInstance.auth.setToken(_token)
       setIsLogged(true)
       await router.push('/')
     }

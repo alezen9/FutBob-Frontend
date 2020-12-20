@@ -2,25 +2,25 @@ import useSWR, { cache, trigger, mutate as mutateCache } from 'swr'
 import produce from 'immer'
 import { useConfigStore } from '@_zustand/configStore'
 import { useEffect, useCallback, useState } from 'react'
-import { filter, get } from 'lodash'
+import { get } from 'lodash'
 import { apiInstance } from 'src/SDK'
 import { DirectMutationImmer, MoreOptions, mutateDraft, stateSelector, SwrKey } from '@_swr/helpers'
-import swrFieldsFetchers from './fetchers'
-import { Field } from '@_SDK_Field/entities'
-import { FieldFilters, UpdateFieldInput } from '@_SDK_Field/types'
+import { FreeAgentFilters, UpdateFreeAgentInput } from 'src/SDK/Modules/FreeAgent/types'
+import swrFreeAgentFetchers from './fetchers'
+import { FreeAgent } from 'src/SDK/Modules/FreeAgent/entities'
 
-interface FieldsMoreOptions extends MoreOptions {
-   filters?: FieldFilters
+interface FreeAgentMoreOptions extends MoreOptions {
+   filters?: FreeAgentFilters
 }
 
-export const useSWRFields = <T extends FieldsMoreOptions>(options?: T) => {
+export const useSWRFreeAgents = <T extends FreeAgentMoreOptions>(options?: T) => {
   const { filters = {}, ...restOfOpts } = options || {}
   const hasToken = apiInstance.auth.hasToken()
   const filtersKey = JSON.stringify(filters)
   const { setIsLoading } = useConfigStore(stateSelector)
   const { data, mutate, isValidating } = useSWR(
-    [SwrKey.FIELDS, filtersKey],
-    swrFieldsFetchers.fieldsFetcher,
+    [SwrKey.FREE_AGENTS, filtersKey],
+    swrFreeAgentFetchers.freeAgentsFetcher,
     {
       revalidateOnMount: hasToken,
       shouldRetryOnError: false,
@@ -35,15 +35,15 @@ export const useSWRFields = <T extends FieldsMoreOptions>(options?: T) => {
 
   const triggerThis = useCallback(
     (shouldRevalidate: boolean = true) => {
-      return trigger([SwrKey.FIELDS, filtersKey], shouldRevalidate)
+      return trigger([SwrKey.FREE_AGENTS, filtersKey], shouldRevalidate)
     }, [trigger])
 
-  const deleteField = useCallback(
+  const deleteFreeAgent = useCallback(
     async (_id: string): Promise<boolean> => {
       try {
-      const deleted = await apiInstance.field.delete(_id)
+      const deleted = await apiInstance.freeAgent.delete(_id)
       if (!deleted) throw new Error()
-      cache.delete([SwrKey.FIELD, _id])
+      cache.delete([SwrKey.FREE_AGENT, _id])
       triggerThis()
         return true
       } catch (error) {
@@ -52,25 +52,25 @@ export const useSWRFields = <T extends FieldsMoreOptions>(options?: T) => {
     }, [triggerThis])
 
   return {
-    list: get(data, 'result', []) as Field[] || [] as Field[],
+    list: get(data, 'result', []) as FreeAgent[] || [] as FreeAgent[],
     totalCount: get(data, 'totalCount', 0),
     trigger: triggerThis,
-    deleteField,
+    deleteFreeAgent,
     isValidating
   }
 }
 
-export const useSWRField = <T extends MoreOptions>(_id: string|null|undefined, options?: T) => {
+export const useSWRFreeAgent = <T extends MoreOptions>(_id: string|null|undefined, options?: T) => {
   const { fromCache = true, ...restOfOpts } = options || {}
   const hasToken = apiInstance.auth.hasToken()
   const { setIsLoading } = useConfigStore(stateSelector)
   const initialData = fromCache
-    ? cache.get([SwrKey.FIELD, _id])
+    ? cache.get([SwrKey.FREE_AGENT, _id])
     : undefined
   const [revalidateOnMount, setRevalidateOnMount] = useState(fromCache && initialData ? false : hasToken)
   const { data, mutate, isValidating } = useSWR(
-    [SwrKey.FIELD, _id],
-    swrFieldsFetchers.fieldFetcher,
+    [SwrKey.FREE_AGENT, _id],
+    swrFreeAgentFetchers.freeAgentFetcher,
     {
       initialData,
       revalidateOnMount,
@@ -90,41 +90,41 @@ export const useSWRField = <T extends MoreOptions>(_id: string|null|undefined, o
 
   const triggerThis = useCallback(
     (shouldRevalidate: boolean = true) => {
-      return trigger([SwrKey.FIELD, _id], shouldRevalidate)
+      return trigger([SwrKey.FREE_AGENT, _id], shouldRevalidate)
     }, [trigger])
 
   const mutateThis = useCallback(
-    (data: Partial<Field>|DirectMutationImmer<Field>, shouldRevalidate: boolean = false) => {
+    (data: Partial<FreeAgent>|DirectMutationImmer<FreeAgent>, shouldRevalidate: boolean = false) => {
       if(typeof data === 'function') return mutate(produce(data), shouldRevalidate)
       else return mutate(produce(mutateDraft(data)), shouldRevalidate)
     }, [mutate])
 
 
-  const createEditField = useCallback(
-    async (field: Omit<Field, '_id'> & Partial<Pick<Field, '_id'>>): Promise<string|boolean> => {
+  const createEditFreeAgent = useCallback(
+    async (freeAgent: Omit<FreeAgent, '_id'> & Partial<Pick<FreeAgent, '_id'>>): Promise<string|boolean> => {
       try {
-         let fieldId = field._id
-         if(!field._id){
-            fieldId = await apiInstance.field.create(field)
-            if(!fieldId) throw new Error()
+         let freeAgentId = freeAgent._id
+         if(!freeAgent._id){
+            freeAgentId = await apiInstance.freeAgent.create(freeAgent)
+            if(!freeAgentId) throw new Error()
          } else {
-            const done = await apiInstance.field.update(field as UpdateFieldInput)
-            mutateCache([SwrKey.FIELD, fieldId], field, false)
+            const done = await apiInstance.freeAgent.update(freeAgent as UpdateFreeAgentInput)
+            mutateCache([SwrKey.FREE_AGENT, freeAgentId], freeAgent, false)
          }
-         return field._id
+         return freeAgent._id
             ? true
-            : fieldId
+            : freeAgentId
       } catch(error){
          return false
       }
   }, [mutateThis])
 
-  const deleteField = useCallback(
+  const deleteFreeAgent = useCallback(
     async (): Promise<boolean> => {
       try {
-      const deleted = await apiInstance.field.delete(get(data, '_id', null))
+      const deleted = await apiInstance.freeAgent.delete(get(data, '_id', null))
       if (!deleted) throw new Error()
-      cache.delete([SwrKey.FIELD, _id])
+      cache.delete([SwrKey.FREE_AGENT, _id])
         return true
       } catch (error) {
         return false
@@ -132,10 +132,10 @@ export const useSWRField = <T extends MoreOptions>(_id: string|null|undefined, o
     }, [mutateThis, get(data, '_id', null), get(data, 'user._id', null)])
 
   return {
-    item: data as Field || {} as Field,
+    item: data as FreeAgent || {} as FreeAgent,
     mutate: mutateThis,
     trigger: triggerThis,
-    createEditField,
-    deleteField
+    createEditFreeAgent,
+    deleteFreeAgent
   }
 }

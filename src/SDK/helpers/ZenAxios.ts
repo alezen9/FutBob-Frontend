@@ -12,7 +12,11 @@ class ZenAxios {
          headers: {
          'Accept': 'application/json',
          'Content-Type': 'application/json',
-         ...server.authHeader && { Authorization: `Bearer ${server.authHeader}` }
+         common: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            ...server.authHeader && { Authorization: `Bearer ${server.authHeader}` }
+         }
          }
       })
       this.setRequestInterceptor(_self, server._LSToken)
@@ -23,7 +27,7 @@ class ZenAxios {
    private setRequestInterceptor(_self: AxiosInstance, tokenName): void {
       _self.interceptors.request.use(
          config => {
-            if (process.browser && !config.headers.common['Authorization'] && process.browser && window.localStorage.getItem(tokenName)) {
+            if (process.browser && !config.headers.common['Authorization'] && window.localStorage.getItem(tokenName)) {
             const _token = window.localStorage.getItem(tokenName)
             const authorization = `Bearer ${_token}`
             config.headers.common['Authorization'] = authorization

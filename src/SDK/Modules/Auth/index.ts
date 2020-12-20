@@ -31,17 +31,19 @@ class AuthServer {
       return this._server.API({ query, name: 'signup', params: signupInput, fields })
    }
 
-   async login (signinInput: SigninInput): Promise<{ token: string }> {
+   async login (signinInput: SigninInput): Promise<string> {
       const query = `
       query {
          login(signinInput: ${paramsToString(signinInput)}){ token }
       }`
-      return this._server.API({ query, name: 'login', params: signinInput })
+      const { token } = await this._server.API({ query, name: 'login', params: signinInput })
+      if(token) this.setToken(token)
+      return token
    }
 
    logout (_logout?: VoidFunction): void {
       window.localStorage.removeItem(this._server._LSToken)
-      this._server._self.defaults.headers.common['Authorization'] = undefined
+      delete this._server._self.defaults.headers.common['Authorization']
       if (_logout) _logout()
    }
 }

@@ -2,7 +2,7 @@ export enum ZenRouteID {
    DASHBOARD = 'DASHBOARD',
    PROFILE = 'PROFILE',
    PLAYERS = 'PLAYERS',
-   FREE_AGENT = 'FREE_AGENT',
+   FREE_AGENTS = 'FREE_AGENTS',
    FIELDS = 'FIELDS',
    APPOINTMENTS = 'APPOINTMENTS',
    STATISTICS = 'STATISTICS'
@@ -36,11 +36,11 @@ export const routes: ZenRoute[] = [
       title: 'Players',
       path: '/players?page=1'
    },
-   // {
-   //    _id: ZenRouteID.FREE_AGENT,
-   //    title: 'Free agent',
-   //    path: '/players?page=1'
-   // },
+   {
+      _id: ZenRouteID.FREE_AGENTS,
+      title: 'Free agent',
+      path: '/free-agents?page=1'
+   },
    {
       _id: ZenRouteID.FIELDS,
       title: 'Fields',

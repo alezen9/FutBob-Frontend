@@ -3,13 +3,10 @@ import Link from 'next/link'
 import { Typography, makeStyles, IconButton } from '@material-ui/core'
 import Spinner from '@_components/Loaders/Spinner'
 import ExitToAppRoundedIcon from '@material-ui/icons/ExitToAppRounded'
-import { useRouter } from 'next/router'
 import { asyncTimeout } from '@_utils/helpers'
-import { apiInstance } from 'src/SDK'
 import ThemeSwitch from '@_components/ThemeModeSwitch'
 import { ZenPalette } from '@_palette'
-import { useConfigStore } from '@_zustand/configStore'
-import { RouteItem } from '@_components/_ZenMenu'
+import { logoutFn, RouteItem } from '@_components/_ZenMenu'
 
 const useStyles = makeStyles(theme => ({
    themeSwitchColor: {
@@ -63,13 +60,13 @@ const Links = React.memo((props: { toggleMenu: VoidFunction, items: RouteItem[] 
 type Props = {
    isLoading?: boolean
    items: RouteItem[]
+   logout: logoutFn
 }
 
 const Navbar = (props: Props) => {
-   const { isLoading = false, items } = props
+   const { isLoading = false, logout, items = [] } = props
    const { themeSwitchColor, themeSwitchColorInvert, headerBoxShadowFix } = useStyles()
-   const router = useRouter()
-   const setIsLogged = useConfigStore(state => state.setIsLogged)
+
    const [open, setOpen] = useState(false)
 
    useLayoutEffect(() => {
@@ -83,18 +80,6 @@ const Navbar = (props: Props) => {
    const toggleMenu = useCallback(() => {
       setOpen(state => !state)
    }, [])
-
-   const afterLogout = useCallback(async () => {
-      await router.push('/login')
-      setIsLogged(false)
-   },[router])
-
-   const logout = useCallback(
-      (e: any) => {
-         e.preventDefault()
-         if (open) toggleMenu()
-         apiInstance.auth.logout(afterLogout)
-      }, [toggleMenu])
 
    return (
       <>
@@ -118,7 +103,7 @@ const Navbar = (props: Props) => {
             </ul>
          </div>
          <div className={`right ${themeSwitchColor}`}>
-            <IconButton onClick={logout}>
+            <IconButton onClick={logout(open, toggleMenu)}>
                <ExitToAppRoundedIcon style={{ color: 'crimson' }} />
             </IconButton>
          </div>

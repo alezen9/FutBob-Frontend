@@ -2,12 +2,9 @@ import React, { useEffect, useCallback } from 'react'
 import { makeStyles, List } from '@material-ui/core'
 import { useRouter } from 'next/router'
 import ExitToAppRoundedIcon from '@material-ui/icons/ExitToAppRounded'
-import { apiInstance } from 'src/SDK'
 import { ZenPalette } from '@_palette'
-import { useConfigStore } from '@_zustand/configStore'
 import { RouteItem } from '..'
 import SingleItem from './SingleItem'
-import { ConfigStore } from '@_zustand/helpers'
 import ExpandableItem from './ExpandableItem'
 
 const useStyles = makeStyles({
@@ -27,8 +24,6 @@ const useStyles = makeStyles({
   }
 })
 
-const stateSelector = (state: ConfigStore) => state.setIsLogged
-
 const LOGOUT_ITEM: RouteItem = {
    _id: 'LOGOUT',
    title: 'Logout',
@@ -38,12 +33,12 @@ const LOGOUT_ITEM: RouteItem = {
 
 type Props = {
    items: RouteItem[]
+   logout: (e: any) => void
 }
 
 const ItemList = (props: Props) => {
-   const { items } = props
+   const { items = [], logout } = props
    const router = useRouter()
-   const setIsLogged = useConfigStore(stateSelector)
    const classes = useStyles()
 
    useEffect(() => {
@@ -54,18 +49,11 @@ const ItemList = (props: Props) => {
       router.push(path)
    }, [])
 
-   const afterLogout = useCallback(() => {
-      router.push('/login')
-         .then(() => {
-            setIsLogged(false)
-         })
-   },[])
-
-   const logout = useCallback(
+   const _logout = useCallback(
       (path?: string) => (e: Event) => {
       e.preventDefault()
-      apiInstance.auth.logout(afterLogout)
-   }, [])
+      logout(e)
+   }, [logout])
 
    return (
       <>
@@ -81,7 +69,7 @@ const ItemList = (props: Props) => {
          <div className={classes.logout}>
          <SingleItem
             item={LOGOUT_ITEM}
-            handleRoute={logout}
+            handleRoute={_logout}
             ignoreActiveProps
          />
          </div>

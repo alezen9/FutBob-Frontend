@@ -3,11 +3,13 @@ import { Draft } from "immer"
 import { isObject } from "lodash"
 
 export enum SwrKey {
-  USER = 'USER',
-  PLAYERS = 'PLAYERS',
-  PLAYER = 'PLAYER',
-  FIELDS = 'FIELDS',
-  FIELD = 'FIELD'
+   USER = 'USER',
+   PLAYERS = 'PLAYERS',
+   PLAYER = 'PLAYER',
+   FIELDS = 'FIELDS',
+   FIELD = 'FIELD',
+   FREE_AGENTS = 'FREE_AGENTS',
+   FREE_AGENT = 'FREE_AGENT'
 }
 
 

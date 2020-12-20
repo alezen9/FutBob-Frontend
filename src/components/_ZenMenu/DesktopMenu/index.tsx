@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { makeStyles, IconButton } from '@material-ui/core'
 import ItemList from './ItemList'
 import MenuRoundedIcon from '@material-ui/icons/MenuRounded'
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded'
 import ThemeSwitch from '@_components/ThemeModeSwitch'
 import { useConfigStore } from '@_zustand/configStore'
-import { RouteItem } from '..'
+import { logoutFn, RouteItem } from '..'
 import { ConfigStore } from '@_zustand/helpers'
 
 const useStyles = makeStyles(theme => ({
@@ -71,12 +71,17 @@ const stateSelector = (state: ConfigStore) => ({
 
 type Props = {
    items: RouteItem[]
+   logout: logoutFn
 }
 
 const DesktopMenu = (props: Props) => {
-   const { items } = props
+   const { items, logout } = props
    const { menuOpen, toggleMenu } = useConfigStore(stateSelector)
    const classes = useStyles({ menuOpen })
+
+   const _logout = useCallback((e: any) => {
+      logout(menuOpen, toggleMenu)(e)
+   }, [logout, menuOpen, toggleMenu])
 
    return (
       <div className={classes.relativeWrapper}>
@@ -91,7 +96,7 @@ const DesktopMenu = (props: Props) => {
          <div className={classes.themeToggleClass}>
             <ThemeSwitch />
          </div>
-         <ItemList items={items} />
+         <ItemList items={items} logout={_logout} />
          </div>
       </div>
    )

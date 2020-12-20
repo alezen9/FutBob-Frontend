@@ -9,6 +9,7 @@ import UserServer from './Modules/User'
 // end modules
 import getConfig from 'next/config'
 import { zenAxiosInstance } from './helpers/ZenAxios'
+import FreeAgentServer from './Modules/FreeAgent'
 const { publicRuntimeConfig } = getConfig()
 
 
@@ -22,7 +23,9 @@ export class ZenServer {
   user: UserServer
   player: PlayerServer
   field: FieldServer
+  freeAgent: FreeAgentServer
   /** end modules */
+
   constructor () {
    this._LSToken = LSToken
    this.authHeader = process.browser
@@ -35,6 +38,7 @@ export class ZenServer {
    this.user = new UserServer(this)
    this.player = new PlayerServer(this)
    this.field = new FieldServer(this)
+   this.freeAgent = new FreeAgentServer(this)
   }
 
   async API ({ query, name, params, fields }: { query: string, name: string, params?: any, fields?: object }) {
