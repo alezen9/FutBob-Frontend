@@ -1,6 +1,5 @@
-import { Pagination } from "./generic"
-import { FieldType, FieldState, Measurements } from '@_entities/Fields'
-import { GeoPoint } from "@_entities/generic"
+import { Pagination } from "../generic_types"
+import { FieldState, FieldType, GeoPoint, Measurements } from "./entities"
 
 export type FieldFilters = {
     ids?: string[],

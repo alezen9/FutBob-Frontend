@@ -64,7 +64,7 @@ const ItemList = (props: Props) => {
    const logout = useCallback(
       (path?: string) => (e: Event) => {
       e.preventDefault()
-      apiInstance.user_logout(afterLogout)
+      apiInstance.auth.logout(afterLogout)
    }, [])
 
    return (

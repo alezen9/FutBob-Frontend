@@ -1,9 +1,9 @@
-import { User } from '@_entities/User'
+import { User } from '@_SDK_User/entities'
 import { apiInstance } from 'src/SDK'
-import { allUserFields } from 'src/SDK/allFields'
+import { user_allFields } from 'src/SDK/Modules/User/gql_all'
 
 const swrUserFetchers = Object.freeze({
-  profileFetcher: (key: string): Promise<User> => apiInstance.user_getUserConnected(allUserFields)
+  profileFetcher: (key: string): Promise<User> => apiInstance.user.getMe(user_allFields)
 })
 
 export default swrUserFetchers

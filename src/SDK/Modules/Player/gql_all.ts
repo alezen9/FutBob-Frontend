@@ -1,6 +1,6 @@
-import { GQL_PlayerType, GQL_UserType, GQL_ScoreType, GQL_FieldType } from './types/generic'
+import { GQL_PlayerType, GQL_ScoreType } from "./gql_type"
 
-const allScoreFields: GQL_ScoreType = {
+export const player_score_allFields: GQL_ScoreType = {
     pace: {
         acceleration: true,
         sprintSpeed: true
@@ -44,27 +44,9 @@ const allScoreFields: GQL_ScoreType = {
     }
 }
 
-export const allUserFields: GQL_UserType = {
-    _id: true,
-    name: true,
-    surname: true,
-    dateOfBirth: true,
-    sex: true,
-    country: true,
-    futsalPlayer: {
-      _id: true,
-      positions: true,
-      state: true,
-      type: true,
-      score: allScoreFields
-    },
-    avatar: true,
-    username: true,
-    email: true,
-    phone: true
-}
 
-export const allPlayerFields: GQL_PlayerType = {
+
+export const player_allFields: GQL_PlayerType = {
     _id: true,
     user: {
       _id: true,
@@ -78,21 +60,5 @@ export const allPlayerFields: GQL_PlayerType = {
     },
     positions: true,
     state: true,
-    score: allScoreFields
-}
-
-export const allFieldFields: GQL_FieldType = {
-    _id: true,
-    state: true,
-    name: true,
-    price: true,
-    type: true,
-    location: {
-       type: true,
-       coordinates: true
-    },
-    measurements: {
-       width: true,
-       height: true
-    }
+    score: player_score_allFields
 }

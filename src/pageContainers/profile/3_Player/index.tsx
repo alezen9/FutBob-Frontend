@@ -11,7 +11,7 @@ import { OverallScore } from '@_icons'
 import { getMeanScoreField } from '@_components/FormikInput/PlayerScoreInputs/SingleScore'
 import PlayerScoreInputs from '@_components/FormikInput/PlayerScoreInputs'
 import { ProfileTabProps } from '..'
-import { PlayerType } from '@_entities/Player'
+import { PlayerType } from '@_SDK_Player/entities'
 import { ZenPalette } from '@_palette'
 import ZenDialog from '@_components/ZenDialog'
 

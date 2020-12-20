@@ -6,8 +6,8 @@ import { filter, get } from 'lodash'
 import { apiInstance } from 'src/SDK'
 import { DirectMutationImmer, MoreOptions, mutateDraft, stateSelector, SwrKey } from '@_swr/helpers'
 import swrFieldsFetchers from './fetchers'
-import { Field } from '@_entities/Fields'
-import { FieldFilters, UpdateFieldInput } from 'src/SDK/types/Fields'
+import { Field } from '@_SDK_Field/entities'
+import { FieldFilters, UpdateFieldInput } from 'src/SDK/Modules/Field/types'
 
 interface FieldsMoreOptions extends MoreOptions {
    filters?: FieldFilters
@@ -15,7 +15,7 @@ interface FieldsMoreOptions extends MoreOptions {
 
 export const useSWRFields = <T extends FieldsMoreOptions>(options?: T) => {
   const { filters = {}, ...restOfOpts } = options || {}
-  const hasToken = apiInstance.hasToken()
+  const hasToken = apiInstance.auth.hasToken()
   const filtersKey = JSON.stringify(filters)
   const { setIsLoading } = useConfigStore(stateSelector)
   const { data, mutate, isValidating } = useSWR(
@@ -41,7 +41,7 @@ export const useSWRFields = <T extends FieldsMoreOptions>(options?: T) => {
   const deleteField = useCallback(
     async (_id: string): Promise<boolean> => {
       try {
-      const deleted = await apiInstance.field_deleteField({ _id })
+      const deleted = await apiInstance.field.delete(_id)
       if (!deleted) throw new Error()
       cache.delete([SwrKey.FIELD, _id])
       triggerThis()
@@ -62,7 +62,7 @@ export const useSWRFields = <T extends FieldsMoreOptions>(options?: T) => {
 
 export const useSWRField = <T extends MoreOptions>(_id: string|null|undefined, options?: T) => {
   const { fromCache = true, ...restOfOpts } = options || {}
-  const hasToken = apiInstance.hasToken()
+  const hasToken = apiInstance.auth.hasToken()
   const { setIsLoading } = useConfigStore(stateSelector)
   const initialData = fromCache
     ? cache.get([SwrKey.PLAYER, _id])
@@ -105,10 +105,10 @@ export const useSWRField = <T extends MoreOptions>(_id: string|null|undefined, o
       try {
          let fieldId = field._id
          if(!field._id){
-            fieldId = await apiInstance.field_createField(field)
+            fieldId = await apiInstance.field.create(field)
             if(!fieldId) throw new Error()
          } else {
-            const done = await apiInstance.field_updateField(field as UpdateFieldInput)
+            const done = await apiInstance.field.update(field as UpdateFieldInput)
             mutateCache([SwrKey.FIELD, fieldId], field, false)
          }
          return field._id
@@ -122,7 +122,7 @@ export const useSWRField = <T extends MoreOptions>(_id: string|null|undefined, o
   const deleteField = useCallback(
     async (): Promise<boolean> => {
       try {
-      const deleted = await apiInstance.field_deleteField({ _id: get(data, '_id', null) })
+      const deleted = await apiInstance.field.delete(get(data, '_id', null))
       if (!deleted) throw new Error()
       cache.delete([SwrKey.PLAYER, _id])
       const { _id: userConnectedId } = cache.get(SwrKey.USER)

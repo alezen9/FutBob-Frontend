@@ -6,7 +6,7 @@ import { get } from 'lodash'
 import { useRouter } from 'next/router'
 import GoBack from '@_components/GoBack'
 import FaceRoundedIcon from '@material-ui/icons/FaceRounded'
-import { User } from '@_entities/User'
+import { User } from '@_SDK_User/entities'
 import { useSWRPlayer } from '@_swr/Players'
 import { useSWRUser } from '@_swr/User'
 

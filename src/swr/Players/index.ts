@@ -2,20 +2,21 @@ import useSWR, { cache, trigger, mutate as mutateCache } from 'swr'
 import produce from 'immer'
 import { useConfigStore } from '@_zustand/configStore'
 import { useEffect, useCallback, useState } from 'react'
-import { EditablePlayer, Player } from '@_entities/Player'
+import { Player } from '@_SDK_Player/entities'
+import { EditablePlayer } from '@_SDK_Player/types'
 import { get, isEqual } from 'lodash'
 import { apiInstance } from 'src/SDK'
 import { DirectMutationImmer, MoreOptions, mutateDraft, stateSelector, SwrKey } from '@_swr/helpers'
 import swrPlayersFetchers from './fetchers'
-import { UpdatePlayerInput } from 'src/SDK/types/Players'
+import { PlayerFilters, UpdatePlayerInput } from 'src/SDK/Modules/Player/types'
 
 interface PlayersMoreOptions extends MoreOptions {
-   filters?: object
+   filters?: PlayerFilters
 }
 
 export const useSWRPlayers = <T extends PlayersMoreOptions>(options?: T) => {
   const { filters = {}, ...restOfOpts } = options || {}
-  const hasToken = apiInstance.hasToken()
+  const hasToken = apiInstance.auth.hasToken()
   const filtersKey = JSON.stringify(filters)
   const { setIsLoading } = useConfigStore(stateSelector)
   const { data, mutate, isValidating } = useSWR(
@@ -41,7 +42,7 @@ export const useSWRPlayers = <T extends PlayersMoreOptions>(options?: T) => {
   const deletePlayer = useCallback(
     async (playerId: string, userId: string): Promise<boolean> => {
       try {
-      const deleted = await apiInstance.player_deletePlayer({
+      const deleted = await apiInstance.player.delete({
         _id: playerId,
         idUser: userId,
         type: 1
@@ -72,7 +73,7 @@ export const useSWRPlayers = <T extends PlayersMoreOptions>(options?: T) => {
 
 export const useSWRPlayer = <T extends MoreOptions>(_id: string|null|undefined, options?: T) => {
   const { fromCache = true, ...restOfOpts } = options || {}
-  const hasToken = apiInstance.hasToken()
+  const hasToken = apiInstance.auth.hasToken()
   const { setIsLoading } = useConfigStore(stateSelector)
   const initialData = fromCache
     ? cache.get([SwrKey.PLAYER, _id])
@@ -121,7 +122,7 @@ export const useSWRPlayer = <T extends MoreOptions>(_id: string|null|undefined, 
             userData: user,
             playerData
           }
-        const playerId = await apiInstance.player_createPlayer(bodyCreate)
+        const playerId = await apiInstance.player.create(bodyCreate)
         if(!playerId) throw new Error()
         _player._id = playerId
       } else {
@@ -130,10 +131,10 @@ export const useSWRPlayer = <T extends MoreOptions>(_id: string|null|undefined, 
         let playerUpdated = true
         let userUpdated = true
         if(!isEqual(thisFutsalPlayer, futsalPlayer)){
-          playerUpdated = await apiInstance.player_updatePlayer(bodyUpdate as UpdatePlayerInput)
+          playerUpdated = await apiInstance.player.update(bodyUpdate as UpdatePlayerInput)
         }
         if(!isEqual(thisUser, user)){
-          userUpdated = await apiInstance.user_updateUser(user)
+          userUpdated = await apiInstance.user.update(user)
         }
         if(!(playerUpdated && userUpdated)) throw new Error()
       }
@@ -153,7 +154,7 @@ export const useSWRPlayer = <T extends MoreOptions>(_id: string|null|undefined, 
   const deletePlayer = useCallback(
     async (): Promise<boolean> => {
       try {
-      const deleted = await apiInstance.player_deletePlayer({
+      const deleted = await apiInstance.player.delete({
         _id: get(data, '_id', null),
         idUser: get(data, 'user._id', null),
         type: 1

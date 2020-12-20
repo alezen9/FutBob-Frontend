@@ -24,11 +24,11 @@ const Private = (props: ProfileTabProps) => {
         let done = false
         const { username, oldPassword, newPassword }: { username?: string, oldPassword?: string, newPassword?: string } = values
         if (username && username !== props.item.username) {
-          done = await apiInstance.user_changeUsername(username)
+          done = await apiInstance.user.changeMyUsername(username)
           mutate({ username })
         }
         if (oldPassword && newPassword) {
-          done = await apiInstance.user_changePassword(oldPassword, newPassword)
+          done = await apiInstance.user.changeMyPassword(oldPassword, newPassword)
         }
         if (done) {
           openSnackbar({

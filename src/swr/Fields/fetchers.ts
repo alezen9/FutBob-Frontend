@@ -1,13 +1,13 @@
 import { get } from 'lodash'
 import { apiInstance } from 'src/SDK'
-import { allFieldFields } from 'src/SDK/allFields'
 import { ListOf } from '@_swr/helpers'
-import { Field } from '@_entities/Fields'
+import { Field } from '@_SDK_Field/entities'
+import { field_allFields } from 'src/SDK/Modules/Field/gql_all'
 
 const swrFieldsFetchers = Object.freeze({
-  fieldsFetcher: (key: string, filtersKey): Promise<ListOf<Field>> => apiInstance.field_getFields(JSON.parse(filtersKey), allFieldFields),
+  fieldsFetcher: (key: string, filtersKey): Promise<ListOf<Field>> => apiInstance.field.getList(JSON.parse(filtersKey), field_allFields),
   fieldFetcher: (key: string, _id: string | null): Promise<Field> => _id
-    ? apiInstance.field_getFields({ ..._id && { ids: [_id] } }, allFieldFields)
+    ? apiInstance.field.getList({ ..._id && { ids: [_id] } }, field_allFields)
          .then(res => res ? get(res, 'result.0', {}) as Field : {} as Field)
     : Promise.resolve({} as Field)
 })

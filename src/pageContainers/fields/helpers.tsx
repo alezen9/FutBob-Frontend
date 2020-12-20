@@ -3,7 +3,7 @@ import { get } from 'lodash'
 import { centsToEuros, decamelize, getOptionsByEnum } from '@_utils/helpers'
 import NavigateNextRoundedIcon from '@material-ui/icons/NavigateNextRounded'
 import DeleteForeverRoundedIcon from '@material-ui/icons/DeleteForeverRounded'
-import { Field, FieldState, FieldType } from '@_entities/Fields'
+import { Field, FieldState, FieldType } from '@_SDK_Field/entities'
 import { TableHeaderData } from '@_components/ZenTable/helpers'
 import { Filter } from '@_components/Filters/Inputs'
 

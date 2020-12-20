@@ -12,7 +12,7 @@ import { TopFormIcon, InjuredIcon, RecoveryIcon } from '@_icons'
 import ExpandLessRoundedIcon from '@material-ui/icons/ExpandLessRounded'
 import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
 import cleanDeep from 'clean-deep'
-import { PlayerScore } from '@_entities/Player'
+import { PlayerScore } from '@_SDK_Player/entities'
 import { OptionType } from '@_components/FormikInput'
 
 export const cleanPathname = (path: string = '') => path.split('?')[0]

@@ -2,17 +2,17 @@ import useSWR, { cache, trigger, mutate as mutateCache } from 'swr'
 import produce from 'immer'
 import { useConfigStore } from '@_zustand/configStore'
 import { useEffect, useCallback, useState } from 'react'
-import { Player } from '@_entities/Player'
-import { EditableUser, User } from '@_entities/User'
+import { Player } from '@_SDK_Player/entities'
+import { User } from '@_SDK_User/entities'
+import { EditableUser, UpdateUserInput } from '@_SDK_User/types'
 import { get } from 'lodash'
 import { apiInstance } from 'src/SDK'
 import { DirectMutationImmer, MoreOptions, mutateDraft, stateSelector, SwrKey } from '@_swr/helpers'
 import swrUserFetchers from './fetchers'
-import { UpdateUserInput } from 'src/SDK/types/Users'
 
 export const useSWRUser = <T extends MoreOptions>(options?: T) => {
   const { fromCache = true, ...restOfOpts } = options || {}
-  const hasToken = apiInstance.hasToken()
+  const hasToken = apiInstance.auth.hasToken()
   const { setIsLoading } = useConfigStore(stateSelector)
   const initialData = fromCache
     ? cache.get(SwrKey.USER)
@@ -60,12 +60,12 @@ export const useSWRUser = <T extends MoreOptions>(options?: T) => {
             userId: user._id,
             playerData
           }
-        const playerId = await apiInstance.player_createPlayer(bodyCreate)
+        const playerId = await apiInstance.player.create(bodyCreate)
         if(!playerId) throw new Error()
         _player._id = playerId
       } else {
         const { type, matches, ...bodyUpdate } = futsalPlayer
-        const updated = await apiInstance.player_updatePlayer(bodyUpdate as UpdateUserInput)
+        const updated = await apiInstance.player.update(bodyUpdate as UpdateUserInput)
         if(!updated) throw new Error()
       }
       mutateThis(draft => {
@@ -81,7 +81,7 @@ export const useSWRUser = <T extends MoreOptions>(options?: T) => {
   const deletePlayer = useCallback(
     async (): Promise<boolean> => {
       try {
-      const deleted = await apiInstance.player_deletePlayer({
+      const deleted = await apiInstance.player.delete({
         _id: get(data, 'futsalPlayer._id', null),
         idUser: get(data, '_id', null),
         type: 1

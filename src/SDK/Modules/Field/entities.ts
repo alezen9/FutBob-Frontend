@@ -1,5 +1,3 @@
-import { GeoPoint } from './generic'
-
 export enum FieldType {
    Indoor,
    Outdoor
@@ -14,6 +12,11 @@ export enum FieldState {
 export type Measurements = {
    width: number
    height: number
+}
+
+export type GeoPoint = {
+    type: string
+    coordinates: number[]
 }
 
 export type Field = {

@@ -7,7 +7,7 @@ import NavigateNextRoundedIcon from '@material-ui/icons/NavigateNextRounded'
 import ListField from '@_components/ListField'
 import DeleteForeverRoundedIcon from '@material-ui/icons/DeleteForeverRounded'
 import { getMeanScoreField } from '@_components/FormikInput/PlayerScoreInputs/SingleScore'
-import { Player, PlayerPositionFutsal, PlayerScore } from '@_entities/Player'
+import { Player, PlayerPositionFutsal, PlayerScore } from '@_SDK_Player/entities'
 import { Filter } from '@_components/Filters/Inputs'
 import { CountryOptions } from '@_utils/nationalities'
 

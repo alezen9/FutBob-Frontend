@@ -9,7 +9,7 @@ import { generalInfoSchema } from '../validations'
 import { CountryOptions } from '@_utils/nationalities'
 import cleanDeep from 'clean-deep'
 import { ProfileTabProps } from '..'
-import { EditableUser } from '@_entities/User'
+import { EditableUser } from '@_SDK_User/types'
 
 
 
@@ -31,7 +31,7 @@ const General = (props: ProfileTabProps) => {
             ...values,
             ...values.country && { country: get(values, 'country.value', 'IT') }
           })
-          const done = await apiInstance.user_updateUserConnected(newVals)
+          const done = await apiInstance.user.updateMe(newVals)
           if (done) {
             mutate(newVals)
             openSnackbar({

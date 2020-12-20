@@ -84,7 +84,7 @@ const SignIn = () => {
     setSubmitting(true)
     let _token
     try {
-      const { token } = await apiInstance.user_login(values)
+      const { token } = await apiInstance.auth.login(values)
       if (token) _token = token
       else throw new Error('Username o password errati')
     } catch (error) {
@@ -96,7 +96,7 @@ const SignIn = () => {
     setSubmitting(false)
     setIsLoading(false)
     if(_token){
-      apiInstance.setToken(_token)
+      apiInstance.auth.setToken(_token)
       setIsLogged(true)
       await router.push('/')
     }

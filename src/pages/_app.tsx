@@ -34,8 +34,8 @@ const MyApp = (props: AppProps) => {
   const { item, trigger } = useSWRUser({ revalidateOnMount: false })
   
   useEffect(() => {
-    if(apiInstance.hasToken() && !get(item, '_id', null) && !isLoading) trigger()
-  }, [apiInstance.hasToken(), get(item, '_id', null), isLoading])
+    if(apiInstance.auth.hasToken() && !get(item, '_id', null) && !isLoading) trigger()
+  }, [apiInstance.auth.hasToken(), get(item, '_id', null), isLoading])
 
   const onError = useCallback(
     (error, key, config) => {

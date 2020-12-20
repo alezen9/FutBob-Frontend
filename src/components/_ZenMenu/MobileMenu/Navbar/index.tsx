@@ -93,7 +93,7 @@ const Navbar = (props: Props) => {
       (e: any) => {
          e.preventDefault()
          if (open) toggleMenu()
-         apiInstance.user_logout(afterLogout)
+         apiInstance.auth.logout(afterLogout)
       }, [toggleMenu])
 
    return (
