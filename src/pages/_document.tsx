@@ -21,21 +21,22 @@ export default class MyDocument extends Document {
           <meta name='msapplication-tooltip' content='FutBob' />
           <meta name='msapplication-starturl' content='/' />
           <meta name='msapplication-tap-highlight' content='no' />
-
+          {/* Icons */}
+          <link rel='apple-touch-icon' type='image/png' sizes='192x192' href='/icons/icon-192x192.png' />
+          <link rel='icon' type='image/png' sizes='256x256' href='/icons/icon-256x256.png' />
+          <link rel='icon' type='image/png' sizes='384x384' href='/icons/icon-384x384.png' />
+          <link rel='icon' type='image/png' sizes='512x512' href='/icons/icon-512x512.png' />
+          <link rel='mask-icon' href='/icons/safari-pinned.svg' color='#5bbad5' />
+          {/* Favicon */}
+          <link rel='shortcut icon' href='/favicon.ico' type='image/x-icon' />
+          <link rel='icon' href='/favicon.ico' type='image/x-icon' />
+          {/* Manifest */}
           <link rel='manifest' href='/manifest.json' />
-
-          <link rel='apple-touch-icon' sizes='180x180' href='/apple-touch-icon.png' />
-          <link rel='icon' type='image/png' sizes='32x32' href='/favicon-32x32.png' />
-          <link rel='icon' type='image/png' sizes='16x16' href='/favicon-16x16.png' />
-          <link rel='manifest' href='/site.webmanifest' />
-          <link rel='mask-icon' href='/safari-pinned-tab.svg' color='#5bbad5' />
+          {/* Other */}
           <meta name='apple-mobile-web-app-title' content='FutBob' />
           <meta name='application-name' content='FutBob' />
           <meta name='msapplication-TileColor' content='#00aba9' />
-          <meta name='theme-color' content='#ffffff' />
-
-          <link rel='shortcut icon' href='/favicon.ico' type='image/x-icon' />
-          <link rel='icon' href='/favicon.ico' type='image/x-icon' />
+          <meta name='theme-color' content='#222' />
 
           <link
             rel='stylesheet'
