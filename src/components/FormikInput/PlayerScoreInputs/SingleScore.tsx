@@ -25,7 +25,7 @@ const ScoreValuesIconMap = {
   Shooting: <GpsFixedOutlinedIcon {...iconProps} />,
   Defense: <DefenseIcon {...iconProps} />,
   Physical: <PhysicalIcon {...iconProps} />,
-  Dribbling: <AllInclusiveIcon {...iconProps} />
+  Technique: <AllInclusiveIcon {...iconProps} />
 }
 
 export const getMeanScoreField = fieldData => {

@@ -16,11 +16,11 @@ import PlayerScoreInputs from '@_components/FormikInput/PlayerScoreInputs'
 import { CountryOptions } from '@_utils/nationalities'
 import { getPlayerPageTitle } from 'src/pages/players/[id]'
 import { ConfigStore } from '@_zustand/helpers'
-import { PlayerType } from '@_SDK_Player/entities'
 import { useSWRUser } from '@_swr/User'
 import { useSWRPlayer } from '@_swr/Players'
 import { createEditPlayerValidationSchema } from './validations'
 import WarningDeleteDialog from '@_components/WarningDeleteDialog'
+import { getPlayerOverall } from '@_utils/playerOverall'
 
 const stateSelector = (state: ConfigStore) => ({
     setIsLoading: state.setIsLoading,
@@ -55,10 +55,9 @@ const PlayerDetail = () => {
       setIsLoading(true)
       const player = {
         ...values,
-        type: PlayerType.Futsal,
         user: {
           ...values.user,
-          country: get(values, 'user.country.value', 'IT')
+          country: get(values, 'user.registry.country.value', 'IT')
         }
       }
       try {
@@ -112,8 +111,9 @@ const PlayerDetail = () => {
       ...playerItem,
       user: {
         sex: 0,
-        ...get(playerItem, 'user', {}),
-        country: CountryOptions.find(({ value }) => value === get(playerItem, 'user.country', 'IT'))
+        _id: get(playerItem, 'user._id', null),
+        ...get(playerItem, 'user.registry', {}),
+        country: CountryOptions.find(({ value }) => value === get(playerItem, 'user.registry.country', 'IT'))
       },
       score: get(playerItem, 'score', initialScoreValues)
     },
@@ -133,7 +133,7 @@ const PlayerDetail = () => {
 
   const playerName = useMemo(() => {
     if(get(playerItem, 'user._id', null) === userConnectedItem._id) return <span style={{ color: ZenPalette.error }}>yourself</span>
-    return `${get(playerItem, 'user.surname', '')} ${get(playerItem, 'user.name', '')}`
+    return `${get(playerItem, 'user.registry.surname', '')} ${get(playerItem, 'user.registry.name', '')}`
   }, [playerItem, userConnectedItem._id])
 
   return (
@@ -200,7 +200,8 @@ const PlayerDetail = () => {
         <Hidden only='xs'>
           <Grid item xs={4} />
         </Hidden>
-        <OverallScore style={{ margin: 'auto' }} value={parseInt(String(meanBy(scoreData, 'value')))} />
+        {/* <OverallScore style={{ margin: 'auto' }} value={parseInt(String(meanBy(scoreData, 'value')))} /> */}
+        <OverallScore style={{ margin: 'auto' }} value={Math.round(getPlayerOverall(formik.values.score, formik.values.positions || []))} />
         <Grid item container xs={12} justify='center'>
           <FormikInput
             sm={4}

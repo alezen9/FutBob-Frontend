@@ -1,15 +1,14 @@
 import { LSToken } from '@_utils/LSVariables'
-import axios, { AxiosInstance } from 'axios'
-import { get } from 'lodash'
+import { AxiosInstance } from 'axios'
 // start modules
 import AuthServer from './Modules/Auth'
 import FieldServer from './Modules/Field'
 import PlayerServer from './Modules/Player'
 import UserServer from './Modules/User'
+import FreeAgentServer from './Modules/FreeAgent'
 // end modules
 import getConfig from 'next/config'
 import { zenAxiosInstance } from './helpers/ZenAxios'
-import FreeAgentServer from './Modules/FreeAgent'
 const { publicRuntimeConfig } = getConfig()
 
 

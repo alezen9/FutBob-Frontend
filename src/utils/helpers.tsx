@@ -12,7 +12,7 @@ import { TopFormIcon, InjuredIcon, RecoveryIcon } from '@_icons'
 import ExpandLessRoundedIcon from '@material-ui/icons/ExpandLessRounded'
 import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
 import cleanDeep from 'clean-deep'
-import { PlayerScore } from '@_SDK_Player/entities'
+import { PlayerPosition, PlayerScore } from '@_SDK_Player/entities'
 import { OptionType } from '@_components/FormikInput'
 
 export const cleanPathname = (path: string = '') => path.split('?')[0]
@@ -124,69 +124,6 @@ export const futsalPositionsOptions = [
   }
 ]
 
-export const footballPositionsOptions = [
-  {
-    value: 5,
-    label: 'Goalkeeper'
-  },
-  {
-    value: 6,
-    label: 'Sweeper'
-  },
-  {
-    value: 7,
-    label: 'Centre back'
-  },
-  {
-    value: 8,
-    label: 'Left full back'
-  },
-  {
-    value: 9,
-    label: 'Right full back'
-  },
-  {
-    value: 10,
-    label: 'Left wing back'
-  },
-  {
-    value: 11,
-    label: 'Right wing back'
-  },
-  {
-    value: 12,
-    label: 'Defensive midfielder'
-  },
-  {
-    value: 13,
-    label: 'Central midfielder'
-  },
-  {
-    value: 14,
-    label: 'Left midfielder'
-  },
-  {
-    value: 15,
-    label: 'Right midfielder'
-  },
-  {
-    value: 16,
-    label: 'Attacking midfielder'
-  },
-  {
-    value: 17,
-    label: 'Center forward'
-  },
-  {
-    value: 18,
-    label: 'Striker'
-  },
-  {
-    value: 19,
-    label: 'Second striker'
-  }
-]
-
 const PhysicalState = React.memo((props: { label: string, value: number }) => {
   const { label, value } = props
   return <span style={{ display: 'flex', fontSize: '1em', alignItems: 'center' }}>
@@ -248,45 +185,31 @@ export const decamelize = (str: string, separator?: string) => {
 
 export const initialScoreValues: PlayerScore = {
   pace: {
-    acceleration: 0,
-    sprintSpeed: 0
+    speed: 0,
+    stamina: 0
   },
   shooting: {
-    positioning: 0,
     finishing: 0,
     shotPower: 0,
-    longShots: 0,
-    volleys: 0,
-    penalties: 0
+    longShots: 0
   },
   passing: {
     vision: 0,
-    crossing: 0,
-    freeKick: 0,
     shortPassing: 0,
-    longPassing: 0,
-    curve: 0
+    longPassing: 0
   },
-  dribbling: {
+  technique: {
     agility: 0,
-    balance: 0,
-    reactions: 0,
     ballControl: 0,
-    dribbling: 0,
-    composure: 0
+    dribbling: 0
   },
   defense: {
-    interceptions: 0,
-    heading: 0,
+    interception: 0,
     defensiveAwareness: 0,
-    standingTackle: 0,
-    slidingTackle: 0
+    versus: 0
   },
   physical: {
-    jumping: 0,
-    stamina: 0,
-    strength: 0,
-    aggression: 0
+    strength: 0
   }
 }
 

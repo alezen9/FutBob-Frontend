@@ -44,15 +44,14 @@ export const useSWRPlayers = <T extends PlayersMoreOptions>(options?: T) => {
       try {
       const deleted = await apiInstance.player.delete({
         _id: playerId,
-        idUser: userId,
-        type: 1
+        idUser: userId
       })
       if (!deleted) throw new Error()
       cache.delete([SwrKey.PLAYER, playerId])
       const { _id: userConnectedId } = cache.get(SwrKey.USER)
       if(userConnectedId === userId){
         mutateCache(SwrKey.USER, produce(draft => {
-          draft.futsalPlayer = null
+          draft.player = null
         }), false)
       }
       triggerThis()
@@ -112,12 +111,12 @@ export const useSWRPlayer = <T extends MoreOptions>(_id: string|null|undefined, 
 
 
   const createEditPlayer = useCallback(
-    async (player: Omit<Player, '_id'> & Partial<Pick<Player, '_id'>>): Promise<string|boolean> => {
+    async (___player: Omit<Player, '_id'> & Partial<Pick<Player, '_id'>>): Promise<string|boolean> => {
       try {
-      const _player = { ...player }
-      const { user, ...futsalPlayer } = _player
+      const _player = { ...___player }
+      const { user, ...player } = _player
       if(!_player._id){
-        const { _id, matches, ...playerData } = futsalPlayer
+        const { _id, ...playerData } = player
         const bodyCreate = {
             userData: user,
             playerData
@@ -126,11 +125,11 @@ export const useSWRPlayer = <T extends MoreOptions>(_id: string|null|undefined, 
         if(!playerId) throw new Error()
         _player._id = playerId
       } else {
-        const { type, matches, ...bodyUpdate } = futsalPlayer
-        const { user: thisUser, ...thisFutsalPlayer } = cache.get([SwrKey.PLAYER, _player._id]) || {}
+        const { ...bodyUpdate } = player
+        const { user: thisUser, ...thisPlayer } = cache.get([SwrKey.PLAYER, _player._id]) || {}
         let playerUpdated = true
         let userUpdated = true
-        if(!isEqual(thisFutsalPlayer, futsalPlayer)){
+        if(!isEqual(thisPlayer, player)){
           playerUpdated = await apiInstance.player.update(bodyUpdate as UpdatePlayerInput)
         }
         if(!isEqual(thisUser, user)){
@@ -138,33 +137,34 @@ export const useSWRPlayer = <T extends MoreOptions>(_id: string|null|undefined, 
         }
         if(!(playerUpdated && userUpdated)) throw new Error()
       }
-      mutateCache([SwrKey.PLAYER, _player._id], _player, false)
+      // mutateCache([SwrKey.PLAYER, _player._id], _player, false)
+      await trigger([SwrKey.PLAYER, _player._id])
       const { _id: userConnectedId } = cache.get(SwrKey.USER)
       if(userConnectedId === user._id){
-        mutateCache(SwrKey.USER, produce(draft => {
-          draft.futsalPlayer = futsalPlayer
-        }), false)
+      //   mutateCache(SwrKey.USER, produce(draft => {
+      //     draft.player = _player
+      //   }), false)
+      await trigger(SwrKey.USER)
       }
       return _player._id
     } catch(error){
       return false
     }
-  }, [mutateThis])
+  }, [mutateThis, trigger])
 
   const deletePlayer = useCallback(
     async (): Promise<boolean> => {
       try {
       const deleted = await apiInstance.player.delete({
         _id: get(data, '_id', null),
-        idUser: get(data, 'user._id', null),
-        type: 1
+        idUser: get(data, 'user._id', null)
       })
       if (!deleted) throw new Error()
       cache.delete([SwrKey.PLAYER, _id])
       const { _id: userConnectedId } = cache.get(SwrKey.USER)
       if(userConnectedId === get(data, 'user._id', null)){
         mutateCache(SwrKey.USER, produce(draft => {
-          draft.futsalPlayer = null
+          draft.player = null
         }), false)
       }
         return true

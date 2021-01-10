@@ -2,45 +2,31 @@ import { GQL_UserType } from "../User/gql_type"
 
 export type GQL_ScoreType = {
     pace?: {
-        acceleration?: boolean,
-        sprintSpeed?: boolean
+        speed?: boolean,
+        stamina?: boolean
     },
     shooting?: {
-        positioning?: boolean,
         finishing?: boolean,
         shotPower?: boolean,
-        longShots?: boolean,
-        volleys?: boolean,
-        penalties?: boolean
+        longShots?: boolean
     },
     passing?: {
         vision?: boolean,
-        crossing?: boolean,
-        freeKick?: boolean,
         shortPassing?: boolean,
-        longPassing?: boolean,
-        curve?: boolean
+        longPassing?: boolean
     },
-    dribbling?: {
+    technique?: {
         agility?: boolean,
-        balance?: boolean,
-        reactions?: boolean,
         ballControl?: boolean,
-        dribbling?: boolean,
-        composure?: boolean
+        dribbling?: boolean
     },
     defense?: {
-        interceptions?: boolean,
-        heading?: boolean,
+        interception?: boolean,
         defensiveAwareness?: boolean,
-        standingTackle?: boolean,
-        slidingTackle?: boolean
+        versus?: boolean
     },
     physical?: {
-        jumping?: boolean,
-        stamina?: boolean,
-        strength?: boolean,
-        aggression?: boolean
+        strength?: boolean
     }
 }
 
@@ -49,6 +35,5 @@ export type GQL_PlayerType = {
     user?: GQL_UserType,
     positions?: boolean,
     state?: boolean,
-    type?: boolean,
     score?: GQL_ScoreType
 }

@@ -1,11 +1,10 @@
-import { PhysicalState, Player, PlayerPosition, PlayerScore, PlayerType } from "./entities";
+import { PhysicalState, Player, PlayerPosition, PlayerScore } from "./entities";
 import { User } from "..//User/entities";
 import { Pagination } from "../generic_types";
 
 export type PlayerFilters = {
    ids?: string[],
    positions?: PlayerPosition[],
-   type?: PlayerType,
    states?: PhysicalState[],
    countries?: string[],
    searchText?: string,
@@ -15,7 +14,6 @@ export type PlayerFilters = {
 export type DeletePlayerInput = {
    _id: string
    idUser: string
-   type: PlayerType
 }
 
 export type UpdatePlayerInput = {
@@ -27,7 +25,7 @@ export type UpdatePlayerInput = {
 
 export type CreatePlayerInput = {
    userId?: string
-   userData?: Omit<User, '_id'|'futsalPlayer'>
+   userData?: Omit<User, '_id'|'player'>
    playerData: Omit<Player, '_id'|'user'>
 }
 

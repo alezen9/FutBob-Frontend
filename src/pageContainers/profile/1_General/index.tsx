@@ -15,7 +15,7 @@ import { EditableUser } from '@_SDK_User/types'
 
 const General = (props: ProfileTabProps) => {
   const {
-    item: { _id, username, futsalPlayer, avatar, ...rest },
+    item: { _id, username, player, registry, ...rest },
     mutate,
     setIsLoading,
     openSnackbar
@@ -26,7 +26,7 @@ const General = (props: ProfileTabProps) => {
       setSubmitting(true)
       setIsLoading(true)
       try {
-        if (!isEqual(rest, values)) {
+        if (!isEqual(registry, values)) {
           const newVals: EditableUser = cleanDeep({
             ...values,
             ...values.country && { country: get(values, 'country.value', 'IT') }
@@ -48,16 +48,16 @@ const General = (props: ProfileTabProps) => {
       }
       setIsLoading(false)
       setSubmitting(false)
-    }, [rest, mutate])
+    }, [JSON.stringify(registry), mutate])
 
   const initCountry = useMemo(() => {
-    if(!rest.country) return null
-    if(CountryOptions) return CountryOptions.find(({ value }) => value === rest.country)
+    if(!registry.country) return null
+    if(CountryOptions) return CountryOptions.find(({ value }) => value === registry.country)
     return null
-  }, [CountryOptions, rest.country])
+  }, [CountryOptions, get(registry, 'country', null)])
 
   const formik = useFormik({
-    initialValues: { ...rest, country: initCountry },
+    initialValues: { ...registry, country: initCountry },
     enableReinitialize: true,
     onSubmit,
     validationSchema: generalInfoSchema

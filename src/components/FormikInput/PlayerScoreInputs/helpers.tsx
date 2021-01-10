@@ -6,45 +6,31 @@ import { decamelize } from '@_utils/helpers'
 
 const scoreProperties = {
   pace: [
-    'acceleration',
-    'sprintSpeed'
+    'speed',
+    'stamina'
   ],
   shooting: [
-    'positioning',
     'finishing',
     'shotPower',
-    'longShots',
-    'volleys',
-    'penalties'
+    'longShots'
   ],
   passing: [
     'vision',
-    'crossing',
-    'freeKick',
     'shortPassing',
-    'longPassing',
-    'curve'
+    'longPassing'
   ],
-  dribbling: [
+  technique: [
     'agility',
-    'balance',
-    'reactions',
     'ballControl',
-    'dribbling',
-    'composure'
+    'dribbling'
   ],
   defense: [
-    'interceptions',
-    'heading',
+    'interception',
     'defensiveAwareness',
-    'standingTackle',
-    'slidingTackle'
+    'versus'
   ],
   physical: [
-    'jumping',
-    'stamina',
-    'strength',
-    'aggression'
+    'strength'
   ]
 }
 

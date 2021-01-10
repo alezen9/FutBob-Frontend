@@ -11,16 +11,16 @@ import { OverallScore } from '@_icons'
 import { getMeanScoreField } from '@_components/FormikInput/PlayerScoreInputs/SingleScore'
 import PlayerScoreInputs from '@_components/FormikInput/PlayerScoreInputs'
 import { ProfileTabProps } from '..'
-import { PlayerType } from '@_SDK_Player/entities'
 import { ZenPalette } from '@_palette'
 import ZenDialog from '@_components/ZenDialog'
 
 const Player = (props: ProfileTabProps) => {
   const { item, setIsLoading, openSnackbar, createEditPlayer, deletePlayer } = props
-  const { _id: userId, futsalPlayer, ...restOfUserData } = item
+  const { _id: userId, player, ...restOfUserData } = item
   const [openConfirmDialog, setOpenConfirmDialog] = useState(null)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'))
+  console.log(player)
 
   const onSubmit = useCallback(
     async (values, { setSubmitting }) => {
@@ -36,15 +36,14 @@ const Player = (props: ProfileTabProps) => {
         ...values,
         user: {
           _id: item._id,
-          name: item.name,
-          surname: item.surname,
-          dateOfBirth: item.dateOfBirth,
-          sex: item.sex,
-          country: item.country,
-          phone: item.phone,
-          ...item.email && { email: item.email }
+          name: item.registry.name,
+          surname: item.registry.surname,
+          dateOfBirth: item.registry.dateOfBirth,
+          sex: item.registry.sex,
+          country: item.registry.country,
+          phone: item.registry.phone,
+          ...item.registry.email && { email: item.registry.email }
         },
-        type: PlayerType.Futsal
       }
       try {
         const done = await createEditPlayer(player)
@@ -65,10 +64,10 @@ const Player = (props: ProfileTabProps) => {
 
   const formik = useFormik({
     initialValues: {
-      _id: get(futsalPlayer, '_id', null),
-      positions: get(futsalPlayer, 'positions', []),
-      state: get(futsalPlayer, 'state', undefined),
-      score: get(futsalPlayer, 'score', initialScoreValues)
+      _id: get(player, '_id', null),
+      positions: get(player, 'positions', []),
+      state: get(player, 'state', undefined),
+      score: get(player, 'score', initialScoreValues)
     },
     enableReinitialize: true,
     onSubmit
@@ -129,7 +128,7 @@ const Player = (props: ProfileTabProps) => {
           {...formik} />
       </Grid>
       <Grid item container xs={12} justify={isSmallScreen ? 'space-evenly' : 'flex-end'}>
-        {get(futsalPlayer, '_id', null) && <Grid item>
+        {get(player, '_id', null) && <Grid item>
           <Button
             style={{ minWidth: 130, color: ZenPalette.error, marginRight: '1.5em', borderColor: ZenPalette.error }}
             disabled={formik.isSubmitting}
@@ -145,7 +144,7 @@ const Player = (props: ProfileTabProps) => {
             onClick={() => formik.handleSubmit()}
             variant='contained'
             color='primary'>
-            {futsalPlayer ? 'Update' : 'Create'}
+            {player ? 'Update' : 'Create'}
           </Button>
         </Grid>
       </Grid>

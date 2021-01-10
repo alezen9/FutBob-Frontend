@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 type PlayerProps = {
   position?: number
   active?: boolean
-  label?: string
+  label?: string|number
   onClick: (pos: number) => void
 }
 
@@ -52,7 +52,7 @@ const Player = React.memo((props: PlayerProps) => {
   const cssPosition = useMemo(() => getCssPosition(position), [position])
   const { player } = useStyles({ cssPosition, active })
 
-  return <div className={player} onClick={() => onClick(position)}>{label || ''}</div>
+  return <div className={player} onClick={() => onClick(position)}>{active ? label || '' : ''}</div>
 })
 
 type PlayersProps = {
@@ -71,6 +71,7 @@ const Players = (props: PlayersProps) => {
         key={`player-${i}`}
         position={i}
         active={values.includes(i)}
+        label={values.findIndex(el => el === i) + 1}
         onClick={onClick} />)
     }
     return res

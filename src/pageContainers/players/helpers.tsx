@@ -7,7 +7,7 @@ import NavigateNextRoundedIcon from '@material-ui/icons/NavigateNextRounded'
 import ListField from '@_components/ListField'
 import DeleteForeverRoundedIcon from '@material-ui/icons/DeleteForeverRounded'
 import { getMeanScoreField } from '@_components/FormikInput/PlayerScoreInputs/SingleScore'
-import { Player, PlayerPositionFutsal, PlayerScore } from '@_SDK_Player/entities'
+import { Player, PlayerPosition, PlayerScore } from '@_SDK_Player/entities'
 import { Filter } from '@_components/Filters/Inputs'
 import { CountryOptions } from '@_utils/nationalities'
 
@@ -29,13 +29,13 @@ export const getPlayerDataRow = ({ openDialog, goToDetails, userConnectedId }) =
     _isUser: userConnectedId === playerData.user._id,
     name: <span style={{ display: 'flex', alignItems: 'center' }}>
       <OverallScore value={playerValue} style={{ transform: 'scale(.75)' }} />
-      {`${get(playerData, 'user.surname', '-')} ${get(playerData, 'user.name', '-')}`}
+      {`${get(playerData, 'user.registry.surname', '-')} ${get(playerData, 'user.registry.name', '-')}`}
     </span>,
-    fullName: `${get(playerData, 'user.surname', '-')} ${get(playerData, 'user.name', '-')}`,
+    fullName: `${get(playerData, 'user.registry.surname', '-')} ${get(playerData, 'user.registry.name', '-')}`,
     physicalState: playerPhysicalStateOptions.find(({ value }) => value === get(playerData, 'state', 0)).label,
-    age: moment().diff(get(playerData, 'user.dateOfBirth', null), 'years'),
-    phone: get(playerData, 'user.phone', '-'),
-    country: get(playerData, 'user.country', '-'),
+    age: moment().diff(get(playerData, 'user.registry.dateOfBirth', null), 'years'),
+    phone: get(playerData, 'user.registry.phone', '-'),
+    country: get(playerData, 'user.registry.country', '-'),
     positions: <ListField
       data={getLabelsByValues({
         values: get(playerData, 'positions', []),
@@ -82,7 +82,7 @@ export const playerFilters: Filter[] = [
    type: 'select',
    name: 'positions',
    label: 'Position',
-   options: getOptionsByEnum(PlayerPositionFutsal),
+   options: getOptionsByEnum(PlayerPosition),
    multiple: true
   },
   {

@@ -50,12 +50,12 @@ export const useSWRUser = <T extends MoreOptions>(options?: T) => {
     }, [mutate])
 
   const createEditPlayer = useCallback(
-    async (player: Omit<Player, '_id'> & Partial<Pick<Player, '_id'>>): Promise<boolean> => {
+    async (__player: Omit<Player, '_id'> & Partial<Pick<Player, '_id'>>): Promise<boolean> => {
       try {
-      const _player = { ...player }
-      const { user, ...futsalPlayer } = _player
+      const _player = { ...__player }
+      const { user, ...player } = _player
       if(!_player._id){
-        const { _id, matches, ...playerData } = futsalPlayer
+        const { _id, ...playerData } = player
         const bodyCreate = {
             userId: user._id,
             playerData
@@ -64,12 +64,11 @@ export const useSWRUser = <T extends MoreOptions>(options?: T) => {
         if(!playerId) throw new Error()
         _player._id = playerId
       } else {
-        const { type, matches, ...bodyUpdate } = futsalPlayer
-        const updated = await apiInstance.player.update(bodyUpdate as UpdateUserInput)
+        const updated = await apiInstance.player.update(player as UpdateUserInput)
         if(!updated) throw new Error()
       }
       mutateThis(draft => {
-        draft.futsalPlayer = futsalPlayer
+        draft.player = _player
       }, false)
       mutateCache([SwrKey.PLAYER, _player._id], _player, false)
       return true
@@ -82,19 +81,18 @@ export const useSWRUser = <T extends MoreOptions>(options?: T) => {
     async (): Promise<boolean> => {
       try {
       const deleted = await apiInstance.player.delete({
-        _id: get(data, 'futsalPlayer._id', null),
-        idUser: get(data, '_id', null),
-        type: 1
+        _id: get(data, 'player._id', null),
+        idUser: get(data, '_id', null)
       })
       if (!deleted) throw new Error()
       mutateThis(draft => {
-        draft.futsalPlayer = null
+        draft.player = null
       }, false)
         return true
       } catch (error) {
         return false
       }
-    }, [mutateThis, get(data, '_id', null), get(data, 'futsalPlayer._id', null)])
+    }, [mutateThis, get(data, '_id', null), get(data, 'player._id', null)])
 
   return {
     item: data as User || {} as User,

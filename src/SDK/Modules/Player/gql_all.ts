@@ -2,45 +2,31 @@ import { GQL_PlayerType, GQL_ScoreType } from "./gql_type"
 
 export const player_score_allFields: GQL_ScoreType = {
     pace: {
-        acceleration: true,
-        sprintSpeed: true
+        speed: true,
+        stamina: true
     },
     shooting: {
-        positioning: true,
         finishing: true,
         shotPower: true,
-        longShots: true,
-        volleys: true,
-        penalties: true
+        longShots: true
     },
     passing: {
         vision: true,
-        crossing: true,
-        freeKick: true,
         shortPassing: true,
-        longPassing: true,
-        curve: true
+        longPassing: true
     },
-    dribbling: {
+    technique: {
         agility: true,
-        balance: true,
-        reactions: true,
         ballControl: true,
-        dribbling: true,
-        composure: true
+        dribbling: true
     },
     defense: {
-        interceptions: true,
-        heading: true,
         defensiveAwareness: true,
-        standingTackle: true,
-        slidingTackle: true
+        interception: true,
+        versus: true
     },
     physical: {
-        jumping: true,
-        stamina: true,
-        strength: true,
-        aggression: true
+        strength: true
     }
 }
 
@@ -50,13 +36,15 @@ export const player_allFields: GQL_PlayerType = {
     _id: true,
     user: {
       _id: true,
-      name: true,
-      surname: true,
-      dateOfBirth: true,
-      sex: true,
-      country: true,
-      phone: true,
-      email: true
+      registry: {
+         name: true,
+         surname: true,
+         dateOfBirth: true,
+         sex: true,
+         country: true,
+         phone: true,
+         email: true
+      }
     },
     positions: true,
     state: true,

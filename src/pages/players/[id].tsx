@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from 'react'
+import React, { useEffect } from 'react'
 import PageTransition from '@_components/PageTransition'
 import PlayerDetail from '@_page-containers/players/show'
 import { useConfigStore } from '@_zustand/configStore'
@@ -11,7 +11,9 @@ import { useSWRPlayer } from '@_swr/Players'
 import { useSWRUser } from '@_swr/User'
 
 export const getPlayerPageTitle = (user: User, isUser: boolean = false) => {
-  const { name, surname } = user
+   const name = get(user, 'registry.name',  get(user, 'name', ''))
+   const surname = get(user, 'registry.surname',  get(user, 'surname', ''))
+
   return isUser
     ? <span style={{display: 'flex', alignItems: 'center'}}>
       <FaceRoundedIcon style={{marginRight: '.5em', fontSize: '1.2em' }}/>
@@ -33,7 +35,7 @@ const Player = () => {
     const _isUser = get(userItem, '_id', null) === get(playerItem, 'user._id', null)
     const pageTitle = getPlayerPageTitle(get(playerItem, 'user', {} as User), _isUser)
     setPageTitle(pageTitle)
-  }, [playerItem._id, userItem._id])
+  }, [JSON.stringify(playerItem), userItem._id])
 
   return (
     <PageTransition>
