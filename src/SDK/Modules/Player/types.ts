@@ -1,32 +1,60 @@
-import { PhysicalState, Player, PlayerPosition, PlayerScore } from "./entities";
-import { User } from "..//User/entities";
-import { Pagination } from "../generic_types";
+import { User } from "@_SDK_User/types"
 
-export type PlayerFilters = {
-   ids?: string[],
-   positions?: PlayerPosition[],
-   states?: PhysicalState[],
-   countries?: string[],
-   searchText?: string,
-   pagination?: Pagination
+export enum PlayerPosition {
+    FutsalGoalKeeper,
+    FutsalBack,
+    FutsalLeftWing,
+    FutsalRightWing,
+    FutsalForward
+}
+export class Pace {
+    speed: number
+    stamina: number
+}
+export class Shooting {
+    finishing: number
+    shotPower: number
+    longShots: number
+}
+export class Passing {
+    vision: number
+    shortPassing: number
+    longPassing: number
+}
+export class Technique {
+    agility: number
+    ballControl: number
+    dribbling: number
+}
+export class Defense {
+    interception: number
+    defensiveAwareness: number
+    versus: number // 1>1
 }
 
-export type DeletePlayerInput = {
-   _id: string
-   idUser: string
+export class Physical {
+    strength: number
+}
+export class PlayerScore {
+    pace: Pace
+    shooting: Shooting
+    passing: Passing
+    technique: Technique
+    defense: Defense
+    physical: Physical
 }
 
-export type UpdatePlayerInput = {
-   _id: string
-   positions?: PlayerPosition[]
-   state?: PhysicalState
-   score?: Required<PlayerScore>
+export enum PhysicalState {
+    Top,
+    Medium,
+    Low,
+    Injured,
+    Recovery
 }
-
-export type CreatePlayerInput = {
-   userId?: string
-   userData?: Omit<User, '_id'|'player'>
-   playerData: Omit<Player, '_id'|'user'>
+export class Player {
+    _id: string
+    user: User
+    positions: PlayerPosition[]
+    state?: PhysicalState
+    score: PlayerScore
 }
-
-export type EditablePlayer = Partial<Player>

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback } from 'react'
 import { Button, Typography, Grid, Theme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { FormikHelpers, useFormik } from 'formik'
@@ -10,6 +10,7 @@ import ThemeSwitch from '@_components/ThemeModeSwitch'
 import { ServerMessage } from '@_utils/serverMessages'
 import { useConfigStore } from '@_zustand/configStore'
 import { ConfigStore } from '@_zustand/helpers'
+import { useIsMounted } from '@_utils/customHooks'
 
 const Copyright = () => {
   return (
@@ -65,17 +66,14 @@ const stateSelector = (state: ConfigStore) => ({
     themeType: state.themeType
   })
 
-const SignIn = () => {
+const Login = () => {
   const classes = useStyles()
   const { openSnackbar, setIsLogged, setIsLoading, isLogged, themeType } = useConfigStore(stateSelector)
   const router = useRouter()
-  const isMounted = useRef(null)
+  const isMounted = useIsMounted()
 
-  useEffect(() => {
-    isMounted.current = true
-    return () => {
-      isMounted.current = false
-    }
+  const goToRegister = useCallback(() => {
+     router.push('/register')
   }, [])
 
   const onSubmit = useCallback(
@@ -118,8 +116,8 @@ const SignIn = () => {
         <FutBobLogo style={{ fontSize: '4em' }} />
         <form className={classes.form} onSubmit={formik.handleSubmit}>
           <FormikInput
-            name='username'
-            label='Username'
+            name='email'
+            label='Email'
             required
             {...formik}
           />
@@ -137,7 +135,15 @@ const SignIn = () => {
             color='primary'
             disabled={formik.isSubmitting}
             className={classes.submit}>
-              Sign In
+              Login
+          </Button>
+           <Button
+            onClick={goToRegister}
+            fullWidth
+            color='primary'
+            disabled={formik.isSubmitting}
+            className={classes.submit}>
+              Register
           </Button>
         </form>
       </Grid>
@@ -146,4 +152,4 @@ const SignIn = () => {
   )
 }
 
-export default SignIn
+export default Login

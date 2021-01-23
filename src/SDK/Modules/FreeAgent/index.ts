@@ -1,8 +1,9 @@
+import { ListOf } from "@_swr/helpers"
 import { paramsToString } from "@_utils/helpers"
-import { ZenServer } from "src/SDK"
-import { FieldsToQuery } from "src/SDK/helpers"
-import { GQL_FreeAgentType } from "./gql_type"
-import { CreateFreeAgentInput, FreeAgentFilters, UpdateFreeAgentInput } from "./types"
+import { Pagination } from "src/SDK/types"
+import { ZenServer } from "../../"
+import { FreeAgent } from "./types"
+import { CreateFreeAgentInput, FiltersFreeAgent, UpdateFreeAgentInput } from "./inputs"
 
 class FreeAgentServer {
    private _server: ZenServer
@@ -11,37 +12,36 @@ class FreeAgentServer {
       this._server = server
    }
 
-   async create(createFreeAgentInput: CreateFreeAgentInput): Promise<any> {
+   async create(body: CreateFreeAgentInput): Promise<string> {
       const query = `
       mutation {
-         createFreeAgent(createFreeAgentInput: ${paramsToString(createFreeAgentInput)})
+         FreeAgent_create(body: ${paramsToString(body)})
       }`
-      return this._server.API({ query, name: 'createFreeAgent' })
+      return this._server.API({ query, name: 'FreeAgent_create' })
    }
 
-   async update(updateFreeAgentInput: UpdateFreeAgentInput): Promise<any> {
+   async update(body: UpdateFreeAgentInput): Promise<boolean> {
       const query = `
       mutation {
-         updateFreeAgent(updateFreeAgentInput: ${paramsToString(updateFreeAgentInput)})
+         FreeAgent_update(body: ${paramsToString(body)})
       }`
-      return this._server.API({ query, name: 'updateFreeAgent' })
+      return this._server.API({ query, name: 'FreeAgent_update' })
    }
 
-   async delete(_id: string): Promise<any> {
+   async delete(_id: string): Promise<boolean> {
       const query = `
       mutation {
-         deleteFreeAgent(_id: "${_id}")
+         FreeAgent_delete(_id: "${_id}")
       }`
-      return this._server.API({ query, name: 'deleteFreeAgent' })
+      return this._server.API({ query, name: 'FreeAgent_delete' })
    }
 
-  async getList(freeAgentFilters: FreeAgentFilters, fields: GQL_FreeAgentType): Promise<any> {
-      const strFields = FieldsToQuery(fields, true)
+  async getList(filters: FiltersFreeAgent, pagination: Pagination, fields: string): Promise<ListOf<FreeAgent>> {
       const query = `
          query {
-            getFreeAgents(freeAgentFilters: ${paramsToString(freeAgentFilters)}) ${strFields}
+            FreeAgent_getList(filters: ${paramsToString(filters)}, pagination: ${paramsToString(pagination)}) ${fields}
          }`
-      return this._server.API({ query, name: 'getFreeAgents' })
+      return this._server.API({ query, name: 'FreeAgent_getList' })
    }
 }
 

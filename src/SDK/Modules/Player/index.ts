@@ -1,8 +1,9 @@
+import { ListOf } from "@_swr/helpers"
 import { paramsToString } from "@_utils/helpers"
-import { ZenServer } from "src/SDK"
-import { FieldsToQuery } from "src/SDK/helpers"
-import { GQL_PlayerType } from "./gql_type"
-import { CreatePlayerInput, DeletePlayerInput, PlayerFilters, UpdatePlayerInput } from "./types"
+import { Pagination } from "src/SDK/types"
+import { ZenServer } from "../../"
+import { CreatePlayerInput, FiltersPlayer, UpdatePlayerInput } from "./inputs"
+import { Player } from "./types"
 
 class PlayerServer {
    private _server: ZenServer
@@ -11,39 +12,38 @@ class PlayerServer {
       this._server = server
    }
 
-   async create (createPlayerInput: CreatePlayerInput) {
+   async create (body: CreatePlayerInput): Promise<string> {
       const query = `
       mutation {
-         createPlayer(createPlayerInput: ${paramsToString(createPlayerInput)})
+         Player_create(body: ${paramsToString(body)})
       }`
-      return this._server.API({ query, name: 'createPlayer', params: createPlayerInput })
+      return this._server.API({ query, name: 'Player_create' })
    }
 
-   async update (updatePlayerInput: UpdatePlayerInput) {
+   async update (body: UpdatePlayerInput): Promise<boolean> {
       const query = `
       mutation {
-         updatePlayer(updatePlayerInput: ${paramsToString(updatePlayerInput)})
+         Player_update(body: ${paramsToString(body)})
       }`
-      return this._server.API({ query, name: 'updatePlayer', params: updatePlayerInput })
-   }
-
-
-   async delete (deletePlayerInput: DeletePlayerInput) {
-      const query = `
-      mutation {
-         deletePlayer(deletePlayerInput: ${paramsToString(deletePlayerInput)})
-      }`
-      return this._server.API({ query, name: 'deletePlayer', params: deletePlayerInput })
+      return this._server.API({ query, name: 'Player_update' })
    }
 
 
-   async getList (playerFilters: PlayerFilters, fields: GQL_PlayerType) {
-      const strFields = FieldsToQuery(fields, true)
+   async delete (_id: string): Promise<boolean> {
+      const query = `
+      mutation {
+         Player_delete(_id: "${_id}")
+      }`
+      return this._server.API({ query, name: 'Player_delete' })
+   }
+
+
+   async getList (filters: FiltersPlayer, pagination: Pagination, fields: string): Promise<ListOf<Player>> {
       const query = `
       query {
-         getPlayers(playerFilters: ${paramsToString(playerFilters)}) ${strFields}
+         Player_getList(filters: ${paramsToString(filters)}, pagination: ${paramsToString(pagination)}) ${fields}
       }`
-      return this._server.API({ query, name: 'getPlayers', params: playerFilters, fields })
+      return this._server.API({ query, name: 'Player_getList' })
    }
 }
 

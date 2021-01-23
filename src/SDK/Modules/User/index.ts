@@ -1,8 +1,7 @@
 import { paramsToString } from "@_utils/helpers"
-import { ZenServer } from "src/SDK"
-import { FieldsToQuery } from "src/SDK/helpers"
-import { GQL_UserType } from "./gql_type"
-import { UpdateUserInput } from "./types"
+import { ZenServer } from "../../"
+import { ChangePasswordInput, CreateUserInput, UpdateRegistryInput } from "./inputs"
+import { User } from "./types"
 
 class UserServer {
    private _server: ZenServer
@@ -11,45 +10,44 @@ class UserServer {
       this._server = server
    }
 
-      async getMe (fields: GQL_UserType) {
-      const strFields = FieldsToQuery(fields)
+   async create (body: CreateUserInput): Promise<string> {
+      const query = `
+      mutation {
+         User_create(body: ${paramsToString(body)})
+      }`
+      return this._server.API({ query, name: 'User_create' })
+   }
+
+   async update (body: UpdateRegistryInput): Promise<boolean> {
+      const query = `
+      mutation {
+         User_update(body: ${paramsToString(body)})
+      }`
+      return this._server.API({ query, name: 'User_update' })
+   }
+
+   async getMe (fields: string): Promise<User> {
       const query = `
       query {
-         getUserConnected ${strFields}
+         User_getMe ${fields}
       }`
-      return this._server.API({ query, name: 'getUserConnected', fields })
+      return this._server.API({ query, name: 'User_getMe' })
    }
 
-   async changeMyUsername (newUsername: string) {
+   async changeMyPassword (body: ChangePasswordInput): Promise<boolean> {
       const query = `
       mutation {
-         changeUsername(newUsername: "${newUsername}")
+         User_changeMyPassword(body: ${paramsToString(body)})
       }`
-      return this._server.API({ query, name: 'changeUsername', params: { newUsername } })
+      return this._server.API({ query, name: 'User_changeMyPassword' })
    }
 
-   async changeMyPassword (oldPassword: string, newPassword: string) {
+   async delete (_id: string): Promise<boolean> {
       const query = `
       mutation {
-         changePassword(oldPassword: "${oldPassword}", newPassword: "${newPassword}")
+         User_delete(_id: "${_id}")
       }`
-      return this._server.API({ query, name: 'changePassword', params: { oldPassword, newPassword } })
-   }
-
-   async updateMe (userInput: Partial<UpdateUserInput>) {
-      const query = `
-      mutation {
-         updateUserConnected(userInput: ${paramsToString(userInput)})
-      }`
-      return this._server.API({ query, name: 'updateUserConnected', params: userInput })
-   }
-
-   async update (userInput: UpdateUserInput) {
-      const query = `
-      mutation {
-         updateUser(userInput: ${paramsToString(userInput)})
-      }`
-      return this._server.API({ query, name: 'updateUser', params: userInput })
+      return this._server.API({ query, name: 'User_delete' })
    }
 }
 

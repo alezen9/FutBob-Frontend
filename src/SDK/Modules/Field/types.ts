@@ -1,22 +1,27 @@
-import { Pagination } from "../generic_types"
-import { FieldState, FieldType, GeoPoint, Measurements } from "./entities"
+import { GeoPoint } from "src/SDK/types"
 
-export type FieldFilters = {
-    ids?: string[],
-    type?: FieldType,
-    states?: FieldState[],
-    searchText?: string,
-    pagination?: Pagination
+export enum FieldType {
+   Indoor,
+   Outdoor
 }
 
-export type UpdateFieldInput = {
-    _id: string,
-    state?: FieldState,
-    type?: FieldType,
-    name?: string,
-    price?: number,
-    measurements?: Measurements,
-    location?: GeoPoint
+export enum FieldState {
+   Terrible,
+   NotGreatNotTerrible,
+   Great
 }
 
-export type CreateFieldInput = Required<Omit<UpdateFieldInput, '_id'>>
+export class Measurements { // in centimeters
+   width: number
+   height: number
+}
+
+export class Field {
+   _id: string
+   type: FieldType
+   name: string
+   measurements: Measurements
+   state: FieldState
+   price: number // in cents
+   location: GeoPoint
+}

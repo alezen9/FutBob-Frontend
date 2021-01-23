@@ -1,7 +1,8 @@
-import { paramsToString } from "@_utils/helpers"
+import { paramsToString } from '@_utils/helpers'
 import { get } from 'lodash'
-import { ZenServer } from "src/SDK"
-import { SigninInput, SignupInput } from "./types"
+import { ZenServer } from "../../"
+import { AuthData } from './types'
+import { LoginInput, RegisterInput } from './inputs'
 
 class AuthServer {
    private _server: ZenServer
@@ -23,28 +24,28 @@ class AuthServer {
       return !!(get(this._server._self, 'defaults.headers.common.Authorization', undefined) || (process.browser && window.localStorage.getItem(this._server._LSToken)))
    }
 
-   async signUp (signupInput: SignupInput, fields) {
+   async register(body: RegisterInput): Promise<boolean> {
       const query = `
       mutation {
-         signup(signupInput: ${paramsToString(signupInput)})${fields}
+         Auth_register(body: ${paramsToString(body)})
       }`
-      return this._server.API({ query, name: 'signup', params: signupInput, fields })
+      return this._server.API({ query, name: 'Auth_register' })
    }
 
-   async login (signinInput: SigninInput): Promise<string> {
+   async confirm(code: string, fields: string): Promise<AuthData> {
       const query = `
       query {
-         login(signinInput: ${paramsToString(signinInput)}){ token }
+         Auth_confirm(code: "${code}")${fields}
       }`
-      const { token } = await this._server.API({ query, name: 'login', params: signinInput })
-      if(token) this.setToken(token)
-      return token
+      return this._server.API({ query, name: 'Auth_confirm' })
    }
 
-   logout (_logout?: VoidFunction): void {
-      window.localStorage.removeItem(this._server._LSToken)
-      delete this._server._self.defaults.headers.common['Authorization']
-      if (_logout) _logout()
+   async login(body: LoginInput, fields: string): Promise<AuthData> {
+      const query = `
+      query {
+         Auth_login(body: ${paramsToString(body)})${fields}
+      }`
+      return this._server.API({ query, name: 'Auth_login' })
    }
 }
 

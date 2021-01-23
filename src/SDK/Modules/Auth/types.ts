@@ -1,8 +1,4 @@
-import { CreateUserInput } from "../User/types"
-
-export type SigninInput = {
-   username: string
-   password: string
+export class AuthData {
+    token: string
+    expiresIn?: string
 }
-
-export type SignupInput = CreateUserInput & SigninInput 
