@@ -2,182 +2,194 @@ import useSWR, { cache, trigger, mutate as mutateCache } from 'swr'
 import produce from 'immer'
 import { useConfigStore } from '@_zustand/configStore'
 import { useEffect, useCallback, useState } from 'react'
-import { Player } from '@_SDK_Player/entities'
-import { EditablePlayer } from '@_SDK_Player/types'
-import { get, isEqual } from 'lodash'
+import { get } from 'lodash'
 import { apiInstance } from 'src/SDK'
-import { DirectMutationImmer, MoreOptions, mutateDraft, stateSelector, SwrKey } from '@_swr/helpers'
+import { DirectMutationImmer, MoreOptions, stateSelector, SwrKey } from '@_swr/helpers'
 import swrPlayersFetchers from './fetchers'
-import { PlayerFilters, UpdatePlayerInput } from '@_SDK_Player/types'
+import { Pagination } from 'src/SDK/types'
+import { CreatePlayerInput, FiltersPlayer, UpdatePlayerInput } from '@_SDK_Player/inputs'
+import { ServerMessage } from '@_utils/serverMessages'
+import { User } from '@_SDK_User/types'
+import { Player } from '@_SDK_Player/types'
 
 interface PlayersMoreOptions extends MoreOptions {
-   filters?: PlayerFilters
+	filters?: FiltersPlayer
+	pagination: Pagination
 }
 
 export const useSWRPlayers = <T extends PlayersMoreOptions>(options?: T) => {
-  const { filters = {}, ...restOfOpts } = options || {}
-  const hasToken = apiInstance.auth.hasToken()
-  const filtersKey = JSON.stringify(filters)
-  const { setIsLoading } = useConfigStore(stateSelector)
-  const { data, mutate, isValidating } = useSWR(
-    [SwrKey.PLAYERS, filtersKey],
-    swrPlayersFetchers.playersFetcher,
-    {
-      revalidateOnMount: hasToken,
-      shouldRetryOnError: false,
-      revalidateOnFocus: false,
-      ...restOfOpts || {}
-    }
-  )
+	const { filters = {}, pagination = { skip: 0 }, ...restOfOpts } = options || {}
+	const hasToken = apiInstance.auth.hasToken()
+	const filtersKey = JSON.stringify(filters)
+	const paginationKey = JSON.stringify(pagination)
 
-  useEffect(() => {
-    setIsLoading(isValidating)
-  }, [isValidating])
+	const { setIsLoading, openSnackbar } = useConfigStore(stateSelector)
 
-  const triggerThis = useCallback(
-    (shouldRevalidate: boolean = true) => {
-      return trigger([SwrKey.PLAYERS, filtersKey], shouldRevalidate)
-    }, [trigger])
+	const { data, isValidating } = useSWR([SwrKey.PLAYERS, filtersKey, paginationKey], swrPlayersFetchers.listFetcher, {
+		revalidateOnMount: hasToken,
+		shouldRetryOnError: false,
+		revalidateOnFocus: false,
+		...(restOfOpts || {})
+	})
 
-  const deletePlayer = useCallback(
-    async (playerId: string, userId: string): Promise<boolean> => {
-      try {
-      const deleted = await apiInstance.player.delete({
-        _id: playerId,
-        idUser: userId
-      })
-      if (!deleted) throw new Error()
-      cache.delete([SwrKey.PLAYER, playerId])
-      const { _id: userConnectedId } = cache.get(SwrKey.USER)
-      if(userConnectedId === userId){
-        mutateCache(SwrKey.USER, produce(draft => {
-          draft.player = null
-        }), false)
-      }
-      triggerThis()
-        return true
-      } catch (error) {
-        return false
-      }
-    }, [triggerThis])
+	useEffect(() => {
+		setIsLoading(isValidating)
+	}, [isValidating])
 
-  return {
-    list: get(data, 'result', []) as Player[] || [] as Player[],
-    totalCount: get(data, 'totalCount', 0),
-    trigger: triggerThis,
-    deletePlayer,
-    isValidating
-  }
+	const triggerThis = useCallback(
+		(shouldRevalidate: boolean = true) => {
+			return trigger([SwrKey.PLAYERS, filtersKey, paginationKey], shouldRevalidate)
+		},
+		[trigger, filtersKey, paginationKey]
+	)
+
+	// SHORTCUT LIST
+	const deletePlayer = useCallback(
+		async (_id: string, isMe?: boolean) => {
+			try {
+				await apiInstance.player.delete(_id)
+				if (isMe)
+					mutateCache(
+						SwrKey.ME,
+						produce((draft: User) => {
+							draft.player = null
+						})
+					)
+				cache.delete([SwrKey.PLAYER, _id])
+				await triggerThis()
+			} catch (error) {
+				openSnackbar({
+					variant: 'error',
+					message: get(ServerMessage, error, ServerMessage.generic)
+				})
+			}
+		},
+		[openSnackbar, triggerThis]
+	)
+
+	return {
+		list: (get(data, 'result', []) || []) as Player[],
+		totalCount: get(data, 'totalCount', 0),
+		trigger: triggerThis,
+		deletePlayer,
+		isValidating
+	}
 }
 
-export const useSWRPlayer = <T extends MoreOptions>(_id: string|null|undefined, options?: T) => {
-  const { fromCache = true, ...restOfOpts } = options || {}
-  const hasToken = apiInstance.auth.hasToken()
-  const { setIsLoading } = useConfigStore(stateSelector)
-  const initialData = fromCache
-    ? cache.get([SwrKey.PLAYER, _id])
-    : undefined
-  const [revalidateOnMount, setRevalidateOnMount] = useState(fromCache && initialData ? false : hasToken)
-  const { data, mutate, isValidating } = useSWR(
-    [SwrKey.PLAYER, _id],
-    swrPlayersFetchers.playerFetcher,
-    {
-      initialData,
-      revalidateOnMount,
-      shouldRetryOnError: false,
-      revalidateOnFocus: false,
-      ...restOfOpts || {}
-    }
-  )
+export const useSWRPlayer = <T extends MoreOptions>(_id: string | null | undefined, options?: T) => {
+	const { fromCache = true, ...restOfOpts } = options || {}
+	const hasToken = apiInstance.auth.hasToken()
+	const initialData = fromCache ? cache.get([SwrKey.PLAYER, _id]) : undefined
+	const [revalidateOnMount, setRevalidateOnMount] = useState(fromCache && initialData ? false : hasToken)
 
-  useEffect(() => {
-    if(get(data, '_id', null) && !revalidateOnMount) setRevalidateOnMount(hasToken)
-  }, [get(data, '_id', null), revalidateOnMount, hasToken])
+	const { setIsLoading, openSnackbar } = useConfigStore(stateSelector)
 
-  useEffect(() => {
-    setIsLoading(isValidating)
-  }, [isValidating])
+	const { data, mutate, isValidating } = useSWR([SwrKey.PLAYER, _id], swrPlayersFetchers.itemFetcher, {
+		initialData,
+		revalidateOnMount,
+		shouldRetryOnError: false,
+		revalidateOnFocus: false,
+		...(restOfOpts || {})
+	})
 
-  const triggerThis = useCallback(
-    (shouldRevalidate: boolean = true) => {
-      return trigger([SwrKey.PLAYER, _id], shouldRevalidate)
-    }, [trigger])
+	useEffect(() => {
+		if (get(data, '_id', null) && !revalidateOnMount) setRevalidateOnMount(hasToken)
+	}, [get(data, '_id', null), revalidateOnMount, hasToken])
 
-  const mutateThis = useCallback(
-    (data: EditablePlayer|DirectMutationImmer<Player>, shouldRevalidate: boolean = false) => {
-      if(typeof data === 'function') return mutate(produce(data), shouldRevalidate)
-      else return mutate(produce(mutateDraft(data)), shouldRevalidate)
-    }, [mutate])
+	useEffect(() => {
+		setIsLoading(isValidating)
+	}, [isValidating])
 
+	const triggerThis = useCallback(
+		(shouldRevalidate: boolean = true) => {
+			return trigger([SwrKey.PLAYER, _id], shouldRevalidate)
+		},
+		[trigger]
+	)
 
-  const createEditPlayer = useCallback(
-    async (___player: Omit<Player, '_id'> & Partial<Pick<Player, '_id'>>): Promise<string|boolean> => {
-      try {
-      const _player = { ...___player }
-      const { user, ...player } = _player
-      if(!_player._id){
-        const { _id, ...playerData } = player
-        const bodyCreate = {
-            userData: user,
-            playerData
-          }
-        const playerId = await apiInstance.player.create(bodyCreate)
-        if(!playerId) throw new Error()
-        _player._id = playerId
-      } else {
-        const { ...bodyUpdate } = player
-        const { user: thisUser, ...thisPlayer } = cache.get([SwrKey.PLAYER, _player._id]) || {}
-        let playerUpdated = true
-        let userUpdated = true
-        if(!isEqual(thisPlayer, player)){
-          playerUpdated = await apiInstance.player.update(bodyUpdate as UpdatePlayerInput)
-        }
-        if(!isEqual(thisUser, user)){
-          userUpdated = await apiInstance.user.update(user)
-        }
-        if(!(playerUpdated && userUpdated)) throw new Error()
-      }
-      // mutateCache([SwrKey.PLAYER, _player._id], _player, false)
-      await trigger([SwrKey.PLAYER, _player._id])
-      const { _id: userConnectedId } = cache.get(SwrKey.USER)
-      if(userConnectedId === user._id){
-      //   mutateCache(SwrKey.USER, produce(draft => {
-      //     draft.player = _player
-      //   }), false)
-      await trigger(SwrKey.USER)
-      }
-      return _player._id
-    } catch(error){
-      return false
-    }
-  }, [mutateThis, trigger])
+	const mutateThis = useCallback(
+		(data: DirectMutationImmer<Player>, shouldRevalidate: boolean = false) => {
+			return mutate(produce(data), shouldRevalidate)
+		},
+		[mutate]
+	)
 
-  const deletePlayer = useCallback(
-    async (): Promise<boolean> => {
-      try {
-      const deleted = await apiInstance.player.delete({
-        _id: get(data, '_id', null),
-        idUser: get(data, 'user._id', null)
-      })
-      if (!deleted) throw new Error()
-      cache.delete([SwrKey.PLAYER, _id])
-      const { _id: userConnectedId } = cache.get(SwrKey.USER)
-      if(userConnectedId === get(data, 'user._id', null)){
-        mutateCache(SwrKey.USER, produce(draft => {
-          draft.player = null
-        }), false)
-      }
-        return true
-      } catch (error) {
-        return false
-      }
-    }, [mutateThis, get(data, '_id', null), get(data, 'user._id', null)])
+	const createPlayer = useCallback(
+		async (body: CreatePlayerInput) => {
+			try {
+				const _id = await apiInstance.player.create(body)
+				mutateThis((draft: Player) => {
+					draft._id = _id
+					if (![null, undefined].includes(body.state)) draft.state = body.state
+					draft.positions = body.positions
+					draft.score = body.score
+				})
+			} catch (error) {
+				openSnackbar({
+					variant: 'error',
+					message: get(ServerMessage, error, ServerMessage.generic)
+				})
+			}
+		},
+		[openSnackbar, mutateThis]
+	)
 
-  return {
-    item: data as Player || {} as Player,
-    mutate: mutateThis,
-    trigger: triggerThis,
-    createEditPlayer,
-    deletePlayer
-  }
+	const updatePlayer = useCallback(
+		async (body: UpdatePlayerInput, isMe?: boolean) => {
+			try {
+				await apiInstance.player.update(body)
+				mutateThis((draft: Player) => {
+					if (![null, undefined].includes(body.positions)) draft.positions = body.positions
+					if (![null, undefined].includes(body.state)) draft.state = body.state
+					if (![null, undefined].includes(body.score)) draft.score = body.score
+				})
+				if (isMe)
+					mutateCache(
+						SwrKey.ME,
+						produce((draft: User) => {
+							if (![null, undefined].includes(body.positions)) draft.player.positions = body.positions
+							if (![null, undefined].includes(body.state)) draft.player.state = body.state
+							if (![null, undefined].includes(body.score)) draft.player.score = body.score
+						})
+					)
+			} catch (error) {
+				openSnackbar({
+					variant: 'error',
+					message: get(ServerMessage, error, ServerMessage.generic)
+				})
+			}
+		},
+		[openSnackbar, mutateThis]
+	)
+
+	const deletePlayer = useCallback(
+		async (_id: string, isMe?: boolean) => {
+			try {
+				await apiInstance.player.delete(_id)
+				if (isMe)
+					mutateCache(
+						SwrKey.ME,
+						produce((draft: User) => {
+							draft.player = null
+						})
+					)
+				cache.delete([SwrKey.PLAYER, _id])
+			} catch (error) {
+				openSnackbar({
+					variant: 'error',
+					message: get(ServerMessage, error, ServerMessage.generic)
+				})
+			}
+		},
+		[openSnackbar]
+	)
+
+	return {
+		item: (data as Player) || ({} as Player),
+		mutate: mutateThis,
+		trigger: triggerThis,
+		createPlayer,
+		updatePlayer,
+		deletePlayer
+	}
 }
