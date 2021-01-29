@@ -1,4 +1,4 @@
-import { PlayerPosition, PlayerScore } from '@_swr/Me/node_modules/@_SDK_Player/entities'
+import { PlayerPosition, PlayerScore } from '@_SDK_Player/types'
 import { reduce } from 'lodash'
 
 export const getPlayerOverall = (score: PlayerScore, positions: PlayerPosition[]): number => {

@@ -1,17 +1,18 @@
 import React, { ReactElement, useCallback } from 'react'
 import { useMediaQuery, useTheme } from '@material-ui/core'
-import { routes, ZenRoute, ZenRouteID } from '@_utils/routes'
 // icons
 import DashboardRoundedIcon from '@material-ui/icons/DashboardRounded'
-import SportsSoccerRoundedIcon from '@material-ui/icons/SportsSoccerRounded'
+// import SportsSoccerRoundedIcon from '@material-ui/icons/SportsSoccerRounded'
 import FaceRoundedIcon from '@material-ui/icons/FaceRounded'
-import BarChartRoundedIcon from '@material-ui/icons/BarChartRounded'
+// import BarChartRoundedIcon from '@material-ui/icons/BarChartRounded'
 import { FieldIcon, FreeAgentIcon, JerseyIcon } from '@_icons'
 import DesktopMenu from './DesktopMenu'
 import MobileMenu from './MobileMenu'
 import { useRouter } from 'next/router'
-import { useConfigStore } from '@_zustand/configStore'
+import { useConfigStore } from '@_zustand/config'
 import { apiInstance } from 'src/SDK'
+import { ZenRoute, ZenRouteID } from '@_utils/routes/types'
+import { routes } from '@_utils/routes'
 
 const iconMap = {
   [ZenRouteID.DASHBOARD]: <DashboardRoundedIcon />,
@@ -19,18 +20,23 @@ const iconMap = {
   [ZenRouteID.PLAYERS]: <JerseyIcon />,
   [ZenRouteID.FREE_AGENTS]: <FreeAgentIcon />,
   [ZenRouteID.FIELDS]: <FieldIcon />,
-  [ZenRouteID.APPOINTMENTS]: <SportsSoccerRoundedIcon />,
-  [ZenRouteID.STATISTICS]: <BarChartRoundedIcon />
+//   [ZenRouteID.APPOINTMENTS]: <SportsSoccerRoundedIcon />,
+//   [ZenRouteID.STATISTICS]: <BarChartRoundedIcon />
 }
 
 export type RouteItem = ZenRoute & {
    icon: ReactElement
 }
 
-const items: RouteItem[] = routes.map(route => ({
-  ...route,
-  icon: iconMap[route._id]
-}))
+const items: RouteItem[] = routes.reduce((acc, route) => {
+  if(route.section && route.isPrivate && iconMap[route._id]){
+     acc.push({
+         ...route,
+         icon: iconMap[route._id]
+     })
+  }
+  return acc
+}, [])
 
 type voidFn = (e: any) => void
 

@@ -6,6 +6,8 @@ import { ZenPalette } from '@_palette'
 import { RouteItem } from '..'
 import SingleItem from './SingleItem'
 import ExpandableItem from './ExpandableItem'
+import { routes } from '@_utils/routes'
+import { ZenRoute, ZenRouteID } from '@_utils/routes/types'
 
 const useStyles = makeStyles({
   root: {},
@@ -25,9 +27,7 @@ const useStyles = makeStyles({
 })
 
 const LOGOUT_ITEM: RouteItem = {
-   _id: 'LOGOUT',
-   title: 'Logout',
-   path: '/login',
+   ...(routes.find(({ _id }) => _id === ZenRouteID.LOGIN) || {}) as ZenRoute,
    icon: <ExitToAppRoundedIcon style={{ color: ZenPalette.lightRed, opacity: 0.7 }} />
 }
 

@@ -2,8 +2,8 @@ import React, { useMemo } from 'react'
 import { Grid, GridProps } from '@material-ui/core'
 import { get, reduce } from 'lodash'
 import SingleScore from './SingleScore'
-import { decamelize } from '@_utils/helpers'
 import { FormikEssentials } from '..'
+import { zenToolboxInstance } from '@_utils/Toolbox'
 
 type Props = {
   gridProps: GridProps
@@ -18,7 +18,7 @@ const PlayerScoreInputs = (props: Props) => {
     return reduce(score, (acc, val, key) => {
       const el = {
         key: `${key}-score`,
-        title: decamelize(key),
+        title: zenToolboxInstance.decamelize(key),
         name: key,
         values: val
       }

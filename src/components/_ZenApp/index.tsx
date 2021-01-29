@@ -8,13 +8,13 @@ import Title from '@_components/Title'
 import ProgressBar from '@_components/ProgressBar'
 import lightTheme from 'lightTheme'
 import darkTheme from 'darkTheme'
-import { useConfigStore } from '@_zustand/configStore'
+import { useConfigStore } from '@_zustand/config'
 import { ConfigInterface, SWRConfig } from 'swr'
 import dynamic from 'next/dynamic'
-import { ConfigStore } from '@_zustand/helpers'
-import { useWithAuthentication, useWithThemeSwitch } from '@_utils/appHooks'
+import { ConfigStore } from '@_zustand/config/helpers'
 import SplashScreen from './SplashScreen'
 import ZenMenu from '@_components/_ZenMenu'
+import { zenHooksInstance } from '@_utils/hooks'
 const NProgress = dynamic(() => import("@_components/NProgress"), { ssr: false })
 
 
@@ -109,8 +109,8 @@ const ZenApp = (props: Props) => {
    const _theme = useTheme()
    const isSmallScreen = useMediaQuery(_theme.breakpoints.down('sm'))
 
-   const { isFirstRun } = useWithAuthentication({ AS_PATH, LSToken })
-   useWithThemeSwitch({ LSTheme })
+   const { isFirstRun } = zenHooksInstance.useInitWithAuthentication({ AS_PATH, LSToken })
+   zenHooksInstance.useWithThemeSwitch({ LSTheme })
 
    const handleClose = useCallback((e, reason) => {
       if (reason === 'clickaway') return
@@ -120,7 +120,7 @@ const ZenApp = (props: Props) => {
    return (
       <>
          <Head>
-            <meta name='viewport' content='width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=7' />
+            <meta name='viewport' content='width=device-width,initial-scale=1' />
             <title>{title}</title>
          </Head>
          <ThemeProvider theme={themeType === 'light' ? lightTheme : darkTheme}>

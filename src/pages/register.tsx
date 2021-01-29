@@ -8,11 +8,12 @@ import { FutBobLogo } from '@_icons'
 import { useRouter } from 'next/router'
 import ThemeSwitch from '@_components/ThemeModeSwitch'
 import { ServerMessage } from '@_utils/serverMessages'
-import { useConfigStore } from '@_zustand/configStore'
-import { ConfigStore } from '@_zustand/helpers'
-import { useIsMounted } from '@_utils/customHooks'
-import { getOptionsByEnum } from '@_utils/helpers'
+import { useConfigStore } from '@_zustand/config'
+import { ConfigStore } from '@_zustand/config/helpers'
 import { Sex } from '@_SDK_User/types'
+import { zenHooksInstance } from '@_utils/hooks'
+import { zenToolboxInstance } from '@_utils/Toolbox'
+import { CountriesOpts } from '@_utils/constants/CountriesOpts'
 
 const Copyright = () => {
 	return (
@@ -30,15 +31,15 @@ const useStyles = makeStyles((theme: Theme) => ({
 		width: '100vw',
 		minHeight: '100vh',
 		overflow: 'hidden',
-		padding: `${theme.spacing(5)}px 0`,
+		padding: `${theme.spacing(5)}px 0`
 	},
 	form: {
 		width: '100%',
-		maxWidth: 300,
-		marginTop: theme.spacing(1),
+		maxWidth: 600,
+		marginTop: theme.spacing(1)
 	},
 	submit: {
-		margin: theme.spacing(3, 0, 2),
+		margin: theme.spacing(3, 0, 2)
 	},
 	logo: {
 		position: 'absolute',
@@ -50,14 +51,14 @@ const useStyles = makeStyles((theme: Theme) => ({
 		color: '#005959',
 		[theme.breakpoints.down('xs')]: {
 			bottom: '-50vh',
-			fontSize: '45em',
-		},
+			fontSize: '45em'
+		}
 	},
 	themeToggleClass: {
 		position: 'absolute',
 		top: '1.5em',
-		right: '1.5em',
-	},
+		right: '1.5em'
+	}
 }))
 
 const stateSelector = (state: ConfigStore) => ({
@@ -65,20 +66,14 @@ const stateSelector = (state: ConfigStore) => ({
 	openSnackbar: state.openSnackbar,
 	setIsLogged: state.setIsLogged,
 	setIsLoading: state.setIsLoading,
-	themeType: state.themeType,
+	themeType: state.themeType
 })
 
 const SignIn = () => {
 	const classes = useStyles()
-	const {
-		openSnackbar,
-		setIsLogged,
-		setIsLoading,
-		isLogged,
-		themeType,
-	} = useConfigStore(stateSelector)
+	const { openSnackbar, setIsLogged, setIsLoading, isLogged, themeType } = useConfigStore(stateSelector)
 	const router = useRouter()
-	const isMounted = useIsMounted()
+	const isMounted = zenHooksInstance.useIsMounted()
 
 	const goToLogin = useCallback(() => {
 		router.push('/login')
@@ -90,12 +85,12 @@ const SignIn = () => {
 			setSubmitting(true)
 			let _token
 			try {
-				const token = await apiInstance.auth.login(values, '{ token }')
+				const token = await apiInstance.auth.login(values)
 				if (token) _token = token
 			} catch (error) {
 				openSnackbar({
 					variant: 'error',
-					message: ServerMessage[error] || 'Username o password errati',
+					message: ServerMessage[error] || 'Username o password errati'
 				})
 			}
 			setSubmitting(false)
@@ -110,73 +105,68 @@ const SignIn = () => {
 
 	const formik = useFormik({
 		initialValues: {},
-		onSubmit,
+		onSubmit
 	})
 
 	// shouldn't happen
 	if (isLogged) return null
 
 	return (
-		<Grid
-			container
-			justify='space-between'
-			alignItems='center'
-			direction='column'
-			className={classes.main}
-		>
+		<Grid container justify='space-between' alignItems='center' direction='column' className={classes.main}>
 			<div className={classes.themeToggleClass}>
 				<ThemeSwitch />
 			</div>
 			<FutBobLogo className={classes.logo} />
-			<Grid
-				container
-				direction='column'
-				alignItems='center'
-				item
-				xs={12}
-				sm={6}
-				style={{ marginTop: '10vh' }}
-			>
+			<Grid container direction='column' alignItems='center' item xs={12} sm={9} style={{ marginTop: '10vh' }}>
 				<FutBobLogo style={{ fontSize: '4em' }} />
 				<form className={classes.form} onSubmit={formik.handleSubmit}>
-					<FormikInput name='name' label='Name' required {...formik} />
-					<FormikInput name='surname' label='Surname' required {...formik} />
-					<FormikInput
-						name='dateOfBirth'
-						label='Date of birth'
-						type='date'
-						required
-						{...formik}
-					/>
-					<FormikInput
-						name='sex'
-						label='Sex'
-						type='select'
-						options={getOptionsByEnum(Sex)}
-						required
-						{...formik}
-					/>
-					<FormikInput name='name' label='Name' required {...formik} />
-					<FormikInput name='surname' label='Surname' required {...formik} />
-					<Button
-						type='submit'
-						fullWidth
-						variant={themeType === 'light' ? 'contained' : 'outlined'}
-						color='primary'
-						disabled={formik.isSubmitting}
-						className={classes.submit}
-					>
-						Register
-					</Button>
-					<Button
-						onClick={goToLogin}
-						fullWidth
-						color='primary'
-						disabled={formik.isSubmitting}
-						className={classes.submit}
-					>
-						Login
-					</Button>
+					<Grid container spacing={3} justify='center'>
+						<FormikInput sm={6} name='name' label='Name' required {...formik} />
+						<FormikInput sm={6} name='surname' label='Surname' required {...formik} />
+						<FormikInput sm={6} name='email' label='Email' required {...formik} />
+						<FormikInput sm={6} name='password' label='Password' type='password' required {...formik} />
+						<FormikInput sm={6} name='dateOfBirth' label='Date of birth' type='date' required {...formik} />
+						<FormikInput
+							sm={6}
+							name='sex'
+							label='Sex'
+							type='select'
+							options={zenToolboxInstance.getOptionsByEnum(Sex)}
+							required
+							{...formik}
+						/>
+						<FormikInput
+							sm={6}
+							name='country'
+							label='Nationality'
+							type='autocomplete'
+							options={CountriesOpts}
+							required
+							{...formik}
+						/>
+						<FormikInput sm={6} name='phone' label='Phone' type='phone' required {...formik} />
+					</Grid>
+					<Grid item xs={12} sm={6}>
+						<Button
+							type='submit'
+							fullWidth
+							variant={themeType === 'light' ? 'contained' : 'outlined'}
+							color='primary'
+							disabled={formik.isSubmitting}
+							className={classes.submit}>
+							Register
+						</Button>
+					</Grid>
+					<Grid item xs={12} sm={6}>
+						<Button
+							onClick={goToLogin}
+							fullWidth
+							color='primary'
+							disabled={formik.isSubmitting}
+							className={classes.submit}>
+							Login
+						</Button>
+					</Grid>
 				</form>
 			</Grid>
 			<Copyright />

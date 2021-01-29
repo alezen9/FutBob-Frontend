@@ -2,7 +2,7 @@ import React from 'react'
 import { Grid, Button } from '@material-ui/core'
 import FormikInput, { FormikEssentials } from '..'
 import { get } from 'lodash'
-import { decamelize } from '@_utils/helpers'
+import { zenToolboxInstance } from '@_utils/Toolbox'
 
 const scoreProperties = {
   pace: [
@@ -49,7 +49,7 @@ export const SlidersDialogContent = React.memo((props: ContentProps) => {
         key={`${field}-formik-${i}-${name}`}
         type='slider'
         name={`score.${name}.${field}`}
-        label={decamelize(field)}
+        label={zenToolboxInstance.decamelize(field)}
         {...formik}
       />
     ))}

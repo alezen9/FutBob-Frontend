@@ -3,10 +3,10 @@ import Link from 'next/link'
 import { Typography, makeStyles, IconButton } from '@material-ui/core'
 import Spinner from '@_components/Loaders/Spinner'
 import ExitToAppRoundedIcon from '@material-ui/icons/ExitToAppRounded'
-import { asyncTimeout } from '@_utils/helpers'
 import ThemeSwitch from '@_components/ThemeModeSwitch'
 import { ZenPalette } from '@_palette'
 import { logoutFn, RouteItem } from '@_components/_ZenMenu'
+import { zenToolboxInstance } from '@_utils/Toolbox'
 
 const useStyles = makeStyles(theme => ({
    themeSwitchColor: {
@@ -71,7 +71,7 @@ const Navbar = (props: Props) => {
 
    useLayoutEffect(() => {
       const setBodyPosition = async (): Promise<void> => {
-         if (open) await asyncTimeout(600)
+         if (open) await zenToolboxInstance.asyncTimeout(600)
          document.body.style.overflow = open ? 'hidden' : 'auto'
       }
       setBodyPosition()

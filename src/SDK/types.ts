@@ -1,13 +1,13 @@
 export class GeoPoint {
-    type: string
-    coordinates: number[]
+	type: string
+	coordinates: number[]
 }
 
 export interface List<T> {
-    totalCount: number,
-    result: T[]
+	totalCount: number
+	result: T[]
 }
 export class Pagination {
-   skip: number
-   limit?: number
+	skip: number
+	limit?: number
 }

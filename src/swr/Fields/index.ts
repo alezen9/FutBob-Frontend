@@ -1,6 +1,6 @@
 import useSWR, { cache, trigger } from 'swr'
 import produce from 'immer'
-import { useConfigStore } from '@_zustand/configStore'
+import { useConfigStore } from '@_zustand/config'
 import { useEffect, useCallback, useState } from 'react'
 import { filter, get } from 'lodash'
 import { apiInstance } from 'src/SDK'

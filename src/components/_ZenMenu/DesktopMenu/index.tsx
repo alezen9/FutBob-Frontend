@@ -4,9 +4,9 @@ import ItemList from './ItemList'
 import MenuRoundedIcon from '@material-ui/icons/MenuRounded'
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded'
 import ThemeSwitch from '@_components/ThemeModeSwitch'
-import { useConfigStore } from '@_zustand/configStore'
+import { useConfigStore } from '@_zustand/config'
 import { logoutFn, RouteItem } from '..'
-import { ConfigStore } from '@_zustand/helpers'
+import { ConfigStore } from '@_zustand/config/helpers'
 
 const useStyles = makeStyles(theme => ({
   relativeWrapper: {

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import Typography from '@material-ui/core/Typography'
 import { useRouter } from 'next/router'
-import { useConfigStore } from '@_zustand/configStore'
+import { useConfigStore } from '@_zustand/config'
 import { getTitleFromPathname } from '../../utils/helpers'
 
 const Title = () => {

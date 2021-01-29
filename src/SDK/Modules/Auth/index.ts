@@ -1,51 +1,68 @@
-import { paramsToString } from '@_utils/helpers'
 import { get } from 'lodash'
-import { ZenServer } from "../../"
+import { ZenServer } from '../../'
 import { AuthData } from './types'
 import { LoginInput, RegisterInput } from './inputs'
+import { zenToolboxInstance } from '@_utils/Toolbox'
 
 class AuthServer {
-   private _server: ZenServer
+	private _server: ZenServer
 
-   constructor(server: ZenServer) {
-      this._server = server
+	constructor(server: ZenServer) {
+		this._server = server
+	}
+
+	setToken(token: string) {
+		const tokenSet = get(this._server._self, 'defaults.headers.common.Authorization', undefined)
+		let _token = tokenSet ? tokenSet.split(' ')[1] : undefined
+		if (token !== _token) {
+			this._server._self.defaults.headers.common['Authorization'] = `Bearer ${token}`
+		}
+		window.localStorage.setItem(this._server._LSToken, token)
+	}
+
+	hasToken(): boolean {
+		return !!(
+			get(this._server._self, 'defaults.headers.common.Authorization', undefined) ||
+			(process.browser && window.localStorage.getItem(this._server._LSToken))
+		)
    }
 
-   setToken (token: string) {
-      const tokenSet = get(this._server._self, 'defaults.headers.common.Authorization', undefined)
-      let _token = tokenSet ? tokenSet.split(' ')[1] : undefined
-      if (token !== _token) {
-      this._server._self.defaults.headers.common['Authorization'] = `Bearer ${token}`
-      }
-      window.localStorage.setItem(this._server._LSToken, token)
-   }
-
-   hasToken (): boolean {
-      return !!(get(this._server._self, 'defaults.headers.common.Authorization', undefined) || (process.browser && window.localStorage.getItem(this._server._LSToken)))
-   }
-
-   async register(body: RegisterInput): Promise<boolean> {
+   async isTokenValid(token: string): Promise<boolean> {
       const query = `
+      query {
+         Auth_isTokenValid(token: "${token}")
+      }`
+      return this._server.API({ query, name: 'Auth_isTokenValid' })
+   }
+
+	async register(body: RegisterInput): Promise<boolean> {
+		const query = `
       mutation {
-         Auth_register(body: ${paramsToString(body)})
+         Auth_register(body: ${zenToolboxInstance.paramsToString(body)})
       }`
-      return this._server.API({ query, name: 'Auth_register' })
-   }
+		return this._server.API({ query, name: 'Auth_register' })
+	}
 
-   async confirm(code: string, fields: string): Promise<AuthData> {
-      const query = `
+	async confirm(code: string): Promise<AuthData> {
+		const query = `
       query {
-         Auth_confirm(code: "${code}")${fields}
+         Auth_confirm(code: "${code}") { token }
       }`
-      return this._server.API({ query, name: 'Auth_confirm' })
-   }
+		return this._server.API({ query, name: 'Auth_confirm' })
+	}
 
-   async login(body: LoginInput, fields: string): Promise<AuthData> {
-      const query = `
+	async login(body: LoginInput): Promise<AuthData> {
+		const query = `
       query {
-         Auth_login(body: ${paramsToString(body)})${fields}
+         Auth_login(body: ${zenToolboxInstance.paramsToString(body)}) { token }
       }`
-      return this._server.API({ query, name: 'Auth_login' })
+		return this._server.API({ query, name: 'Auth_login' })
+   }
+   
+   logout (_logout?: VoidFunction): void {
+      window.localStorage.removeItem(this._server._LSToken)
+      delete this._server._self.defaults.headers.common['Authorization']
+      if (_logout) _logout()
    }
 }
 

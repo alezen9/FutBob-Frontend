@@ -1,5 +1,5 @@
-import { useConfigStore } from '@_zustand/configStore'
-import { ConfigStore } from '@_zustand/helpers'
+import { useConfigStore } from '@_zustand/config'
+import { ConfigStore } from '@_zustand/config/helpers'
 import React from 'react'
 import { logoutFn, RouteItem } from '..'
 import Navbar from './Navbar'

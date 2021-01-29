@@ -44,105 +44,103 @@ export default class MyDocument extends Document {
           />
           <style global jsx>
             {`
-            @font-face {
-              font-family: Poppins;
-              src: url('/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
-              font-display: swap;
-            }
-            
-            @font-face {
-              font-family: Poppins;
-              src: url('/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
-              font-weight: bold;
-              font-display: swap;
-            }
-            
-            @font-face {
-              font-family: Poppins;
-              src: url('/fonts/Poppins/Poppins-Italic.ttf') format('truetype');
-              font-style: italic;
-              font-display: swap;
-            }
-            
-            @font-face {
-              font-family: Poppins;
-              src: url('/fonts/Poppins/Poppins-BoldItalic.ttf') format('truetype');
-              font-style: italic;
-              font-weight: bold;
-              font-display: swap;
-            }
+							@font-face {
+								font-family: Poppins;
+								src: url('/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+								font-display: swap;
+							}
 
-            #nprogress .bar {
-              background: rgb(42, 156, 71) !important;
-              background-color: rgb(42, 156, 71) !important;
-            }
+							@font-face {
+								font-family: Poppins;
+								src: url('/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
+								font-weight: bold;
+								font-display: swap;
+							}
 
-            #nprogress .spinner {
-              display: none;
-            }
+							@font-face {
+								font-family: Poppins;
+								src: url('/fonts/Poppins/Poppins-Italic.ttf') format('truetype');
+								font-style: italic;
+								font-display: swap;
+							}
 
-            ::-webkit-scrollbar {
-              /* width: 4px; */
-              width: 0;
-              height: 4px;
-            }
+							@font-face {
+								font-family: Poppins;
+								src: url('/fonts/Poppins/Poppins-BoldItalic.ttf') format('truetype');
+								font-style: italic;
+								font-weight: bold;
+								font-display: swap;
+							}
 
-            ::-webkit-scrollbar-track {
-              background-color: transparent;
-              -webkit-border-radius: 10px;
-              border-radius: 10px;
-            }
-            
-            ::-webkit-scrollbar-thumb {
-              -webkit-border-radius: 10px;
-              border-radius: 10px;
-              background: rgba(158, 158, 158, 0.5);
-            }
-            ::-webkit-calendar-picker-indicator {
-                filter: invert(50%);
-            }
-            @media all and (display-mode: standalone) {
-              body::after {
-                position: fixed;
-                top: -80px;
-                left: 0;
-                width: 100vw;
-                height: 80px;
-                content: " ";
-                backdrop-filter: blur(20px);
-                background-color: rgba(0,0,0,.3);
-              }
-              ::-webkit-scrollbar {
-                display: none;
-              }
-              ::-webkit-scrollbar-track {
-                display: none;
-              }
-              ::-webkit-scrollbar-thumb {
-                display: none;
-              }
-            }
+							#nprogress .bar {
+								background: rgb(42, 156, 71) !important;
+								background-color: rgb(42, 156, 71) !important;
+							}
 
-            @media all and (max-width: 450px) {
-              ::-webkit-scrollbar {
-                display: none;
-              }
-              ::-webkit-scrollbar-track {
-                display: none;
-              }
-              ::-webkit-scrollbar-thumb {
-                display: none;
-              }
-            }`}
+							#nprogress .spinner {
+								display: none;
+							}
+
+							::-webkit-scrollbar {
+								/* width: 4px; */
+								width: 0;
+								height: 4px;
+							}
+
+							::-webkit-scrollbar-track {
+								background-color: transparent;
+								-webkit-border-radius: 10px;
+								border-radius: 10px;
+							}
+
+							::-webkit-scrollbar-thumb {
+								-webkit-border-radius: 10px;
+								border-radius: 10px;
+								background: rgba(158, 158, 158, 0.5);
+							}
+							::-webkit-calendar-picker-indicator {
+								filter: invert(50%);
+							}
+							@media all and (display-mode: standalone) {
+								body::after {
+									position: fixed;
+									top: -80px;
+									left: 0;
+									width: 100vw;
+									height: 80px;
+									content: ' ';
+									backdrop-filter: blur(20px);
+									background-color: rgba(0, 0, 0, 0.3);
+								}
+								::-webkit-scrollbar {
+									display: none;
+								}
+								::-webkit-scrollbar-track {
+									display: none;
+								}
+								::-webkit-scrollbar-thumb {
+									display: none;
+								}
+							}
+
+							@media all and (max-width: 450px) {
+								::-webkit-scrollbar {
+									display: none;
+								}
+								::-webkit-scrollbar-track {
+									display: none;
+								}
+								::-webkit-scrollbar-thumb {
+									display: none;
+								}
+							}
+						`}
           </style>
         </Head>
         <body>
-          <noscript>
-            You need to enable JavaScript to run this app.
-          </noscript>
+          <noscript>You need to enable JavaScript to run this app.</noscript>
           <Main />
           <NextScript />
-          {/* <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyAKgYkl0eoObprgXkXU_Xd6ZqYJMvPaNZ8&libraries=places' /> */}
         </body>
       </Html>
     )

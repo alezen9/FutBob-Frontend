@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect } from 'react'
-import { useConfigStore } from '@_zustand/configStore'
+import { useConfigStore } from '@_zustand/config'
 import { get } from 'lodash'
 import { ServerMessage } from '@_utils/serverMessages'
-import { ConfigStore } from '@_zustand/helpers'
+import { ConfigStore } from '@_zustand/config/helpers'
 import { AS_PATH, LSTheme, LSToken } from '@_utils/LSVariables'
 import ZenApp from '@_components/_ZenApp'
 import { AppProps } from 'next/app'
-import { useSWRUser } from '@_swr/Me'
+import { useSWRMe } from '@_swr/Me'
 import { apiInstance } from 'src/SDK'
 import { FutBobLogo } from '@_icons'
 import { setLocale } from 'yup'
@@ -32,7 +32,7 @@ const MyApp = (props: AppProps) => {
 	const { Component, pageProps } = props
 	const { isLoading, openSnackbar } = useConfigStore(stateSelector)
 
-	const { item, trigger } = useSWRUser({ revalidateOnMount: false })
+	const { item, trigger } = useSWRMe({ revalidateOnMount: false })
 
 	useEffect(() => {
 		if (apiInstance.auth.hasToken() && !get(item, '_id', null) && !isLoading) trigger()
@@ -50,7 +50,11 @@ const MyApp = (props: AppProps) => {
 
 	return (
 		<>
-			<ZenApp title='FutBob' LSVariables={{ AS_PATH, LSTheme, LSToken }} swrConfig={{ onError }} SplashscreenIcon={<FutBobLogo style={{ fontSize: '6em' }} />}>
+			<ZenApp
+				title='FutBob'
+				LSVariables={{ AS_PATH, LSTheme, LSToken }}
+				swrConfig={{ onError }}
+				SplashscreenIcon={<FutBobLogo style={{ fontSize: '6em' }} />}>
 				<Component {...pageProps} />
 			</ZenApp>
 		</>

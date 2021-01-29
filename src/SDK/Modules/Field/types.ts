@@ -1,27 +1,28 @@
-import { GeoPoint } from "src/SDK/types"
+import { GeoPoint } from 'src/SDK/types'
 
 export enum FieldType {
-   Indoor,
-   Outdoor
+	Indoor,
+	Outdoor
 }
 
 export enum FieldState {
-   Terrible,
-   NotGreatNotTerrible,
-   Great
+	Terrible,
+	NotGreatNotTerrible,
+	Great
 }
 
-export class Measurements { // in centimeters
-   width: number
-   height: number
+export class Measurements {
+	// in centimeters
+	width: number
+	height: number
 }
 
 export class Field {
-   _id: string
-   type: FieldType
-   name: string
-   measurements: Measurements
-   state: FieldState
-   price: number // in cents
-   location: GeoPoint
+	_id: string
+	type: FieldType
+	name: string
+	measurements: Measurements
+	state: FieldState
+	price: number // in cents
+	location: GeoPoint
 }

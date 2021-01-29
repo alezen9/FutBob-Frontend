@@ -3,8 +3,8 @@ import { Button, Grid, IconButton, makeStyles, MobileStepper, useMediaQuery } fr
 import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded'
 import ArrowForwardIosRoundedIcon from '@material-ui/icons/ArrowForwardIosRounded'
 import DoneAllRoundedIcon from '@material-ui/icons/DoneAllRounded'
-import { useConfigStore } from '@_zustand/configStore'
-import { ConfigStore } from '@_zustand/helpers'
+import { useConfigStore } from '@_zustand/config'
+import { ConfigStore } from '@_zustand/config/helpers'
 import { ZenPalette } from '@_palette'
 
 type Props = {

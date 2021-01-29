@@ -1,11 +1,11 @@
 import React, { useState, useMemo, Fragment, useCallback, ReactNode, ReactElement } from 'react'
 import { Button, Grid, Tooltip, IconButton, Menu, MenuItem, makeStyles, TableCell, Collapse, TableRow, useTheme, useMediaQuery } from '@material-ui/core'
-import { camelize } from '@_utils/helpers'
 import { uniqueId, get } from 'lodash'
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
 import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
 import cleanDeep from 'clean-deep'
 import TypographyLabel from '../TypographyLabel'
+import { zenToolboxInstance } from '@_utils/Toolbox'
 
 const useStyles = makeStyles(theme => ({
   menu: {
@@ -68,7 +68,7 @@ export interface SetDataOut {
 }
 
 export const setData = <T extends SetDataIn>({ headers, data, withActions }:T):SetDataOut => {
-  const headerKeys = headers.map(({ name, id }) => id || camelize(name))
+  const headerKeys = headers.map(({ name, id }) => id || zenToolboxInstance.camelize(name))
   const res = data.reduce((acc: SetDataOut, _row: TableRowData, i: number) => {
     const { _isUser, ...row } = _row
     acc._data = [
@@ -261,7 +261,7 @@ export const MobileRowCell = React.memo((props: MobileRowCellProps) => {
 
   const { mainRow, mainName } = useMemo((): { mainRow: mainRowType[], mainName: string } => {
     const first = mainHeaders[0]
-    const mainName = camelize(first.id || first.name)
+    const mainName = zenToolboxInstance.camelize(first.id || first.name)
     return {
       mainRow: [
         { name: row[mainName] },
@@ -302,7 +302,7 @@ export const MobileRowCell = React.memo((props: MobileRowCellProps) => {
           <Collapse in={open} timeout='auto' unmountOnExit>
             <Grid container spacing={2} style={{ marginBottom: '1em', paddingLeft: 16 }}>
               {Object.entries(cleanDeep(row, { cleanValues: ['-', '', ' '] })).filter(([key, val]) => key !== mainName).map(([key, val], i) => {
-                const found = _headers.find(({ name, id }) => (id || name) && camelize(id || name) === key)
+                const found = _headers.find(({ name, id }) => (id || name) && zenToolboxInstance.camelize(id || name) === key)
                 return key === 'actions'
                   ? <Fragment key={`el-${key}-${uniqueId()}-${i}`} />
                   : <TypographyLabel key={`el-${key}-${uniqueId()}-${i}`} label={found.name} value={get(val, 'props.stringData', val) || '-'} {...get(val, 'props.typoGraphyLabelPropsForward', {})} sm={6} />
