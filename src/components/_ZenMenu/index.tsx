@@ -12,7 +12,7 @@ import { useRouter } from 'next/router'
 import { useConfigStore } from '@_zustand/config'
 import { apiInstance } from 'src/SDK'
 import { ZenRoute, ZenRouteID } from '@_utils/routes/types'
-import { routes } from '@_utils/routes'
+import { routes, routesPaths } from '@_utils/routes'
 
 const iconMap = {
   [ZenRouteID.DASHBOARD]: <DashboardRoundedIcon />,
@@ -52,7 +52,7 @@ const ZenMenu = () => {
    }))
 
    const afterLogout = useCallback(async () => {
-      await router.push('/login')
+      await router.push(routesPaths[ZenRouteID.LOGIN].path)
       setIsLogged(false)
       setIsLoading(false)
    },[router])

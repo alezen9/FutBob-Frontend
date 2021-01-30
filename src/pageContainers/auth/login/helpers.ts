@@ -29,6 +29,6 @@ export const onLogin = ({ openSnackbar, setIsLoading, setIsLogged, goToHome }) =
 }
 
 export const schema = yup.object().shape({
-	email: yup.string().required(),
-	password: yup.string().required()
+	email: yup.string().required('Required'),
+	password: yup.string().required('Required')
 })

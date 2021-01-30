@@ -111,6 +111,7 @@ const ZenApp = (props: Props) => {
 
    const { isFirstRun } = zenHooksInstance.useInitWithAuthentication({ AS_PATH, LSToken })
    zenHooksInstance.useWithThemeSwitch({ LSTheme })
+   const showMenu = zenHooksInstance.useHideMenuInPublic()
 
    const handleClose = useCallback((e, reason) => {
       if (reason === 'clickaway') return
@@ -130,7 +131,7 @@ const ZenApp = (props: Props) => {
                   ? <SplashScreen icon={SplashscreenIcon} />
                   : <div className={classes.wrapper}>
                      {isLoading && !isSmallScreen ? <ProgressBar /> : <NProgress />}
-                     {isLogged && <ZenMenu />}
+                     {isLogged && showMenu && <ZenMenu />}
                      <div {...isLogged && { className: classes.content }}>
                      {isLogged && <Title />}
                      {swrConfig

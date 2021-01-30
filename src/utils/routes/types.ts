@@ -1,4 +1,5 @@
 export enum ZenRouteID {
+   ERROR = 'ERROR',
    LOGIN = 'LOGIN',
    REGISTER = 'REGISTER',
    CONFIRM_REGISTRATION = 'CONFIRM_REGISTRATION',
@@ -31,7 +32,7 @@ export type ZenSubRoute = {
 }
 
 export type ZenRoute = {
-   _id: string
+   _id: ZenRouteID
    title: string
    path: string
    isPrivate: boolean

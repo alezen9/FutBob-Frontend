@@ -1,5 +1,5 @@
 import { ThemeType } from '@_palette'
-import { ZenRoute } from '@_utils/routes/types'
+import { ZenRoute, ZenRouteID } from '@_utils/routes/types'
 import { setSnackbarData } from '@_zustand/helpers'
 
 export type ConfigStore = {
@@ -9,7 +9,8 @@ export type ConfigStore = {
 	isLoading: boolean
 	pageTitle: any
    snackbar: any
-   activeRoute: ZenRoute,
+   activeRoute: ZenRoute
+   setActiveRoute: (routeID: ZenRouteID) => void
 	setPageTitle: (title: any) => void
 	openSnackbar: (data: setSnackbarData) => void
 	closeSnackbar: VoidFunction

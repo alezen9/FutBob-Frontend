@@ -1,6 +1,10 @@
-import React from 'react'
-import { Grid, makeStyles, Theme, Typography } from '@material-ui/core'
+import React, { useCallback, useEffect } from 'react'
+import { Button, Grid, makeStyles, Theme, Typography } from '@material-ui/core'
 import { ZenPalette } from '@_palette'
+import { useConfigStore } from '@_zustand/config'
+import { ZenRouteID } from '@_utils/routes/types'
+import { useRouter } from 'next/router'
+import { routesPaths } from '@_utils/routes'
 
 const useStyles = makeStyles((theme: Theme) => ({
 	container: {
@@ -16,6 +20,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 		alignItems: 'center'
 	},
 	item: {
+      marginBottom: '2em',
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'center'
@@ -30,9 +35,21 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 const Custom404 = () => {
-	const classes = useStyles()
+   const classes = useStyles()
+   const setActiveRoute = useConfigStore(state => state.setActiveRoute)
+   const router = useRouter()
+   
+   useEffect(() => {
+      setActiveRoute(ZenRouteID.ERROR)
+   }, [setActiveRoute])
+
+   const goBackToSafety = useCallback(() => {
+      const homePath = routesPaths[ZenRouteID.DASHBOARD].path
+      router.push(homePath)
+   }, [router.push])
+
 	return (
-		<Grid className={classes.container} container justify='center' alignContent='center'>
+		<Grid className={classes.container} container direction='column' justify='center' alignContent='center'>
 			<div className={classes.item}>
 				<Typography variant='h1'>404</Typography>
 				<div className={classes.verticalDivider} />
@@ -41,6 +58,11 @@ const Custom404 = () => {
 					<Typography variant='body1'>Not found</Typography>
 				</Grid>
 			</div>
+         <Grid item>
+            <Button color='primary' onClick={goBackToSafety}>
+               Take me back to safety!
+            </Button>
+         </Grid>
 		</Grid>
 	)
 }

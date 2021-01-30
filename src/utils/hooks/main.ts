@@ -1,9 +1,12 @@
 import { ThemeType } from '@_palette'
+import { routesPaths } from '@_utils/routes'
+import { ZenRouteID } from '@_utils/routes/types'
 import { useConfigStore } from '@_zustand/config'
 import { ConfigStoreSelector } from '@_zustand/config/helpers'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { apiInstance } from 'src/SDK'
+import { zenHooksInstance } from '.'
 
 type ThemeConfig = {
 	lightColor?: string
@@ -16,9 +19,13 @@ type AuthConfig = {
 	LSToken: string
 }
 
+type ZenRouteAuthIDS = ZenRouteID.DASHBOARD|ZenRouteID.LOGIN|ZenRouteID.REGISTER
+
 export class ZenMainHooks {
    private stateSelectorTheme: ConfigStoreSelector
    private stateSelectorAuth: ConfigStoreSelector
+   private stateSelectorSetActiveRoute: ConfigStoreSelector
+   private paths: Partial<Record<ZenRouteAuthIDS, string>>
 
    constructor(){
       this.stateSelectorTheme = state => ({
@@ -26,8 +33,45 @@ export class ZenMainHooks {
          setTheme: state.setTheme
       })
       this.stateSelectorAuth = state => ({
-         setIsLogged: state.setIsLogged
+         setIsLogged: state.setIsLogged,
+         isLogged: state.isLogged,
+         activeRoute: state.activeRoute
       })
+      this.stateSelectorSetActiveRoute = state => ({
+         setActiveRoute: state.setActiveRoute
+      })
+      this.paths = {
+         [ZenRouteID.DASHBOARD]: routesPaths[ZenRouteID.DASHBOARD].path,
+         [ZenRouteID.LOGIN]: routesPaths[ZenRouteID.LOGIN].path,
+         [ZenRouteID.REGISTER]: routesPaths[ZenRouteID.REGISTER].path
+      }
+   }
+
+   private checkPathType (path: string): { isAuthPath: boolean, isPublicPath: boolean } {
+      // see if user is on public route
+      const isAuthPath: boolean = !!/\/auth\/(login|register)/.test(path)
+      // TODO: aggiungere in OR nella regex le routes per invito partita e altre simili
+      const isPublicPath: boolean = !!/(\/auth\/(login|register|confirm))/.test(path)
+      return { isAuthPath, isPublicPath }
+   }
+
+   useSetActivePage = (routeID: ZenRouteID) => {
+      const { setActiveRoute } = useConfigStore(this.stateSelectorSetActiveRoute)
+   
+      useEffect(() => {
+         setActiveRoute(routeID)
+      }, [setActiveRoute, routeID])
+   }
+
+   useHideMenuInPublic = (): boolean => {
+      const [showMenu, setShowMenu] = useState(false)
+      const activeRoute = useConfigStore(state => state.activeRoute)
+      
+      useEffect(() => {
+         setShowMenu(activeRoute.isPrivate)
+      }, [activeRoute.isPrivate])
+
+      return showMenu
    }
 
    useWithThemeSwitch = (config: ThemeConfig) => {
@@ -57,8 +101,24 @@ export class ZenMainHooks {
    useInitWithAuthentication = (config: AuthConfig) => {
       const { AS_PATH, LSToken } = config
       const [isFirstRun, setFirstRun] = useState(true)
+      const [isCheckingToken, setIsCheckingToken] = useState(true)
       const router = useRouter()
-      const { setIsLogged } = useConfigStore(this.stateSelectorAuth)
+      const { setIsLogged, isLogged, activeRoute } = useConfigStore(this.stateSelectorAuth)
+      const isMounted = zenHooksInstance.useIsMounted()
+      const isTokenValid = useRef(false)
+
+      useEffect(() => {
+         if(!isCheckingToken && isFirstRun) setFirstRun(false)
+      }, [isCheckingToken, isFirstRun])
+
+      // make auth routes not accessible if user is logged in
+      useEffect(() => {
+         if(!isCheckingToken && isLogged && [ZenRouteID.LOGIN, ZenRouteID.REGISTER, ZenRouteID.CONFIRM_REGISTRATION].includes(activeRoute._id)) {
+            router.replace(this.paths.DASHBOARD)
+               .then(() => isMounted.current && setIsCheckingToken(false))
+               .catch(() => isMounted.current && setIsCheckingToken(false))
+         }
+      }, [activeRoute._id, isLogged, isCheckingToken])
 
       // useEffect(() => {
       //    if (!isEmpty(cleanQueryParams(router.query))) {
@@ -66,28 +126,58 @@ export class ZenMainHooks {
       //    }
       // }, [router.query])
 
+      const redirectUser = useCallback(
+         (isAuthPath: boolean, isPublicPath: boolean): void => {
+            console.log('here', { isAuthPath, isPublicPath, isTokenValid: isTokenValid.current })
+            if(!isTokenValid.current && !isPublicPath) {
+               router.replace(this.paths.LOGIN)
+                  .then(() => isMounted.current && setIsCheckingToken(false))
+                  .catch(() => isMounted.current && setIsCheckingToken(false))
+            } else if(isTokenValid.current && isAuthPath) {
+               router.replace(this.paths.DASHBOARD)
+                  .then(() => isMounted.current && setIsCheckingToken(false))
+                  .catch(() => isMounted.current && setIsCheckingToken(false))
+            } else {
+               isMounted.current && setIsCheckingToken(false)
+            }
+         }, [router.replace])
+
+      // on mount
       useEffect(() => {
          // prefetch main routes
-         router.prefetch('/auth/login')
-         router.prefetch('/auth/register')
-         router.prefetch('/')
+         router.prefetch(this.paths.LOGIN)
+         router.prefetch(this.paths.REGISTER)
+         router.prefetch(this.paths.DASHBOARD)
          // rehydrate app
          const jssStyles = document.querySelector('#jss-server-side')
          if (jssStyles) jssStyles.parentElement.removeChild(jssStyles)
-         // check LS token validity
-         const checkToken = async (token: string): Promise<void> => {
-            try {
-               if(!token) throw new Error('no_token')
-               const isValid = await apiInstance.auth.isTokenValid(token)
-               setIsLogged(isValid)
-            } catch (error) {
-               setIsLogged(false)
-            }
-         }
+         // check path type
+         const { isAuthPath, isPublicPath } = this.checkPathType(router.pathname)
+         // get and check LS token validity
          const token: string = window && window.localStorage 
             ? window.localStorage.getItem(LSToken) 
             : null
-         checkToken(token)
+         if(!token) {
+            isTokenValid.current = false
+            setIsLogged(false)
+            redirectUser(isAuthPath, isPublicPath)
+         } else {
+            apiInstance.auth.isTokenValid(token)
+               .then(isValid => {
+                  if(isMounted.current){
+                     isTokenValid.current = isValid
+                     setIsLogged(isValid)
+                     redirectUser(isAuthPath, isPublicPath)
+                  }
+               })
+               .catch(() => {
+                  if(isMounted.current){
+                     isTokenValid.current = false
+                     setIsLogged(false)
+                     redirectUser(isAuthPath, isPublicPath)
+                  }
+               })
+         }
          // const path: string = isLogged ? (/\/login/.test(router.pathname) ? '/' : router.pathname || '/') : '/auth/login'
          // const asPath: string | null = isLogged ? window.localStorage.getItem(AS_PATH) : null
          // const origin = asPath ? get(asPath.split('?'), '0', '') : ''
@@ -97,7 +187,7 @@ export class ZenMainHooks {
          // } else {
          //    router.replace(`${path}${params ? `?${params}` : ''}`).then(() => setFirstRun(false))
          // }
-      }, [LSToken, AS_PATH])
+      }, [LSToken, AS_PATH, redirectUser])
 
       return {
          isFirstRun

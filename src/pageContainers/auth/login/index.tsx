@@ -9,6 +9,8 @@ import React, { useCallback } from 'react'
 import Copyright from '../Copyright'
 import { schema, onLogin } from './helpers'
 import { useSharedStyles, stateSelector } from '../helpers'
+import { routesPaths } from '@_utils/routes'
+import { ZenRouteID } from '@_utils/routes/types'
 
 const LoginContainer = () => {
   const { openSnackbar, setIsLoading, setIsLogged } = useConfigStore(stateSelector)
@@ -16,11 +18,11 @@ const LoginContainer = () => {
   const classes = useSharedStyles()
 
   const goToHome = useCallback(() => {
-    router.push('/')
+    router.push(routesPaths[ZenRouteID.DASHBOARD].path)
   }, [router.push])
 
   const goToRegister = useCallback(() => {
-    router.push('/auth/register')
+    router.push(routesPaths[ZenRouteID.REGISTER].path)
   }, [router.push])
 
   const formik = useFormik({
@@ -38,8 +40,17 @@ const LoginContainer = () => {
       <Grid container direction='column' alignItems='center' item xs={12} sm={6} style={{ marginTop: '10vh' }}>
         <FutBobLogo style={{ fontSize: '4em' }} />
         <form className={classes.form} onSubmit={formik.handleSubmit}>
-          <FormikInput name='email' label='Email' required {...formik} />
-          <FormikInput name='password' label='Password' type='password' required {...formik} />
+          <FormikInput
+            name='email'
+            label='Email'
+            required
+            {...formik} />
+          <FormikInput
+            name='password'
+            label='Password'
+            type='password'
+            required
+            {...formik} />
           <Button
             type='submit'
             fullWidth

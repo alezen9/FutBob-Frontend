@@ -2,7 +2,7 @@ import { ZenPalette, ThemeType } from '../../../palette'
 import create, { UseStore } from 'zustand'
 import { ConfigStore } from './helpers'
 import { LSTheme } from '@_utils/LSVariables'
-import { routes } from '@_utils/routes'
+import { routes, routesPaths } from '@_utils/routes'
 import { setSnackbarData, _immer } from '@_zustand/helpers'
 import { ZenRouteID } from '@_utils/routes/types'
 
@@ -14,11 +14,10 @@ export const useConfigStore: UseStore<ConfigStore> = create(
 		isLoading: false,
 		pageTitle: 'Dashboard',
       snackbar: { open: false },
-      activeRoute: routes.find(({ _id }) => _id === ZenRouteID.LOGIN),
+      activeRoute: {},
       setActiveRoute: (routeID: ZenRouteID) => {
          set((state: ConfigStore) => {
-            const route = routes.find(({ _id }) => _id === routeID)
-				state.activeRoute = route
+				state.activeRoute = routesPaths[routeID]
 			})
       },
 		setPageTitle: (title: any) => {

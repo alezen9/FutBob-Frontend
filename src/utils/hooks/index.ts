@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react"
+import { useConfigStore } from "@_zustand/config"
+import { MutableRefObject, useEffect, useRef, useState } from "react"
 import { ZenMainHooks } from './main'
 
 class ZenHooks extends ZenMainHooks {
@@ -11,7 +12,7 @@ class ZenHooks extends ZenMainHooks {
       return ref.current
    }
 
-   useIsMounted = (): boolean => {
+   useIsMounted = (): MutableRefObject<boolean> => {
       const isMounted = useRef<boolean>(false)
       useEffect(() => {
          isMounted.current = true
@@ -19,7 +20,7 @@ class ZenHooks extends ZenMainHooks {
             isMounted.current = false
          }
       }, [])
-      return isMounted.current
+      return isMounted
    }
 
 }
