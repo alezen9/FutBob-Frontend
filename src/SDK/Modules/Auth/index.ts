@@ -32,7 +32,7 @@ class AuthServer {
       query {
          Auth_isTokenValid(token: "${token}")
       }`
-      return this._server.API({ query, name: 'Auth_isTokenValid' })
+      return this._server.API({ query, name: 'Auth_isTokenValid', params: token })
    }
 
 	async login(body: LoginInput): Promise<AuthData> {
@@ -40,7 +40,7 @@ class AuthServer {
       query {
          Auth_login(body: ${zenToolboxInstance.paramsToString(body)}) { token }
       }`
-		return this._server.API({ query, name: 'Auth_login' })
+		return this._server.API({ query, name: 'Auth_login', params: body })
    }
 
    /** Start registration flow */
@@ -49,7 +49,7 @@ class AuthServer {
       mutation {
          Auth_requestRegistration(body: ${zenToolboxInstance.paramsToString(body)})
       }`
-      return this._server.API({ query, name: 'Auth_requestRegistration' })
+      return this._server.API({ query, name: 'Auth_requestRegistration', params: body })
    }
 
    async requestRegistrationEmailResend(body: RequestResendInput): Promise<boolean> {
@@ -57,7 +57,7 @@ class AuthServer {
       mutation {
          Auth_requestRegistrationEmailResend(body: ${zenToolboxInstance.paramsToString(body)})
       }`
-      return this._server.API({ query, name: 'Auth_requestRegistrationEmailResend' })
+      return this._server.API({ query, name: 'Auth_requestRegistrationEmailResend', params: body })
    }
 
    async finalizeRegistration(body: FinalizeRegistrationInput): Promise<AuthData> {
@@ -65,7 +65,7 @@ class AuthServer {
       mutation {
          Auth_finalizeRegistration(body: ${zenToolboxInstance.paramsToString(body)}) { token }
       }`
-      return this._server.API({ query, name: 'Auth_finalizeRegistration' })
+      return this._server.API({ query, name: 'Auth_finalizeRegistration', params: body, fields: '{ token }' })
    }
    /** End registration flow */
 
@@ -77,7 +77,7 @@ class AuthServer {
       mutation {
          Auth_requestResetPassword(email: "${email}")
       }`
-      return this._server.API({ query, name: 'Auth_requestResetPassword' })
+      return this._server.API({ query, name: 'Auth_requestResetPassword', params: email, })
    }
 
    async requestResetPasswordEmailResend(body: RequestResendInput): Promise<boolean> {
@@ -85,7 +85,7 @@ class AuthServer {
       mutation {
          Auth_requestResetPasswordEmailResend(body: ${zenToolboxInstance.paramsToString(body)})
       }`
-      return this._server.API({ query, name: 'Auth_requestResetPasswordEmailResend' })
+      return this._server.API({ query, name: 'Auth_requestResetPasswordEmailResend', params: body })
    }
 
    async finalizeResetPassword(body: FinalizeRegistrationInput): Promise<AuthData> {
@@ -93,7 +93,7 @@ class AuthServer {
       mutation {
          Auth_finalizeResetPassword(body: ${zenToolboxInstance.paramsToString(body)}) { token }
       }`
-      return this._server.API({ query, name: 'Auth_finalizeResetPassword' })
+      return this._server.API({ query, name: 'Auth_finalizeResetPassword', params: body, fields: '{ token }' })
    }
    /** End reset password flow */
    

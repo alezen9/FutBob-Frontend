@@ -17,7 +17,7 @@ class FieldServer {
       mutation {
          Field_create(body: ${zenToolboxInstance.paramsToString(body)})
       }`
-		return this._server.API({ query, name: 'Field_create' })
+		return this._server.API({ query, name: 'Field_create', params: body })
 	}
 
 	async update(body: UpdateFieldInput): Promise<boolean> {
@@ -25,7 +25,7 @@ class FieldServer {
       mutation {
          Field_update(body: ${zenToolboxInstance.paramsToString(body)})
       }`
-		return this._server.API({ query, name: 'Field_update' })
+		return this._server.API({ query, name: 'Field_update', params: body })
 	}
 
 	async delete(_id: string): Promise<boolean> {
@@ -33,7 +33,7 @@ class FieldServer {
       mutation {
          Field_delete(_id: "${_id}")
       }`
-		return this._server.API({ query, name: 'Field_delete' })
+		return this._server.API({ query, name: 'Field_delete', params: _id })
 	}
 
 	async getList(filters: FiltersField, pagination: Pagination, fields: string): Promise<ListOf<Field>> {
@@ -41,7 +41,7 @@ class FieldServer {
       query {
          Field_getList(filters: ${zenToolboxInstance.paramsToString(filters)}, pagination: ${zenToolboxInstance.paramsToString(pagination)}) ${fields}
       }`
-		return this._server.API({ query, name: 'Field_getList' })
+		return this._server.API({ query, name: 'Field_getList', params: { filters, pagination }, fields })
 	}
 }
 

@@ -17,7 +17,7 @@ class FreeAgentServer {
       mutation {
          FreeAgent_create(body: ${zenToolboxInstance.paramsToString(body)})
       }`
-		return this._server.API({ query, name: 'FreeAgent_create' })
+		return this._server.API({ query, name: 'FreeAgent_create', params: body })
 	}
 
 	async update(body: UpdateFreeAgentInput): Promise<boolean> {
@@ -25,7 +25,7 @@ class FreeAgentServer {
       mutation {
          FreeAgent_update(body: ${zenToolboxInstance.paramsToString(body)})
       }`
-		return this._server.API({ query, name: 'FreeAgent_update' })
+		return this._server.API({ query, name: 'FreeAgent_update', params: body })
 	}
 
 	async delete(_id: string): Promise<boolean> {
@@ -33,7 +33,7 @@ class FreeAgentServer {
       mutation {
          FreeAgent_delete(_id: "${_id}")
       }`
-		return this._server.API({ query, name: 'FreeAgent_delete' })
+		return this._server.API({ query, name: 'FreeAgent_delete', params: _id })
 	}
 
 	async getList(filters: FiltersFreeAgent, pagination: Pagination, fields: string): Promise<ListOf<FreeAgent>> {
@@ -41,7 +41,7 @@ class FreeAgentServer {
          query {
             FreeAgent_getList(filters: ${zenToolboxInstance.paramsToString(filters)}, pagination: ${zenToolboxInstance.paramsToString(pagination)}) ${fields}
          }`
-		return this._server.API({ query, name: 'FreeAgent_getList' })
+		return this._server.API({ query, name: 'FreeAgent_getList', params: { filters, pagination }, fields })
 	}
 }
 

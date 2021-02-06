@@ -11,11 +11,11 @@ export const privateRoutes: ZenRoute[] = [
    },
     // ============================ //
    {
-      _id: ZenRouteID.PROFILE,
-      section: ZenSection.PROFILE,
+      _id: ZenRouteID.ME,
+      section: ZenSection.ME,
       isPrivate: true,
       title: 'Profile',
-      path: '/profile'
+      path: '/me'
    },
     // ============================ //
    {

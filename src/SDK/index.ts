@@ -36,7 +36,7 @@ export class ZenServer {
 		this.freeAgent = new FreeAgentServer(this)
 	}
 
-	async API({ query, name, params, fields }: { query: string; name: string; params?: any; fields?: object }) {
+	async API({ query, name, params, fields }: { query: string; name: string; params?: any; fields?: string }) {
 		return this._self.post('/graphql', { query }).then((res: any) => {
 			const { data, errors } = res
 			if (errors && errors.length) {

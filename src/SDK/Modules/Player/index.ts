@@ -17,7 +17,7 @@ class PlayerServer {
       mutation {
          Player_create(body: ${zenToolboxInstance.paramsToString(body)})
       }`
-		return this._server.API({ query, name: 'Player_create' })
+		return this._server.API({ query, name: 'Player_create', params: body })
 	}
 
 	async update(body: UpdatePlayerInput): Promise<boolean> {
@@ -25,7 +25,7 @@ class PlayerServer {
       mutation {
          Player_update(body: ${zenToolboxInstance.paramsToString(body)})
       }`
-		return this._server.API({ query, name: 'Player_update' })
+		return this._server.API({ query, name: 'Player_update', params: body })
 	}
 
 	async delete(_id: string): Promise<boolean> {
@@ -33,7 +33,7 @@ class PlayerServer {
       mutation {
          Player_delete(_id: "${_id}")
       }`
-		return this._server.API({ query, name: 'Player_delete' })
+		return this._server.API({ query, name: 'Player_delete', params: _id })
 	}
 
 	async getList(filters: FiltersPlayer, pagination: Pagination, fields: string): Promise<ListOf<Player>> {
@@ -41,7 +41,7 @@ class PlayerServer {
       query {
          Player_getList(filters: ${zenToolboxInstance.paramsToString(filters)}, pagination: ${zenToolboxInstance.paramsToString(pagination)}) ${fields}
       }`
-		return this._server.API({ query, name: 'Player_getList' })
+		return this._server.API({ query, name: 'Player_getList', params: { filters, pagination }, fields })
 	}
 }
 

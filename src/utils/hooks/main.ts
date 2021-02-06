@@ -145,7 +145,7 @@ export class ZenMainHooks {
             } else { /** 3 & 4 */
                isMounted.current && setIsCheckingToken(false)
             }
-         }, [router.replace])
+         }, [])
 
       // on mount
       useEffect(() => {
@@ -192,7 +192,7 @@ export class ZenMainHooks {
          // } else {
          //    router.replace(`${path}${params ? `?${params}` : ''}`).then(() => setFirstRun(false))
          // }
-      }, [LSToken, AS_PATH, redirectUser])
+      }, [LSToken, AS_PATH])
 
       return {
          isFirstRun,

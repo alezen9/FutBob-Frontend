@@ -15,7 +15,7 @@ class UserServer {
       mutation {
          User_create(body: ${zenToolboxInstance.paramsToString(body)})
       }`
-		return this._server.API({ query, name: 'User_create' })
+		return this._server.API({ query, name: 'User_create', params: body })
 	}
 
 	async update(body: UpdateRegistryInput): Promise<boolean> {
@@ -23,7 +23,7 @@ class UserServer {
       mutation {
          User_update(body: ${zenToolboxInstance.paramsToString(body)})
       }`
-		return this._server.API({ query, name: 'User_update' })
+		return this._server.API({ query, name: 'User_update', params: body })
 	}
 
 	async getMe(fields: string): Promise<User> {
@@ -31,7 +31,7 @@ class UserServer {
       query {
          User_getMe ${fields}
       }`
-		return this._server.API({ query, name: 'User_getMe' })
+		return this._server.API({ query, name: 'User_getMe', fields })
 	}
 
 	async changeMyPassword(body: ChangePasswordInput): Promise<boolean> {
@@ -39,7 +39,7 @@ class UserServer {
       mutation {
          User_changeMyPassword(body: ${zenToolboxInstance.paramsToString(body)})
       }`
-		return this._server.API({ query, name: 'User_changeMyPassword' })
+		return this._server.API({ query, name: 'User_changeMyPassword', params: body })
 	}
 
 	async delete(_id: string): Promise<boolean> {
@@ -47,7 +47,7 @@ class UserServer {
       mutation {
          User_delete(_id: "${_id}")
       }`
-		return this._server.API({ query, name: 'User_delete' })
+		return this._server.API({ query, name: 'User_delete', params: _id })
 	}
 }
 

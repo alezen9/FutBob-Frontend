@@ -16,7 +16,7 @@ import { routes, routesPaths } from '@_utils/routes'
 
 const iconMap = {
   [ZenRouteID.DASHBOARD]: <DashboardRoundedIcon />,
-  [ZenRouteID.PROFILE]: <FaceRoundedIcon />,
+  [ZenRouteID.ME]: <FaceRoundedIcon />,
   [ZenRouteID.PLAYERS]: <JerseyIcon />,
   [ZenRouteID.FREE_AGENTS]: <FreeAgentIcon />,
   [ZenRouteID.FIELDS]: <FieldIcon />,
@@ -51,10 +51,10 @@ const ZenMenu = () => {
       setIsLoading: state.setIsLoading
    }))
 
-   const afterLogout = useCallback(async () => {
-      await router.push(routesPaths[ZenRouteID.LOGIN].path)
+   const afterLogout = useCallback(() => {
       setIsLogged(false)
       setIsLoading(false)
+      router.push(routesPaths[ZenRouteID.LOGIN].path)
    },[router])
 
    const logout = useCallback(

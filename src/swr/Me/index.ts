@@ -53,11 +53,17 @@ export const useSWRMe = <T extends MoreOptions>(options?: T) => {
 		async (body: ChangePasswordInput) => {
 			try {
 				await apiInstance.user.changeMyPassword(body)
+            openSnackbar({
+					variant: 'success',
+					message: 'Password updated successfully'
+				})
+            return true
 			} catch (error) {
 				openSnackbar({
 					variant: 'error',
 					message: get(ServerMessage, error, ServerMessage.generic)
 				})
+            return false
 			}
 		},
 		[openSnackbar]
@@ -67,11 +73,23 @@ export const useSWRMe = <T extends MoreOptions>(options?: T) => {
 		async (body: UpdateRegistryInput) => {
 			try {
 				await apiInstance.user.update(body)
+            mutateThis((draft: User) => {
+					draft.registry = {
+                  ...draft.registry,
+                  ...body
+               }
+				})
+            openSnackbar({
+					variant: 'success',
+					message: 'Registry updated successfully'
+				})
+            return true
 			} catch (error) {
 				openSnackbar({
 					variant: 'error',
 					message: get(ServerMessage, error, ServerMessage.generic)
 				})
+            return false
 			}
 		},
 		[openSnackbar]
@@ -87,11 +105,17 @@ export const useSWRMe = <T extends MoreOptions>(options?: T) => {
 					draft.player.positions = body.positions
 					draft.player.score = body.score
 				})
+            openSnackbar({
+					variant: 'success',
+					message: 'Player creatd successfully'
+				})
+            return true
 			} catch (error) {
 				openSnackbar({
 					variant: 'error',
 					message: get(ServerMessage, error, ServerMessage.generic)
 				})
+            return false
 			}
 		},
 		[openSnackbar, mutateThis]
@@ -106,11 +130,17 @@ export const useSWRMe = <T extends MoreOptions>(options?: T) => {
 					if (![null, undefined].includes(body.state)) draft.player.state = body.state
 					if (![null, undefined].includes(body.score)) draft.player.score = body.score
 				})
+            openSnackbar({
+					variant: 'success',
+					message: 'Player updated successfully'
+				})
+            return true
 			} catch (error) {
 				openSnackbar({
 					variant: 'error',
 					message: get(ServerMessage, error, ServerMessage.generic)
 				})
+            return false
 			}
 		},
 		[openSnackbar, mutateThis]
@@ -123,11 +153,17 @@ export const useSWRMe = <T extends MoreOptions>(options?: T) => {
 				mutateThis((draft: User) => {
 					draft.player = null
 				})
+            openSnackbar({
+					variant: 'success',
+					message: 'Player deleted successfully'
+				})
+            return true
 			} catch (error) {
 				openSnackbar({
 					variant: 'error',
 					message: get(ServerMessage, error, ServerMessage.generic)
 				})
+            return false
 			}
 		},
 		[openSnackbar]

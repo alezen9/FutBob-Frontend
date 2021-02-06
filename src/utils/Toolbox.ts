@@ -1,6 +1,6 @@
 import { OptionType } from "@_components/FormikInput"
 import cleanDeep from "clean-deep"
-import { compact, isObject, map } from "lodash"
+import { compact, isObject, map, isUndefined, keys, has, get, entries, isObjectLike, isEqual } from "lodash"
 
 class ZenToolbox {
    private formatter: Intl.NumberFormat
@@ -30,7 +30,6 @@ class ZenToolbox {
     * @description Takes an object as param and returns the same object in string format valid for gql queries
     */
    paramsToString = params => {
-      console.log(params)
       let str = ''
       for (const key in params) {
          if (isObject(params[key])) {
@@ -71,6 +70,80 @@ class ZenToolbox {
    eurosToCents = (euros: number) => Math.trunc(euros * 100)
 
    centsToEuros = (cents: number) => this.formatter.format(cents / 100)
+
+   /**
+    * 
+    * @description Given two objects it returns what changed from object 1 (older) to object 2 (newer)
+    */
+   v2_deepDiff = (fromObject: Object, toObject: Object) => {
+      const changes = {}
+
+      const buildPath = (path: string, obj: Object, key: string) => isUndefined(path) ? key : `${path}.${key}`
+
+      const walk = (fromObject: Object, toObject: Object, path?: string) => {
+         for (const key of keys(fromObject)) {
+            const currentPath = buildPath(path, fromObject, key)
+            if (!has(toObject, key)) {
+            changes[currentPath] = { from: get(fromObject, key) }
+            }
+         }
+
+         for (const [key, to] of entries(toObject)) {
+            const currentPath = buildPath(path, toObject, key)
+            if (!has(fromObject, key)) {
+            changes[currentPath] = to
+            } else {
+            const from = get(fromObject, key)
+            if (!isEqual(from, to)) {
+               if (isObjectLike(to) && isObjectLike(from)) {
+                  walk(from, to, currentPath)
+               } else {
+                  changes[currentPath] = to
+               }
+            }
+            }
+         }
+      }
+
+      walk(fromObject, toObject)
+
+      return changes
+   }
+
+   deepDiff = (fromObject: Object, toObject: Object) => {
+      const changes = {}
+
+      const buildPath = (path: string, obj: Object, key: string) => isUndefined(path) ? key : `${path}.${key}`
+
+      const walk = (fromObject: Object, toObject: Object, path?: string) => {
+         for (const key of keys(fromObject)) {
+            const currentPath = buildPath(path, fromObject, key)
+            if (!has(toObject, key)) {
+            changes[currentPath] = { from: get(fromObject, key) }
+            }
+         }
+
+         for (const [key, to] of entries(toObject)) {
+            const currentPath = buildPath(path, toObject, key)
+            if (!has(fromObject, key)) {
+            changes[currentPath] = { to }
+            } else {
+            const from = get(fromObject, key)
+            if (!isEqual(from, to)) {
+               if (isObjectLike(to) && isObjectLike(from)) {
+                  walk(from, to, currentPath)
+               } else {
+                  changes[currentPath] = { from, to }
+               }
+            }
+            }
+         }
+      }
+
+      walk(fromObject, toObject)
+
+      return changes
+   }
 }
 
 export const zenToolboxInstance = new ZenToolbox()
