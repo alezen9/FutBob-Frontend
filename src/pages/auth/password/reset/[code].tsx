@@ -2,14 +2,14 @@ import React from 'react'
 import PageTransition from '@_components/PageTransition'
 import { zenHooksInstance } from '@_utils/hooks'
 import { ZenRouteID } from '@_utils/routes/types'
-import RequestAccountContainer from '@_page-containers/auth/account/request'
+import ResetPasswordContainer from '@_page-containers/auth/password/reset'
 
 const ResetPassword = () => {
   zenHooksInstance.useSetActivePage(ZenRouteID.FINALIZE_RESET_PASSWORD)
 
   return (
     <PageTransition>
-      <RequestAccountContainer />
+      <ResetPasswordContainer />
     </PageTransition>
   )
 }

@@ -7,12 +7,12 @@ import { useConfigStore } from '@_zustand/config'
 import { useFormik } from 'formik'
 import { useRouter } from 'next/router'
 import Copyright from '../Copyright'
-import { schema, onLogin } from './helpers'
+import { schemaResetPassword, onResetPassword } from './helpers'
 import { useSharedStyles, stateSelector } from '../helpers'
 import { routesPaths } from '@_utils/routes'
 import { ZenRouteID } from '@_utils/routes/types'
 
-const LoginContainer = () => {
+const ResetPasswordContainer = () => {
   const { openSnackbar, setIsLoading, setIsLogged } = useConfigStore(stateSelector)
   const router = useRouter()
   const classes = useSharedStyles()
@@ -25,18 +25,17 @@ const LoginContainer = () => {
     router.push(routesPaths[ZenRouteID.DASHBOARD].path)
   }, [router.push])
 
-  const goToRegister = useCallback(() => {
-    router.push(routesPaths[ZenRouteID.REQUEST_ACCOUNT].path)
-  }, [router.push])
-
-  const goToForgotPassword = useCallback(() => {
-    router.push(routesPaths[ZenRouteID.REQUEST_RESET_PASSWORD].path)
+  const goToLogin = useCallback(() => {
+    router.push(routesPaths[ZenRouteID.LOGIN].path)
   }, [router.push])
 
   const formik = useFormik({
-    initialValues: {},
-    validationSchema: schema,
-    onSubmit: onLogin({ openSnackbar, setIsLoading, setIsLogged, goToHome })
+    initialValues: {
+      unverifiedCode: router.query.code
+    },
+    enableReinitialize: true,
+    validationSchema: schemaResetPassword,
+    onSubmit: onResetPassword({ openSnackbar, setIsLoading, goToHome, setIsLogged })
   })
 
   return (
@@ -49,13 +48,14 @@ const LoginContainer = () => {
         <FutBobLogo style={{ fontSize: '4em' }} />
         <form className={classes.form} onSubmit={formik.handleSubmit}>
           <FormikInput
-            name='email'
-            label='Email'
+            name='password'
+            label='Password'
+            type='password'
             required
             {...formik} />
           <FormikInput
-            name='password'
-            label='Password'
+            name='confirmPassword'
+            label='Confirm password'
             type='password'
             required
             {...formik} />
@@ -66,23 +66,15 @@ const LoginContainer = () => {
             color='primary'
             disabled={formik.isSubmitting}
             className={classes.submit}>
-               Login
+                 Reset password
           </Button>
           <Button
-            onClick={goToForgotPassword}
+            onClick={goToLogin}
             fullWidth
             color='primary'
             disabled={formik.isSubmitting}
             className={classes.submit}>
-               Forgot password?
-          </Button>
-          <Button
-            onClick={goToRegister}
-            fullWidth
-            color='primary'
-            disabled={formik.isSubmitting}
-            className={classes.submit}>
-               Create an account
+                  Back to Login
           </Button>
         </form>
       </Grid>
@@ -91,4 +83,4 @@ const LoginContainer = () => {
   )
 }
 
-export default LoginContainer
+export default ResetPasswordContainer

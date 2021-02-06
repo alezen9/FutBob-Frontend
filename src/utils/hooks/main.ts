@@ -64,15 +64,15 @@ export class ZenMainHooks {
       }, [setActiveRoute, routeID])
    }
 
-   useHideMenuInPublic = (): boolean => {
-      const [showMenu, setShowMenu] = useState(false)
+   useIsPrivateRoute = (): boolean => {
+      const [isPrivate, setIsPrivate] = useState(false)
       const activeRoute = useConfigStore(state => state.activeRoute)
       
       useEffect(() => {
-         setShowMenu(activeRoute.isPrivate)
+         setIsPrivate(!!activeRoute.isPrivate)
       }, [activeRoute.isPrivate])
 
-      return showMenu
+      return isPrivate
    }
 
    useWithThemeSwitch = (config: ThemeConfig) => {

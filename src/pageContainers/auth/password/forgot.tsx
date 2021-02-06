@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Button, Grid } from '@material-ui/core'
 import FormikInput from '@_components/FormikInput'
 import ThemeModeSwitch from '@_components/ThemeModeSwitch'
@@ -7,36 +7,29 @@ import { useConfigStore } from '@_zustand/config'
 import { useFormik } from 'formik'
 import { useRouter } from 'next/router'
 import Copyright from '../Copyright'
-import { schema, onLogin } from './helpers'
+import { schemaRequestReset, onForgotPassword } from './helpers'
 import { useSharedStyles, stateSelector } from '../helpers'
 import { routesPaths } from '@_utils/routes'
 import { ZenRouteID } from '@_utils/routes/types'
 
-const LoginContainer = () => {
-  const { openSnackbar, setIsLoading, setIsLogged } = useConfigStore(stateSelector)
+const ForgotPasswordContainter = () => {
+  const { openSnackbar, setIsLoading } = useConfigStore(stateSelector)
   const router = useRouter()
   const classes = useSharedStyles()
+  const [emailSent, setEmailSent] = useState(false)
 
   useEffect(() => {
     setIsLoading(false)
   }, [setIsLoading])
 
-  const goToHome = useCallback(() => {
-    router.push(routesPaths[ZenRouteID.DASHBOARD].path)
-  }, [router.push])
-
-  const goToRegister = useCallback(() => {
-    router.push(routesPaths[ZenRouteID.REQUEST_ACCOUNT].path)
-  }, [router.push])
-
-  const goToForgotPassword = useCallback(() => {
-    router.push(routesPaths[ZenRouteID.REQUEST_RESET_PASSWORD].path)
+  const goToLogin = useCallback(() => {
+    router.push(routesPaths[ZenRouteID.LOGIN].path)
   }, [router.push])
 
   const formik = useFormik({
     initialValues: {},
-    validationSchema: schema,
-    onSubmit: onLogin({ openSnackbar, setIsLoading, setIsLogged, goToHome })
+    validationSchema: schemaRequestReset,
+    onSubmit: onForgotPassword({ openSnackbar, setIsLoading, setEmailSent })
   })
 
   return (
@@ -53,12 +46,6 @@ const LoginContainer = () => {
             label='Email'
             required
             {...formik} />
-          <FormikInput
-            name='password'
-            label='Password'
-            type='password'
-            required
-            {...formik} />
           <Button
             type='submit'
             fullWidth
@@ -66,23 +53,15 @@ const LoginContainer = () => {
             color='primary'
             disabled={formik.isSubmitting}
             className={classes.submit}>
-               Login
+               Proceed
           </Button>
           <Button
-            onClick={goToForgotPassword}
+            onClick={goToLogin}
             fullWidth
             color='primary'
             disabled={formik.isSubmitting}
             className={classes.submit}>
-               Forgot password?
-          </Button>
-          <Button
-            onClick={goToRegister}
-            fullWidth
-            color='primary'
-            disabled={formik.isSubmitting}
-            className={classes.submit}>
-               Create an account
+               Back to Login
           </Button>
         </form>
       </Grid>
@@ -91,4 +70,4 @@ const LoginContainer = () => {
   )
 }
 
-export default LoginContainer
+export default ForgotPasswordContainter

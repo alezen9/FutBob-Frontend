@@ -73,7 +73,7 @@ const FinalizeAccountContainer = () => {
             color='primary'
             disabled={formik.isSubmitting}
             className={classes.submit}>
-                  Login
+                  Back to Login
           </Button>
         </form>
       </Grid>
