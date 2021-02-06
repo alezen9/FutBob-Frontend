@@ -1,5 +1,6 @@
 import { ThemeType } from '@_palette'
 import { routesPaths } from '@_utils/routes'
+import { publicRoutes } from '@_utils/routes/Public'
 import { ZenRouteID } from '@_utils/routes/types'
 import { useConfigStore } from '@_zustand/config'
 import { ConfigStoreSelector } from '@_zustand/config/helpers'
@@ -20,7 +21,7 @@ type AuthConfig = {
 }
 
 type ZenRouteAuthIDS = ZenRouteID.DASHBOARD|ZenRouteID.LOGIN|ZenRouteID.REQUEST_ACCOUNT
-const ZenRouteAuthIDSArr: ZenRouteID[] = [ZenRouteID.DASHBOARD,ZenRouteID.LOGIN,ZenRouteID.REQUEST_ACCOUNT]
+const publicRoutesIDS: ZenRouteID[] = publicRoutes.map(({ _id }) => _id)
 
 export class ZenMainHooks {
    private stateSelectorTheme: ConfigStoreSelector
@@ -112,9 +113,9 @@ export class ZenMainHooks {
          if(!isCheckingToken && isFirstRun) setFirstRun(false)
       }, [isCheckingToken, isFirstRun])
 
-      // make auth routes not accessible if user is logged in
+      // make public routes not accessible if user is logged in
       useEffect(() => {
-         if(!isCheckingToken && isLogged && ZenRouteAuthIDSArr.includes(activeRoute._id)) {
+         if(!isCheckingToken && isLogged && publicRoutesIDS.includes(activeRoute._id)) {
             router.replace(this.paths.DASHBOARD)
                .then(() => isMounted.current && setIsCheckingToken(false))
                .catch(() => isMounted.current && setIsCheckingToken(false))
@@ -129,15 +130,19 @@ export class ZenMainHooks {
 
       const redirectUser = useCallback(
          (isAuthPath: boolean, isPublicPath: boolean): void => {
-            if(!isTokenValid.current && !isPublicPath) {
+            // 1. good token && public => redirect to home
+            // 2. bad token && private => redirect login
+            // 3. bad token && public => ok
+            // 4. good token and private => ok
+            if(!isTokenValid.current && !isPublicPath) { /** 2 */
                router.replace(this.paths.LOGIN)
                   .then(() => isMounted.current && setIsCheckingToken(false))
                   .catch(() => isMounted.current && setIsCheckingToken(false))
-            } else if(isTokenValid.current && isAuthPath) {
+            } else if(isTokenValid.current && isPublicPath) { /** 1 */
                router.replace(this.paths.DASHBOARD)
                   .then(() => isMounted.current && setIsCheckingToken(false))
                   .catch(() => isMounted.current && setIsCheckingToken(false))
-            } else {
+            } else { /** 3 & 4 */
                isMounted.current && setIsCheckingToken(false)
             }
          }, [router.replace])
