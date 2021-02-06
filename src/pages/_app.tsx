@@ -19,7 +19,7 @@ setLocale({
 		notType: ({ path, type, value, originalValue }) => {
 			if (['string', 'number'].includes(type)) return 'Invalid input'
 		},
-		required: ''
+      required: 'Required field',
 	}
 })
 

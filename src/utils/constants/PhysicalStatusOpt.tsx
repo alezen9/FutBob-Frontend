@@ -3,8 +3,9 @@ import { TopFormIcon, InjuredIcon, RecoveryIcon } from '@_icons'
 import ExpandLessRoundedIcon from '@material-ui/icons/ExpandLessRounded'
 import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
 import { OptionType } from '@_components/FormikInput'
+import { PhysicalState } from '@_SDK_Player/types'
 
-const PhysicalState = React.memo((props: OptionType) => {
+const PhysicalStateIcon = React.memo((props: OptionType) => {
 	const { label, value } = props
 	return (
 		<span style={{ display: 'flex', fontSize: '1em', alignItems: 'center' }}>
@@ -18,30 +19,30 @@ const PhysicalState = React.memo((props: OptionType) => {
 	)
 })
 
-export const playerPhysicalStateOptions = [
+export const PhysicalStateOpts = [
 	{
-		value: 0,
+		value: PhysicalState.Top,
 		label: 'Top',
-		component: <PhysicalState label='Top' value={0} />
+		component: <PhysicalStateIcon label='Top' value={PhysicalState.Top} />
 	},
 	{
-		value: 1,
+		value: PhysicalState.Medium,
 		label: 'Medium',
-		component: <PhysicalState label='Medium' value={1} />
+		component: <PhysicalStateIcon label='Medium' value={PhysicalState.Medium} />
 	},
 	{
-		value: 2,
+		value: PhysicalState.Low,
 		label: 'Low',
-		component: <PhysicalState label='Low' value={2} />
+		component: <PhysicalStateIcon label='Low' value={PhysicalState.Low} />
 	},
 	{
-		value: 3,
+		value: PhysicalState.Injured,
 		label: 'Injured',
-		component: <PhysicalState label='Injured' value={3} />
+		component: <PhysicalStateIcon label='Injured' value={PhysicalState.Injured} />
 	},
 	{
-		value: 4,
+		value: PhysicalState.Recovery,
 		label: 'Recovery',
-		component: <PhysicalState label='Recovery' value={4} />
+		component: <PhysicalStateIcon label='Recovery' value={PhysicalState.Recovery} />
 	}
 ]

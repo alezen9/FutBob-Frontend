@@ -1,7 +1,7 @@
 import { get } from 'lodash'
 import { ZenServer } from '../../'
 import { AuthData } from './types'
-import { LoginInput, RegisterInput } from './inputs'
+import { FinalizeRegistrationInput, LoginInput, RegisterInput, RequestResendInput } from './inputs'
 import { zenToolboxInstance } from '@_utils/Toolbox'
 
 class AuthServer {
@@ -35,22 +35,6 @@ class AuthServer {
       return this._server.API({ query, name: 'Auth_isTokenValid' })
    }
 
-	async register(body: RegisterInput): Promise<boolean> {
-		const query = `
-      mutation {
-         Auth_register(body: ${zenToolboxInstance.paramsToString(body)})
-      }`
-		return this._server.API({ query, name: 'Auth_register' })
-	}
-
-	async confirm(code: string): Promise<AuthData> {
-		const query = `
-      query {
-         Auth_confirm(code: "${code}") { token }
-      }`
-		return this._server.API({ query, name: 'Auth_confirm' })
-	}
-
 	async login(body: LoginInput): Promise<AuthData> {
 		const query = `
       query {
@@ -58,6 +42,60 @@ class AuthServer {
       }`
 		return this._server.API({ query, name: 'Auth_login' })
    }
+
+   /** Start registration flow */
+   async requestRegistration(body: RegisterInput): Promise<boolean> {
+      const query = `
+      mutation {
+         Auth_requestRegistration(body: ${zenToolboxInstance.paramsToString(body)})
+      }`
+      return this._server.API({ query, name: 'Auth_requestRegistration' })
+   }
+
+   async requestRegistrationEmailResend(body: RequestResendInput): Promise<boolean> {
+      const query = `
+      mutation {
+         Auth_requestRegistrationEmailResend(body: ${zenToolboxInstance.paramsToString(body)})
+      }`
+      return this._server.API({ query, name: 'Auth_requestRegistrationEmailResend' })
+   }
+
+   async finalizeRegistration(body: FinalizeRegistrationInput): Promise<AuthData> {
+      const query = `
+      mutation {
+         Auth_finalizeRegistration(body: ${zenToolboxInstance.paramsToString(body)}) { token }
+      }`
+      return this._server.API({ query, name: 'Auth_finalizeRegistration' })
+   }
+   /** End registration flow */
+
+
+
+   /** Start reset password flow */
+   async requestResetPassword(email: string): Promise<boolean> {
+      const query = `
+      mutation {
+         Auth_requestResetPassword(email: "${email}")
+      }`
+      return this._server.API({ query, name: 'Auth_requestResetPassword' })
+   }
+
+   async requestResetPasswordEmailResend(body: RequestResendInput): Promise<boolean> {
+      const query = `
+      mutation {
+         Auth_requestResetPasswordEmailResend(body: ${zenToolboxInstance.paramsToString(body)})
+      }`
+      return this._server.API({ query, name: 'Auth_requestResetPasswordEmailResend' })
+   }
+
+   async finalizeResetPassword(body: FinalizeRegistrationInput): Promise<AuthData> {
+      const query = `
+      mutation {
+         Auth_finalizeResetPassword(body: ${zenToolboxInstance.paramsToString(body)}) { token }
+      }`
+      return this._server.API({ query, name: 'Auth_finalizeResetPassword' })
+   }
+   /** End reset password flow */
    
    logout (_logout?: VoidFunction): void {
       window.localStorage.removeItem(this._server._LSToken)

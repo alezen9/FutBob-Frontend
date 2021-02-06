@@ -11,7 +11,7 @@ import InputPhone from './InputPhone'
 import InputAddress from './InputAddress'
 import InputAsyncAutocomplete from './InputAsyncAutocomplete'
 import InputSwitch from './InputSwitch'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import InputAutocomplete from './InputAutocomplete'
 import InputSlider from './InputSlider'
 import { ZenPalette } from '@_palette'
@@ -370,15 +370,15 @@ const FormikInput = (props: Props) => {
     case 'date':
       const onDateChange = e => {
         const v: string = e.target.value
-        const isValidDate = moment(v).isValid()
+        const isValidDate = dayjs(v).isValid()
         if (isValidDate) {
-          const isoDate = moment(v).toISOString()
+          const isoDate = dayjs(v).toISOString()
           props.setFieldTouched(name, true, false)
           props.setFieldValue(name, isoDate)
         }
       }
-      const _v = moment(get(values, name, '')).isValid()
-        ? moment(get(values, name, '')).format('YYYY-MM-DD')
+      const _v = dayjs(get(values, name, '')).isValid()
+        ? dayjs(get(values, name, '')).format('YYYY-MM-DD')
         : ''
       return (
         <GridWrapper {...props}>

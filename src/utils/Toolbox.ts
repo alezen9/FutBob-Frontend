@@ -30,6 +30,7 @@ class ZenToolbox {
     * @description Takes an object as param and returns the same object in string format valid for gql queries
     */
    paramsToString = params => {
+      console.log(params)
       let str = ''
       for (const key in params) {
          if (isObject(params[key])) {

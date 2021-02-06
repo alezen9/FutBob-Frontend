@@ -1,4 +1,4 @@
-import { ZenRoute, ZenRouteID, ZenSection } from "../types";
+import { ZenRoute, ZenRouteID } from "../types";
 
 export const publicRoutes: ZenRoute[] = [
    // ============================ //
@@ -15,18 +15,30 @@ export const publicRoutes: ZenRoute[] = [
       title: 'Login',
       path: '/auth/login'
    },
-    // ============================ //
+   // ============================ //
    {
-      _id: ZenRouteID.REGISTER,
+      _id: ZenRouteID.REQUEST_ACCOUNT,
       isPrivate: false,
-      title: 'Register',
-      path: '/auth/register'
+      title: 'Request account',
+      path: '/auth/account/request'
    },
-    // ============================ //
    {
-      _id: ZenRouteID.CONFIRM_REGISTRATION,
+      _id: ZenRouteID.FINALIZE_ACCOUNT,
       isPrivate: false,
-      title: 'Confirm registration',
-      path: '/auth/confirm-registration/:code'
+      title: 'Finalize account registration',
+      path: '/auth/account/finalize/:code'
    },
+   // ============================ //
+   {
+      _id: ZenRouteID.REQUEST_RESET_PASSWORD,
+      isPrivate: false,
+      title: 'Request account',
+      path: '/auth/password/forgot'
+   },
+   {
+      _id: ZenRouteID.FINALIZE_RESET_PASSWORD,
+      isPrivate: false,
+      title: 'Finalize reset password',
+      path: '/auth/password/reset/:code'
+   }
 ]

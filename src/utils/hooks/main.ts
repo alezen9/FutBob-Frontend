@@ -19,7 +19,8 @@ type AuthConfig = {
 	LSToken: string
 }
 
-type ZenRouteAuthIDS = ZenRouteID.DASHBOARD|ZenRouteID.LOGIN|ZenRouteID.REGISTER
+type ZenRouteAuthIDS = ZenRouteID.DASHBOARD|ZenRouteID.LOGIN|ZenRouteID.REQUEST_ACCOUNT
+const ZenRouteAuthIDSArr: ZenRouteID[] = [ZenRouteID.DASHBOARD,ZenRouteID.LOGIN,ZenRouteID.REQUEST_ACCOUNT]
 
 export class ZenMainHooks {
    private stateSelectorTheme: ConfigStoreSelector
@@ -43,15 +44,15 @@ export class ZenMainHooks {
       this.paths = {
          [ZenRouteID.DASHBOARD]: routesPaths[ZenRouteID.DASHBOARD].path,
          [ZenRouteID.LOGIN]: routesPaths[ZenRouteID.LOGIN].path,
-         [ZenRouteID.REGISTER]: routesPaths[ZenRouteID.REGISTER].path
+         [ZenRouteID.REQUEST_ACCOUNT]: routesPaths[ZenRouteID.REQUEST_ACCOUNT].path
       }
    }
 
    private checkPathType (path: string): { isAuthPath: boolean, isPublicPath: boolean } {
       // see if user is on public route
-      const isAuthPath: boolean = !!/\/auth\/(login|register)/.test(path)
-      // TODO: aggiungere in OR nella regex le routes per invito partita e altre simili
-      const isPublicPath: boolean = !!/(\/auth\/(login|register|confirm))/.test(path)
+      const isAuthPath: boolean = !!/\/auth\/(login|account\/request)/.test(path)
+      // every public route
+      const isPublicPath: boolean = !!/(\/auth\/(login|account\/request|account\/finalize|password\/forgot|password\/reset))/.test(path)
       return { isAuthPath, isPublicPath }
    }
 
@@ -113,7 +114,7 @@ export class ZenMainHooks {
 
       // make auth routes not accessible if user is logged in
       useEffect(() => {
-         if(!isCheckingToken && isLogged && [ZenRouteID.LOGIN, ZenRouteID.REGISTER, ZenRouteID.CONFIRM_REGISTRATION].includes(activeRoute._id)) {
+         if(!isCheckingToken && isLogged && ZenRouteAuthIDSArr.includes(activeRoute._id)) {
             router.replace(this.paths.DASHBOARD)
                .then(() => isMounted.current && setIsCheckingToken(false))
                .catch(() => isMounted.current && setIsCheckingToken(false))
@@ -128,7 +129,6 @@ export class ZenMainHooks {
 
       const redirectUser = useCallback(
          (isAuthPath: boolean, isPublicPath: boolean): void => {
-            console.log('here', { isAuthPath, isPublicPath, isTokenValid: isTokenValid.current })
             if(!isTokenValid.current && !isPublicPath) {
                router.replace(this.paths.LOGIN)
                   .then(() => isMounted.current && setIsCheckingToken(false))
@@ -146,7 +146,7 @@ export class ZenMainHooks {
       useEffect(() => {
          // prefetch main routes
          router.prefetch(this.paths.LOGIN)
-         router.prefetch(this.paths.REGISTER)
+         router.prefetch(this.paths.REQUEST_ACCOUNT)
          router.prefetch(this.paths.DASHBOARD)
          // rehydrate app
          const jssStyles = document.querySelector('#jss-server-side')
@@ -190,7 +190,8 @@ export class ZenMainHooks {
       }, [LSToken, AS_PATH, redirectUser])
 
       return {
-         isFirstRun
+         isFirstRun,
+         isTokenValid
       }
    }
 }

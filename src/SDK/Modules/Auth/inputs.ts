@@ -13,5 +13,16 @@ export class RegisterInput {
 	country: string
 	phone: string
 	email: string
-	password: string
+}
+
+
+export class FinalizeRegistrationInput {
+   unverifiedCode: string
+   password: string
+   confirmPassword: string
+}
+
+export class RequestResendInput {
+   expiredCode: string
+   email: string
 }

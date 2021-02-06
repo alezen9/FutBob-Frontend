@@ -1,10 +1,10 @@
-import { ZenPalette, ThemeType } from '../../../palette'
+import { ZenPalette, ThemeType } from '@_palette'
 import create, { UseStore } from 'zustand'
 import { ConfigStore } from './helpers'
 import { LSTheme } from '@_utils/LSVariables'
-import { routes, routesPaths } from '@_utils/routes'
+import { routesPaths } from '@_utils/routes'
 import { setSnackbarData, _immer } from '@_zustand/helpers'
-import { ZenRouteID } from '@_utils/routes/types'
+import { ZenRouteID, ZenRoute } from '@_utils/routes/types'
 
 export const useConfigStore: UseStore<ConfigStore> = create(
 	_immer((set: any, get: any, api: any) => ({
@@ -14,7 +14,7 @@ export const useConfigStore: UseStore<ConfigStore> = create(
 		isLoading: false,
 		pageTitle: 'Dashboard',
       snackbar: { open: false },
-      activeRoute: {},
+      activeRoute: {} as ZenRoute,
       setActiveRoute: (routeID: ZenRouteID) => {
          set((state: ConfigStore) => {
 				state.activeRoute = routesPaths[routeID]

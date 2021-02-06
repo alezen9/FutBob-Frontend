@@ -3,22 +3,32 @@ import { ConfigStore } from '@_zustand/config/helpers'
 
 export const useSharedStyles = makeStyles((theme: Theme) => ({
 	main: {
-		position: 'fixed',
 		width: '100vw',
 		minHeight: '100vh',
-		overflow: 'hidden',
 		padding: `${theme.spacing(5)}px 0`
-	},
+   },
 	form: {
 		width: '100%',
 		maxWidth: 300,
 		marginTop: theme.spacing(1)
+   },
+   formRegister: {
+		width: '100%',
+		maxWidth: 550,
+      marginTop: theme.spacing(2.5),
+      '& > div > div': {
+         paddingTop: '0 !important',
+         paddingBottom: '0 !important'
+      },
+      [theme.breakpoints.down('xs')]: {
+         maxWidth: 300
+      }
 	},
 	submit: {
 		margin: theme.spacing(3, 0, 2)
 	},
 	logo: {
-		position: 'absolute',
+		position: 'fixed',
 		bottom: '-40vh',
 		left: '-10vw',
 		fontSize: '50em',
