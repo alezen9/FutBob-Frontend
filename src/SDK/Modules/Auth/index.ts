@@ -52,12 +52,12 @@ class AuthServer {
       return this._server.API({ query, name: 'Auth_requestRegistration', params: body })
    }
 
-   async requestRegistrationEmailResend(body: RequestResendInput): Promise<boolean> {
+   async requestRegistrationEmailResend(expiredCode: string): Promise<boolean> {
       const query = `
       mutation {
-         Auth_requestRegistrationEmailResend(body: ${zenToolboxInstance.paramsToString(body)})
+         Auth_requestRegistrationEmailResend(expiredCode: "${expiredCode}")
       }`
-      return this._server.API({ query, name: 'Auth_requestRegistrationEmailResend', params: body })
+      return this._server.API({ query, name: 'Auth_requestRegistrationEmailResend', params: expiredCode })
    }
 
    async finalizeRegistration(body: FinalizeRegistrationInput): Promise<AuthData> {
@@ -80,12 +80,12 @@ class AuthServer {
       return this._server.API({ query, name: 'Auth_requestResetPassword', params: email, })
    }
 
-   async requestResetPasswordEmailResend(body: RequestResendInput): Promise<boolean> {
+   async requestResetPasswordEmailResend(expiredCode: string): Promise<boolean> {
       const query = `
       mutation {
-         Auth_requestResetPasswordEmailResend(body: ${zenToolboxInstance.paramsToString(body)})
+         Auth_requestResetPasswordEmailResend(expiredCode: "${expiredCode}")
       }`
-      return this._server.API({ query, name: 'Auth_requestResetPasswordEmailResend', params: body })
+      return this._server.API({ query, name: 'Auth_requestResetPasswordEmailResend', params: expiredCode })
    }
 
    async finalizeResetPassword(body: FinalizeRegistrationInput): Promise<AuthData> {

@@ -11,11 +11,11 @@ import { schema, onLogin } from './helpers'
 import { useSharedStyles, stateSelector } from '../helpers'
 import { routesPaths } from '@_utils/routes'
 import { ZenRouteID } from '@_utils/routes/types'
+import Link from 'next/link'
 
 const LoginContainer = () => {
   const { openSnackbar, setIsLoading, setIsLogged } = useConfigStore(stateSelector)
   const router = useRouter()
-  const classes = useSharedStyles()
 
   useEffect(() => {
     setIsLoading(false)
@@ -25,19 +25,13 @@ const LoginContainer = () => {
     router.push(routesPaths[ZenRouteID.DASHBOARD].path)
   }, [router.push])
 
-  const goToRegister = useCallback(() => {
-    router.push(routesPaths[ZenRouteID.REQUEST_ACCOUNT].path)
-  }, [router.push])
-
-  const goToForgotPassword = useCallback(() => {
-    router.push(routesPaths[ZenRouteID.REQUEST_RESET_PASSWORD].path)
-  }, [router.push])
-
   const formik = useFormik({
     initialValues: {},
     validationSchema: schema,
     onSubmit: onLogin({ openSnackbar, setIsLoading, setIsLogged, goToHome })
   })
+
+  const classes = useSharedStyles({ isSubmitting: formik.isSubmitting })
 
   return (
     <Grid container justify='space-between' alignItems='center' direction='column' className={classes.main}>
@@ -68,22 +62,16 @@ const LoginContainer = () => {
             className={classes.submit}>
                Login
           </Button>
-          <Button
-            onClick={goToForgotPassword}
-            fullWidth
-            color='primary'
-            disabled={formik.isSubmitting}
-            className={classes.submit}>
-               Forgot password?
-          </Button>
-          <Button
-            onClick={goToRegister}
-            fullWidth
-            color='primary'
-            disabled={formik.isSubmitting}
-            className={classes.submit}>
-               Create an account
-          </Button>
+          <Grid container justify='center' style={{ marginTop: '2em' }} item xs={12}>
+            <Link passHref href={routesPaths[ZenRouteID.REQUEST_RESET_PASSWORD].path}>
+              <a className={classes.link}>Forgot password?</a>
+            </Link>
+          </Grid>
+          <Grid container justify='center' style={{ marginTop: '2em' }} item xs={12}>
+            <Link passHref href={routesPaths[ZenRouteID.REQUEST_ACCOUNT].path}>
+              <a className={classes.link}>Create an account</a>
+            </Link>
+          </Grid>
         </form>
       </Grid>
       <Copyright />

@@ -13,6 +13,8 @@ import { setLocale } from 'yup'
 // css
 import 'nprogress/nprogress.css'
 import '@_components/_ZenMenu/MobileMenu/Navbar/Navbar.css'
+import '@_components/AnimatedSuccess/Success.css'
+
 
 setLocale({
 	mixed: {

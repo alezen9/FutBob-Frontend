@@ -1,4 +1,5 @@
 import { makeStyles, Theme } from '@material-ui/core'
+import { ZenPalette } from '@_palette'
 import { ConfigStore } from '@_zustand/config/helpers'
 
 export const useSharedStyles = makeStyles((theme: Theme) => ({
@@ -10,7 +11,7 @@ export const useSharedStyles = makeStyles((theme: Theme) => ({
 	form: {
 		width: '100%',
 		maxWidth: 300,
-		marginTop: theme.spacing(1)
+      margin: theme.spacing(1, 'auto')
    },
    formRegister: {
 		width: '100%',
@@ -27,7 +28,16 @@ export const useSharedStyles = makeStyles((theme: Theme) => ({
 	submit: {
 		margin: theme.spacing(3, 0, 2)
 	},
+   link: (props: any) => ({
+      color: ZenPalette.typographyGrey,
+      margin: 'auto',
+      ...props.isSubmitting && {
+         opacity: 0.5,
+         pointerEvents: 'none'
+      }
+   }),
 	logo: {
+      zIndex: -1,
 		position: 'fixed',
 		bottom: '-40vh',
 		left: '-10vw',

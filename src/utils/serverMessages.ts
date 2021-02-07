@@ -11,6 +11,7 @@ export const ServerMessage = Object.freeze({
   user_code_not_verified: 'Unverified user',
   user_user_not_exists_or_code_already_verified: 'Code already used or user does not exist',
   user_user_not_confirmed: 'Unverified user',
+  invalid_code_or_not_yet_expired: 'User not exists or code is still valid',
   user_password_not_confirmed: 'Passwords don\'t match',
   user_update_not_possible: 'User update is not possible',
   player_update_failed: 'Update failed',

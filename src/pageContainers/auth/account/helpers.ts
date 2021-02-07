@@ -83,3 +83,20 @@ export const schemaFinalizeAccount = yup.object().shape({
    password: yup.string().required(),
 	confirmPassword: yup.string().required().oneOf([yup.ref('password')], 'Passwords must match')
 })
+
+/** RESEND */
+
+export const onResendCode = ({ openSnackbar, setIsLoading, setEmailSent, code }) => async () => {
+	setIsLoading(true)
+	try {
+      await apiInstance.auth.requestRegistrationEmailResend(code)
+      setEmailSent(true)
+	} catch (error) {
+      console.log(error)
+		openSnackbar({
+			variant: 'error',
+			message: get(ServerMessage, error, ServerMessage.generic)
+		})
+	}
+	setIsLoading(false)
+}
