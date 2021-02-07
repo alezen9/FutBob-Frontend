@@ -32,6 +32,7 @@ const FinalizeAccountContainer = () => {
     initialValues: {
       unverifiedCode: router.query.code
     },
+    enableReinitialize: true,
     validationSchema: schemaFinalizeAccount,
     onSubmit: onFinalizeAccount({ openSnackbar, setIsLoading, goToHome, setIsLogged })
   })

@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useMemo, ReactNode, useCallback, ReactNodeArray, ReactChildren, ReactChild } from 'react'
+import React, { useState, Fragment, useMemo, ReactNode, useCallback } from 'react'
 import TextField from '@material-ui/core/TextField'
 import { makeStyles } from '@material-ui/core/styles'
 import { FormControl, FormHelperText, Grid, IconButton, InputAdornment, Chip, FormControlLabel, GridSpacing } from '@material-ui/core'
@@ -11,10 +11,10 @@ import InputPhone from './InputPhone'
 import InputAddress from './InputAddress'
 import InputAsyncAutocomplete from './InputAsyncAutocomplete'
 import InputSwitch from './InputSwitch'
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import InputAutocomplete from './InputAutocomplete'
 import InputSlider from './InputSlider'
-import { ZenPalette } from '@_palette'
+import InputDate from './InputDate'
 
 const useStyles = makeStyles(theme => ({
   gridWrapper: {
@@ -260,7 +260,6 @@ const FormikInput = (props: Props) => {
             props.setFieldValue(name, newValues.filter(({ value }) => value !== -1))
           }
         } else {
-           console.log(d)
           props.setFieldTouched(name, true, false)
           props.setFieldValue(name, e.target.value, true)
         }
@@ -368,38 +367,17 @@ const FormikInput = (props: Props) => {
         </GridWrapper>
       )
     case 'date':
-      const onDateChange = e => {
-        const v: string = e.target.value
-        const isValidDate = dayjs(v).isValid()
-        if (isValidDate) {
-          const isoDate = dayjs(v).toISOString()
-          props.setFieldTouched(name, true, false)
-          props.setFieldValue(name, isoDate)
-        }
+      const onDateChange = (date: Dayjs) => {
+         const isoDate = dayjs(date).isValid()
+            ? dayjs(date).toISOString()
+            : null
+         props.setFieldTouched(name, true, false)
+         props.setFieldValue(name, isoDate)
       }
-      const _v = dayjs(get(values, name, '')).isValid()
-        ? dayjs(get(values, name, '')).format('YYYY-MM-DD')
-        : ''
       return (
         <GridWrapper {...props}>
           <FormControl variant={variant} className={formControl} {...{ style }}>
-            <TextField
-              id={id}
-              name={name}
-              label={label}
-              type='date'
-              InputLabelProps={{
-                shrink: true
-              }}
-              value={_v}
-              onChange={onDateChange}
-              margin='normal'
-              disabled={disabled}
-              helperText={helperText}
-              error={!!get(errors, name, false)}
-              variant={variant}
-            />
-            {get(errors, name, false) && <FormHelperText margin='dense' style={{ color: 'red' }} id={`${id}_error`}>{get(errors, name, '')}</FormHelperText>}
+            <InputDate {...defaultProps} onChange={onDateChange} />
           </FormControl>
         </GridWrapper>
       )
