@@ -22,9 +22,9 @@ const Private: React.FC<TabProps> = props => {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <Grid item container justify='center' style={{ margin:'auto' }} spacing={3} sm={10}>
+      <Grid item container style={{ margin:'auto' }} spacing={3}>
         <FormikInput
-          sm={6}
+          sm={4}
           name='oldPassword'
           label='Current password'
           type='password'
@@ -32,9 +32,17 @@ const Private: React.FC<TabProps> = props => {
           {...formik}
         />
         <FormikInput
-          sm={6}
+          sm={4}
           name='newPassword'
           label='New password'
+          type='password'
+          required
+          {...formik}
+        />
+        <FormikInput
+          sm={4}
+          name='confirmPassword'
+          label='Confirm password'
           type='password'
           required
           {...formik}

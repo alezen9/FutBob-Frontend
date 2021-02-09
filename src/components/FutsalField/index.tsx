@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Players from './Players'
 import { get } from 'lodash'
-import { Switch } from '@material-ui/core'
+import { Switch, Typography } from '@material-ui/core'
 import { FormikValues } from 'formik'
 import { FormikEssentials } from '@_components/FormikInput'
 
@@ -153,19 +153,19 @@ type Props = Partial<FormikEssentials> & {
 }
 
 const FutsalField = (props: Props) => {
-  const { withPlayers = true, positions = [], onPositionClick, onTypeChange, name, values, setFieldValue, setFieldTouched, type = 'outdoor' } = props
+  const { withPlayers = true, positions = [], onPositionClick, onTypeChange, name, values, errors, setFieldValue, setFieldTouched, type = 'outdoor' } = props
   const [outDoor, setOutDoor] = useState(type === 'outdoor')
   const { wrapper, typeSwitch, fieldWrapper, field, lines1, lines2, trackClass } = useStyles({ indoor: !outDoor })
 
   const vals: number[] = useMemo(() => get(values, name, positions) || [], [name, positions, values])
 
-  const setVal = useCallback(
-    val => {
-      if (setFieldValue && setFieldTouched && name) {
-        setFieldTouched(name, true, false)
-        setFieldValue(name, val, false)
-      }
-    }, [setFieldValue, setFieldTouched, name])
+   const setVal = useCallback(
+      val => {
+         if (setFieldValue && setFieldTouched && name) {
+            setFieldValue(name, val, false)
+               .then(() => setFieldTouched(name, true))
+         }
+      }, [setFieldValue, setFieldTouched, name])
 
   const onPositionClickFormik = useCallback(
     (pos: number) => {
@@ -186,6 +186,7 @@ const FutsalField = (props: Props) => {
   }, [onTypeChange])
 
   return (
+   <>
     <div className={wrapper}>
       <div className={fieldWrapper}>
         <div className={field}>
@@ -198,6 +199,8 @@ const FutsalField = (props: Props) => {
         </div>
       </div>
     </div>
+    {get(errors, name, null) && <Typography variant='body2' color='error' style={{ fontSize: '.85em' }} align='center'>Select at least one option</Typography>}
+    </>
   )
 }
 

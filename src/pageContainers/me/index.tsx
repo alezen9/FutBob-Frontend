@@ -14,7 +14,6 @@ import _Registry from './1_Registry'
 export type TabProps = {
    item: User
    setIsLoading: (isLoading: boolean) => void
-   openSnackbar: (data: setSnackbarData) => void
    updateMyRegistry: (body: UpdateRegistryInput) => Promise<boolean>
    updateMyPassword: (body: ChangePasswordInput) => Promise<boolean>
    createMyPlayer: (body: CreatePlayerInput) => Promise<boolean>
@@ -23,23 +22,19 @@ export type TabProps = {
 }
 
 const MeContainer = () => {
-  const { openSnackbar, setIsLoading } = useConfigStore(state => ({
-    openSnackbar: state.openSnackbar,
-    setIsLoading: state.setIsLoading
-  }))
+  const setIsLoading = useConfigStore(state => state.setIsLoading)
 
   const { item, updateMyRegistry, updateMyPassword, createMyPlayer, updateMyPlayer, deleteMyPlayer } = useSWRMe()
 
   const tabProps = useMemo(() => ({
     item,
-    openSnackbar,
     setIsLoading,
     updateMyRegistry,
     updateMyPassword,
     createMyPlayer,
     updateMyPlayer,
     deleteMyPlayer
-  }), [item, openSnackbar, setIsLoading, updateMyRegistry, updateMyPassword, createMyPlayer, updateMyPlayer, deleteMyPlayer])
+  }), [JSON.stringify(item), setIsLoading, updateMyRegistry, updateMyPassword, createMyPlayer, updateMyPlayer, deleteMyPlayer])
 
   return (
     <ZenTabs>
@@ -51,10 +46,10 @@ const MeContainer = () => {
         title='Private'
         component={<Private {...tabProps} />}
       />
-      {/* <ZenTab
+      <ZenTab
         title='Player'
         component={<Player {...tabProps} />}
-      /> */}
+      />
     </ZenTabs>
   )
 }

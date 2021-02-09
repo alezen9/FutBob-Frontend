@@ -100,10 +100,13 @@ export const useSWRMe = <T extends MoreOptions>(options?: T) => {
 			try {
 				const _id = await apiInstance.player.create(body)
 				mutateThis((draft: User) => {
-					draft.player._id = _id
-					if (![null, undefined].includes(body.state)) draft.player.state = body.state
-					draft.player.positions = body.positions
-					draft.player.score = body.score
+               // @ts-ignore
+               draft.player = {
+                  _id,
+                  state: body.state,
+                  positions: body.positions,
+                  score: body.score
+               }
 				})
             openSnackbar({
 					variant: 'success',

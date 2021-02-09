@@ -1,19 +1,16 @@
-import { PlayerPosition, PlayerScore } from '@_SDK_Player/types'
+import { Defense, Pace, Passing, Physical, PlayerPosition, PlayerScore, Shooting, Technique } from '@_SDK_Player/types'
 import { reduce } from 'lodash'
+import { RadarChartData } from '@_components/Charts/Radar'
+import { zenToolboxInstance } from './Toolbox'
 
-export const getPlayerOverall = (score: PlayerScore, positions: PlayerPosition[]): number => {
-	const zoneOverall = reduce(
+export const getPlayerOverall = (score: PlayerScore, positions: PlayerPosition[]): { overall: number, chartData: RadarChartData[] } => {
+   const { chartData, ...zoneOverall } = reduce(
 		score,
 		(acc, val, key) => {
 			// calcolo media ponderata della categoria corrente
-			const keyMean = reduce(
-				val,
-				(acc1, val1, key1) => {
-					acc1 += val1 * lvl1Coeff[key][key1]
-					return acc1
-				},
-				0
-			)
+         const keyMean = getKeyMean(val, key)
+         // aggiungo a chartData i valori che poi andrò a visualizzare nel grafico in dettaglio player
+         acc.chartData.push({ prop: zenToolboxInstance.capitalize(key), value: Math.trunc(keyMean) })
 			// calcolo media ponderata della categoria corrente secondo le zone del campo
 			acc[Zone.Back] += keyMean * lvl2Coeff[key][Zone.Back]
 			acc[Zone.Center] += keyMean * lvl2Coeff[key][Zone.Center]
@@ -23,7 +20,8 @@ export const getPlayerOverall = (score: PlayerScore, positions: PlayerPosition[]
 		{
 			[Zone.Back]: 0,
 			[Zone.Center]: 0,
-			[Zone.Forward]: 0
+			[Zone.Forward]: 0,
+         chartData: [] as RadarChartData[]
 		}
 	)
 	// sistemo in ordine di importanza i ruoli del giocatore secondo la zona del campo interessata
@@ -33,7 +31,7 @@ export const getPlayerOverall = (score: PlayerScore, positions: PlayerPosition[]
 				positions,
 				(acc, val) => {
 					if ([PlayerPosition.FutsalLeftWing, PlayerPosition.FutsalRightWing].includes(val)) acc.push(Zone.Center)
-					else if ([PlayerPosition.FutsalBack].includes(val)) acc.push(Zone.Back)
+					else if ([PlayerPosition.FutsalBack, PlayerPosition.FutsalGoalKeeper].includes(val)) acc.push(Zone.Back)
 					else if ([PlayerPosition.FutsalForward].includes(val)) acc.push(Zone.Forward)
 					return acc
 				},
@@ -52,7 +50,19 @@ export const getPlayerOverall = (score: PlayerScore, positions: PlayerPosition[]
 		0
 	)
 
-	return overall
+	return { overall: Math.trunc(overall), chartData }
+}
+
+type SingleScoreVal = Pace|Shooting|Passing|Technique|Defense|Physical
+
+export const getKeyMean = (val: SingleScoreVal, key: string, truncate = false) => {
+   const keyMean = reduce(val, (acc1, val1, key1) => {
+      acc1 += val1 * lvl1Coeff[key][key1]
+      return acc1
+   }, 0)
+   return truncate
+      ? Math.trunc(keyMean)
+      : keyMean
 }
 
 enum Zone {

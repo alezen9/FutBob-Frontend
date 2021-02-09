@@ -153,6 +153,11 @@ const FormikInput = (props: Props) => {
 
   const toggleShowMemoized = useCallback((e: any) => toggleShow(state => !state), [])
 
+  const _setFieldValueTouched = useCallback((name: string, value: any) => {
+     props.setFieldValue(name, value, true)
+      .then(() => props.setFieldTouched(name, true, false))
+  }, [props.setFieldValue, props.setFieldTouched])
+
   const PasswordAdornment = () => <InputAdornment position='end' >
     <IconButton aria-label='Show/Hide password' onClick={toggleShowMemoized}>
       {show ? <LockOpen /> : <Lock />}
@@ -166,8 +171,7 @@ const FormikInput = (props: Props) => {
   switch (type) {
     case 'slider':
       const onSliderChange = (e, d: number) => {
-        props.setFieldTouched(name, true, false)
-        props.setFieldValue(name, d, true)
+        _setFieldValueTouched(name, d)
       }
       return (
         <GridWrapper {...props} container spacing={2} gridStyle={{ margin: '0 0 10px 0', padding: 0 }}>
@@ -176,8 +180,7 @@ const FormikInput = (props: Props) => {
       )
     case 'address':
       const onAddressChange = v => {
-        props.setFieldTouched(name, true, false)
-        props.setFieldValue(name, v, true)
+         _setFieldValueTouched(name, v)
       }
       return (
         <GridWrapper {...props} container spacing={2} gridStyle={{ margin: '0 0 10px 0', padding: 0 }}>
@@ -192,8 +195,7 @@ const FormikInput = (props: Props) => {
       break
     case 'phone':
       const onChangePhone = (v: string) => {
-        props.setFieldTouched(name, true, false)
-        props.setFieldValue(name, v, true)
+        _setFieldValueTouched(name, v)
       }
       return (
         <GridWrapper {...props}>
@@ -204,8 +206,7 @@ const FormikInput = (props: Props) => {
       )
     case 'checkbox':
       const onChangeCheckbox = (e, d: boolean) => {
-        props.setFieldTouched(name, true, false)
-        props.setFieldValue(name, d, true)
+        _setFieldValueTouched(name, d)
         if (supplementaryOnChange) supplementaryOnChange(e, e.target.checked)
       }
       return (
@@ -226,8 +227,7 @@ const FormikInput = (props: Props) => {
       )
     case 'switch':
       const onChangeSwitch = (e, d: boolean) => {
-        props.setFieldTouched(name, true, false)
-        props.setFieldValue(name, d, true)
+        _setFieldValueTouched(name, d)
       }
       return (
         <GridWrapper {...props}>
@@ -252,22 +252,18 @@ const FormikInput = (props: Props) => {
            const __label = get(d, 'props.children.props.children.props.label', get(d, 'props.children.props.children', '-'))
           const _v = { value: __value, label: __label }
           if (_v.value === -1) {
-            props.setFieldTouched(name, true, false)
-            props.setFieldValue(name, [_v])
+            _setFieldValueTouched(name, [_v])
           } else if (_v.value !== null) {
-            const newValues = [...new Set([...get(values, name, []), _v])]
-            props.setFieldTouched(name, true, false)
-            props.setFieldValue(name, newValues.filter(({ value }) => value !== -1))
+            const newValues = [...new Set([...get(values, name, []), _v])].filter(({ value }) => value !== -1)
+            _setFieldValueTouched(name, newValues)
           }
         } else {
-          props.setFieldTouched(name, true, false)
-          props.setFieldValue(name, e.target.value, true)
+          _setFieldValueTouched(name, e.target.value)
         }
       }
 
       const handleChipDelete = v => () => {
-        props.setFieldTouched(name, true, false)
-        props.setFieldValue(name, [...get(values, name, []).filter(val => val.value !== v)])
+        _setFieldValueTouched(name, [...get(values, name, []).filter(val => val.value !== v)])
       }
 
       const renderChips = () => (get(values, name, []) || []).map((chip, i) => {
@@ -295,18 +291,15 @@ const FormikInput = (props: Props) => {
         if(props.multiple) {
           const selectedAValue = get(e, 'target.value', null) === 0 // 0 for selected value
           if(selectedAValue) {
-            props.setFieldValue(name, d || [])
-              .then(() => props.setFieldTouched(name, true, false))
+            _setFieldValueTouched(name, d || [])
           }
         } else {
-          props.setFieldValue(name, d)
-            .then(() => props.setFieldTouched(name, true, false))
+            _setFieldValueTouched(name, d)
         }
       }
 
       const handleChipDeleteAutoCompleteMultiple = (v) => () => {
-        props.setFieldValue(name, [...get(values, name, []).filter(val => val.value !== v)])
-         .then(() => props.setFieldTouched(name, true, false))
+         _setFieldValueTouched(name, [...get(values, name, []).filter(val => val.value !== v)])
       }
 
       const renderChipsAutoCompleteMultiple = () => get(values, name, []).map((chip, i) => {
@@ -333,17 +326,14 @@ const FormikInput = (props: Props) => {
         if (props.multiple) {
           const currentVals = get(values, name, [])
           const newVals = compact(uniqBy([...currentVals, ...d], 'value'))
-          props.setFieldValue(name, newVals)
-            .then(() => props.setFieldTouched(name, true))
+            _setFieldValueTouched(name, newVals)
         } else {
-          props.setFieldValue(name, d)
-            .then(() => props.setFieldTouched(name, true))
+            _setFieldValueTouched(name, d)
         }
       }
 
       const handleChipDelete3 = (v) => () => {
-        props.setFieldTouched(name, true, false)
-        props.setFieldValue(name, [...get(values, name, []).filter(val => val.value !== v)])
+        _setFieldValueTouched(name, [...get(values, name, []).filter(val => val.value !== v)])
       }
 
       const renderChips3 = (): JSX.Element[] => compact(get(values, name, []).map(chip => {
@@ -371,8 +361,7 @@ const FormikInput = (props: Props) => {
          const isoDate = dayjs(date).isValid()
             ? dayjs(date).toISOString()
             : null
-         props.setFieldTouched(name, true, false)
-         props.setFieldValue(name, isoDate)
+         _setFieldValueTouched(name, isoDate)
       }
       return (
         <GridWrapper {...props}>
@@ -398,8 +387,7 @@ const FormikInput = (props: Props) => {
           className={textField}
           value={get(values, name, '') || ''}
           onChange={e => {
-            props.setFieldTouched(name, true, false)
-            handleChange(e)
+            _setFieldValueTouched(name, e.target.value)
             if (supplementaryOnChange) supplementaryOnChange(e.target.value)
           }}
           margin='normal'

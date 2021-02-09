@@ -4,6 +4,7 @@ import { get, reduce } from 'lodash'
 import SingleScore from './SingleScore'
 import { FormikEssentials } from '..'
 import { zenToolboxInstance } from '@_utils/Toolbox'
+import { PlayerScore } from '@_SDK_Player/types'
 
 type Props = {
   gridProps: GridProps
@@ -14,17 +15,18 @@ const PlayerScoreInputs = (props: Props) => {
   const { gridProps = {}, formik } = props
 
   const items = useMemo(() => {
-    const score = get(formik, 'values.score', {})
-    return reduce(score, (acc, val, key) => {
-      const el = {
-        key: `${key}-score`,
-        title: zenToolboxInstance.decamelize(key),
-        name: key,
-        values: val
-      }
-      return [...acc, el]
-    }, [])
-  }, [get(formik, 'values.score', {})])
+      const score = get(formik, 'values.score', {}) as PlayerScore
+      return reduce(score, (acc, val, key) => {
+         const el = {
+         key: `${key}-score`,
+         title: zenToolboxInstance.decamelize(key),
+         name: key,
+         values: val
+         }
+         acc.push(el)
+         return acc
+      }, [])
+  }, [JSON.stringify(get(formik, 'values.score', {}))])
 
   return (
     <Grid style={{ margin: 'auto' }} container spacing={3} item xs={12} sm={6} justify='center' {...gridProps}>

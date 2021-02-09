@@ -11,6 +11,8 @@ import GpsFixedOutlinedIcon from '@material-ui/icons/GpsFixedOutlined'
 import AllInclusiveIcon from '@material-ui/icons/AllInclusive'
 import { FormikEssentials } from '..'
 import ZenDialog from '@_components/ZenDialog'
+import { Defense, Pace, Passing, Physical, Shooting, Technique } from '@_SDK_Player/types'
+import { getKeyMean } from '@_utils/playerOverall'
 
 const iconProps = {
   style: {
@@ -26,17 +28,6 @@ const ScoreValuesIconMap = {
   Defense: <DefenseIcon {...iconProps} />,
   Physical: <PhysicalIcon {...iconProps} />,
   Technique: <AllInclusiveIcon {...iconProps} />
-}
-
-export const getMeanScoreField = fieldData => {
-  const { nItems, totVal } = reduce(fieldData, (acc, value) => ({
-    nItems: acc.nItems + 1,
-    totVal: acc.totVal + value
-  })
-  , { nItems: 0, totVal: 0 })
-  return nItems === 0
-    ? 0
-    : Math.trunc(totVal / nItems)
 }
 
 const useStyles = makeStyles(theme => ({
@@ -56,44 +47,42 @@ const useStyles = makeStyles(theme => ({
 type Props = {
   title?: string
   name: string
-  values?: {
-    [field: string]: number
-  }
+  values: Pace|Shooting|Passing|Technique|Defense|Physical
   formik: FormikEssentials
 }
 
 const SingleScore = (props: Props) => {
-  const { title = '-', name, values = {}, formik } = props
+  const { title = '-', name, values, formik } = props
   const classes = useStyles()
   const [openSliders, setOpenSliders] = useState(false)
   const [initialVals, setInitialVals] = useState(get(formik, `values.score.${name}`, {}))
 
-  useEffect(() => {
-    if (!openSliders) setInitialVals(get(formik, `values.score.${name}`, {}))
-  }, [get(formik, `values.score.${name}`, {})])
-
-  const cancelChanges = useCallback(
-    () => {
-      formik.setFieldValue(`score.${name}`, initialVals, false)
-    }, [initialVals, formik.setFieldValue])
-
   const toggleSliders = useCallback(
-    (_cancelChanges: boolean = true) => () => {
+   () => {
       setOpenSliders(state => !state)
-      if (_cancelChanges) cancelChanges()
-    }, [cancelChanges])
+   }, [])
 
-  const { score, color } = useMemo(() => {
-    const score = getMeanScoreField(values)
+   const cancelChanges = useCallback(() => {
+      formik.setFieldValue(`score.${name}`, initialVals, false)
+      setOpenSliders(false)
+   }, [initialVals, formik.setFieldValue])
+
+   const confirmChanges = useCallback(() => {
+      setInitialVals(get(formik, `values.score.${name}`, {}))
+      setOpenSliders(false)
+   }, [get(formik, `values.score.${name}`, {})])
+
+  const { keyMean, color } = useMemo(() => {
+    const keyMean = getKeyMean(values, name, true)
     return {
-      score,
-      color: getScoreColor(score)
+      keyMean,
+      color: getScoreColor(keyMean)
     }
   }, [values])
 
   return (
       <>
-        <Grid onClick={toggleSliders(false)} className={classes.mainWrapper} container item xs={6} sm={4}>
+        <Grid onClick={toggleSliders} className={classes.mainWrapper} container item xs={6} sm={4}>
           <Grid className={classes.main} item container xs={12}>
             <Grid item xs={12} style={{ display: 'flex', alignItems: 'center' }}>
               {ScoreValuesIconMap[title] || 'A'}
@@ -103,18 +92,18 @@ const SingleScore = (props: Props) => {
             </Grid>
             <Grid item xs={12}>
               <Typography variant='h3' align='right' style={{ color }}>
-                {score}
+                {keyMean}
               </Typography>
             </Grid>
           </Grid>
         </Grid>
         <ZenDialog
           open={openSliders}
-          onClose={toggleSliders()}
+          onClose={cancelChanges}
           title={title}
           fullScreen={false}
           content={<SlidersDialogContent formik={formik} name={name} />}
-          actions={<SlidersDialogActions cancelChanges={toggleSliders()} confirmChanges={toggleSliders(false)} />}
+          actions={<SlidersDialogActions cancelChanges={cancelChanges} confirmChanges={confirmChanges} />}
         />
     </>
   )
