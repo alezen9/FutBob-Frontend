@@ -45,6 +45,6 @@ export const allItem = `{
 }`
 
 export const allList = `{
-   result { ${allItem} },
+   result ${allItem},
    totalCount
 }`

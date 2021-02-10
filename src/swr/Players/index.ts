@@ -12,6 +12,7 @@ import { ServerMessage } from '@_utils/serverMessages'
 import { User } from '@_SDK_User/types'
 import { Player } from '@_SDK_Player/types'
 
+
 interface PlayersMoreOptions extends MoreOptions {
 	filters?: FiltersPlayer
 	pagination: Pagination
@@ -43,6 +44,10 @@ export const useSWRPlayers = <T extends PlayersMoreOptions>(options?: T) => {
 		[trigger, filtersKey, paginationKey]
 	)
 
+   const setDetailCache = useCallback((item: Player) => {
+      cache.set([SwrKey.PLAYER, item._id], item)
+   }, [])
+
 	// SHORTCUT LIST
 	const deletePlayer = useCallback(
 		async (_id: string, isMe?: boolean) => {
@@ -72,6 +77,7 @@ export const useSWRPlayers = <T extends PlayersMoreOptions>(options?: T) => {
 		totalCount: get(data, 'totalCount', 0),
 		trigger: triggerThis,
 		deletePlayer,
+      setDetailCache,
 		isValidating
 	}
 }

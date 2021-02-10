@@ -9,11 +9,11 @@ export enum ZenRouteID {
    ME = 'ME',
    PLAYERS = 'PLAYERS',
    PLAYER_CREATE = 'PLAYER_CREATE',
-   PLAYER_EDIT = 'PLAYER_EDIT',
+   PLAYER_DETAIL = 'PLAYER_DETAIL',
    FREE_AGENTS = 'FREE_AGENTS',
    FIELDS = 'FIELDS',
    FIELDS_CREATE = 'FIELDS_CREATE',
-   FIELDS_EDIT = 'FIELDS_EDIT'
+   FIELDS_DETAIL = 'FIELDS_DETAIL'
    // APPOINTMENTS = 'APPOINTMENTS',
    // STATISTICS = 'STATISTICS'
 }
@@ -37,6 +37,7 @@ export type ZenRoute = {
    _id: ZenRouteID
    title: string
    path: string
+   as?: (...args: any) => string
    isPrivate: boolean
    section?: ZenSection
    subpaths?: ZenSubRoute[]
