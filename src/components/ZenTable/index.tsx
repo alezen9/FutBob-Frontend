@@ -46,7 +46,6 @@ const CustomTable = React.memo((props: TableProps) => {
   const [tableId] = useState(uniqueId('table-'))
   const [lastStickyIndex, setLastStickyIndex] = useState(0)
 
-
   const { _headers = [], _data = [], _isUserIndexRow } = useMemo(():SetDataOut => {
     if (!headers.length) {
       return {

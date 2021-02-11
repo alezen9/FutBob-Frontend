@@ -30,7 +30,7 @@ export const getPlayerDataRow = ({ openDialog, goToDetails, userConnectedId }) =
       <OverallScore value={overall} style={{ transform: 'scale(.75)' }} />
       {`${playerData.user.registry.surname} ${playerData.user.registry.name}`}
     </span>,
-    fullName: `${get(playerData, 'user.registry.surname', '-')} ${get(playerData, 'user.registry.name', '-')}`,
+    fullName: `${playerData.user.registry.surname} ${playerData.user.registry.name}`,
     physicalState: PhysicalStateOpts.find(({ value }) => value === get(playerData, 'state', 0)).component,
     age: dayjs().diff(playerData.user.registry.dateOfBirth, 'years'),
     phone: playerData.user.registry.phone,

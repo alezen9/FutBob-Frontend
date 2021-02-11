@@ -1,9 +1,8 @@
 import React, { useState, useMemo, Fragment, useCallback, ReactNode, ReactElement } from 'react'
 import { Button, Grid, Tooltip, IconButton, Menu, MenuItem, makeStyles, TableCell, Collapse, TableRow, useTheme, useMediaQuery } from '@material-ui/core'
-import { uniqueId, get } from 'lodash'
+import { uniqueId, get, map, compact } from 'lodash'
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
 import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
-import cleanDeep from 'clean-deep'
 import TypographyLabel from '../TypographyLabel'
 import { zenToolboxInstance } from '@_utils/Toolbox'
 
@@ -298,21 +297,51 @@ export const MobileRowCell = React.memo((props: MobileRowCellProps) => {
         })}
       </TableRow>
       <TableRow className={classes.collapsableMobileRow}>
-        <TableCell className={classes.collapsableMobileRowCell} colSpan={withActions ? 2 : 1}>
-          <Collapse in={open} timeout='auto' unmountOnExit>
-            <Grid container spacing={2} style={{ marginBottom: '1em', paddingLeft: 16 }}>
-              {Object.entries(cleanDeep(row, { cleanValues: ['-', '', ' '] })).filter(([key, val]) => key !== mainName).map(([key, val], i) => {
-                const found = _headers.find(({ name, id }) => (id || name) && zenToolboxInstance.camelize(id || name) === key)
-                return key === 'actions'
-                  ? <Fragment key={`el-${key}-${uniqueId()}-${i}`} />
-                  : <TypographyLabel key={`el-${key}-${uniqueId()}-${i}`} label={found.name} value={get(val, 'props.stringData', val) || '-'} {...get(val, 'props.typoGraphyLabelPropsForward', {})} sm={6} />
-              })}
-            </Grid>
-          </Collapse>
-        </TableCell>
+         <CollapsableCell
+         open={open}
+         mainName={mainName}
+         colSpan={withActions ? 2 : 1}
+         _headers={_headers}
+         row={row} />
       </TableRow>
     </>
   )
+})
+
+
+type CollapsableCellProps = {
+   open: boolean
+   mainName: string
+   colSpan: number
+   row: TableRowData
+   _headers: TableHeaderData[]
+}
+
+const CollapsableCell = React.memo((props: CollapsableCellProps) => {
+   const { open = false, mainName = '', colSpan = 1, row = {}, _headers = [] } = props
+   const classes = useStyles()
+
+   const data = useMemo(() => {
+      const res = map(row, (val, key) => {
+         if(['actions', mainName].includes(key) || ['-', '', ' '].includes(val)) return null
+         const found = _headers.find(({ name, id }) => (id || name) && zenToolboxInstance.camelize(id || name) === key)
+         return <TypographyLabel
+         key={`el-${key}-${uniqueId()}`}
+         label={found.name}
+         value={get(val, 'props.stringData', val) || '-'}
+         {...get(val, 'props.typoGraphyLabelPropsForward', {})}
+         sm={6} />
+      })
+      return compact(res)
+   }, [row, mainName, _headers.length])
+   
+   return <TableCell className={classes.collapsableMobileRowCell} colSpan={colSpan}>
+      <Collapse in={open} timeout='auto' unmountOnExit>
+         <Grid container spacing={2} style={{ margin: '1em auto', paddingLeft: 16 }}>
+            {data}
+         </Grid>
+      </Collapse>
+   </TableCell>
 })
 
 

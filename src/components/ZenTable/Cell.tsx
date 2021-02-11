@@ -1,7 +1,6 @@
 import React, { ReactElement, useMemo } from 'react'
 import { makeStyles, TableCell, useMediaQuery, useTheme } from '@material-ui/core'
 import { ZenPalette } from '@_palette'
-import { get } from 'lodash'
 
 type Props = {
   name?: string
@@ -28,9 +27,6 @@ const useStyles = makeStyles(theme => ({
         } : {
           background: ZenPalette.tableCellBackground
         }
-        // background: props.isHeader
-        //   ? ZenPalette.tableHeaderCellBackground
-        //   : ZenPalette.tableCellBackground
       },
       ...props.isLastStickyColumn && {
         '&:after': {
@@ -78,7 +74,6 @@ const ZenTableCell = (props: Props) => {
       style={inlineStyles}>
       {component || name}
     </TableCell>
-    {/* {sticky && !isSmallScreen && <TableCell {...isHeader && { className: classes.bgCellHeader }} style={{ ...headerStyles, ...style }}></TableCell>} */}
     </>
   )
 }
