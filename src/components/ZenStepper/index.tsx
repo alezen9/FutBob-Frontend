@@ -27,7 +27,7 @@ type Props = {
   resetButton?: ReactElement
 }
 
-const ZenStepper = (props: Props) => {
+const ZenStepper: React.FC<Props> = props => {
   const { children = [], safeGuard, OnCompleteStep, disableNext, disablePrev, resetButton } = props
   const { updateStatus } = (props.flowConfig || {}) as StepperFlowConfig
   const classes = useStyles()
@@ -102,7 +102,6 @@ type ZenStepProps = {
   component: ReactNode
 }
 
-// @ts-ignore
 export const ZenStep = (props: ZenStepProps) => <div {...props} />
 
 const useCustomIconStyles = makeStyles(theme => ({

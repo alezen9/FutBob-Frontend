@@ -8,6 +8,10 @@ export enum Sex {
 export class Credentials {
 	email: string
 }
+
+export type AdditionalInfo = {
+   email?: string
+}
 export class Registry {
 	name: string
 	surname: string
@@ -15,6 +19,7 @@ export class Registry {
 	sex: Sex
 	country: string
 	phone: string
+   additionalInfo?: AdditionalInfo
 }
 export class User {
 	_id: string

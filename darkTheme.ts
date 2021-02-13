@@ -233,7 +233,12 @@ const darkTheme = createMuiTheme({
         color: configColors.typographyColor.dark,
         borderRadius,
         fontSize: 14,
-        borderColor: borderColor
+        borderColor: borderColor,
+        '&$disabled': {
+          backgroundColor: 'transparent',
+          borderColor: 'rgba(255,255,255,.1)',
+          color: 'rgba(255,255,255,.1)'
+        }
       },
       text: {
         '&:hover': {

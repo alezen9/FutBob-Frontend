@@ -47,15 +47,16 @@ const useStyles = makeStyles(theme => ({
 type Props = {
   title?: string
   name: string
+  formikName: string
   values: Pace|Shooting|Passing|Technique|Defense|Physical
   formik: FormikEssentials
 }
 
 const SingleScore = (props: Props) => {
-  const { title = '-', name, values, formik } = props
+  const { title = '-', name, formikName, values, formik } = props
   const classes = useStyles()
   const [openSliders, setOpenSliders] = useState(false)
-  const [initialVals, setInitialVals] = useState(get(formik, `values.score.${name}`, {}))
+  const [initialVals, setInitialVals] = useState(get(formik, `values.${formikName}`, {}))
 
   const toggleSliders = useCallback(
    () => {
@@ -63,14 +64,14 @@ const SingleScore = (props: Props) => {
    }, [])
 
    const cancelChanges = useCallback(() => {
-      formik.setFieldValue(`score.${name}`, initialVals, false)
+      formik.setFieldValue(`${formikName}.${name}`, initialVals, false)
       setOpenSliders(false)
    }, [initialVals, formik.setFieldValue])
 
    const confirmChanges = useCallback(() => {
-      setInitialVals(get(formik, `values.score.${name}`, {}))
+      setInitialVals(get(formik, `values.${formikName}.${name}`, {}))
       setOpenSliders(false)
-   }, [get(formik, `values.score.${name}`, {})])
+   }, [get(formik, `values.${formikName}.${name}`, {})])
 
   const { keyMean, color } = useMemo(() => {
     const keyMean = getKeyMean(values, name, true)
@@ -102,7 +103,7 @@ const SingleScore = (props: Props) => {
           onClose={cancelChanges}
           title={title}
           fullScreen={false}
-          content={<SlidersDialogContent formik={formik} name={name} />}
+          content={<SlidersDialogContent formik={formik} name={name} formikName={formikName} />}
           actions={<SlidersDialogActions cancelChanges={cancelChanges} confirmChanges={confirmChanges} />}
         />
     </>

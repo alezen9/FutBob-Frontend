@@ -84,7 +84,7 @@ const Controls = (props: Props) => {
                </IconButton>
             :  <Button color='primary' variant='outlined' disabled={activeStep === 0 || disablePrev} onClick={handleBack}>
                   <ArrowBackIosRoundedIcon style={{ marginRight: '.5em', fontSize: '.85em' }} />
-                  Indietro
+                  Back
                </Button>
          }
          nextButton={
@@ -93,7 +93,7 @@ const Controls = (props: Props) => {
                      <ArrowForwardIosRoundedIcon />
                   </IconButton>
                :   <Button disabled={disableNext} color='primary' variant='outlined' onClick={handleNext}>
-                     Avanti
+                     Next
                      <ArrowForwardIosRoundedIcon style={{ marginLeft: '.5em', fontSize: '.85em' }} />
                   </Button>
          }

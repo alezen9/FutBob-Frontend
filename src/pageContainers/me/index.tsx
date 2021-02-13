@@ -18,23 +18,25 @@ export type TabProps = {
    updateMyPassword: (body: ChangePasswordInput) => Promise<boolean>
    createMyPlayer: (body: CreatePlayerInput) => Promise<boolean>
    updateMyPlayer: (body: UpdatePlayerInput) => Promise<boolean>
+   updateMyEmail: (newEmail: string) => Promise<boolean>
    deleteMyPlayer: (_id: string) => Promise<boolean>
 }
 
 const MeContainer = () => {
   const setIsLoading = useConfigStore(state => state.setIsLoading)
 
-  const { item, updateMyRegistry, updateMyPassword, createMyPlayer, updateMyPlayer, deleteMyPlayer } = useSWRMe()
+  const { item, updateMyRegistry, updateMyPassword, updateMyEmail, createMyPlayer, updateMyPlayer, deleteMyPlayer } = useSWRMe()
 
   const tabProps = useMemo(() => ({
     item,
     setIsLoading,
     updateMyRegistry,
     updateMyPassword,
+    updateMyEmail,
     createMyPlayer,
     updateMyPlayer,
     deleteMyPlayer
-  }), [JSON.stringify(item), setIsLoading, updateMyRegistry, updateMyPassword, createMyPlayer, updateMyPlayer, deleteMyPlayer])
+  }), [JSON.stringify(item), setIsLoading, updateMyRegistry, updateMyPassword, updateMyEmail, createMyPlayer, updateMyPlayer, deleteMyPlayer])
 
   return (
     <ZenTabs>

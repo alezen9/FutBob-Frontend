@@ -14,7 +14,8 @@ const Registry: React.FC<TabProps> = props => {
   const {
     item: { _id, registry, credentials: { email } },
     setIsLoading,
-    updateMyRegistry
+    updateMyRegistry,
+    updateMyEmail
   } = props
 
   const initCountry = useMemo(() => {
@@ -28,7 +29,7 @@ const Registry: React.FC<TabProps> = props => {
        initialValues: { _id, ...registry, email },
       _id, ...registry, country: initCountry, email },
     enableReinitialize: true,
-    onSubmit: onUpdateMyRegistry({ setIsLoading, updateMyRegistry }),
+    onSubmit: onUpdateMyRegistry({ setIsLoading, updateMyRegistry, updateMyEmail }),
     validationSchema: schema
   })
 

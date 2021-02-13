@@ -42,6 +42,14 @@ class UserServer {
 		return this._server.API({ query, name: 'User_changeMyPassword', params: body })
 	}
 
+   async changeMyEmail(newEmail: string): Promise<boolean> {
+		const query = `
+      mutation {
+         User_changeMyEmail(newEmail: "${newEmail}")
+      }`
+		return this._server.API({ query, name: 'User_changeMyEmail', params: newEmail })
+	}
+
 	async delete(_id: string): Promise<boolean> {
 		const query = `
       mutation {

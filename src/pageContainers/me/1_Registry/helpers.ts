@@ -8,7 +8,7 @@ import dayjs from 'dayjs'
 import { WithInitialValues } from '@_utils/types'
 import { zenToolboxInstance } from '@_utils/Toolbox'
 
-export const onUpdateMyRegistry = ({ setIsLoading, updateMyRegistry  }) => async (
+export const onUpdateMyRegistry = ({ setIsLoading, updateMyRegistry, updateMyEmail }) => async (
 	values: WithInitialValues<UpdateRegistryInput & { country: OptionType }>,
 	helpers: FormikHelpers<any>
 ) => {
@@ -19,9 +19,13 @@ export const onUpdateMyRegistry = ({ setIsLoading, updateMyRegistry  }) => async
       ...values.country && { country: get(values, 'country.value', 'IT') }
    })
    const { initialValues, ...rest } = body
-   const diff = zenToolboxInstance.v2_deepDiff(initialValues, rest)
+   const diff = zenToolboxInstance.v2_deepDiff(initialValues, rest) as UpdateRegistryInput
    let done = true
-   if(!isEmpty(diff)) done = await updateMyRegistry({ _id: initialValues._id, ...diff })
+   if(!isEmpty(diff)) {
+      const { email, ...rest } = diff
+      if(email) await updateMyEmail(diff.email)
+      done = await updateMyRegistry({ _id: initialValues._id, ...rest })
+   }
 	setIsLoading(false)
 	helpers.setSubmitting(false)
    if(done) helpers.setTouched({}, false)

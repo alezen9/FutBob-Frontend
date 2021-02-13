@@ -65,9 +65,25 @@ export const useSWRMe = <T extends MoreOptions>(options?: T) => {
 				})
             return false
 			}
-		},
-		[openSnackbar]
-	)
+		},[openSnackbar])
+
+   const updateMyEmail = useCallback(
+		async (newEmail: string) => {
+			try {
+				await apiInstance.user.changeMyEmail(newEmail)
+            openSnackbar({
+					variant: 'success',
+					message: 'Email updated successfully'
+				})
+            return true
+			} catch (error) {
+				openSnackbar({
+					variant: 'error',
+					message: get(ServerMessage, error, ServerMessage.generic)
+				})
+            return false
+			}
+		},[openSnackbar])
 
 	const updateMyRegistry = useCallback(
 		async (body: UpdateRegistryInput) => {
@@ -91,9 +107,7 @@ export const useSWRMe = <T extends MoreOptions>(options?: T) => {
 				})
             return false
 			}
-		},
-		[openSnackbar]
-	)
+		},[openSnackbar])
 
 	const createMyPlayer = useCallback(
 		async (body: CreatePlayerInput) => {
@@ -120,9 +134,7 @@ export const useSWRMe = <T extends MoreOptions>(options?: T) => {
 				})
             return false
 			}
-		},
-		[openSnackbar, mutateThis]
-	)
+		},[openSnackbar, mutateThis])
 
 	const updateMyPlayer = useCallback(
 		async (body: UpdatePlayerInput) => {
@@ -145,9 +157,7 @@ export const useSWRMe = <T extends MoreOptions>(options?: T) => {
 				})
             return false
 			}
-		},
-		[openSnackbar, mutateThis]
-	)
+		},[openSnackbar, mutateThis])
 
 	const deleteMyPlayer = useCallback(
 		async (_id: string) => {
@@ -168,15 +178,14 @@ export const useSWRMe = <T extends MoreOptions>(options?: T) => {
 				})
             return false
 			}
-		},
-		[openSnackbar]
-	)
+		},[openSnackbar])
 
 	return {
 		item: (data || {}) as User,
 		trigger: triggerThis,
 		updateMyPassword,
 		updateMyRegistry,
+      updateMyEmail,
 		createMyPlayer,
 		updateMyPlayer,
 		deleteMyPlayer

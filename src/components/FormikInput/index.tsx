@@ -77,6 +77,7 @@ export type FormikEssentials = {
   handleSubmit?: any
   setTouched?: any
   resetForm?: any
+  isSubmitting?: boolean
 }
 
 

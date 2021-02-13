@@ -33,7 +33,7 @@ export const privateRoutes: ZenRoute[] = [
       path: '/players/create'
    },
    {
-      _id: ZenRouteID.PLAYER_EDIT,
+      _id: ZenRouteID.PLAYER_DETAIL,
       section: ZenSection.PLAYERS,
       isPrivate: true,
       title: 'Edit player',
@@ -64,7 +64,7 @@ export const privateRoutes: ZenRoute[] = [
       path: '/fields/create'
    },
    {
-      _id: ZenRouteID.FIELDS_EDIT,
+      _id: ZenRouteID.FIELDS_DETAIL,
       section: ZenSection.FIELDS,
       isPrivate: true,
       title: 'Edit player',

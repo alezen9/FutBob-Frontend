@@ -36,11 +36,12 @@ const scoreProperties = {
 
 type ContentProps = {
   name: string
+  formikName: string
   formik: FormikEssentials
 }
 
 export const SlidersDialogContent = React.memo((props: ContentProps) => {
-  const { name, formik } = props
+  const { name, formikName, formik } = props
 
   return <Grid container>
     {get(scoreProperties, name, []).map((field, i) => (
@@ -48,7 +49,7 @@ export const SlidersDialogContent = React.memo((props: ContentProps) => {
         sm={12}
         key={`${field}-formik-${i}-${name}`}
         type='slider'
-        name={`score.${name}.${field}`}
+        name={`${formikName}.${name}.${field}`}
         label={zenToolboxInstance.decamelize(field)}
         {...formik}
       />

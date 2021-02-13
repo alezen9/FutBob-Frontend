@@ -1,18 +1,17 @@
-import { Sex } from './types'
+import { AdditionalInfo, Sex } from './types'
 
 export class ChangePasswordInput {
 	oldPassword: string
 	newPassword: string
 }
-
 export class CreateUserInput {
 	name: string
 	surname: string
 	dateOfBirth: string | Date
 	sex: Sex
 	country: string
-	email?: string
 	phone: string
+   additionalInfo?: AdditionalInfo
 }
 export class UpdateRegistryInput {
 	_id: string
@@ -21,6 +20,7 @@ export class UpdateRegistryInput {
 	dateOfBirth?: string | Date
 	sex?: Sex
 	country?: string
-	email?: string
 	phone?: string
+   email?: string
+   additionalInfo?: AdditionalInfo
 }

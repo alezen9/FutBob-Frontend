@@ -8,25 +8,27 @@ import { PlayerScore } from '@_SDK_Player/types'
 
 type Props = {
   gridProps: GridProps
+  name?: string
   formik: FormikEssentials
 }
 
 const PlayerScoreInputs = (props: Props) => {
-  const { gridProps = {}, formik } = props
+  const { gridProps = {}, name = 'score', formik } = props
 
   const items = useMemo(() => {
-      const score = get(formik, 'values.score', {}) as PlayerScore
+      const score = get(formik, `values.${name}`, {}) as PlayerScore
       return reduce(score, (acc, val, key) => {
          const el = {
-         key: `${key}-score`,
-         title: zenToolboxInstance.decamelize(key),
-         name: key,
-         values: val
+            key: `${key}-score`,
+            title: zenToolboxInstance.decamelize(key),
+            name: key,
+            formikName: name,
+            values: val
          }
          acc.push(el)
          return acc
       }, [])
-  }, [JSON.stringify(get(formik, 'values.score', {}))])
+  }, [name, JSON.stringify(get(formik, `values.${name}`, {}))])
 
   return (
     <Grid style={{ margin: 'auto' }} container spacing={3} item xs={12} sm={6} justify='center' {...gridProps}>
