@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core/styles'
 import Players from './Players'
 import { get } from 'lodash'
 import { Switch, Typography } from '@material-ui/core'
-import { FormikValues } from 'formik'
 import { FormikEssentials } from '@_components/FormikInput'
 
 const useStyles = makeStyles(theme => {
@@ -149,11 +148,12 @@ type Props = Partial<FormikEssentials> & {
    onPositionClick?: () => any
    onTypeChange?: (newType: string) => void
    name?: string
-   type: 'indoor'|'outdoor'
+   type?: 'indoor'|'outdoor'
+   hideSwitch?: boolean
 }
 
-const FutsalField = (props: Props) => {
-  const { withPlayers = true, positions = [], onPositionClick, onTypeChange, name, values, errors, setFieldValue, setFieldTouched, type = 'outdoor' } = props
+const FutsalField: React.FC<Props> = props => {
+  const { withPlayers = true, positions = [], onPositionClick, onTypeChange, name, values, errors, setFieldValue, setFieldTouched, type = 'outdoor', hideSwitch = false } = props
   const [outDoor, setOutDoor] = useState(type === 'outdoor')
   const { wrapper, typeSwitch, fieldWrapper, field, lines1, lines2, trackClass } = useStyles({ indoor: !outDoor })
 
@@ -194,9 +194,9 @@ const FutsalField = (props: Props) => {
           <div className={lines2} />
           {withPlayers && <Players values={vals} onClick={onPositionClickFormik || onPositionClick} />}
         </div>
-        <div className={typeSwitch}>
+        {!hideSwitch && <div className={typeSwitch}>
           <Switch classes={{ track: trackClass }} color='primary' checked={outDoor} onChange={toggleField} />
-        </div>
+        </div>}
       </div>
     </div>
     {get(errors, name, null) && <Typography variant='body2' color='error' style={{ fontSize: '.85em' }} align='center'>Select at least one option</Typography>}

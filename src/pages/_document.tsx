@@ -37,11 +37,10 @@ export default class MyDocument extends Document {
           <meta name='application-name' content='FutBob' />
           <meta name='msapplication-TileColor' content='#00aba9' />
           <meta name='theme-color' content='#222' />
+          {/* Fonts */}
+          <link href='https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;700&display=swap' rel='stylesheet' />
+          <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap' />
 
-          <link
-            rel='stylesheet'
-            href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap'
-          />
           <style global jsx>
             {`
 							@font-face {

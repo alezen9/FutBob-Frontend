@@ -12,7 +12,7 @@ import { routesPaths } from '@_utils/routes'
 import { ZenRouteID } from '@_utils/routes/types'
 import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
-import EmailSentSuccessfully from '../EmailSentSuccessfully'
+import SuccessAnimationCheck from '@_components/SuccessAnimationCheck'
 
 const ForgotPasswordContainter = () => {
   const { openSnackbar, setIsLoading } = useConfigStore(stateSelector)
@@ -40,7 +40,9 @@ const ForgotPasswordContainter = () => {
         <FutBobLogo style={{ fontSize: '4em' }} />
         <AnimatePresence exitBeforeEnter>
           {emailSent
-            ? <EmailSentSuccessfully key='success-request-password' />
+            ? <SuccessAnimationCheck
+              message='An email has been sent to you, please take appropriate action.'
+              key='success-send-password' />
             : <motion.div
               key='form-forgot-password'
               style={{ width: '100%' }}

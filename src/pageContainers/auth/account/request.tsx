@@ -13,8 +13,8 @@ import { ZenRouteID } from '@_utils/routes/types'
 import { CountriesOpts } from '@_utils/constants/CountriesOpts'
 import { SexOpts } from '@_utils/constants/SexOpts'
 import Link from 'next/link'
-import EmailSentSuccessfully from '../EmailSentSuccessfully'
 import { AnimatePresence, motion } from 'framer-motion'
+import SuccessAnimationCheck from '@_components/SuccessAnimationCheck'
 
 const RequestAccountContainer = () => {
   const { openSnackbar, setIsLoading } = useConfigStore(stateSelector)
@@ -42,7 +42,9 @@ const RequestAccountContainer = () => {
         <FutBobLogo style={{ fontSize: '4em' }} />
         <AnimatePresence exitBeforeEnter>
           {emailSent
-            ? <EmailSentSuccessfully key='success-send-account' />
+            ? <SuccessAnimationCheck
+              message='An email has been sent to you, please take appropriate action.'
+              key='success-send-account' />
             : <motion.div
               key='form-request-account'
               initial={{ opacity: 0 }}

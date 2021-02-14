@@ -15,6 +15,8 @@ type Props = {
 const _Skills: React.FC<Props> = props => {
    const { formik } = props
 
+   console.log(formik.errors)
+
   const { overall, chartData } = useMemo(() => {
     const { player: { score, positions = [] } } = formik.values
     const { overall, chartData } = getPlayerOverall(score, positions)
@@ -44,7 +46,6 @@ const _Skills: React.FC<Props> = props => {
         <FutsalField
           type='outdoor'
           name='player.positions'
-          hideSwitch
           {...formik} />
       </Grid>
     </Grid>

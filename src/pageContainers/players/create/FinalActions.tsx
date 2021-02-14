@@ -4,28 +4,39 @@ import ZenDialog from '@_components/ZenDialog'
 import React, { useCallback, useState } from 'react'
 import KeyboardBackspaceRoundedIcon from '@material-ui/icons/KeyboardBackspaceRounded'
 import { ZenPalette } from '@_palette'
+import ClearRoundedIcon from '@material-ui/icons/ClearRounded'
 
 type ResetStepperBtnProps = {
-  onClick?: VoidFunction
+  reset?: VoidFunction
   onReset?: VoidFunction
+  onBack?: VoidFunction
   formik: FormikEssentials
 }
 
+const resetStyle = {
+   color: ZenPalette.error,
+   borderColor: ZenPalette.error,
+   marginLeft: '1em'
+}
+
 const ResetStepperBtn: React.FC<ResetStepperBtnProps> = props=> {
-  const { onClick, onReset, formik } = props
+  const { reset, onReset, onBack, formik } = props
   const [openDialog, setOpenDialog] = useState(false)
 
   const handleClick = useCallback((force?: boolean) => () => {
     if(!force) setOpenDialog(true)
     else {
       if(onReset) onReset()
-      if(onClick) onClick()
+      if(reset) reset()
     }
-  }, [onClick, onReset])
+  }, [reset, onReset])
 
   return (
     <>
-    <Button disabled={formik.isSubmitting} onClick={handleClick()} startIcon={<KeyboardBackspaceRoundedIcon />} variant='outlined' >
+   {onBack && <Button disabled={formik.isSubmitting} onClick={onBack} startIcon={<KeyboardBackspaceRoundedIcon />} variant='outlined' >
+      Back
+    </Button>}
+    <Button disabled={formik.isSubmitting} onClick={handleClick()} startIcon={<ClearRoundedIcon />} variant='outlined' {...onBack && { style: resetStyle }} >
       Cancel
     </Button>
     <ZenDialog

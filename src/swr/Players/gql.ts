@@ -10,7 +10,10 @@ export const allItem = `{
          dateOfBirth,
          sex,
          country,
-         phone
+         phone,
+         additionalInfo {
+            email
+         }
       }
    },
    score {

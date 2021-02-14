@@ -104,6 +104,7 @@ class ColorPalette {
    backgroundColorStandOut: string
    tableCellBackground: string
    tableHeaderCellBackground: string
+   shineBackgroundImage: string
 
 
   constructor (themeType: ThemeType = ThemeType.light) {
@@ -186,7 +187,10 @@ class ColorPalette {
       : '#e3e3e3'
     this.draggableDraggingBackground = this.themeType === ThemeType.dark
       ? '#575757'
-      : '#b5b5b5'
+      : '#b5b5b5',
+   this.shineBackgroundImage = this.themeType === ThemeType.dark
+      ? 'linear-gradient(110deg, transparent 33%, rgba(255,255,255,0.7) 50%, transparent 66%)'
+      : 'linear-gradient(110deg, transparent 33%, rgba(255,255,255,0.7) 50%, transparent 66%)'
   }
 }
 

@@ -12,8 +12,8 @@ import { useSharedStyles, stateSelector } from '../helpers'
 import { routesPaths } from '@_utils/routes'
 import { ZenRouteID } from '@_utils/routes/types'
 import Link from 'next/link'
-import EmailSentSuccessfully from '../EmailSentSuccessfully'
 import { AnimatePresence, motion } from 'framer-motion'
+import SuccessAnimationCheck from '@_components/SuccessAnimationCheck'
 
 const FinalizeAccountContainer = () => {
   const { openSnackbar, setIsLoading, setIsLogged } = useConfigStore(stateSelector)
@@ -49,7 +49,9 @@ const FinalizeAccountContainer = () => {
         <FutBobLogo style={{ fontSize: '4em' }} />
         <AnimatePresence exitBeforeEnter>
           {emailSent
-            ? <EmailSentSuccessfully key='success-resend-account' />
+            ? <SuccessAnimationCheck
+              message='An email has been sent to you, please take appropriate action.'
+              key='success-resend-account' />
             : <motion.div
               key='form-finalize'
               style={{ width: '100%' }}

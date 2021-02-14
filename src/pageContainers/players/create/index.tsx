@@ -10,8 +10,11 @@ import OfflineBoltRoundedIcon from '@material-ui/icons/OfflineBoltRounded'
 import _Registry from './1_Registry'
 import _Final_Save from './3_Final_Save'
 import _Skills from './2_Skills'
-import { schema } from './helpers'
-import ResetStepperBtn from './ResetStepperBtn'
+import { schema, createPlayer } from './helpers'
+import FinalActions from './FinalActions'
+import { useConfigStore } from '@_zustand/config'
+import { ConfigStore } from '@_zustand/config/helpers'
+import { useRouter } from 'next/router'
 
 type StepType = 'registry'|'skills'
 
@@ -19,8 +22,15 @@ const steps: StepType[] = ['registry', 'skills']
 
 const stepperConfig = { steps }
 
+const stateSelector = (state: ConfigStore) => ({
+	openSnackbar: state.openSnackbar,
+	setIsLoading: state.setIsLoading
+})
+
 const CreatePlayerContainer = () => {
-   const { status, flowConfig, resetStatus } = useStepperFlow<StepType>(stepperConfig)
+   const { status, flowConfig, backOneFromFinal, resetStatus } = useStepperFlow<StepType>(stepperConfig)
+   const { openSnackbar, setIsLoading } = useConfigStore(stateSelector)
+   const router = useRouter()
 
    const formik = useFormik({
       initialValues: {
@@ -30,7 +40,7 @@ const CreatePlayerContainer = () => {
          }
       },
       validationSchema: schema,
-      onSubmit: () => {}
+      onSubmit: createPlayer({ openSnackbar, setIsLoading, router })
    })
 
    const onReset = useCallback(() => {
@@ -63,10 +73,10 @@ const CreatePlayerContainer = () => {
       <Grid container justify='center'>
          <ZenStepper
             flowConfig={flowConfig}
-            OnCompleteStep={<_Final_Save formik={formik} />}
+            OnCompleteStep={<_Final_Save {...{ formik }} />}
             disableNext={disableNext}
             disablePrev={disablePrev}
-            resetButton={<ResetStepperBtn {...{ onReset, formik }} />}
+            FinalActions={<FinalActions {...{ onReset, onBack: backOneFromFinal, formik }} />}
          >
             <ZenStep
                title='Registry'

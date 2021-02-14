@@ -15,7 +15,7 @@ type Props = {
    nSteps: number
    disableNext?: boolean
    disablePrev?: boolean
-   resetButton?: ReactElement
+   FinalActions?: ReactElement
 }
 
 const useStyles = makeStyles(theme => ({
@@ -58,15 +58,15 @@ const useStyles = makeStyles(theme => ({
 const selectorConfigStore = (state: ConfigStore) => state.menuOpen
 
 const Controls = (props: Props) => {
-   const { handleBack, handleNext, handleReset, nSteps, activeStep, disableNext, disablePrev, resetButton } = props
+   const { handleBack, handleNext, handleReset, nSteps, activeStep, disableNext, disablePrev, FinalActions } = props
    const isMenuOpen = useConfigStore(selectorConfigStore)
    const classes = useStyles({ isMenuOpen })
    const isSmallScreen = useMediaQuery('(max-width: 850px)')
    return <Grid item xs={12} className={classes.gridContainer}>
       {activeStep === nSteps
       ?  <div className={classes.endBtnContainer}>
-         {resetButton
-            ?  React.cloneElement(resetButton, { onClick: handleReset })
+         {FinalActions
+            ?  React.cloneElement(FinalActions, { reset: handleReset })
             :  <Button startIcon={<DoneAllRoundedIcon />} color='primary' variant='outlined' size='small' onClick={handleReset}>
                   Fine
                </Button>}

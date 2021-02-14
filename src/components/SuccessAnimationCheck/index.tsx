@@ -3,7 +3,12 @@ import { Grid, Typography } from '@material-ui/core'
 import { SuccessAnimated } from '@_components/AnimatedSuccess'
 import { motion } from 'framer-motion'
 
-const EmailSentSuccessfully = () => {
+type Props = {
+   message: string
+}
+
+const SuccessAnimationCheck: React.FC<Props> = props => {
+   const { message } = props
   return (
     <motion.div
       style={{ width: '100%' }}
@@ -15,11 +20,11 @@ const EmailSentSuccessfully = () => {
           <SuccessAnimated style={{ width: '7em', height: '7em' }} />
         </Grid>
         <Grid item xs={12} style={{ marginBottom: '5em' }}>
-          <Typography align='center'>An email has been sent to you, please take appropriate action.</Typography>
+          <Typography align='center'>{message}</Typography>
         </Grid>
       </Grid>
     </motion.div>
   )
 }
 
-export default React.memo(EmailSentSuccessfully)
+export default React.memo(SuccessAnimationCheck)

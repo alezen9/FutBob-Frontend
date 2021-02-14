@@ -4,34 +4,45 @@ import FormikInput, { FormikEssentials } from '@_components/FormikInput'
 import { CountriesOpts } from '@_utils/constants/CountriesOpts'
 import { SexOpts } from '@_utils/constants/SexOpts'
 import PlayerCard from '@_components/PlayerCard'
+import { useFormik } from 'formik'
+import { Player } from '@_SDK_Player/types'
+import { get } from 'lodash'
 
 
 type Props = {
-   formik: FormikEssentials
+   item: Player
+   isMe: boolean
+   // updatePlayerRegistry: any
 }
 
 const _Registry: React.FC<Props> = props => {
-  const { formik } = props
+   const { item, isMe } = props
+
+   const formik = useFormik({
+      initialValues: get(item, 'user.registry', {}),
+      enableReinitialize: true,
+      onSubmit: () => {}
+   })
 
   return (
       <Grid container spacing={3} style={{ margin:'auto' }}>
         <FormikInput
           sm={4}
-          name='user.name'
+          name='name'
           label='Name'
           required
           {...formik}
         />
         <FormikInput
           sm={4}
-          name='user.surname'
+          name='surname'
           label='Surname'
           required
           {...formik}
         />
         <FormikInput
           sm={4}
-          name='user.dateOfBirth'
+          name='dateOfBirth'
           label='Date of birth'
           type='date'
           required
@@ -39,7 +50,7 @@ const _Registry: React.FC<Props> = props => {
         />
         <FormikInput
           sm={4}
-          name='user.sex'
+          name='sex'
           label='Sex'
           type='select'
           options={SexOpts}
@@ -48,7 +59,7 @@ const _Registry: React.FC<Props> = props => {
         />
         <FormikInput
           sm={4}
-          name='user.phone'
+          name='phone'
           label='Phone'
           type='phone'
           required
@@ -56,8 +67,8 @@ const _Registry: React.FC<Props> = props => {
         />
         <FormikInput
           sm={4}
-          name='user.additionalInfo.email'
-          label='Email'
+          name='additionalInfo.email'
+          label={isMe ? 'Additional email' : 'Email'}
           {...formik}
         />
         <Hidden only='xs'>
@@ -65,7 +76,7 @@ const _Registry: React.FC<Props> = props => {
         </Hidden>
         <FormikInput
           sm={4}
-          name='user.country'
+          name='country'
           label='Nationality'
           type='autocomplete'
           options={CountriesOpts}

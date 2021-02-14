@@ -1,8 +1,5 @@
 import React, { useMemo } from 'react'
 import ZenTabs, { ZenTab } from '@_components/ZenTabs'
-// import General from './1_Registry'
-// import Private from './2_Private'
-// import Player from './3_Player'
 import { useSWRMe } from '@_swr/Me'
 import { useConfigStore } from '@_zustand/config'
 import { User } from '@_SDK_User/types'
@@ -11,6 +8,9 @@ import { ChangePasswordInput, UpdateRegistryInput } from '@_SDK_User/inputs'
 import { CreatePlayerInput, UpdatePlayerInput } from '@_SDK_Player/inputs'
 import { useSWRPlayer } from '@_swr/Players'
 import { useRouter } from 'next/router'
+import _Registry from './1_Registry'
+import _Skills from './2_Skills'
+import { get } from 'lodash'
 
 export type TabProps = {
    item: User
@@ -28,6 +28,11 @@ const PlayersContainer = () => {
   const setIsLoading = useConfigStore(state => state.setIsLoading)
 
   const { item, createPlayer, updatePlayer, deletePlayer } = useSWRPlayer(_id as string)
+  const { item: me } = useSWRMe()
+
+  const isMe = useMemo(() => {
+     return get(item, 'user._id', null) === me._id
+  }, [get(item, 'user._id', null), me._id])
 
 //   const tabProps = useMemo(() => ({
 //     item,
@@ -40,17 +45,17 @@ const PlayersContainer = () => {
 //   }), [JSON.stringify(item), setIsLoading, updateMyRegistry, updateMyPassword, createMyPlayer, updateMyPlayer, deleteMyPlayer])
 
   return (
-     <>players</>
-   //  <ZenTabs>
-   //    <ZenTab
-   //      title=''
-   //      component={<_Registry {...tabProps} />}
-   //    />
-   //    <ZenTab
-   //      title='Stats'
-   //      component={<Private {...tabProps} />}
-   //    />
-   //  </ZenTabs>
+    <ZenTabs>
+      <ZenTab
+        title='Registry'
+        component={<_Registry {...{ item, isMe }} />}
+      />
+      <ZenTab
+        title='Stats'
+      //   component={<_Skills {...{}} />}
+      component={<>player</>}
+      />
+    </ZenTabs>
   )
 }
 

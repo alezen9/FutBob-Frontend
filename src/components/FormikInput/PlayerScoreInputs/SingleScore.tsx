@@ -56,7 +56,7 @@ const SingleScore = (props: Props) => {
   const { title = '-', name, formikName, values, formik } = props
   const classes = useStyles()
   const [openSliders, setOpenSliders] = useState(false)
-  const [initialVals, setInitialVals] = useState(get(formik, `values.${formikName}`, {}))
+  const [initialVals, setInitialVals] = useState(values)
 
   const toggleSliders = useCallback(
    () => {
@@ -66,12 +66,13 @@ const SingleScore = (props: Props) => {
    const cancelChanges = useCallback(() => {
       formik.setFieldValue(`${formikName}.${name}`, initialVals, false)
       setOpenSliders(false)
-   }, [initialVals, formik.setFieldValue])
+   }, [JSON.stringify(initialVals), name, formik.setFieldValue])
 
    const confirmChanges = useCallback(() => {
-      setInitialVals(get(formik, `values.${formikName}.${name}`, {}))
+      const vals = get(formik, `values.${formikName}.${name}`, {})
+      setInitialVals(vals)
       setOpenSliders(false)
-   }, [get(formik, `values.${formikName}.${name}`, {})])
+   }, [JSON.stringify(get(formik, `values.${formikName}.${name}`, {})), name, formikName])
 
   const { keyMean, color } = useMemo(() => {
     const keyMean = getKeyMean(values, name, true)
@@ -79,7 +80,7 @@ const SingleScore = (props: Props) => {
       keyMean,
       color: getScoreColor(keyMean)
     }
-  }, [values])
+  }, [JSON.stringify(values), name])
 
   return (
       <>
