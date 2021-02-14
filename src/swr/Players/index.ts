@@ -11,6 +11,7 @@ import { CreatePlayerInput, FiltersPlayer, UpdatePlayerInput } from '@_SDK_Playe
 import { ServerMessage } from '@_utils/serverMessages'
 import { User } from '@_SDK_User/types'
 import { Player } from '@_SDK_Player/types'
+import { UpdateRegistryInput } from '@_SDK_User/inputs'
 
 
 interface PlayersMoreOptions extends MoreOptions {
@@ -120,27 +121,54 @@ export const useSWRPlayer = <T extends MoreOptions>(_id: string | null | undefin
 		[mutate]
 	)
 
-	const createPlayer = useCallback(
-		async (body: CreatePlayerInput) => {
+   const updatePlayerRegistry = useCallback(
+		async (body: UpdateRegistryInput, isMe?: boolean) => {
 			try {
-				const _id = await apiInstance.player.create(body)
+				await apiInstance.user.update(body)
 				mutateThis((draft: Player) => {
-					draft._id = _id
-					if (![null, undefined].includes(body.state)) draft.state = body.state
-					draft.positions = body.positions
-					draft.score = body.score
+					if (![null, undefined].includes(body.name)) draft.user.registry.name = body.name
+					if (![null, undefined].includes(body.surname)) draft.user.registry.surname  = body.surname
+					if (![null, undefined].includes(body.country)) draft.user.registry.country  = body.country
+					if (![null, undefined].includes(body.dateOfBirth)) draft.user.registry.dateOfBirth  = body.dateOfBirth
+					if (![null, undefined].includes(body.phone)) draft.user.registry.phone  = body.phone
+               if (![null, undefined].includes(body.sex)) draft.user.registry.sex  = body.sex
+               draft.user.registry.additionalInfo = {
+                  ...draft.user.registry.additionalInfo || {},
+                  ...body.additionalInfo || {}
+               }
 				})
+				if (isMe) {
+					mutateCache(
+						SwrKey.ME,
+						produce((draft: User) => {
+                     if (![null, undefined].includes(body.name)) draft.registry.name = body.name
+                     if (![null, undefined].includes(body.surname)) draft.registry.surname  = body.surname
+                     if (![null, undefined].includes(body.country)) draft.registry.country  = body.country
+                     if (![null, undefined].includes(body.dateOfBirth)) draft.registry.dateOfBirth  = body.dateOfBirth
+                     if (![null, undefined].includes(body.phone)) draft.registry.phone  = body.phone
+                     if (![null, undefined].includes(body.sex)) draft.registry.sex  = body.sex
+                     draft.registry.additionalInfo = {
+                        ...draft.registry.additionalInfo || {},
+                        ...body.additionalInfo || {}
+                     }
+                  })
+					)
+            }
+            openSnackbar({
+					variant: 'success',
+					message: 'Player registry updated successfully'
+				})
+            return true
 			} catch (error) {
 				openSnackbar({
 					variant: 'error',
 					message: get(ServerMessage, error, ServerMessage.generic)
 				})
+            return false
 			}
-		},
-		[openSnackbar, mutateThis]
-	)
+		}, [openSnackbar, mutateThis])
 
-	const updatePlayer = useCallback(
+	const updatePlayerSkills = useCallback(
 		async (body: UpdatePlayerInput, isMe?: boolean) => {
 			try {
 				await apiInstance.player.update(body)
@@ -149,7 +177,7 @@ export const useSWRPlayer = <T extends MoreOptions>(_id: string | null | undefin
 					if (![null, undefined].includes(body.state)) draft.state = body.state
 					if (![null, undefined].includes(body.score)) draft.score = body.score
 				})
-				if (isMe)
+				if (isMe){
 					mutateCache(
 						SwrKey.ME,
 						produce((draft: User) => {
@@ -158,15 +186,20 @@ export const useSWRPlayer = <T extends MoreOptions>(_id: string | null | undefin
 							if (![null, undefined].includes(body.score)) draft.player.score = body.score
 						})
 					)
+            }
+            openSnackbar({
+					variant: 'success',
+					message: 'Player skills updated successfully'
+				})
+            return true
 			} catch (error) {
 				openSnackbar({
 					variant: 'error',
 					message: get(ServerMessage, error, ServerMessage.generic)
 				})
+            return false
 			}
-		},
-		[openSnackbar, mutateThis]
-	)
+		}, [openSnackbar, mutateThis])
 
 	const deletePlayer = useCallback(
 		async (_id: string, isMe?: boolean) => {
@@ -180,22 +213,26 @@ export const useSWRPlayer = <T extends MoreOptions>(_id: string | null | undefin
 						})
 					)
 				cache.delete([SwrKey.PLAYER, _id])
+            openSnackbar({
+					variant: 'success',
+					message: 'Player deleted successfully'
+				})
+            return true
 			} catch (error) {
 				openSnackbar({
 					variant: 'error',
 					message: get(ServerMessage, error, ServerMessage.generic)
 				})
+            return false
 			}
-		},
-		[openSnackbar]
-	)
+		}, [openSnackbar])
 
 	return {
 		item: (data as Player) || ({} as Player),
 		mutate: mutateThis,
 		trigger: triggerThis,
-		createPlayer,
-		updatePlayer,
+		updatePlayerRegistry,
+      updatePlayerSkills,
 		deletePlayer
 	}
 }

@@ -17,6 +17,7 @@ import { routesPaths } from '@_utils/routes'
 import { ZenRouteID } from '@_utils/routes/types'
 import { ConfigStore } from '@_zustand/config/helpers'
 import { FiltersPlayer } from '@_SDK_Player/inputs'
+import { zenHooksInstance } from '@_utils/hooks'
 
 const stateSelector = (state: ConfigStore) => ({
   openSnackbar: state.openSnackbar,
@@ -32,8 +33,19 @@ const PlayersContainer = () => {
    const [openConfirmDelete, setOpenConfirmDelete] = useState(false)
    const { list = [], totalCount, deletePlayer, setDetailCache, isValidating } = useSWRPlayers({ filters, pagination: { skip: (currentPage - 1) * LIMIT, limit: LIMIT  } })
    const { item: { _id } } = useSWRMe()
-   const { openSnackbar, setIsLoading } = useConfigStore(stateSelector)
+   const { setIsLoading } = useConfigStore(stateSelector)
    const router = useRouter()
+   const isMounted = zenHooksInstance.useIsMounted()
+   
+   const onDelete = useCallback(async () => {
+     setIsLoading(true)
+     if(get(currentItem, '_id', null)) {
+        await deletePlayer(get(currentItem, '_id', null), get(currentItem, 'user._id', null) === _id)
+        router.push(routesPaths[ZenRouteID.PLAYERS].path)
+     }
+     if(isMounted.current) setOpenConfirmDelete(false)
+     setIsLoading(false)
+  }, [get(currentItem, '_id', null), deletePlayer, setIsLoading, _id])
 
    useEffect(() => {
       if(!router.query.page) {
@@ -133,7 +145,7 @@ const PlayersContainer = () => {
          open={openConfirmDelete}
          text={<>You are about to delete <span style={{ fontWeight: 'bold' }}>{playerName}</span>, continue and delete?</>}
          onClose={closeDialog}
-         onDelete={() => {}}
+         onDelete={onDelete}
       />
     </>
   )

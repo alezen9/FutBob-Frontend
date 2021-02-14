@@ -9,8 +9,8 @@ export const onSubmit = ({ setIsLoading, createMyPlayer, updateMyPlayer }) => as
    setIsLoading(true)
    helpers.setSubmitting(true)
    const { user, _id, ...body } = values
-   if(_id) updateMyPlayer({ ...body, _id })
-   else createMyPlayer({ ...body, user })
+   if(_id) await updateMyPlayer({ ...body, _id })
+   else await createMyPlayer({ ...body, user })
    console.log(values)
    helpers.setSubmitting(false)
    setIsLoading(false)

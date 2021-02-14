@@ -84,7 +84,7 @@ class ZenToolbox {
          for (const key of keys(fromObject)) {
             const currentPath = buildPath(path, fromObject, key)
             if (!has(toObject, key)) {
-            changes[currentPath] = { from: get(fromObject, key) }
+            changes[currentPath] = get(toObject, key, null)
             }
          }
 

@@ -39,6 +39,7 @@ export type ZenRoute = {
    path: string
    as?: (...args: any) => string
    displayBack?: boolean
+   backRouteID?: ZenRouteID
    isPrivate: boolean
    section?: ZenSection
    subpaths?: ZenSubRoute[]

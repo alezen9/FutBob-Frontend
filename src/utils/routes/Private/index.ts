@@ -30,6 +30,7 @@ export const privateRoutes: ZenRoute[] = [
       section: ZenSection.PLAYERS,
       isPrivate: true,
       displayBack: true,
+      backRouteID: ZenRouteID.PLAYERS,
       title: 'Create player',
       path: '/players/create'
    },
@@ -38,6 +39,7 @@ export const privateRoutes: ZenRoute[] = [
       section: ZenSection.PLAYERS,
       isPrivate: true,
       displayBack: true,
+      backRouteID: ZenRouteID.PLAYERS,
       title: 'Detail player',
       path: '/players/detail/:_id',
       as: ({ _id }) => `/players/detail/${_id}`
@@ -63,6 +65,7 @@ export const privateRoutes: ZenRoute[] = [
       section: ZenSection.FIELDS,
       isPrivate: true,
       displayBack: true,
+      backRouteID: ZenRouteID.FIELDS,
       title: 'Create field',
       path: '/fields/create'
    },
@@ -71,6 +74,7 @@ export const privateRoutes: ZenRoute[] = [
       section: ZenSection.FIELDS,
       isPrivate: true,
       displayBack: true,
+      backRouteID: ZenRouteID.FIELDS,
       title: 'Detail field',
       path: '/fields/detail/:_id',
       as: ({ _id }) => `/fields/detail/${_id}`

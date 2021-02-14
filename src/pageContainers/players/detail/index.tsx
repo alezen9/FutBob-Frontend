@@ -2,24 +2,22 @@ import React, { useMemo } from 'react'
 import ZenTabs, { ZenTab } from '@_components/ZenTabs'
 import { useSWRMe } from '@_swr/Me'
 import { useConfigStore } from '@_zustand/config'
-import { User } from '@_SDK_User/types'
-import { setSnackbarData } from '@_zustand/helpers'
-import { ChangePasswordInput, UpdateRegistryInput } from '@_SDK_User/inputs'
-import { CreatePlayerInput, UpdatePlayerInput } from '@_SDK_Player/inputs'
+import { UpdateRegistryInput } from '@_SDK_User/inputs'
+import { UpdatePlayerInput } from '@_SDK_Player/inputs'
 import { useSWRPlayer } from '@_swr/Players'
 import { useRouter } from 'next/router'
 import _Registry from './1_Registry'
 import _Skills from './2_Skills'
 import { get } from 'lodash'
+import { Player } from '@_SDK_Player/types'
 
 export type TabProps = {
-   item: User
+   item: Player
+   isMe: boolean,
    setIsLoading: (isLoading: boolean) => void
-   updateMyRegistry: (body: UpdateRegistryInput) => Promise<boolean>
-   updateMyPassword: (body: ChangePasswordInput) => Promise<boolean>
-   createMyPlayer: (body: CreatePlayerInput) => Promise<boolean>
-   updateMyPlayer: (body: UpdatePlayerInput) => Promise<boolean>
-   deleteMyPlayer: (_id: string) => Promise<boolean>
+   updatePlayerRegistry: (body: UpdateRegistryInput, isMe?: boolean) => Promise<boolean>
+   updatePlayerSkills: (body: UpdatePlayerInput, isMe?: boolean) => Promise<boolean>
+   deletePlayer: (_id: string, isMe?: boolean) => Promise<boolean>
 }
 
 const PlayersContainer = () => {
@@ -27,32 +25,31 @@ const PlayersContainer = () => {
    const { _id } = router.query
   const setIsLoading = useConfigStore(state => state.setIsLoading)
 
-  const { item, createPlayer, updatePlayer, deletePlayer } = useSWRPlayer(_id as string)
+  const { item, updatePlayerRegistry, updatePlayerSkills, deletePlayer } = useSWRPlayer(_id as string)
   const { item: me } = useSWRMe()
 
   const isMe = useMemo(() => {
      return get(item, 'user._id', null) === me._id
   }, [get(item, 'user._id', null), me._id])
 
-//   const tabProps = useMemo(() => ({
-//     item,
-//     setIsLoading,
-//     updateMyRegistry,
-//     updateMyPassword,
-//     createMyPlayer,
-//     updateMyPlayer,
-//     deleteMyPlayer
-//   }), [JSON.stringify(item), setIsLoading, updateMyRegistry, updateMyPassword, createMyPlayer, updateMyPlayer, deleteMyPlayer])
+  const tabProps = useMemo(() => ({
+    item,
+    setIsLoading,
+    isMe,
+    updatePlayerRegistry,
+    updatePlayerSkills,
+    deletePlayer
+  }), [JSON.stringify(item), setIsLoading, updatePlayerRegistry, updatePlayerSkills, deletePlayer])
 
   return (
     <ZenTabs>
       <ZenTab
         title='Registry'
-        component={<_Registry {...{ item, isMe }} />}
+        component={<_Registry {...tabProps} />}
       />
       <ZenTab
         title='Skills'
-        component={<_Skills {...{ item }} />}
+        component={<_Skills {...tabProps} />}
       />
       <ZenTab
         title='Stats'

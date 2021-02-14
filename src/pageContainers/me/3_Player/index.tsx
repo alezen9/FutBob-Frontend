@@ -14,6 +14,7 @@ import { PhysicalStateOpts } from '@_utils/constants/PhysicalStatusOpt'
 import { initialScoreValues } from '@_utils/constants/InitValuesPlayerScore'
 import { getPlayerOverall } from '@_utils/playerOverall'
 import { onSubmit, schema } from './helpers'
+import { zenHooksInstance } from '@_utils/hooks'
 
 const Player: React.FC<TabProps> = props => {
   const { item, setIsLoading, createMyPlayer, updateMyPlayer, deleteMyPlayer } = props
@@ -21,11 +22,14 @@ const Player: React.FC<TabProps> = props => {
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'))
+  const isMounted = zenHooksInstance.useIsMounted()
 
-  const onDelete = useCallback(() => {
-     if(get(player, '_id', null)) deleteMyPlayer(get(player, '_id', null))
-     setOpenConfirmDialog(false)
-  }, [get(player, '_id', null), deleteMyPlayer])
+  const onDelete = useCallback(async () => {
+     setIsLoading(true)
+     if(get(player, '_id', null)) await deleteMyPlayer(get(player, '_id', null))
+     if(isMounted.current) setOpenConfirmDialog(false)
+     setIsLoading(false)
+  }, [get(player, '_id', null), deleteMyPlayer, setIsLoading])
 
   const formik = useFormik({
     initialValues: {

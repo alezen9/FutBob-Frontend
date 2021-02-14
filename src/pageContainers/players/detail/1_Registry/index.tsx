@@ -1,22 +1,16 @@
 import React, { useMemo } from 'react'
-import { Grid, Hidden } from '@material-ui/core'
-import FormikInput, { FormikEssentials } from '@_components/FormikInput'
+import { Button, Grid, Hidden } from '@material-ui/core'
+import FormikInput from '@_components/FormikInput'
 import { CountriesOpts } from '@_utils/constants/CountriesOpts'
 import { SexOpts } from '@_utils/constants/SexOpts'
-import PlayerCard from '@_components/PlayerCard'
 import { useFormik } from 'formik'
-import { Player } from '@_SDK_Player/types'
-import { get } from 'lodash'
+import { get, isEmpty } from 'lodash'
+import { TabProps } from '..'
+import { onUpdatePlayerRegistry, schema } from './helpers'
 
 
-type Props = {
-   item: Player
-   isMe: boolean
-   // updatePlayerRegistry: any
-}
-
-const _Registry: React.FC<Props> = props => {
-   const { item, isMe } = props
+const _Registry: React.FC<TabProps> = props => {
+   const { item, isMe, setIsLoading, updatePlayerRegistry } = props
 
    const initCountry = useMemo(() => {
       const _country = get(item, 'user.registry.country', null)
@@ -27,14 +21,18 @@ const _Registry: React.FC<Props> = props => {
 
    const formik = useFormik({
       initialValues: {
+         initialValues: { _id: get(item, 'user._id', null), ...get(item, 'user.registry', {}) },
+         _id: get(item, 'user._id', null),
          ...get(item, 'user.registry', {}),
          country: initCountry
       },
       enableReinitialize: true,
-      onSubmit: () => {}
+      validationSchema: schema,
+      onSubmit: onUpdatePlayerRegistry({ isMe, setIsLoading, updatePlayerRegistry })
    })
 
   return (
+      <form onSubmit={formik.handleSubmit}>
       <Grid container spacing={3} style={{ margin:'auto' }}>
         <FormikInput
           sm={4}
@@ -78,7 +76,7 @@ const _Registry: React.FC<Props> = props => {
         <FormikInput
           sm={4}
           name='additionalInfo.email'
-          label={isMe ? 'Additional email' : 'Email'}
+          label='Email'
           {...formik}
         />
         <Hidden only='xs'>
@@ -96,7 +94,18 @@ const _Registry: React.FC<Props> = props => {
         <Hidden only='xs'>
           <Grid item xs={4} />
         </Hidden>
+        <Grid item xs={12} style={{display: 'flex', justifyContent: 'flex-end'}}>
+          <Button
+            style={{ minWidth: 150 }}
+            disabled={formik.isSubmitting || isEmpty(formik.touched)}
+            onClick={() => formik.handleSubmit()}
+            variant='contained'
+            color='primary'>
+                Update
+          </Button>
+        </Grid>
       </Grid>
+    </form>
   )
 }
 

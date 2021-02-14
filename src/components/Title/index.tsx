@@ -5,17 +5,23 @@ import { Button } from '@material-ui/core'
 import { useRouter } from 'next/router'
 import NavigateBeforeRoundedIcon from '@material-ui/icons/NavigateBeforeRounded'
 import { ZenPalette } from '@_palette'
+import { routesPaths } from '@_utils/routes'
 
 const Title = () => {
-  const { pageTitle, activeRoute } = useConfigStore(state => ({
+  const { pageTitle, activeRoute, prevRoute } = useConfigStore(state => ({
     pageTitle: state.pageTitle,
-    activeRoute: state.activeRoute
+    activeRoute: state.activeRoute,
+    prevRoute: state.prevRoute
   }))
   const router = useRouter()
 
   const goBack = useCallback(() => {
-    router.back()
-  }, [])
+    if (activeRoute.backRouteID === prevRoute._id) {
+      router.back()
+    } else {
+      router.push(routesPaths[activeRoute.backRouteID].path)
+    }
+  }, [JSON.stringify(activeRoute), JSON.stringify(prevRoute)])
 
   return (
     <Typography component='h2' variant='h6' color='primary' gutterBottom>

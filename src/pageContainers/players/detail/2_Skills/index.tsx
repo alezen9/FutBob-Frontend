@@ -1,30 +1,57 @@
-import React, { useMemo } from 'react'
-import { Grid } from '@material-ui/core'
+import React, { useCallback, useMemo, useState } from 'react'
+import { Grid, Button, Typography, useTheme, useMediaQuery } from '@material-ui/core'
+import { get, isEmpty } from 'lodash'
 import FutsalField from '@_components/FutsalField'
+import { useFormik } from 'formik'
 import FormikInput from '@_components/FormikInput'
 import RadarChart from '@_components/Charts/Radar'
 import { OverallScore } from '@_icons'
 import PlayerScoreInputs from '@_components/FormikInput/PlayerScoreInputs'
+import { TabProps } from '..'
+import { ZenPalette } from '@_palette'
+import ZenDialog from '@_components/ZenDialog'
 import { PhysicalStateOpts } from '@_utils/constants/PhysicalStatusOpt'
+import { initialScoreValues } from '@_utils/constants/InitValuesPlayerScore'
 import { getPlayerOverall } from '@_utils/playerOverall'
-import { Player } from '@_SDK_Player/types'
-import { useFormik } from 'formik'
+import { onUpdatePlayerSkills, schema } from './helpers'
+import { useRouter } from 'next/router'
+import { ZenRouteID } from '@_utils/routes/types'
+import { routesPaths } from '@_utils/routes'
+import { zenHooksInstance } from '@_utils/hooks'
 
-type Props = {
-   item: Player
-}
+const _Skills: React.FC<TabProps> = props => {
+  const { item, setIsLoading, isMe, updatePlayerSkills, deletePlayer } = props
+  const { user, ...player } = item
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
+  const theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'))
+  const router = useRouter()
+   const isMounted = zenHooksInstance.useIsMounted()
 
-const _Skills: React.FC<Props> = props => {
-   const { item: { user, ...player } } = props
+  const onDelete = useCallback(async () => {
+     setIsLoading(true)
+     if(get(player, '_id', null)) {
+        await deletePlayer(get(player, '_id', null), isMe)
+        router.push(routesPaths[ZenRouteID.PLAYERS].path)
+     }
+     if(isMounted.current) setOpenConfirmDialog(false)
+     setIsLoading(false)
+  }, [get(player, '_id', null), deletePlayer, isMe, setIsLoading])
 
-   const formik = useFormik({
-      initialValues: player,
-      enableReinitialize: true,
-      onSubmit: () => {}
-   })
+  const formik = useFormik({
+    initialValues: {
+      _id: get(player, '_id', null),
+      positions: get(player, 'positions', []),
+      state: get(player, 'state', undefined),
+      score: get(player, 'score', initialScoreValues)
+    },
+    enableReinitialize: true,
+    validationSchema: schema,
+    onSubmit: onUpdatePlayerSkills({ setIsLoading, updatePlayerSkills, isMe })
+  })
 
   const { overall, chartData } = useMemo(() => {
-    const { score, positions = [] } = formik.values
+    const { score, positions } = formik.values
     const { overall, chartData } = getPlayerOverall(score, positions)
     return { overall, chartData }
   }, [JSON.stringify(formik.values.score), JSON.stringify(formik.values.positions)])
@@ -55,6 +82,42 @@ const _Skills: React.FC<Props> = props => {
           hideSwitch
           {...formik} />
       </Grid>
+      <Grid item container xs={12} justify={isSmallScreen ? 'space-evenly' : 'flex-end'}>
+        {get(player, '_id', null) && <Grid item>
+          <Button
+            style={{ minWidth: 130, color: ZenPalette.error, marginRight: '1.5em', borderColor: ZenPalette.error }}
+            disabled={formik.isSubmitting}
+            onClick={() => setOpenConfirmDialog(true)}
+            variant='outlined'>
+        Delete
+          </Button>
+        </Grid>}
+        <Grid item>
+          <Button
+            style={{ minWidth: 130 }}
+            disabled={formik.isSubmitting || isEmpty(formik.touched)}
+            onClick={() => formik.handleSubmit()}
+            variant='contained'
+            color='primary'>
+            {player ? 'Update' : 'Create'}
+          </Button>
+        </Grid>
+      </Grid>
+      <ZenDialog
+        open={!!openConfirmDialog}
+        fullScreen={false}
+        title='Attention!'
+        content={<Typography >You are about to delete <span style={{ fontWeight: 'bold', color: ZenPalette.error }}>{isMe ? 'yourself' : `${get(item, 'user.registry.surname', '')} ${get(item, 'user.registry.name', '')}`}</span>, continue and delete?</Typography>}
+        actions={
+          <Button
+            style={{ minWidth: 150, backgroundColor: ZenPalette.error }}
+            onClick={onDelete}
+            variant='contained'>
+          Delete
+          </Button>
+        }
+        onClose={() => setOpenConfirmDialog(false)}
+      />
     </Grid>
   )
 }
