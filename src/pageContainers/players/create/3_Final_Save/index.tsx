@@ -22,7 +22,7 @@ const _Final_Save: React.FC<Props> = props => {
       </Grid>
       <Grid item container xs={12} justify='center'>
          <Grid item>
-         <Fab color='primary' onClick={formik.handleSubmit}>
+         <Fab color='primary' onClick={formik.handleSubmit} disabled={formik.isSubmitting}>
             <SaveRoundedIcon />
          </Fab>
          </Grid>

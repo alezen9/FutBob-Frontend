@@ -51,7 +51,12 @@ const PlayersContainer = () => {
         component={<_Registry {...{ item, isMe }} />}
       />
       <ZenTab
+        title='Skills'
+        component={<_Skills {...{ item }} />}
+      />
+      <ZenTab
         title='Stats'
+        disabled
       //   component={<_Skills {...{}} />}
       component={<>player</>}
       />

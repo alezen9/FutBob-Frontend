@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Grid, Hidden } from '@material-ui/core'
 import FormikInput, { FormikEssentials } from '@_components/FormikInput'
 import { CountriesOpts } from '@_utils/constants/CountriesOpts'
@@ -18,8 +18,18 @@ type Props = {
 const _Registry: React.FC<Props> = props => {
    const { item, isMe } = props
 
+   const initCountry = useMemo(() => {
+      const _country = get(item, 'user.registry.country', null)
+      if(!_country) return null
+      if(CountriesOpts) return CountriesOpts.find(({ value }) => value === _country)
+      return null
+   }, [get(item, 'user.registry.country', null)])
+
    const formik = useFormik({
-      initialValues: get(item, 'user.registry', {}),
+      initialValues: {
+         ...get(item, 'user.registry', {}),
+         country: initCountry
+      },
       enableReinitialize: true,
       onSubmit: () => {}
    })

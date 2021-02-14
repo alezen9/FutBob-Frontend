@@ -269,6 +269,20 @@ const lightTheme = createMuiTheme({
         borderBottom: 'none'
       }
     },
+    MuiTab: {
+      textColorInherit: {
+        '&$disabled': {
+          opacity: 0.3,
+          background: `repeating-linear-gradient(
+            -55deg,
+            #DFDFE5,
+            #DFDFE5 10px,
+            #EFEFF2 10px,
+            #EFEFF2 20px
+          )`
+        }
+      }
+    },
     MuiMenuItem: {
       root: {
         padding: '.5em 1em',

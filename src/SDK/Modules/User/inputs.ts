@@ -21,6 +21,5 @@ export class UpdateRegistryInput {
 	sex?: Sex
 	country?: string
 	phone?: string
-   email?: string
    additionalInfo?: AdditionalInfo
 }

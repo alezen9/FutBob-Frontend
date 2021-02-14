@@ -29,6 +29,7 @@ const PlayersContainer = () => {
    const [filters, setFilters] = useState<FiltersPlayer>({})
    const [currentPage, setCurrentPage] = useState(1)
    const [currentItem, setCurrentItem] = useState<Player>(null)
+   const [openConfirmDelete, setOpenConfirmDelete] = useState(false)
    const { list = [], totalCount, deletePlayer, setDetailCache, isValidating } = useSWRPlayers({ filters, pagination: { skip: (currentPage - 1) * LIMIT, limit: LIMIT  } })
    const { item: { _id } } = useSWRMe()
    const { openSnackbar, setIsLoading } = useConfigStore(stateSelector)
@@ -45,17 +46,18 @@ const PlayersContainer = () => {
 
   const playerName = useMemo(() => {
     if(get(currentItem, 'user._id', null) === _id) return <span style={{ color: ZenPalette.error }}>yourself</span>
-    return `${get(currentItem, 'user.surname', '')} ${get(currentItem, 'user.name', '')}`
-  }, [currentItem, _id])
+    return `${get(currentItem, 'user.registry.surname', '')} ${get(currentItem, 'user.registry.name', '')}`
+  }, [get(currentItem, '_id', null), _id])
 
   const openDialog = useCallback(
     item => () => {
       setCurrentItem(item)
+      setOpenConfirmDelete(true)
     }, [])
 
   const closeDialog = useCallback(
     () => {
-      setCurrentItem(null)
+      setOpenConfirmDelete(false)
     }, [])
 
   const goToDetails = useCallback(
@@ -72,7 +74,6 @@ const PlayersContainer = () => {
   const handleChangePage = useCallback(
       (e: any, newPage: number) => {
          setCurrentPage(newPage)
-         // const newPath = `${router.pathname}?page=${newPage}`
          router.replace({
             pathname: routesPaths[ZenRouteID.PLAYERS].path,
             query: { page: newPage }
@@ -129,7 +130,7 @@ const PlayersContainer = () => {
          />}
       />
       <WarningDeleteDialog
-         open={!!currentItem}
+         open={openConfirmDelete}
          text={<>You are about to delete <span style={{ fontWeight: 'bold' }}>{playerName}</span>, continue and delete?</>}
          onClose={closeDialog}
          onDelete={() => {}}

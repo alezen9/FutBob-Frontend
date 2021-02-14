@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles'
 import { AppBar, Tabs, Tab, useMediaQuery, Box } from '@material-ui/core'
 // utils
 import { compact, get } from 'lodash'
-import cleanDeep from 'clean-deep'
 
 type Props = {
   children?: ReactElement<TabProps>[]
@@ -78,7 +77,7 @@ const tabProps: any = (index: number) => {
   }
 }
 
-const ZenTabs = (props: Props) => {
+const ZenTabs: React.FC<Props> = props => {
   const { children, safeGuard } = props
   const { wrapper, appBar, tabs, indicatorClass, box, outercomponentBox } = useStyles()
   const [value, setValue] = useState(0)
@@ -147,5 +146,4 @@ type TabProps = {
   outercomponent?: ReactNode
 }
 
-// @ts-ignore
 export const ZenTab = (props: TabProps) => <div {...props} />

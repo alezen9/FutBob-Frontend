@@ -18,6 +18,7 @@ export const useConfigStore: UseStore<ConfigStore> = create(
       setActiveRoute: (routeID: ZenRouteID) => {
          set((state: ConfigStore) => {
 				state.activeRoute = routesPaths[routeID]
+            state.pageTitle = routesPaths[routeID].title
 			})
       },
 		setPageTitle: (title: any) => {

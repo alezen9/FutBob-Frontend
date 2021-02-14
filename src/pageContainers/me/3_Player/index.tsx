@@ -64,11 +64,12 @@ const Player: React.FC<TabProps> = props => {
       <Grid item xs={12} sm={7} style={{ height: 500 }}>
         <RadarChart data={chartData} />
       </Grid>
-      <PlayerScoreInputs formik={formik} gridProps={{ sm: 5 }} />
+      <PlayerScoreInputs formik={formik} name='score' gridProps={{ sm: 5 }} />
       <Grid item xs={12}>
         <FutsalField
           type='outdoor'
           name='positions'
+          hideSwitch
           {...formik} />
       </Grid>
       <Grid item container xs={12} justify={isSmallScreen ? 'space-evenly' : 'flex-end'}>

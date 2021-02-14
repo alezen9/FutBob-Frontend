@@ -122,12 +122,6 @@ export class ZenMainHooks {
          }
       }, [activeRoute._id, isLogged, isCheckingToken])
 
-      // useEffect(() => {
-      //    if (!isEmpty(cleanQueryParams(router.query))) {
-      //       window.localStorage.setItem(AS_PATH, router.asPath)
-      //    }
-      // }, [router.query])
-
       const redirectUser = useCallback(
          (isAuthPath: boolean, isPublicPath: boolean): void => {
             // 1. good token && public => redirect to home
@@ -183,15 +177,6 @@ export class ZenMainHooks {
                   }
                })
          }
-         // const path: string = isLogged ? (/\/login/.test(router.pathname) ? '/' : router.pathname || '/') : '/auth/login'
-         // const asPath: string | null = isLogged ? window.localStorage.getItem(AS_PATH) : null
-         // const origin = asPath ? get(asPath.split('?'), '0', '') : ''
-         // const params: string = asPath && origin === router.pathname ? get(asPath.split('?'), '1', '') : ''
-         // if (asPath && rawParams.test(router.pathname)) {
-         //    router.replace(path, asPath).then(() => setFirstRun(false))
-         // } else {
-         //    router.replace(`${path}${params ? `?${params}` : ''}`).then(() => setFirstRun(false))
-         // }
       }, [LSToken, AS_PATH])
 
       return {

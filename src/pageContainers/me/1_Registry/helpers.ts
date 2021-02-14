@@ -9,7 +9,7 @@ import { WithInitialValues } from '@_utils/types'
 import { zenToolboxInstance } from '@_utils/Toolbox'
 
 export const onUpdateMyRegistry = ({ setIsLoading, updateMyRegistry, updateMyEmail }) => async (
-	values: WithInitialValues<UpdateRegistryInput & { country: OptionType }>,
+	values: WithInitialValues<UpdateRegistryInput & { email: string, country: OptionType }>,
 	helpers: FormikHelpers<any>
 ) => {
 	setIsLoading(true)
@@ -19,7 +19,7 @@ export const onUpdateMyRegistry = ({ setIsLoading, updateMyRegistry, updateMyEma
       ...values.country && { country: get(values, 'country.value', 'IT') }
    })
    const { initialValues, ...rest } = body
-   const diff = zenToolboxInstance.v2_deepDiff(initialValues, rest) as UpdateRegistryInput
+   const diff = zenToolboxInstance.v2_deepDiff(initialValues, rest) as UpdateRegistryInput & { email: string }
    let done = true
    if(!isEmpty(diff)) {
       const { email, ...rest } = diff
