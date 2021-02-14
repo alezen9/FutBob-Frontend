@@ -1,5 +1,6 @@
 import { ListOf } from '@_swr/helpers'
 import { zenToolboxInstance } from '@_utils/Toolbox'
+import { get } from 'lodash'
 import { Pagination } from 'src/SDK/types'
 import { ZenServer } from '../../'
 import { CreatePlayerInput, FiltersPlayer, UpdatePlayerInput } from './inputs'
@@ -13,19 +14,21 @@ class PlayerServer {
 	}
 
 	async create(body: CreatePlayerInput): Promise<string> {
+      const revisedBody = { ...body, user: String(body.user) }
 		const query = `
       mutation {
-         Player_create(body: ${zenToolboxInstance.paramsToString(body)})
+         Player_create(body: ${zenToolboxInstance.paramsToString(revisedBody)})
       }`
-		return this._server.API({ query, name: 'Player_create', params: body })
+		return this._server.API({ query, name: 'Player_create', params: revisedBody })
 	}
 
 	async update(body: UpdatePlayerInput): Promise<boolean> {
+      const revisedBody = { ...body, _id: String(body._id) }
 		const query = `
       mutation {
-         Player_update(body: ${zenToolboxInstance.paramsToString(body)})
+         Player_update(body: ${zenToolboxInstance.paramsToString(revisedBody)})
       }`
-		return this._server.API({ query, name: 'Player_update', params: body })
+		return this._server.API({ query, name: 'Player_update', params: revisedBody })
 	}
 
 	async delete(_id: string): Promise<boolean> {
@@ -33,15 +36,16 @@ class PlayerServer {
       mutation {
          Player_delete(_id: "${_id}")
       }`
-		return this._server.API({ query, name: 'Player_delete', params: _id })
+		return this._server.API({ query, name: 'Player_delete', params: String(_id) })
 	}
 
 	async getList(filters: FiltersPlayer, pagination: Pagination, fields: string): Promise<ListOf<Player>> {
+      const revisedFilters = { ...filters, ids: (get(filters, 'ids', []) || []).map((_id: string|number) => String(_id)) }
 		const query = `
       query {
-         Player_getList(filters: ${zenToolboxInstance.paramsToString(filters)}, pagination: ${zenToolboxInstance.paramsToString(pagination)}) ${fields}
+         Player_getList(filters: ${zenToolboxInstance.paramsToString(revisedFilters)}, pagination: ${zenToolboxInstance.paramsToString(pagination)}) ${fields}
       }`
-		return this._server.API({ query, name: 'Player_getList', params: { filters, pagination }, fields })
+		return this._server.API({ query, name: 'Player_getList', params: { filters: revisedFilters, pagination }, fields })
 	}
 }
 

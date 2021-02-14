@@ -1,6 +1,6 @@
 import { ZenPalette, ThemeType } from '@_palette'
 import create, { UseStore } from 'zustand'
-import { ConfigStore } from './helpers'
+import { ConfigStore, PrevRoute } from './helpers'
 import { LSTheme } from '@_utils/LSVariables'
 import { routesPaths } from '@_utils/routes'
 import { setSnackbarData, _immer } from '@_zustand/helpers'
@@ -15,8 +15,13 @@ export const useConfigStore: UseStore<ConfigStore> = create(
 		pageTitle: 'Dashboard',
       snackbar: { open: false },
       activeRoute: {} as ZenRoute,
+      prevRoute: {} as PrevRoute,
       setActiveRoute: (routeID: ZenRouteID) => {
          set((state: ConfigStore) => {
+            state.prevRoute = {
+               ...state.activeRoute,
+               exactURL: window.location.href
+            }
 				state.activeRoute = routesPaths[routeID]
             state.pageTitle = routesPaths[routeID].title
 			})

@@ -3,14 +3,12 @@ import * as yup from 'yup'
 import { OptionType } from "@_components/FormikInput";
 import { CreatePlayerInput } from "@_SDK_Player/inputs";
 import { CreateUserInput } from "@_SDK_User/inputs";
-import { routesPaths } from "@_utils/routes";
-import { ZenRouteID } from "@_utils/routes/types";
 import { ServerMessage } from "@_utils/serverMessages";
 import { FormikHelpers } from "formik";
 import { get } from "lodash";
 import { apiInstance } from "src/SDK";
 
-export const createPlayer = ({ setIsLoading, openSnackbar, router }) => async (
+export const createPlayer = ({ setIsLoading, openSnackbar, setPlayerID }) => async (
 	values: { user: CreateUserInput & { country: OptionType }, player: Omit<CreatePlayerInput, 'user'> },
 	helpers: FormikHelpers<any>
 ) => {
@@ -22,11 +20,7 @@ export const createPlayer = ({ setIsLoading, openSnackbar, router }) => async (
       if(!userID) throw new Error()
       const playerID = await apiInstance.player.create({ ...player, user: userID })
       if(!playerID) throw new Error()
-      openSnackbar({
-			variant: 'success',
-			message: 'Player created successfully'
-		})
-      await router.push(routesPaths[ZenRouteID.PLAYER_DETAIL].path, routesPaths[ZenRouteID.PLAYER_DETAIL].as({ _id: playerID }))
+      setPlayerID(playerID)
    } catch (error) {
       openSnackbar({
 			variant: 'error',

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { Grid } from '@material-ui/core'
 import ZenStepper, { ZenStep } from '@_components/ZenStepper'
 import { useStepperFlow } from '@_components/ZenStepper/helper'
@@ -31,6 +31,7 @@ const CreatePlayerContainer = () => {
    const { status, flowConfig, backOneFromFinal, resetStatus } = useStepperFlow<StepType>(stepperConfig)
    const { openSnackbar, setIsLoading } = useConfigStore(stateSelector)
    const router = useRouter()
+   const [playerID, setPlayerID] = useState(null)
 
    const formik = useFormik({
       initialValues: {
@@ -40,7 +41,7 @@ const CreatePlayerContainer = () => {
          }
       },
       validationSchema: schema,
-      onSubmit: createPlayer({ openSnackbar, setIsLoading, router })
+      onSubmit: createPlayer({ openSnackbar, setIsLoading, setPlayerID })
    })
 
    const onReset = useCallback(() => {
@@ -73,10 +74,10 @@ const CreatePlayerContainer = () => {
       <Grid container justify='center'>
          <ZenStepper
             flowConfig={flowConfig}
-            OnCompleteStep={<_Final_Save {...{ formik }} />}
+            OnCompleteStep={<_Final_Save {...{ formik, playerID }} />}
             disableNext={disableNext}
             disablePrev={disablePrev}
-            FinalActions={<FinalActions {...{ onReset, onBack: backOneFromFinal, formik }} />}
+            FinalActions={<FinalActions {...{ onReset, onBack: backOneFromFinal, formik, playerID }} />}
          >
             <ZenStep
                title='Registry'

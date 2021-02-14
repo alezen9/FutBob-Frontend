@@ -2,6 +2,10 @@ import { ThemeType } from '@_palette'
 import { ZenRoute, ZenRouteID } from '@_utils/routes/types'
 import { setSnackbarData } from '@_zustand/helpers'
 
+export type PrevRoute = ZenRoute & {
+   exactURL: string
+}
+
 export type ConfigStore = {
 	themeType: ThemeType
 	isLogged: boolean
@@ -10,6 +14,7 @@ export type ConfigStore = {
 	pageTitle: any
    snackbar: any
    activeRoute: ZenRoute
+   prevRoute: PrevRoute,
    setActiveRoute: (routeID: ZenRouteID) => void
 	setPageTitle: (title: any) => void
 	openSnackbar: (data: setSnackbarData) => void

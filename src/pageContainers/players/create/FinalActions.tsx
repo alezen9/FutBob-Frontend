@@ -5,39 +5,52 @@ import React, { useCallback, useState } from 'react'
 import KeyboardBackspaceRoundedIcon from '@material-ui/icons/KeyboardBackspaceRounded'
 import { ZenPalette } from '@_palette'
 import ClearRoundedIcon from '@material-ui/icons/ClearRounded'
+import DetailsRoundedIcon from '@material-ui/icons/DetailsRounded'
+import { routesPaths } from '@_utils/routes'
+import { ZenRouteID } from '@_utils/routes/types'
+import { useRouter } from 'next/router'
 
 type ResetStepperBtnProps = {
   reset?: VoidFunction
   onReset?: VoidFunction
   onBack?: VoidFunction
   formik: FormikEssentials
+  playerID: string|null
 }
 
 const resetStyle = {
    color: ZenPalette.error,
-   borderColor: ZenPalette.error,
-   marginLeft: '1em'
+   borderColor: ZenPalette.error
 }
 
 const ResetStepperBtn: React.FC<ResetStepperBtnProps> = props=> {
-  const { reset, onReset, onBack, formik } = props
+  const { reset, onReset, onBack, formik, playerID } = props
   const [openDialog, setOpenDialog] = useState(false)
+  const router = useRouter()
 
   const handleClick = useCallback((force?: boolean) => () => {
-    if(!force) setOpenDialog(true)
-    else {
+     if(force || playerID) {
       if(onReset) onReset()
       if(reset) reset()
-    }
-  }, [reset, onReset])
+     } else {
+        setOpenDialog(true)
+     }
+  }, [reset, onReset, playerID])
+
+  const goToPlayerDetail = useCallback(() => {
+     router.push(routesPaths[ZenRouteID.PLAYER_DETAIL].path, routesPaths[ZenRouteID.PLAYER_DETAIL].as({ _id: playerID }))
+  }, [playerID])
 
   return (
     <>
-   {onBack && <Button disabled={formik.isSubmitting} onClick={onBack} startIcon={<KeyboardBackspaceRoundedIcon />} variant='outlined' >
+   {onBack && !playerID && <Button disabled={formik.isSubmitting} onClick={onBack} startIcon={<KeyboardBackspaceRoundedIcon />} variant='outlined' >
       Back
     </Button>}
-    <Button disabled={formik.isSubmitting} onClick={handleClick()} startIcon={<ClearRoundedIcon />} variant='outlined' {...onBack && { style: resetStyle }} >
-      Cancel
+    {playerID && <Button onClick={goToPlayerDetail} startIcon={<DetailsRoundedIcon />} variant='contained' color='primary' >
+      Detail
+    </Button>}
+    <Button disabled={formik.isSubmitting} onClick={handleClick()} startIcon={<ClearRoundedIcon />} variant='outlined' style={{ marginLeft: '1em', ...onBack && !playerID && resetStyle }} >
+      {playerID ? 'New player' : 'Cancel'}
     </Button>
     <ZenDialog
       open={openDialog}
@@ -47,7 +60,7 @@ const ResetStepperBtn: React.FC<ResetStepperBtnProps> = props=> {
       onClose={() => setOpenDialog(false)}
       actions={<Grid container justify='flex-end'>
           <Grid item>
-            <Button onClick={handleClick(true)} variant='outlined' style={{ color: ZenPalette.error, borderColor: ZenPalette.error }}>proceed</Button>
+            <Button onClick={handleClick(true)} variant='outlined' style={{ color: ZenPalette.error, borderColor: ZenPalette.error }}>Proceed</Button>
           </Grid>
       </Grid>}
     />

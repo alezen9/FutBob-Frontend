@@ -19,11 +19,12 @@ class UserServer {
 	}
 
 	async update(body: UpdateRegistryInput): Promise<boolean> {
+      const revisedBody = { ...body, _id: String(body._id) }
 		const query = `
       mutation {
-         User_update(body: ${zenToolboxInstance.paramsToString(body)})
+         User_update(body: ${zenToolboxInstance.paramsToString(revisedBody)})
       }`
-		return this._server.API({ query, name: 'User_update', params: body })
+		return this._server.API({ query, name: 'User_update', params: revisedBody })
 	}
 
 	async getMe(fields: string): Promise<User> {
@@ -55,7 +56,7 @@ class UserServer {
       mutation {
          User_delete(_id: "${_id}")
       }`
-		return this._server.API({ query, name: 'User_delete', params: _id })
+		return this._server.API({ query, name: 'User_delete', params: String(_id) })
 	}
 }
 

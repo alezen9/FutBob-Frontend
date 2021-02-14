@@ -4,6 +4,7 @@ import { ZenServer } from '../../'
 import { FreeAgent } from './types'
 import { CreateFreeAgentInput, FiltersFreeAgent, UpdateFreeAgentInput } from './inputs'
 import { zenToolboxInstance } from '@_utils/Toolbox'
+import { get } from 'lodash'
 
 class FreeAgentServer {
 	private _server: ZenServer
@@ -21,11 +22,12 @@ class FreeAgentServer {
 	}
 
 	async update(body: UpdateFreeAgentInput): Promise<boolean> {
+      const revisedBody = { ...body, _id: String(body._id) }
 		const query = `
       mutation {
-         FreeAgent_update(body: ${zenToolboxInstance.paramsToString(body)})
+         FreeAgent_update(body: ${zenToolboxInstance.paramsToString(revisedBody)})
       }`
-		return this._server.API({ query, name: 'FreeAgent_update', params: body })
+		return this._server.API({ query, name: 'FreeAgent_update', params: revisedBody })
 	}
 
 	async delete(_id: string): Promise<boolean> {
@@ -33,15 +35,16 @@ class FreeAgentServer {
       mutation {
          FreeAgent_delete(_id: "${_id}")
       }`
-		return this._server.API({ query, name: 'FreeAgent_delete', params: _id })
+		return this._server.API({ query, name: 'FreeAgent_delete', params: String(_id) })
 	}
 
 	async getList(filters: FiltersFreeAgent, pagination: Pagination, fields: string): Promise<ListOf<FreeAgent>> {
+      const revisedFilters = { ...filters, ids: (get(filters, 'ids', []) || []).map((_id: string|number) => String(_id)) }
 		const query = `
          query {
-            FreeAgent_getList(filters: ${zenToolboxInstance.paramsToString(filters)}, pagination: ${zenToolboxInstance.paramsToString(pagination)}) ${fields}
+            FreeAgent_getList(filters: ${zenToolboxInstance.paramsToString(revisedFilters)}, pagination: ${zenToolboxInstance.paramsToString(pagination)}) ${fields}
          }`
-		return this._server.API({ query, name: 'FreeAgent_getList', params: { filters, pagination }, fields })
+		return this._server.API({ query, name: 'FreeAgent_getList', params: { filters: revisedFilters, pagination }, fields })
 	}
 }
 
