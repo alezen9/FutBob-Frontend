@@ -49,6 +49,7 @@ const useStyles = makeStyles(theme => ({
       overflow: 'hidden auto',
       minHeight: '100vh',
       padding: '1.5em',
+      // marginTop: '4.5em', // per menu material ui
       transition: 'width .2s ease',
       [theme.breakpoints.down('sm')]: {
          position: 'relative',

@@ -13,6 +13,7 @@ import { useConfigStore } from '@_zustand/config'
 import { apiInstance } from 'src/SDK'
 import { ZenRoute, ZenRouteID } from '@_utils/routes/types'
 import { routes, routesPaths } from '@_utils/routes'
+import DesktopMenuNew from './DesktopMenuNew'
 
 const iconMap = {
   [ZenRouteID.DASHBOARD]: <DashboardRoundedIcon />,
@@ -67,6 +68,7 @@ const ZenMenu = () => {
    return isSmallScreen
       ? <MobileMenu items={items} logout={logout} />
       : <DesktopMenu items={items} logout={logout} />
+      // : <DesktopMenuNew items={items} logout={logout} />
 }
 
 export default React.memo(ZenMenu)
