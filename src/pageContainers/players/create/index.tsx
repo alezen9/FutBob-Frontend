@@ -14,7 +14,6 @@ import { schema, createPlayer } from './helpers'
 import FinalActions from './FinalActions'
 import { useConfigStore } from '@_zustand/config'
 import { ConfigStore } from '@_zustand/config/helpers'
-import { useRouter } from 'next/router'
 
 type StepType = 'registry'|'skills'
 
@@ -30,7 +29,6 @@ const stateSelector = (state: ConfigStore) => ({
 const CreatePlayerContainer = () => {
    const { status, flowConfig, backOneFromFinal, resetStatus } = useStepperFlow<StepType>(stepperConfig)
    const { openSnackbar, setIsLoading } = useConfigStore(stateSelector)
-   const router = useRouter()
    const [playerID, setPlayerID] = useState(null)
 
    const formik = useFormik({

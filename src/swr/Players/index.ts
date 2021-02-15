@@ -41,9 +41,7 @@ export const useSWRPlayers = <T extends PlayersMoreOptions>(options?: T) => {
 	const triggerThis = useCallback(
 		(shouldRevalidate: boolean = true) => {
 			return trigger([SwrKey.PLAYERS, filtersKey, paginationKey], shouldRevalidate)
-		},
-		[trigger, filtersKey, paginationKey]
-	)
+		}, [trigger, filtersKey, paginationKey])
 
    const setDetailCache = useCallback((item: Player) => {
       cache.set([SwrKey.PLAYER, item._id], item)

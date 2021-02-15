@@ -1,23 +1,21 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { get, isEmpty } from 'lodash'
-import { getPlayerDataRow, _FiltersPlayer, headers } from './helpers'
+import { getFieldDataRow, _FiltersField, headers } from './helpers'
 import { useRouter } from 'next/router'
 import AddRoundedIcon from '@material-ui/icons/AddRounded'
-import { ZenPalette } from '@_palette'
 import ZenTable from '@_components/ZenTable'
 import ZenPagination from '@_components/ZenTable/ZenPagination'
 import Filters from '@_components/Filters'
 import { Action } from '@_components/Filters/Actions'
 import WarningDeleteDialog from '@_components/WarningDeleteDialog'
 import { useConfigStore } from '@_zustand/config'
-import { useSWRMe } from '@_swr/Me'
-import { useSWRPlayers } from '@_swr/Players'
-import { Player } from '@_SDK_Player/types'
 import { routesPaths } from '@_utils/routes'
 import { ZenRouteID } from '@_utils/routes/types'
 import { ConfigStore } from '@_zustand/config/helpers'
-import { FiltersPlayer } from '@_SDK_Player/inputs'
 import { zenHooksInstance } from '@_utils/hooks'
+import { FiltersField } from '@_SDK_Field/inputs'
+import { Field } from '@_SDK_Field/types'
+import { useSWRFields } from '@_swr/Fields'
 
 const stateSelector = (state: ConfigStore) => ({
   openSnackbar: state.openSnackbar,
@@ -26,13 +24,12 @@ const stateSelector = (state: ConfigStore) => ({
 
 const LIMIT = 10
 
-const PlayersContainer = () => {
-   const [filters, setFilters] = useState<FiltersPlayer>({})
+const FieldsContainer = () => {
+   const [filters, setFilters] = useState<FiltersField>({})
    const [currentPage, setCurrentPage] = useState(1)
-   const [currentItem, setCurrentItem] = useState<Player>(null)
+   const [currentItem, setCurrentItem] = useState<Field>(null)
    const [openConfirmDelete, setOpenConfirmDelete] = useState(false)
-   const { list = [], totalCount, deletePlayer, setDetailCache, isValidating } = useSWRPlayers({ filters, pagination: { skip: (currentPage - 1) * LIMIT, limit: LIMIT  } })
-   const { item: { _id } } = useSWRMe()
+   const { list = [], totalCount, deleteField, setDetailCache, isValidating } = useSWRFields({ filters, pagination: { skip: (currentPage - 1) * LIMIT, limit: LIMIT  } })
    const { setIsLoading } = useConfigStore(stateSelector)
    const router = useRouter()
    const isMounted = zenHooksInstance.useIsMounted()
@@ -40,25 +37,20 @@ const PlayersContainer = () => {
    const onDelete = useCallback(async () => {
      setIsLoading(true)
      if(get(currentItem, '_id', null)) {
-        await deletePlayer(get(currentItem, '_id', null), get(currentItem, 'user._id', null) === _id)
+        await deleteField(get(currentItem, '_id', null))
      }
      if(isMounted.current) setOpenConfirmDelete(false)
      setIsLoading(false)
-  }, [get(currentItem, '_id', null), deletePlayer, setIsLoading, _id])
+  }, [get(currentItem, '_id', null), deleteField, setIsLoading])
 
    useEffect(() => {
       if(!router.query.page) {
          router.replace({
-            pathname: routesPaths[ZenRouteID.PLAYERS].path,
+            pathname: routesPaths[ZenRouteID.FIELDS].path,
             query: { page: 1 }
          })
       }
    }, [])
-
-  const playerName = useMemo(() => {
-    if(get(currentItem, 'user._id', null) === _id) return <span style={{ color: ZenPalette.error }}>yourself</span>
-    return `${get(currentItem, 'user.registry.surname', '')} ${get(currentItem, 'user.registry.name', '')}`
-  }, [get(currentItem, '_id', null), _id])
 
   const openDialog = useCallback(
     item => () => {
@@ -72,21 +64,21 @@ const PlayersContainer = () => {
     }, [])
 
   const goToDetails = useCallback(
-    (item: Player) => () => {
+    (item: Field) => () => {
       setDetailCache(item)
-      router.push(routesPaths[ZenRouteID.PLAYER_DETAIL].path, routesPaths[ZenRouteID.PLAYER_DETAIL].as({ _id: item._id }))
+      router.push(routesPaths[ZenRouteID.FIELDS_DETAIL].path, routesPaths[ZenRouteID.FIELDS_DETAIL].as({ _id: item._id }))
     }, [setDetailCache])
 
   const goToCreate = useCallback(
    () => {
-      router.push(routesPaths[ZenRouteID.PLAYER_CREATE].path)
+      router.push(routesPaths[ZenRouteID.FIELDS_CREATE].path)
     }, [])
 
   const handleChangePage = useCallback(
       (e: any, newPage: number) => {
          setCurrentPage(newPage)
          router.replace({
-            pathname: routesPaths[ZenRouteID.PLAYERS].path,
+            pathname: routesPaths[ZenRouteID.FIELDS].path,
             query: { page: newPage }
          })
    }, [])
@@ -114,16 +106,16 @@ const PlayersContainer = () => {
   ], [goToCreate])
 
    const tableData = useMemo(() => {
-      const data = list.map(getPlayerDataRow({ goToDetails, openDialog, userConnectedId: _id }))
+      const data = list.map(getFieldDataRow({ goToDetails, openDialog}))
       return data
-  }, [JSON.stringify(list), goToDetails, openDialog, _id])
+  }, [JSON.stringify(list), goToDetails, openDialog])
 
   return (
     <>
       <Filters
          withSearch
          actions={actions}
-         filters={_FiltersPlayer}
+         filters={_FiltersField}
          formikConfig={{
          onSubmit: onFiltersSubmit
          }}
@@ -142,7 +134,7 @@ const PlayersContainer = () => {
       />
       <WarningDeleteDialog
          open={openConfirmDelete}
-         text={<>You are about to delete <span style={{ fontWeight: 'bold' }}>{playerName}</span>, continue and delete?</>}
+         text={<>You are about to delete <span style={{ fontWeight: 'bold' }}>{get(currentItem, 'name', '-')}</span>, continue and delete?</>}
          onClose={closeDialog}
          onDelete={onDelete}
       />
@@ -150,4 +142,4 @@ const PlayersContainer = () => {
   )
 }
 
-export default React.memo(PlayersContainer)
+export default React.memo(FieldsContainer)

@@ -12,8 +12,9 @@ import dayjs from 'dayjs'
 import { CountriesOpts } from '@_utils/constants/CountriesOpts'
 import { PhysicalStateOpts } from '@_utils/constants/PhysicalStatusOpt'
 import { zenToolboxInstance } from '@_utils/Toolbox'
+import { TableHeaderData } from '@_components/ZenTable/helpers'
 
-export const headers = [
+export const headers: TableHeaderData[] = [
   { name: 'Name', style: { minWidth: 230 } },
   { name: 'Physical state', style: { minWidth: 180, textAlign: 'left' } },
   { name: 'Positions', style: { minWidth: 130, textAlign: 'center' } },

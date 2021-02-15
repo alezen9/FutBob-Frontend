@@ -18,6 +18,7 @@ import { useRouter } from 'next/router'
 import { ZenRouteID } from '@_utils/routes/types'
 import { routesPaths } from '@_utils/routes'
 import { zenHooksInstance } from '@_utils/hooks'
+import WarningDeleteDialog from '@_components/WarningDeleteDialog'
 
 const _Skills: React.FC<TabProps> = props => {
   const { item, setIsLoading, isMe, updatePlayerSkills, deletePlayer } = props
@@ -32,7 +33,7 @@ const _Skills: React.FC<TabProps> = props => {
      setIsLoading(true)
      if(get(player, '_id', null)) {
         await deletePlayer(get(player, '_id', null), isMe)
-        router.push(routesPaths[ZenRouteID.PLAYERS].path)
+        router.replace(routesPaths[ZenRouteID.PLAYERS].path)
      }
      if(isMounted.current) setOpenConfirmDialog(false)
      setIsLoading(false)
@@ -103,20 +104,11 @@ const _Skills: React.FC<TabProps> = props => {
           </Button>
         </Grid>
       </Grid>
-      <ZenDialog
-        open={!!openConfirmDialog}
-        fullScreen={false}
-        title='Attention!'
-        content={<Typography >You are about to delete <span style={{ fontWeight: 'bold', color: ZenPalette.error }}>{isMe ? 'yourself' : `${get(item, 'user.registry.surname', '')} ${get(item, 'user.registry.name', '')}`}</span>, continue and delete?</Typography>}
-        actions={
-          <Button
-            style={{ minWidth: 150, backgroundColor: ZenPalette.error }}
-            onClick={onDelete}
-            variant='contained'>
-          Delete
-          </Button>
-        }
-        onClose={() => setOpenConfirmDialog(false)}
+      <WarningDeleteDialog
+         open={!!openConfirmDialog}
+         text={< >You are about to delete <span style={{ fontWeight: 'bold', color: ZenPalette.error }}>{isMe ? 'yourself' : `${get(item, 'user.registry.surname', '')} ${get(item, 'user.registry.name', '')}`}</span>, continue and delete?</>}
+         onClose={() => setOpenConfirmDialog(false)}
+         onDelete={onDelete}
       />
     </Grid>
   )

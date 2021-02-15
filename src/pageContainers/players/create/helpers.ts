@@ -14,14 +14,21 @@ export const createPlayer = ({ setIsLoading, openSnackbar, setPlayerID }) => asy
 ) => {
    setIsLoading(true)
 	helpers.setSubmitting(true)
+   let userID: string, playerID: string
    try {
       const { user, player } = values
-      const userID = await apiInstance.user.create({ ...user, country: user.country.value })
+      userID = await apiInstance.user.create({ ...user, country: user.country.value })
       if(!userID) throw new Error()
-      const playerID = await apiInstance.player.create({ ...player, user: userID })
+      playerID = await apiInstance.player.create({ ...player, user: userID })
       if(!playerID) throw new Error()
       setPlayerID(playerID)
    } catch (error) {
+      try {
+         if(playerID) await apiInstance.player.delete(playerID)
+         if(userID) await apiInstance.user.delete(userID)
+      } catch (error) {
+         console.error('something went wrong dammit...')
+      }
       openSnackbar({
 			variant: 'error',
 			message: get(ServerMessage, error, ServerMessage.generic)

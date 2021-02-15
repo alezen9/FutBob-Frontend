@@ -38,9 +38,11 @@ export const useSWRFields = <T extends FieldsMoreOptions>(options?: T) => {
 	const triggerThis = useCallback(
 		(shouldRevalidate: boolean = true) => {
 			return trigger([SwrKey.FIELDS, filtersKey, paginationKey], shouldRevalidate)
-		},
-		[trigger, filtersKey, paginationKey]
-	)
+		}, [trigger, filtersKey, paginationKey])
+
+   const setDetailCache = useCallback((item: Field) => {
+      cache.set([SwrKey.FIELD, item._id], item)
+   }, [])
 
 	// SHORTCUT LIST
 	const deleteField = useCallback(
@@ -55,16 +57,15 @@ export const useSWRFields = <T extends FieldsMoreOptions>(options?: T) => {
 					message: get(ServerMessage, error, ServerMessage.generic)
 				})
 			}
-		},
-		[openSnackbar, triggerThis]
-	)
+		}, [openSnackbar, triggerThis])
 
 	return {
 		list: (get(data, 'result', []) || []) as Field[],
 		totalCount: get(data, 'totalCount', 0),
 		trigger: triggerThis,
 		deleteField,
-		isValidating
+		isValidating,
+      setDetailCache
 	}
 }
 
@@ -119,15 +120,19 @@ export const useSWRField = <T extends MoreOptions>(_id: string | null | undefine
 					draft.measurements = body.measurements
 					draft.location = body.location
 				})
+            openSnackbar({
+					variant: 'success',
+					message: 'Field created successfully'
+				})
+            return _id
 			} catch (error) {
 				openSnackbar({
 					variant: 'error',
 					message: get(ServerMessage, error, ServerMessage.generic)
 				})
+            return false
 			}
-		},
-		[openSnackbar, mutateThis]
-	)
+		}, [openSnackbar, mutateThis])
 
 	const updateField = useCallback(
 		async (body: UpdateFieldInput) => {
@@ -141,26 +146,36 @@ export const useSWRField = <T extends MoreOptions>(_id: string | null | undefine
 					if (![null, undefined].includes(body.measurements)) draft.measurements = body.measurements
 					if (![null, undefined].includes(body.type)) draft.location = body.location
 				})
+            openSnackbar({
+					variant: 'success',
+					message: 'Field updated successfully'
+				})
+            return true
 			} catch (error) {
 				openSnackbar({
 					variant: 'error',
 					message: get(ServerMessage, error, ServerMessage.generic)
 				})
+            return false
 			}
-		},
-		[openSnackbar, mutateThis]
-	)
+		}, [openSnackbar, mutateThis])
 
 	const deleteField = useCallback(
 		async (_id: string) => {
 			try {
 				await apiInstance.field.delete(_id)
 				cache.delete([SwrKey.FIELD, _id])
+            openSnackbar({
+					variant: 'success',
+					message: 'Field deleted successfully'
+				})
+            return true
 			} catch (error) {
 				openSnackbar({
 					variant: 'error',
 					message: get(ServerMessage, error, ServerMessage.generic)
 				})
+            return false
 			}
 		},
 		[openSnackbar]

@@ -68,8 +68,14 @@ class ZenToolbox {
    }
 
    eurosToCents = (euros: number) => Math.trunc(euros * 100)
+   
+   centsToEuros = (cents: number) => {
+      const formatted = this.formatter.format(cents / 100)
+      const res = formatted.replace(',', '.').replace('€', '').trim()
+      return Number(res)
+   }
 
-   centsToEuros = (cents: number) => this.formatter.format(cents / 100)
+   centsToEurosFormatted = (cents: number) => this.formatter.format(cents / 100)
 
    /**
     * 
