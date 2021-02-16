@@ -2,7 +2,7 @@ import useSWR, { cache, trigger } from 'swr'
 import produce from 'immer'
 import { useConfigStore } from '@_zustand/config'
 import { useEffect, useCallback, useState } from 'react'
-import { filter, get } from 'lodash'
+import { get } from 'lodash'
 import { apiInstance } from 'src/SDK'
 import { DirectMutationImmer, MoreOptions, stateSelector, SwrKey } from '@_swr/helpers'
 import swrFieldsFetchers from './fetchers'
@@ -73,6 +73,7 @@ export const useSWRField = <T extends MoreOptions>(_id: string | null | undefine
 	const { fromCache = true, ...restOfOpts } = options || {}
 	const hasToken = apiInstance.auth.hasToken()
 	const initialData = fromCache ? cache.get([SwrKey.FIELD, _id]) : undefined
+   console.log(initialData)
 	const [revalidateOnMount, setRevalidateOnMount] = useState(fromCache && initialData ? false : hasToken)
 
 	const { setIsLoading, openSnackbar } = useConfigStore(stateSelector)

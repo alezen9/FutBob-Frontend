@@ -10,9 +10,9 @@ export const ShortName_Skill = {
 }
 
 export const ShortName_Position = {
-  [PlayerPosition.FutsalGoalKeeper]: 'GK',
-  [PlayerPosition.FutsalBack]: 'DEF',
-  [PlayerPosition.FutsalLeftWing]: 'LW',
-  [PlayerPosition.FutsalRightWing]: 'RW',
-  [PlayerPosition.FutsalForward]: 'FWD'
+  [PlayerPosition.GoalKeeper]: 'GK',
+  [PlayerPosition.Back]: 'DEF',
+  [PlayerPosition.LeftWing]: 'LW',
+  [PlayerPosition.RightWing]: 'RW',
+  [PlayerPosition.Forward]: 'FWD'
 }

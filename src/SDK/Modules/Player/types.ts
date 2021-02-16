@@ -1,11 +1,11 @@
 import { User } from '@_SDK_User/types'
 
 export enum PlayerPosition {
-	FutsalGoalKeeper,
-	FutsalBack,
-	FutsalLeftWing,
-	FutsalRightWing,
-	FutsalForward
+	GoalKeeper,
+	Back,
+	LeftWing,
+	RightWing,
+	Forward
 }
 export class Pace {
 	speed: number

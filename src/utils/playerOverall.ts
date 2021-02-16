@@ -30,9 +30,9 @@ export const getPlayerOverall = (score: PlayerScore, positions: PlayerPosition[]
 			reduce(
 				positions,
 				(acc, val) => {
-					if ([PlayerPosition.FutsalLeftWing, PlayerPosition.FutsalRightWing].includes(val)) acc.push(Zone.Center)
-					else if ([PlayerPosition.FutsalBack, PlayerPosition.FutsalGoalKeeper].includes(val)) acc.push(Zone.Back)
-					else if ([PlayerPosition.FutsalForward].includes(val)) acc.push(Zone.Forward)
+					if ([PlayerPosition.LeftWing, PlayerPosition.RightWing].includes(val)) acc.push(Zone.Center)
+					else if ([PlayerPosition.Back, PlayerPosition.GoalKeeper].includes(val)) acc.push(Zone.Back)
+					else if ([PlayerPosition.Forward].includes(val)) acc.push(Zone.Forward)
 					return acc
 				},
 				[]

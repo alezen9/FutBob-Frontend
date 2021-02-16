@@ -5,7 +5,7 @@ import { CircleFlag } from 'react-circle-flags'
 import { PlayerPosition, PlayerScore } from '@_SDK_Player/types'
 import { initialScoreValues } from '@_utils/constants/InitValuesPlayerScore'
 import { getPlayerOverall } from '@_utils/playerOverall'
-import { chunk, get } from 'lodash'
+import { chunk, get, uniqueId } from 'lodash'
 import { ShortName_Position, ShortName_Skill } from '@_utils/constants/ShortNamePlayerProps'
 
 const DARK_GOLD = '#46390C'
@@ -65,7 +65,7 @@ const useStyles = makeStyles(theme => ({
     top: '20%',
     left: 0,
     transform: 'translateY(-20%)',
-    width: 60,
+    width: 100,
     display: 'flex',
     flexDirection: 'column',
     color: TEXT_GOLD,
@@ -185,7 +185,7 @@ const PlayerCard: React.FC<Props> = props => {
           <div className={classes.skillSection}>
              {left.map(({ prop, value }) => {
                 return (
-                   <div>
+                   <div key={uniqueId()}>
                      <span>{value}</span>
                      <span>{ShortName_Skill[prop]}</span>
                   </div>
@@ -195,7 +195,7 @@ const PlayerCard: React.FC<Props> = props => {
           <div className={classes.skillSection}>
              {right.map(({ prop, value }) => {
                 return (
-                   <div>
+                   <div key={uniqueId()}>
                      <span>{value}</span>
                      <span>{ShortName_Skill[prop]}</span>
                   </div>
