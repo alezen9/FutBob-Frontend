@@ -6,6 +6,13 @@ import CancelRoundedIcon from '@material-ui/icons/CancelRounded'
 import { ZenPalette } from '@_palette'
 import { getScoreColor } from '@_utils/helpers'
 import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded'
+import { mdiFaceWoman } from '@mdi/js'
+import Icon from '@mdi/react'
+import { useSWRMe } from '@_swr/Me'
+import { get } from 'lodash'
+import { Sex } from '@_SDK_User/types'
+import FaceRoundedIcon from '@material-ui/icons/FaceRounded'
+
 
 const useStyles = makeStyles(theme => ({
    topFormIcon: {
@@ -260,4 +267,26 @@ export const FreeAgentIcon = props => {
       <AddCircleOutlineRoundedIcon />
     </span>
   )
+}
+
+export const FaceDynamicIcon = props => {
+   const { color } = props
+   const { item } = useSWRMe()
+   const isFemale = useMemo(() => {
+      return get(item, 'registry.sex', null) === Sex.Female
+   }, [get(item, 'registry.sex', null)])
+
+   const currentColor = useMemo(() => {
+      return color
+         ? ZenPalette.primary.main
+         : ZenPalette.typographyGrey
+   }, [color])
+
+   return isFemale
+      ?<Icon path={mdiFaceWoman}
+      title="Me"
+      size={1}
+      color={currentColor}
+   />
+   : <FaceRoundedIcon {...props} />
 }

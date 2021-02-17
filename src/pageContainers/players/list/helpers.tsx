@@ -17,7 +17,7 @@ export const headers: TableHeaderData[] = [
   { name: 'Name', style: { minWidth: 230 } },
   { name: 'Physical state', style: { minWidth: 180, textAlign: 'left' } },
   { name: 'Positions', style: { minWidth: 190, textAlign: 'center' } },
-  { name: 'Country', style: { maxWidth: 280, textAlign: 'left' } },
+  { name: 'Country', style: { minWidth: 280, textAlign: 'left' } },
   { name: 'Age', style: { maxWidth: 70, textAlign: 'center' } },
   { name: 'Phone', style: { minWidth: 180 } }
 ]

@@ -14,7 +14,7 @@ export const privateRoutes: ZenRoute[] = [
       _id: ZenRouteID.ME,
       section: ZenSection.ME,
       isPrivate: true,
-      title: 'Profile',
+      title: 'Me',
       path: '/me'
    },
     // ============================ //

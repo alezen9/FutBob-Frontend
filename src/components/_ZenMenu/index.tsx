@@ -3,9 +3,8 @@ import { useMediaQuery, useTheme } from '@material-ui/core'
 // icons
 import DashboardRoundedIcon from '@material-ui/icons/DashboardRounded'
 // import SportsSoccerRoundedIcon from '@material-ui/icons/SportsSoccerRounded'
-import FaceRoundedIcon from '@material-ui/icons/FaceRounded'
 // import BarChartRoundedIcon from '@material-ui/icons/BarChartRounded'
-import { FieldIcon, FreeAgentIcon, JerseyIcon } from '@_icons'
+import { FieldIcon, FreeAgentIcon, JerseyIcon, FaceDynamicIcon } from '@_icons'
 import DesktopMenu from './DesktopMenu'
 import MobileMenu from './MobileMenu'
 import { useRouter } from 'next/router'
@@ -13,11 +12,12 @@ import { useConfigStore } from '@_zustand/config'
 import { apiInstance } from 'src/SDK'
 import { ZenRoute, ZenRouteID } from '@_utils/routes/types'
 import { routes, routesPaths } from '@_utils/routes'
-import DesktopMenuNew from './DesktopMenuNew'
+// import DesktopMenuNew from './DesktopMenuNew'
+
 
 const iconMap = {
   [ZenRouteID.DASHBOARD]: <DashboardRoundedIcon />,
-  [ZenRouteID.ME]: <FaceRoundedIcon />,
+  [ZenRouteID.ME]: <FaceDynamicIcon />,
   [ZenRouteID.PLAYERS]: <JerseyIcon />,
   [ZenRouteID.FREE_AGENTS]: <FreeAgentIcon />,
   [ZenRouteID.FIELDS]: <FieldIcon />,
@@ -56,7 +56,7 @@ const ZenMenu = () => {
       setIsLogged(false)
       setIsLoading(false)
       router.push(routesPaths[ZenRouteID.LOGIN].path)
-   },[router])
+   },[])
 
    const logout = useCallback(
       (open: boolean, toggleMenu: VoidFunction) => (e: any) => {
