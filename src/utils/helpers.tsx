@@ -40,3 +40,11 @@ export const getScoreColor = (value: number) => {
 	if (value <= 100) return '#B29600'
 	return ZenPalette.typographyGrey
 }
+
+export const getScoreColorFillGradient = (value: number) => {
+   if (value < 40) return 'url(#red)'
+	if (value < 65) return 'url(#orange)'
+	if (value < 85) return 'url(#green)'
+	if (value <= 100) return 'url(#gold)'
+	return ZenPalette.typographyGrey
+}

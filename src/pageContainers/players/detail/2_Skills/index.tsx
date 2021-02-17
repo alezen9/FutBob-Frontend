@@ -59,7 +59,7 @@ const _Skills: React.FC<TabProps> = props => {
 
   return (
     <Grid container spacing={3}>
-      <OverallScore style={{ margin: 'auto' }} value={overall} />
+      <OverallScore style={{ margin: 'auto' }} value={overall} size={4} />
       <Grid item container xs={12} justify='center'>
         <FormikInput
           sm={4}

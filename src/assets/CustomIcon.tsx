@@ -3,16 +3,15 @@ import SvgIcon from '@material-ui/core/SvgIcon'
 import { makeStyles } from '@material-ui/core'
 import ExpandLessRoundedIcon from '@material-ui/icons/ExpandLessRounded'
 import CancelRoundedIcon from '@material-ui/icons/CancelRounded'
-import { ZenPalette } from '@_palette'
-import { getScoreColor } from '@_utils/helpers'
+import { ThemeType, ZenPalette } from '@_palette'
+import { getScoreColor, getScoreColorFillGradient } from '@_utils/helpers'
 import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded'
-import { mdiFaceWoman } from '@mdi/js'
+import { mdiFaceWoman, mdiShield } from '@mdi/js'
 import Icon from '@mdi/react'
 import { useSWRMe } from '@_swr/Me'
 import { get } from 'lodash'
 import { Sex } from '@_SDK_User/types'
 import FaceRoundedIcon from '@material-ui/icons/FaceRounded'
-
 
 const useStyles = makeStyles(theme => ({
    topFormIcon: {
@@ -34,19 +33,34 @@ const useStyles = makeStyles(theme => ({
    injured: {
       transform: 'rotateZ(45deg)'
    },
-   overallScore: {
+   // overallScore: {
+   //    position: 'relative',
+   //    color: (props: any) => props.color,
+   //    '& > svg': {
+   //       fontSize: '3em'
+   //    },
+   //    '& > span': {
+   //       position: 'absolute',
+   //       top: '35%',
+   //       left: '50%',
+   //       transform: 'translate(-50%, -35%)',
+   //       fontWeight: 'bold',
+   //       fontSize: '.8em'
+   //    }
+   // },
+      overallScore: {
       position: 'relative',
       color: (props: any) => props.color,
-      '& > svg': {
-         fontSize: '3em'
-      },
       '& > span': {
          position: 'absolute',
-         top: '35%',
+         top: '40%',
          left: '50%',
-         transform: 'translate(-50%, -35%)',
-         fontWeight: 'bold',
-         fontSize: '.8em'
+         transform: 'translate(-50%, -40%)',
+         // fontWeight: 600,
+         fontSize: (props: any) => props.size*8,
+         color: '#fff',
+         width: '100%',
+         textAlign: 'center'
       }
    },
    freeAgentIcon: {
@@ -154,17 +168,35 @@ export const InjuredIcon = props => {
 }
 
 export const OverallScore = props => {
-  const { value = 0, autoColor = true, ...rest } = props
+  const { value = 0, autoColor = true, size = 2, ...rest } = props
   const color = useMemo(() => {
     if (!autoColor) return ZenPalette.typographyGrey
-    return getScoreColor(value)
+    return getScoreColorFillGradient(value)
   }, [value, autoColor])
 
-  const { overallScore } = useStyles({ color })
+  const { overallScore } = useStyles({ color, size })
   return <span className={overallScore} {...rest} >
-    <SvgIcon viewBox='0 0 1000 1000'>
-      <path d='M881.4,151.4C768.5,99,561.4,10.2,500.8,10c-60.5,0.2-268.5,89.3-381.9,141.8c-23.8,11-39.5,36.2-38.9,62.6c1.9,95.7,14.6,236.2,64.4,361.8c107.9,272.1,297.2,399.7,350.3,413.1c1.9,0.5,3.8,0.7,5.7,0.7c2,0,4-0.2,5.9-0.8c60.8-16.1,247.5-157.7,349.1-413c49.8-125.1,62.6-266.2,64.6-362.6C920.5,190.2,902.4,161.2,881.4,151.4L881.4,151.4z M812.1,559c-94.6,237.8-264.5,363.9-311.9,383.1C450.7,923.5,285.6,805.6,187.8,559c-47.2-119-59.3-253.6-61.2-345.5c-0.2-9,5.8-16.5,11.9-19.3C307.3,116,463.1,56.8,500.8,56.7c37.9,0.1,193,59,360.9,137c4.2,2.2,11.8,13.8,11.7,19C871.5,305.2,859.3,440.4,812.1,559L812.1,559z' />
-    </SvgIcon>
+   <svg style={{ width: 24*size, height: 24*size }} viewBox="0 0 24 24">
+      <radialGradient id="red">
+         <stop offset="0%" stop-color="#a90329" />
+         <stop offset="44%" stop-color="#8f0222" />
+         <stop offset="100%" stop-color="#6d0019" />
+       </radialGradient>
+       <radialGradient id="orange">
+         <stop offset="33%" stop-color="#ffb76b" />
+         <stop offset="100%" stop-color="#ff7f04" />
+       </radialGradient>
+       <radialGradient id="green">
+         <stop offset="9%" stop-color="#51b218" />
+         <stop offset="38%" stop-color="#4ca014" />
+         <stop offset="88%" stop-color="#337a0f" />
+       </radialGradient>
+       <radialGradient id="gold">
+         <stop offset="0%" stop-color="#cfb223" />
+         <stop offset="100%" stop-color="#ab9a18" />
+       </radialGradient>
+      <path fill={color} d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1Z" />
+   </svg>
     <span>{value}</span>
   </span>
 }
@@ -283,10 +315,9 @@ export const FaceDynamicIcon = props => {
    }, [color])
 
    return isFemale
-      ?<Icon path={mdiFaceWoman}
-      title="Me"
-      size={1}
-      color={currentColor}
-   />
-   : <FaceRoundedIcon {...props} />
+      ? <Icon path={mdiFaceWoman}
+         title="Me"
+         size={1}
+         color={currentColor} />
+      : <FaceRoundedIcon {...props} />
 }
