@@ -28,6 +28,7 @@ const useStyles = makeStyles({
 
 const LOGOUT_ITEM: RouteItem = {
    ...routesPaths[ZenRouteID.LOGIN],
+   title: 'Logout',
    icon: <ExitToAppRoundedIcon style={{ color: ZenPalette.lightRed, opacity: 0.7 }} />
 }
 

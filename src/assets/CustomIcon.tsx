@@ -178,22 +178,22 @@ export const OverallScore = props => {
   return <span className={overallScore} {...rest} >
    <svg style={{ width: 24*size, height: 24*size }} viewBox="0 0 24 24">
       <radialGradient id="red">
-         <stop offset="0%" stop-color="#a90329" />
-         <stop offset="44%" stop-color="#8f0222" />
-         <stop offset="100%" stop-color="#6d0019" />
+         <stop offset="0%" stopColor="#a90329" />
+         <stop offset="44%" stopColor="#8f0222" />
+         <stop offset="100%" stopColor="#6d0019" />
        </radialGradient>
        <radialGradient id="orange">
-         <stop offset="33%" stop-color="#ffb76b" />
-         <stop offset="100%" stop-color="#ff7f04" />
+         <stop offset="33%" stopColor="#ffb76b" />
+         <stop offset="100%" stopColor="#ff7f04" />
        </radialGradient>
        <radialGradient id="green">
-         <stop offset="9%" stop-color="#51b218" />
-         <stop offset="38%" stop-color="#4ca014" />
-         <stop offset="88%" stop-color="#337a0f" />
+         <stop offset="9%" stopColor="#51b218" />
+         <stop offset="38%" stopColor="#4ca014" />
+         <stop offset="88%" stopColor="#337a0f" />
        </radialGradient>
        <radialGradient id="gold">
-         <stop offset="0%" stop-color="#cfb223" />
-         <stop offset="100%" stop-color="#ab9a18" />
+         <stop offset="0%" stopColor="#cfb223" />
+         <stop offset="100%" stopColor="#ab9a18" />
        </radialGradient>
       <path fill={color} d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1Z" />
    </svg>

@@ -33,7 +33,7 @@ const _Registry: React.FC<TabProps> = props => {
 
   return (
       <form onSubmit={formik.handleSubmit}>
-      <Grid container spacing={3} style={{ margin:'auto' }}>
+      <Grid container spacing={3} justify='center' >
         <FormikInput
           sm={4}
           name='name'

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Grid, Button, useMediaQuery, useTheme } from '@material-ui/core'
 import FormikInput from '@_components/FormikInput'
 import { useFormik } from 'formik'
@@ -16,7 +16,7 @@ import { routesPaths } from '@_utils/routes'
 import { ZenRouteID } from '@_utils/routes/types'
 import { FieldState, FieldType } from '@_SDK_Field/types'
 import { zenToolboxInstance } from '@_utils/Toolbox'
-import { FieldTypeOpts } from '@_utils/constants/FieldTypeOpts'
+import { FieldTurfTypeOpts } from '@_utils/constants/FieldTurfTypeOpts'
 import { zenHooksInstance } from '@_utils/hooks'
 
 const stateSelector = (state: ConfigStore) => ({
@@ -147,7 +147,7 @@ const FieldDetail = () => {
             type='select'
             name='state'
             label='Turf state'
-            options={FieldTypeOpts}
+            options={FieldTurfTypeOpts}
             required
             {...formik}
          />

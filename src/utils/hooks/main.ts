@@ -50,9 +50,9 @@ export class ZenMainHooks {
    }
 
    private checkPathType (path: string): { isAuthPath: boolean, isPublicPath: boolean } {
-      // see if user is on public route
+      // see if user is on public route (do not touch anymore)
       const isAuthPath: boolean = !!/\/auth\/(login|account\/request)/.test(path)
-      // every public route
+      // every public route (edit only this one)
       const isPublicPath: boolean = !!/(\/auth\/(login|account\/request|account\/finalize|password\/forgot|password\/reset))/.test(path)
       return { isAuthPath, isPublicPath }
    }
@@ -115,7 +115,7 @@ export class ZenMainHooks {
 
       // make public routes not accessible if user is logged in
       useEffect(() => {
-         if(!isCheckingToken && isLogged && publicRoutesIDS.includes(activeRoute._id)) {
+         if(!isCheckingToken && isLogged && publicRoutesIDS.includes(activeRoute._id) && activeRoute._id !== ZenRouteID.ERROR) {
             router.replace(this.paths.DASHBOARD)
                .then(() => isMounted.current && setIsCheckingToken(false))
                .catch(() => isMounted.current && setIsCheckingToken(false))

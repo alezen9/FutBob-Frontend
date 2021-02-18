@@ -5,7 +5,7 @@ import ThumbUpRoundedIcon from '@material-ui/icons/ThumbUpRounded'
 import ThumbDownRoundedIcon from '@material-ui/icons/ThumbDownRounded'
 import { RadiationIcon } from '@_icons'
 
-export const FieldTypeOpts: OptionType[] = [
+export const FieldTurfTypeOpts: OptionType[] = [
    {
       value: FieldState.Great,
       label: 'Great',

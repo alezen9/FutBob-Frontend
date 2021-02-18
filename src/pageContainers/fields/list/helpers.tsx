@@ -6,6 +6,7 @@ import { Filter } from '@_components/Filters/Inputs'
 import { zenToolboxInstance } from '@_utils/Toolbox'
 import { Field, FieldState, FieldType } from '@_SDK_Field/types'
 import { TableHeaderData } from '@_components/ZenTable/helpers'
+import { FieldTurfTypeOpts } from '@_utils/constants/FieldTurfTypeOpts'
 
 export const headers: TableHeaderData[] = [
   { name: 'Name', style: { minWidth: 230 }, sticky: true },
@@ -49,7 +50,7 @@ export const _FiltersField: Filter[] = [
    type: 'select',
    name: 'states',
    label: 'Turf state',
-   options: zenToolboxInstance.getOptionsByEnum(FieldState),
+   options: FieldTurfTypeOpts,
    multiple: true
   }
 ]

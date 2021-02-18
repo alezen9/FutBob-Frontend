@@ -31,17 +31,30 @@ const ScoreValuesIconMap = {
 }
 
 const useStyles = makeStyles(theme => ({
-  mainWrapper: {
-    flexBasis: '50%',
-    maxWidth: '50%'
-  },
-  main: {
-    borderRadius: 10,
-    padding: theme.spacing(2),
-    boxShadow: ZenPalette.boxShadow,
-    cursor: 'pointer',
-    backgroundColor: ZenPalette.paperBackgroundColor
-  }
+   mainWrapper: {
+      flexBasis: '50%',
+      maxWidth: '50%'
+   },
+   main: {
+      borderRadius: 10,
+      padding: theme.spacing(2),
+      boxShadow: ZenPalette.boxShadow,
+      cursor: 'pointer',
+      backgroundColor: ZenPalette.paperBackgroundColor
+   },
+   title: {
+      fontSize: '1em',
+      [theme.breakpoints.down('xs')]: {
+         fontSize: '.85em'
+      }
+   },
+   titleContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      [theme.breakpoints.down('xs')]: {
+         marginBottom: '1em'
+      }
+   }
 }))
 
 type Props = {
@@ -86,9 +99,9 @@ const SingleScore = (props: Props) => {
       <>
         <Grid onClick={toggleSliders} className={classes.mainWrapper} container item xs={6} sm={4}>
           <Grid className={classes.main} item container xs={12}>
-            <Grid item xs={12} style={{ display: 'flex', alignItems: 'center' }}>
+            <Grid item xs={12} className={classes.titleContainer}>
               {ScoreValuesIconMap[title] || 'A'}
-              <Typography variant='caption' style={{ fontSize: '1em' }}>
+              <Typography variant='caption' className={classes.title}>
                 {title}
               </Typography>
             </Grid>

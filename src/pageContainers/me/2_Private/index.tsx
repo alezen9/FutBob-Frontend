@@ -22,7 +22,7 @@ const Private: React.FC<TabProps> = props => {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <Grid item container style={{ margin:'auto' }} spacing={3}>
+      <Grid container spacing={3} justify='center' >
         <FormikInput
           sm={4}
           name='oldPassword'

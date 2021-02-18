@@ -73,7 +73,7 @@ export const useSWRField = <T extends MoreOptions>(_id: string | null | undefine
 	const { fromCache = true, ...restOfOpts } = options || {}
 	const hasToken = apiInstance.auth.hasToken()
 	const initialData = fromCache ? cache.get([SwrKey.FIELD, _id]) : undefined
-   console.log(initialData)
+   console.log(initialData, _id)
 	const [revalidateOnMount, setRevalidateOnMount] = useState(fromCache && initialData ? false : hasToken)
 
 	const { setIsLoading, openSnackbar } = useConfigStore(stateSelector)
@@ -112,15 +112,6 @@ export const useSWRField = <T extends MoreOptions>(_id: string | null | undefine
 		async (body: CreateFieldInput) => {
 			try {
 				const _id = await apiInstance.field.create(body)
-				mutateThis((draft: Field) => {
-					draft._id = _id
-					draft.name = body.name
-					draft.type = body.type
-					draft.state = body.state
-					draft.price = body.price
-					draft.measurements = body.measurements
-					draft.location = body.location
-				})
             openSnackbar({
 					variant: 'success',
 					message: 'Field created successfully'
@@ -131,7 +122,7 @@ export const useSWRField = <T extends MoreOptions>(_id: string | null | undefine
 					variant: 'error',
 					message: get(ServerMessage, error, ServerMessage.generic)
 				})
-            return false
+            return null
 			}
 		}, [openSnackbar, mutateThis])
 
@@ -165,6 +156,7 @@ export const useSWRField = <T extends MoreOptions>(_id: string | null | undefine
 		async (_id: string) => {
 			try {
 				await apiInstance.field.delete(_id)
+            console.log('deleting...', _id)
 				cache.delete([SwrKey.FIELD, _id])
             openSnackbar({
 					variant: 'success',
