@@ -90,14 +90,20 @@ export const useSWRFreeAgents = <T extends FreeAgentMoreOptions>(options?: T) =>
 	const deleteFreeAgent = useCallback(
 		async (_id: string) => {
 			try {
-				await apiInstance.player.delete(_id)
+				await apiInstance.freeAgent.delete(_id)
 				cache.delete([SwrKey.FREE_AGENT, _id])
 				await triggerThis()
+            openSnackbar({
+					variant: 'success',
+					message: 'Free agent deleted successfully'
+				})
+            return true
 			} catch (error) {
 				openSnackbar({
 					variant: 'error',
 					message: get(ServerMessage, error, ServerMessage.generic)
 				})
+            return false
 			}
 		}, [openSnackbar, triggerThis])
 
