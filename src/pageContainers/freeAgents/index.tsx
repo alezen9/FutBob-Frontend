@@ -13,6 +13,8 @@ import { ConfigStore } from '@_zustand/config/helpers'
 import { FreeAgent } from '@_SDK_FreeAgent/types'
 import { useConfigStore } from '@_zustand/config'
 import CreateEditDialog from './CreateEditDialog'
+import { ZenRouteID } from '@_utils/routes/types'
+import { routesPaths } from '@_utils/routes'
 
 const stateSelector = (state: ConfigStore) => ({
   setIsLoading: state.setIsLoading
@@ -21,8 +23,9 @@ const stateSelector = (state: ConfigStore) => ({
 const LIMIT = 10
 
 const FreeAgentContainer = () => {
+   const router = useRouter()
   const [filters, setFilters] = useState({})
-  const [currentPage, setCurrentPage] = useState(1)
+   const [currentPage, setCurrentPage] = useState(Number(get(router.query, 'page', 1)))
   const [currentDeleteItem, setCurrentDeleteItem] = useState<FreeAgent>(null)
    const [currentEditItem, setCurrentEditItem] = useState<FreeAgent>(null)
 
@@ -30,7 +33,15 @@ const FreeAgentContainer = () => {
    const [_openDeleteDialog, setOpenDeleteDialog,] = useState(false)
   const { list = [], totalCount, deleteFreeAgent, createFreeAgent,  updateFreeAgent, isValidating } = useSWRFreeAgents({ filters, pagination: { skip: (currentPage - 1) * LIMIT, limit: LIMIT } })
   const { setIsLoading } = useConfigStore(stateSelector)
-  const router = useRouter()
+
+   useEffect(() => {
+      if(!router.query.page) {
+         router.replace({
+            pathname: routesPaths[ZenRouteID.FREE_AGENTS].path,
+            query: { page: 1 }
+         })
+      }
+   }, [router.query.page])
 
   const openDeleteDialog = useCallback(
     (item: FreeAgent) => () => {
@@ -79,10 +90,6 @@ const FreeAgentContainer = () => {
          handleChangePage(null, 1)
          setFilters(values)
    }, [])
-
-  useEffect(() => {
-     if(isEmpty(filters)) setCurrentPage(1)
-  }, [JSON.stringify(filters)])
 
 
   const actions: Action[] = useMemo(() => [

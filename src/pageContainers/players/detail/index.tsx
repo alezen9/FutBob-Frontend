@@ -23,11 +23,7 @@ export type TabProps = {
 const PlayersContainer = () => {
    const router = useRouter()
    const { _id } = router.query
-  const { setIsLoading, setPageTitle, pageTitle } = useConfigStore(state => ({
-     setIsLoading: state.setIsLoading,
-     setPageTitle: state.setPageTitle,
-     pageTitle: state.pageTitle
-  }))
+  const setIsLoading = useConfigStore(state => state.setIsLoading)
 
   const { item, updatePlayerRegistry, updatePlayerSkills, deletePlayer } = useSWRPlayer(_id as string)
   const { item: me } = useSWRMe()

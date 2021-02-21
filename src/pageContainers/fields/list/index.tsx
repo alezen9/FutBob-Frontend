@@ -25,13 +25,13 @@ const stateSelector = (state: ConfigStore) => ({
 const LIMIT = 10
 
 const FieldsContainer = () => {
+   const router = useRouter()
    const [filters, setFilters] = useState<FiltersField>({})
-   const [currentPage, setCurrentPage] = useState(1)
+   const [currentPage, setCurrentPage] = useState(Number(get(router.query, 'page', 1)))
    const [currentItem, setCurrentItem] = useState<Field>(null)
    const [openConfirmDelete, setOpenConfirmDelete] = useState(false)
    const { list = [], totalCount, deleteField, setDetailCache, isValidating } = useSWRFields({ filters, pagination: { skip: (currentPage - 1) * LIMIT, limit: LIMIT  } })
    const { setIsLoading } = useConfigStore(stateSelector)
-   const router = useRouter()
    const isMounted = zenHooksInstance.useIsMounted()
    
    const onDelete = useCallback(async () => {
@@ -50,7 +50,7 @@ const FieldsContainer = () => {
             query: { page: 1 }
          })
       }
-   }, [])
+   }, [router.query.page])
 
   const openDialog = useCallback(
     item => () => {
@@ -89,10 +89,6 @@ const FieldsContainer = () => {
          handleChangePage(null, 1)
          setFilters(values)
    }, [])
-
-  useEffect(() => {
-     if(isEmpty(filters)) setCurrentPage(1)
-  }, [JSON.stringify(filters)])
 
 
   const actions: Action[] = useMemo(() => [

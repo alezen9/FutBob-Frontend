@@ -28,15 +28,15 @@ const stateSelector = (state: ConfigStore) => ({
 const LIMIT = 10
 
 const PlayersContainer = () => {
+   const router = useRouter()
    const [filters, setFilters] = useState<FiltersPlayer>({})
-   const [currentPage, setCurrentPage] = useState(1)
+   const [currentPage, setCurrentPage] = useState(Number(get(router.query, 'page', 1)))
    const [currentItem, setCurrentItem] = useState<Player>(null)
    const [sort, setSort] = useState<SortPlayer>({})
    const [openConfirmDelete, setOpenConfirmDelete] = useState(false)
    const { list = [], totalCount, deletePlayer, setDetailCache, isValidating } = useSWRPlayers({ filters, pagination: { skip: (currentPage - 1) * LIMIT, limit: LIMIT  }, sort })
    const { item: { _id } } = useSWRMe()
    const { setIsLoading } = useConfigStore(stateSelector)
-   const router = useRouter()
    const isMounted = zenHooksInstance.useIsMounted()
    
    const onDelete = useCallback(async () => {
@@ -50,12 +50,13 @@ const PlayersContainer = () => {
 
    useEffect(() => {
       if(!router.query.page) {
+         console.log(router.query)
          router.replace({
             pathname: routesPaths[ZenRouteID.PLAYERS].path,
             query: { page: 1 }
          })
       }
-   }, [])
+   }, [router.query.page])
 
   const playerName = useMemo(() => {
     if(get(currentItem, 'user._id', null) === _id) return <span style={{ color: ZenPalette.error }}>yourself</span>
@@ -99,10 +100,6 @@ const PlayersContainer = () => {
          handleChangePage(null, 1)
          setFilters(values)
    }, [])
-
-  useEffect(() => {
-     if(isEmpty(filters)) setCurrentPage(1)
-  }, [JSON.stringify(filters)])
 
 
   const actions: Action[] = useMemo(() => [

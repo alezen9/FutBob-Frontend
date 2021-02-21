@@ -77,7 +77,7 @@ const FieldDetail = () => {
 
   return (
     <>
-      <Grid container spacing={3} style={{ marginTop: '2em' }}>
+      <Grid container spacing={3} justify='center' style={{ marginTop: '2em' }}>
          <Grid item container xs={12} md={6} justify='center'>
             <FutsalField
                onTypeChange={onTypeChange}
@@ -103,7 +103,7 @@ const FieldDetail = () => {
           {...formik}
         />
         <FormikInput
-          sm={6}
+          xs={6}
           name='measurements.width'
           label='Width'
           inputProps={{
@@ -113,7 +113,7 @@ const FieldDetail = () => {
           {...formik}
         />
         <FormikInput
-          sm={6}
+          xs={6}
           name='measurements.height'
           label='Length'
           inputProps={{
