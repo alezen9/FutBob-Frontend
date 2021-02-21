@@ -23,7 +23,11 @@ export type TabProps = {
 const PlayersContainer = () => {
    const router = useRouter()
    const { _id } = router.query
-  const setIsLoading = useConfigStore(state => state.setIsLoading)
+  const { setIsLoading, setPageTitle, pageTitle } = useConfigStore(state => ({
+     setIsLoading: state.setIsLoading,
+     setPageTitle: state.setPageTitle,
+     pageTitle: state.pageTitle
+  }))
 
   const { item, updatePlayerRegistry, updatePlayerSkills, deletePlayer } = useSWRPlayer(_id as string)
   const { item: me } = useSWRMe()
@@ -54,8 +58,7 @@ const PlayersContainer = () => {
       <ZenTab
         title='Stats'
         disabled
-      //   component={<_Skills {...{}} />}
-      component={<>player</>}
+         component={<></>}
       />
     </ZenTabs>
   )

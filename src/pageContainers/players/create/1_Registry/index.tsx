@@ -4,6 +4,7 @@ import FormikInput, { FormikEssentials } from '@_components/FormikInput'
 import { CountriesOpts } from '@_utils/constants/CountriesOpts'
 import { SexOpts } from '@_utils/constants/SexOpts'
 import PlayerCard from '@_components/PlayerCard'
+import dayjs from 'dayjs'
 
 
 type Props = {
@@ -35,6 +36,8 @@ const _Registry: React.FC<Props> = props => {
           label='Date of birth'
           type='date'
           required
+          minDate={dayjs().subtract(70, 'years')}
+          maxDate={dayjs().subtract(5, 'years')}
           {...formik}
         />
         <FormikInput

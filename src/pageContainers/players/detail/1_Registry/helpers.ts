@@ -42,6 +42,6 @@ export const schema = yup.object().shape({
 	country: yup.string().required(),
 	phone: yup.string().required(),
    additionalInfo: yup.object().shape({
-      email: yup.string().email()
-   })
+      email: yup.string().email().nullable()
+   }).nullable()
 })

@@ -4,6 +4,7 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/picker
 import {get} from 'lodash'
 import { FormHelperText, makeStyles, useMediaQuery, useTheme } from '@material-ui/core'
 import { ThemeType, ZenPalette } from '@_palette'
+import { Dayjs } from 'dayjs'
 
 const useStyles = makeStyles(theme => ({
   textField: {
@@ -45,10 +46,12 @@ type Props = {
   name: string
   disabled?: boolean
   errors: any
+  minDate?: Dayjs
+  maxDate?: Dayjs
 }
 
 const InputDate: React.FC<Props> = props => {
-   const { id, label, onChange, values, name, disabled = false, errors } = props
+   const { id, label, onChange, values, name, disabled = false, errors, minDate, maxDate } = props
    const classes = useStyles({error: !!get(errors, name, null)})
    const theme = useTheme()
    const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'))
@@ -71,6 +74,8 @@ const InputDate: React.FC<Props> = props => {
                autoOk
                value={get(values, name, null)}
                onChange={onChange}
+               {...minDate && { minDate }}
+               {...maxDate && { maxDate }}
                invalidDateMessage=''
                KeyboardButtonProps={{
                   'aria-label': 'change date',

@@ -7,6 +7,7 @@ import { useFormik } from 'formik'
 import { get, isEmpty } from 'lodash'
 import { TabProps } from '..'
 import { onUpdatePlayerRegistry, schema } from './helpers'
+import dayjs from 'dayjs'
 
 
 const _Registry: React.FC<TabProps> = props => {
@@ -54,6 +55,8 @@ const _Registry: React.FC<TabProps> = props => {
           label='Date of birth'
           type='date'
           required
+          minDate={dayjs().subtract(70, 'years')}
+          maxDate={dayjs().subtract(5, 'years')}
           {...formik}
         />
         <FormikInput

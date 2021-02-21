@@ -7,6 +7,7 @@ import { TabProps } from '..'
 import { CountriesOpts } from '@_utils/constants/CountriesOpts'
 import { onUpdateMyRegistry, schema } from './helpers'
 import { SexOpts } from '@_utils/constants/SexOpts'
+import dayjs from 'dayjs'
 
 
 
@@ -56,6 +57,8 @@ const Registry: React.FC<TabProps> = props => {
           label='Date of birth'
           type='date'
           required
+          minDate={dayjs().subtract(70, 'years')}
+          maxDate={dayjs().subtract(5, 'years')}
           {...formik}
         />
         <FormikInput

@@ -108,16 +108,12 @@ export const useSWRPlayer = <T extends MoreOptions>(_id: string | null | undefin
 	const triggerThis = useCallback(
 		(shouldRevalidate: boolean = true) => {
 			return trigger([SwrKey.PLAYER, _id], shouldRevalidate)
-		},
-		[trigger]
-	)
+		}, [trigger])
 
 	const mutateThis = useCallback(
 		(data: DirectMutationImmer<Player>, shouldRevalidate: boolean = false) => {
 			return mutate(produce(data), shouldRevalidate)
-		},
-		[mutate]
-	)
+		}, [mutate])
 
    const updatePlayerRegistry = useCallback(
 		async (body: UpdateRegistryInput, isMe?: boolean) => {

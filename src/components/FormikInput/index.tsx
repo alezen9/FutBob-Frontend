@@ -111,6 +111,8 @@ type Props = FormikEssentials & GridWrapperProps & {
   fullWidthChip?: boolean
   valuesToexcludeFromOptions?: string[]
   placeholder?: string
+   minDate?: Dayjs
+  maxDate?: Dayjs
 }
 
 export type FormikInputProps = Props
