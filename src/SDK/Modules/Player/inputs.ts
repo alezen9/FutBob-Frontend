@@ -21,3 +21,13 @@ export class FiltersPlayer {
 	countries?: string[]
 	searchText?: string
 }
+
+export enum EnumSortPlayer {
+   name = 'name',
+   country = 'country',
+   age = 'age'
+}
+export class SortPlayer {
+   field?: EnumSortPlayer
+   sort?: 'ASC'|'DESC'
+}

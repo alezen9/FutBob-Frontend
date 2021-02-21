@@ -3,7 +3,7 @@ import { zenToolboxInstance } from '@_utils/Toolbox'
 import { get } from 'lodash'
 import { Pagination } from 'src/SDK/types'
 import { ZenServer } from '../../'
-import { CreatePlayerInput, FiltersPlayer, UpdatePlayerInput } from './inputs'
+import { CreatePlayerInput, FiltersPlayer, SortPlayer, UpdatePlayerInput } from './inputs'
 import { Player } from './types'
 
 class PlayerServer {
@@ -39,13 +39,13 @@ class PlayerServer {
 		return this._server.API({ query, name: 'Player_delete', params: String(_id) })
 	}
 
-	async getList(filters: FiltersPlayer, pagination: Pagination, fields: string): Promise<ListOf<Player>> {
+	async getList(filters: FiltersPlayer, pagination: Pagination, sort: SortPlayer, fields: string): Promise<ListOf<Player>> {
       const revisedFilters = { ...filters, ids: (get(filters, 'ids', []) || []).map((_id: string|number) => String(_id)) }
 		const query = `
       query {
-         Player_getList(filters: ${zenToolboxInstance.paramsToString(revisedFilters)}, pagination: ${zenToolboxInstance.paramsToString(pagination)}) ${fields}
+         Player_getList(filters: ${zenToolboxInstance.paramsToString(revisedFilters)}, pagination: ${zenToolboxInstance.paramsToString(pagination)}, sort: ${zenToolboxInstance.paramsToString(sort)}) ${fields}
       }`
-		return this._server.API({ query, name: 'Player_getList', params: { filters: revisedFilters, pagination }, fields })
+		return this._server.API({ query, name: 'Player_getList', params: { filters: revisedFilters, pagination, sort }, fields })
 	}
 }
 

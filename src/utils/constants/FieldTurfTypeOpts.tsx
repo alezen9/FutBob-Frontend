@@ -12,7 +12,8 @@ export const FieldTurfTypeOpts: OptionType[] = [
       component: <span style={{ display: 'flex', fontSize: '1em', alignItems: 'center' }}>
          <ThumbUpRoundedIcon style={{ color: 'limegreen', fontSize: '1.2em' }} />
          <span style={{ marginLeft: '1em' }}>Great</span>
-      </span>
+      </span>,
+      icon: <ThumbUpRoundedIcon style={{ color: 'limegreen', fontSize: '1.2em' }} />
    },
    {
       value: FieldState.NotGreatNotTerrible,
@@ -20,7 +21,8 @@ export const FieldTurfTypeOpts: OptionType[] = [
       component: <span style={{ display: 'flex', fontSize: '1em', alignItems: 'center' }}>
          <RadiationIcon style={{ color: 'orange', fontSize: '1.2em' }} />
          <span style={{ marginLeft: '1em' }}>Not great not terrible</span>
-      </span>
+      </span>,
+      icon: <RadiationIcon style={{ color: 'orange', fontSize: '1.2em' }} />
    },
    {
       value: FieldState.Terrible,
@@ -28,6 +30,7 @@ export const FieldTurfTypeOpts: OptionType[] = [
       component: <span style={{ display: 'flex', fontSize: '1em', alignItems: 'center' }}>
          <ThumbDownRoundedIcon style={{ color: 'crimson', fontSize: '1.2em' }} />
          <span style={{ marginLeft: '1em' }}>Terrible</span>
-      </span>
+      </span>,
+      icon: <ThumbDownRoundedIcon style={{ color: 'crimson', fontSize: '1.2em' }} />
    }
 ]

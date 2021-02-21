@@ -16,8 +16,9 @@ import { Player } from '@_SDK_Player/types'
 import { routesPaths } from '@_utils/routes'
 import { ZenRouteID } from '@_utils/routes/types'
 import { ConfigStore } from '@_zustand/config/helpers'
-import { FiltersPlayer } from '@_SDK_Player/inputs'
+import { EnumSortPlayer, FiltersPlayer, SortPlayer } from '@_SDK_Player/inputs'
 import { zenHooksInstance } from '@_utils/hooks'
+import { ZenTableSort } from '@_components/ZenTable/helpers'
 
 const stateSelector = (state: ConfigStore) => ({
   openSnackbar: state.openSnackbar,
@@ -30,8 +31,9 @@ const PlayersContainer = () => {
    const [filters, setFilters] = useState<FiltersPlayer>({})
    const [currentPage, setCurrentPage] = useState(1)
    const [currentItem, setCurrentItem] = useState<Player>(null)
+   const [sort, setSort] = useState<SortPlayer>({})
    const [openConfirmDelete, setOpenConfirmDelete] = useState(false)
-   const { list = [], totalCount, deletePlayer, setDetailCache, isValidating } = useSWRPlayers({ filters, pagination: { skip: (currentPage - 1) * LIMIT, limit: LIMIT  } })
+   const { list = [], totalCount, deletePlayer, setDetailCache, isValidating } = useSWRPlayers({ filters, pagination: { skip: (currentPage - 1) * LIMIT, limit: LIMIT  }, sort })
    const { item: { _id } } = useSWRMe()
    const { setIsLoading } = useConfigStore(stateSelector)
    const router = useRouter()
@@ -113,6 +115,21 @@ const PlayersContainer = () => {
     }
   ], [goToCreate])
 
+  const sortTable: ZenTableSort = useMemo(() => ({
+     colIDS: ['name', 'country', 'age'],
+     initialValue: {
+        colID: 'name',
+        isASC: true
+     },
+     disableAll: isValidating,
+     onSortChange: (id: string, isASC: boolean) => {
+        setSort({
+           field: id as EnumSortPlayer,
+           sort: isASC ? 'ASC' : 'DESC'
+        })
+     }
+  }), [isValidating])
+
    const tableData = useMemo(() => {
       const data = list.map(getPlayerDataRow({ goToDetails, openDialog, userConnectedId: _id }))
       return data
@@ -139,6 +156,7 @@ const PlayersContainer = () => {
             currentPage={currentPage}
             onChangePage={handleChangePage}
          />}
+         sort={sortTable}
       />
       <WarningDeleteDialog
          open={openConfirmDelete}

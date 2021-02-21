@@ -20,8 +20,10 @@ export const getFieldDataRow = ({ openDialog, goToDetails }) => (fieldData: Fiel
   return {
     name: get(fieldData, 'name', 'Unknown field'),
     type: zenToolboxInstance.decamelize(FieldType[get(fieldData, 'type', 0)]),
-    price: zenToolboxInstance.centsToEuros(get(fieldData, 'price', 0)),
-    state: zenToolboxInstance.decamelize(FieldState[get(fieldData, 'state', 0)]),
+    price: get(fieldData, 'price', 0) === 0
+      ? 'Free'
+      : zenToolboxInstance.centsToEurosFormatted(get(fieldData, 'price', 0)),
+    state: FieldTurfTypeOpts.find(({ value }) => value === get(fieldData, 'state', 0)).icon,
     dimensions: `${get(fieldData, 'measurements.height', 0)}x${get(fieldData, 'measurements.width', 0)} m`,
     actions: [
       {

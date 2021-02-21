@@ -7,7 +7,7 @@ import { apiInstance } from 'src/SDK'
 import { DirectMutationImmer, MoreOptions, stateSelector, SwrKey } from '@_swr/helpers'
 import swrPlayersFetchers from './fetchers'
 import { Pagination } from 'src/SDK/types'
-import { CreatePlayerInput, FiltersPlayer, UpdatePlayerInput } from '@_SDK_Player/inputs'
+import { CreatePlayerInput, FiltersPlayer, SortPlayer, UpdatePlayerInput } from '@_SDK_Player/inputs'
 import { ServerMessage } from '@_utils/serverMessages'
 import { User } from '@_SDK_User/types'
 import { Player } from '@_SDK_Player/types'
@@ -17,17 +17,19 @@ import { UpdateRegistryInput } from '@_SDK_User/inputs'
 interface PlayersMoreOptions extends MoreOptions {
 	filters?: FiltersPlayer
 	pagination: Pagination
+   sort?: SortPlayer
 }
 
 export const useSWRPlayers = <T extends PlayersMoreOptions>(options?: T) => {
-	const { filters = {}, pagination = { skip: 0 }, ...restOfOpts } = options || {}
+	const { filters = {}, pagination = { skip: 0 }, sort = {}, ...restOfOpts } = options || {}
 	const hasToken = apiInstance.auth.hasToken()
 	const filtersKey = JSON.stringify(filters)
 	const paginationKey = JSON.stringify(pagination)
+   const sortKey = JSON.stringify(sort)
 
 	const { setIsLoading, openSnackbar } = useConfigStore(stateSelector)
 
-	const { data, isValidating } = useSWR([SwrKey.PLAYERS, filtersKey, paginationKey], swrPlayersFetchers.listFetcher, {
+	const { data, isValidating } = useSWR([SwrKey.PLAYERS, filtersKey, paginationKey, sortKey], swrPlayersFetchers.listFetcher, {
 		revalidateOnMount: hasToken,
 		shouldRetryOnError: false,
 		revalidateOnFocus: false,
@@ -40,8 +42,8 @@ export const useSWRPlayers = <T extends PlayersMoreOptions>(options?: T) => {
 
 	const triggerThis = useCallback(
 		(shouldRevalidate: boolean = true) => {
-			return trigger([SwrKey.PLAYERS, filtersKey, paginationKey], shouldRevalidate)
-		}, [trigger, filtersKey, paginationKey])
+			return trigger([SwrKey.PLAYERS, filtersKey, paginationKey, sortKey], shouldRevalidate)
+		}, [trigger, filtersKey, paginationKey, sortKey])
 
    const setDetailCache = useCallback((item: Player) => {
       cache.set([SwrKey.PLAYER, item._id], item)

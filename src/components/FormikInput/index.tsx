@@ -64,6 +64,7 @@ export type OptionType = {
   label: any
   value: any
   component?: ReactNode
+  icon?: ReactNode
   [field: string]: any
 }
 
@@ -388,7 +389,7 @@ const FormikInput = (props: Props) => {
           type={type}
           placeholder={placeholder}
           className={textField}
-          value={get(values, name, '') || ''}
+          value={[null, undefined].includes(get(values, name, '')) ? '' : get(values, name, '')}
           onChange={e => {
             _setFieldValueTouched(name, e.target.value)
             if (supplementaryOnChange) supplementaryOnChange(e.target.value)

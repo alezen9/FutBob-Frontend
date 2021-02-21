@@ -14,11 +14,11 @@ import { TableHeaderData } from '@_components/ZenTable/helpers'
 import GroupedPositions from '@_components/GroupedPositions'
 
 export const headers: TableHeaderData[] = [
-  { name: 'Name', style: { minWidth: 230 } },
+  { id: 'name', name: 'Name', style: { minWidth: 230 } },
   { name: 'Physical state', style: { minWidth: 180, textAlign: 'left' } },
   { name: 'Positions', style: { minWidth: 190, textAlign: 'center' } },
-  { name: 'Country', style: { minWidth: 280, textAlign: 'left' } },
-  { name: 'Age', style: { maxWidth: 70, textAlign: 'center' } },
+  { id: 'country', name: 'Country', style: { minWidth: 280, textAlign: 'left' } },
+  { id: 'age', name: 'Age', style: { minWidth: 120, textAlign: 'center' } },
   { name: 'Phone', style: { minWidth: 180 } }
 ]
 
