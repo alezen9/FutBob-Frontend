@@ -12,7 +12,7 @@ export const headers: TableHeaderData[] = [
   { name: 'Name', style: { minWidth: 230 } },
   { name: 'Type', style: { maxWidth: 70, textAlign: 'center' } },
   { name: 'Price', style: { minWidth: 130, textAlign: 'center' } },
-  { name: 'State', style: { minWidth: 200, textAlign: 'center' } },
+  { name: 'State', style: { minWidth: 200, textAlign: 'left' } },
   { name: 'Dimensions', style: { maxWidth: 200, textAlign: 'center' } }
 ]
 
