@@ -4,7 +4,7 @@ import NavigateNextRoundedIcon from '@material-ui/icons/NavigateNextRounded'
 import DeleteForeverRoundedIcon from '@material-ui/icons/DeleteForeverRounded'
 import { Filter } from '@_components/Filters/Inputs'
 import { zenToolboxInstance } from '@_utils/Toolbox'
-import { Field, FieldState, FieldType } from '@_SDK_Field/types'
+import { Field, FieldType } from '@_SDK_Field/types'
 import { TableHeaderData } from '@_components/ZenTable/helpers'
 import { FieldTurfTypeOpts } from '@_utils/constants/FieldTurfTypeOpts'
 
@@ -23,7 +23,7 @@ export const getFieldDataRow = ({ openDialog, goToDetails }) => (fieldData: Fiel
     price: get(fieldData, 'price', 0) === 0
       ? 'Free'
       : zenToolboxInstance.centsToEurosFormatted(get(fieldData, 'price', 0)),
-    state: FieldTurfTypeOpts.find(({ value }) => value === get(fieldData, 'state', 0)).icon,
+    state: FieldTurfTypeOpts.find(({ value }) => value === get(fieldData, 'state', 0)).component,
     dimensions: `${get(fieldData, 'measurements.height', 0)}x${get(fieldData, 'measurements.width', 0)} m`,
     actions: [
       {
