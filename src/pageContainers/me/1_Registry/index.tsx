@@ -10,14 +10,14 @@ import { SexOpts } from '@_utils/constants/SexOpts'
 import dayjs from 'dayjs'
 
 
-
 const Registry: React.FC<TabProps> = props => {
   const {
-    item: { _id, registry, credentials: { email } },
+    item: { _id, registry, credentials },
     setIsLoading,
     updateMyRegistry,
     updateMyEmail
   } = props
+  const { email } = credentials || {}
 
   const initCountry = useMemo(() => {
     if(!registry.country) return null

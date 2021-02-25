@@ -1,15 +1,28 @@
 import React from 'react'
-import { CircleFlag } from 'react-circle-flags'
+import Flags from 'country-flag-icons/react/1x1'
+import { makeStyles } from '@material-ui/core'
+import { ZenPalette } from '@_palette'
 
 type PropsFlags = {
   value: string
   label: string
 }
 
+const useStyles = makeStyles({
+   flag: {
+      marginRight: '1em',
+      width: 25,
+      borderRadius: '50%',
+      boxShadow: ZenPalette.boxShadow
+   }
+})
+
 const FlagOption = React.memo((props: PropsFlags) => {
   const { value = '', label } = props
+  const classes = useStyles()
+  const Flag = Flags[value]
   return <div style={{ display: 'flex', alignItems: 'center' }}>
-    <CircleFlag countryCode={value.toLowerCase()} height='20' style={{ marginRight: '1em' }} />
+     {Flag && <Flag title={label} className={classes.flag} />}
     {label}
   </div>
 })
@@ -50,11 +63,11 @@ export const CountriesOpts = [
     label: 'Armenia',
     component: <FlagOption value='AM' label='Armenia' />
   },
-  {
-    value: 'AN',
-    label: 'Netherlands Antilles',
-    component: <FlagOption value='AN' label='Netherlands Antilles' />
-  },
+//   {
+//     value: 'AN',
+//     label: 'Netherlands Antilles',
+//     component: <FlagOption value='AN' label='Netherlands Antilles' />
+//   },
   {
     value: 'AO',
     label: 'Angola',
@@ -1175,11 +1188,11 @@ export const CountriesOpts = [
     label: 'Uganda',
     component: <FlagOption value='UG' label='Uganda' />
   },
-  {
-    value: 'UM',
-    label: 'United States Minor Outlying Islands',
-    component: <FlagOption value='UM' label='United States Minor Outlying Islands' />
-  },
+//   {
+//     value: 'UM',
+//     label: 'United States Minor Outlying Islands',
+//     component: <FlagOption value='UM' label='United States Minor Outlying Islands' />
+//   },
   {
     value: 'US',
     label: 'United States',

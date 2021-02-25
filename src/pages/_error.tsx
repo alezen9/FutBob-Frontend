@@ -50,14 +50,14 @@ const Error = props => {
    }, [router.push])
    
 	return (
-		<Grid className={classes.container} container justify='center' alignContent='center'>
+		<Grid className={classes.container} container direction='column' justify='center' alignContent='center'>
 			<div className={classes.item}>
 				<Typography variant='h1'>{statusCode || '000'}</Typography>
 				<div className={classes.verticalDivider} />
 				<Grid item>
 					<Typography variant='body1'>{statusCode === 404 ? 'Page' : 'Oops!'}</Typography>
 					<Typography variant='body1'>
-						{statusCode === 404 ? 'Not found' : "Something's wrong, i can feel it"}
+						{statusCode === 404 ? 'Not found' : "This is (not) the way!"}
 					</Typography>
 				</Grid>
 			</div>
