@@ -8,16 +8,17 @@ import { CountriesOpts } from '@_utils/constants/CountriesOpts'
 import { onUpdateMyRegistry, schema } from './helpers'
 import { SexOpts } from '@_utils/constants/SexOpts'
 import dayjs from 'dayjs'
+import { Credentials, Registry as RegistryType } from '@_SDK_User/types'
 
 
 const Registry: React.FC<TabProps> = props => {
   const {
-    item: { _id, registry, credentials },
+    item: { _id, registry = {} as RegistryType, credentials = {} as Credentials },
     setIsLoading,
     updateMyRegistry,
     updateMyEmail
   } = props
-  const { email } = credentials || {}
+  const { email } = credentials
 
   const initCountry = useMemo(() => {
     if(!registry.country) return null
