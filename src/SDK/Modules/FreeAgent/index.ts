@@ -5,6 +5,7 @@ import { FreeAgent } from './types'
 import { CreateFreeAgentInput, FiltersFreeAgent, UpdateFreeAgentInput } from './inputs'
 import { zenToolboxInstance } from '@_utils/Toolbox'
 import { get } from 'lodash'
+import { CreatePlayerInput } from '@_SDK_Player/inputs'
 
 class FreeAgentServer {
 	private _server: ZenServer
@@ -36,6 +37,14 @@ class FreeAgentServer {
          FreeAgent_delete(_id: "${_id}")
       }`
 		return this._server.API({ query, name: 'FreeAgent_delete', params: String(_id) })
+	}
+
+   async registerAsPlayer(_id: string, body: CreatePlayerInput): Promise<string> {
+		const query = `
+      mutation {
+         FreeAgent_registerAsPlayer(_id: "${_id}", body: ${zenToolboxInstance.paramsToString(body)})
+      }`
+		return this._server.API({ query, name: 'FreeAgent_registerAsPlayer', params: String(_id) })
 	}
 
 	async getList(filters: FiltersFreeAgent, pagination: Pagination, fields: string): Promise<ListOf<FreeAgent>> {

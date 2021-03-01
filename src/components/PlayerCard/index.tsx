@@ -175,7 +175,7 @@ const PlayerCard: React.FC<Props> = props => {
           <span>{overall}</span>
           <span>{ShortName_Position[get(positions, '0', null)]}</span>
           <span>
-            {Flag && <Flag style={{ filter: 'drop-shadow(2px 4px 6px rgba(0,0,0,.3))', width: 30, borderRadius: '50' }} />}
+            {Flag && <Flag style={{ filter: 'drop-shadow(2px 4px 6px rgba(0,0,0,.3))', width: 30, borderRadius: '50%' }} />}
           </span>
         </div>
 

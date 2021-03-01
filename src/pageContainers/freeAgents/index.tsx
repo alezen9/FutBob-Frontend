@@ -31,7 +31,7 @@ const FreeAgentContainer = () => {
 
   const [_openCreateEdit, setOpenCreateEdit] = useState(false)
    const [_openDeleteDialog, setOpenDeleteDialog,] = useState(false)
-  const { list = [], totalCount, deleteFreeAgent, createFreeAgent,  updateFreeAgent, isValidating } = useSWRFreeAgents({ filters, pagination: { skip: (currentPage - 1) * LIMIT, limit: LIMIT } })
+  const { list = [], totalCount, deleteFreeAgent, createFreeAgent,  updateFreeAgent, isValidating, setDetailCache } = useSWRFreeAgents({ filters, pagination: { skip: (currentPage - 1) * LIMIT, limit: LIMIT } })
   const { setIsLoading } = useConfigStore(stateSelector)
 
    useEffect(() => {
@@ -77,6 +77,12 @@ const FreeAgentContainer = () => {
       setOpenCreateEdit(false)
    }, [])
 
+   const goToRegisterAsPlayer = useCallback(
+    (item: FreeAgent) => () => {
+      setDetailCache(item)
+      router.push(routesPaths[ZenRouteID.FREE_AGENT_REGISTER_PLAYER].path, routesPaths[ZenRouteID.FREE_AGENT_REGISTER_PLAYER].as({ _id: item._id }))
+    }, [setDetailCache])
+
   const handleChangePage = useCallback(
       (e: any, newPage: number) => {
          setCurrentPage(newPage)
@@ -103,9 +109,9 @@ const FreeAgentContainer = () => {
   ], [goToCreate])
 
    const tableData = useMemo(() => {
-      const data = list.map(getFreeAgentsDataRow({ openDeleteDialog, openCreateEditDialog }))
+      const data = list.map(getFreeAgentsDataRow({ openDeleteDialog, openCreateEditDialog, goToRegisterAsPlayer }))
       return data
-  }, [JSON.stringify(list), openCreateEditDialog, openDeleteDialog])
+  }, [JSON.stringify(list), openCreateEditDialog, openDeleteDialog, goToRegisterAsPlayer])
 
   return (
     <>

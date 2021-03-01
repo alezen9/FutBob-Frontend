@@ -44,29 +44,33 @@ export const useSWRFreeAgents = <T extends FreeAgentMoreOptions>(options?: T) =>
 			return trigger([SwrKey.FREE_AGENTS, filtersKey, paginationKey], shouldRevalidate)
 	}, [trigger, filtersKey, paginationKey])
 
-   	const mutateThis = useCallback(
+   const mutateThis = useCallback(
 		(data: DirectMutationImmer<ListOf<FreeAgent>>, shouldRevalidate: boolean = false) => {
 			return mutate(produce(data), shouldRevalidate)
-		}, [mutate])
+	}, [mutate])
 
-   	const createFreeAgent = useCallback(
-		   async (body: CreateFreeAgentInput) => {
-            try {
-               const _id = await apiInstance.freeAgent.create(body)
-               openSnackbar({
-                  variant: 'success',
-                  message: 'Free agent created successfully'
-               })
-               await triggerThis()
-               return _id
-            } catch (error) {
-               openSnackbar({
-                  variant: 'error',
-                  message: get(ServerMessage, error, ServerMessage.generic)
-               })
-               return null
-            }
-		}, [openSnackbar, triggerThis])
+   const setDetailCache = useCallback((item: FreeAgent) => {
+      cache.set([SwrKey.FREE_AGENT, item._id], item)
+   }, [])
+
+   const createFreeAgent = useCallback(
+      async (body: CreateFreeAgentInput) => {
+         try {
+            const _id = await apiInstance.freeAgent.create(body)
+            openSnackbar({
+               variant: 'success',
+               message: 'Free agent created successfully'
+            })
+            await triggerThis()
+            return _id
+         } catch (error) {
+            openSnackbar({
+               variant: 'error',
+               message: get(ServerMessage, error, ServerMessage.generic)
+            })
+            return null
+         }
+   }, [openSnackbar, triggerThis])
 
 	const updateFreeAgent = useCallback(
 		async (body: UpdateFreeAgentInput) => {
@@ -114,105 +118,49 @@ export const useSWRFreeAgents = <T extends FreeAgentMoreOptions>(options?: T) =>
       createFreeAgent,
       updateFreeAgent,
 		deleteFreeAgent,
-		isValidating
+		isValidating,
+      setDetailCache
 	}
 }
 
-// export const useSWRFreeAgent = <T extends MoreOptions>(_id: string | null | undefined, options?: T) => {
-// 	const { fromCache = true, ...restOfOpts } = options || {}
-// 	const hasToken = apiInstance.auth.hasToken()
-// 	const { setIsLoading, openSnackbar } = useConfigStore(stateSelector)
-// 	const initialData = fromCache ? cache.get([SwrKey.FREE_AGENT, _id]) : undefined
-// 	const [revalidateOnMount, setRevalidateOnMount] = useState(fromCache && initialData ? false : hasToken)
-// 	const { data, mutate, isValidating } = useSWR([SwrKey.FREE_AGENT, _id], swrFreeAgentFetchers.itemFetcher, {
-// 		initialData,
-// 		revalidateOnMount,
-// 		shouldRetryOnError: false,
-// 		revalidateOnFocus: false,
-// 		...(restOfOpts || {})
-// 	})
 
-// 	useEffect(() => {
-// 		if (get(data, '_id', null) && !revalidateOnMount) setRevalidateOnMount(hasToken)
-// 	}, [get(data, '_id', null), revalidateOnMount, hasToken])
+export const useSWRFreeAgent = <T extends MoreOptions>(_id: string | null | undefined, options?: T) => {
+	const { fromCache = true, ...restOfOpts } = options || {}
+	const hasToken = apiInstance.auth.hasToken()
+	const initialData = fromCache ? cache.get([SwrKey.FREE_AGENT, _id]) : undefined
+	const [revalidateOnMount, setRevalidateOnMount] = useState(fromCache && initialData ? false : hasToken)
 
-// 	useEffect(() => {
-// 		setIsLoading(isValidating)
-// 	}, [isValidating])
+	const { setIsLoading, openSnackbar } = useConfigStore(stateSelector)
 
-// 	const triggerThis = useCallback(
-// 		(shouldRevalidate: boolean = true) => {
-// 			return trigger([SwrKey.FREE_AGENT, _id], shouldRevalidate)
-// 		},
-// 		[trigger]
-// 	)
+	const { data, mutate, isValidating } = useSWR([SwrKey.PLAYER, _id], swrFreeAgentFetchers.itemFetcher, {
+		initialData,
+		revalidateOnMount,
+		shouldRetryOnError: false,
+		revalidateOnFocus: false,
+		...(restOfOpts || {})
+	})
 
-// 	const mutateThis = useCallback(
-// 		(data: DirectMutationImmer<FreeAgent>, shouldRevalidate: boolean = false) => {
-// 			return mutate(produce(data), shouldRevalidate)
-// 		},
-// 		[mutate]
-// 	)
+	useEffect(() => {
+		if (get(data, '_id', null) && !revalidateOnMount) setRevalidateOnMount(hasToken)
+	}, [get(data, '_id', null), revalidateOnMount, hasToken])
 
-// 	const createFreeAgent = useCallback(
-// 		async (body: CreateFreeAgentInput) => {
-// 			try {
-// 				const _id = await apiInstance.freeAgent.create(body)
-//             openSnackbar({
-// 					variant: 'success',
-// 					message: 'Free agent created successfully'
-// 				})
-//             return _id
-// 			} catch (error) {
-// 				openSnackbar({
-// 					variant: 'error',
-// 					message: get(ServerMessage, error, ServerMessage.generic)
-// 				})
-//             return null
-// 			}
-// 		},
-// 		[openSnackbar, mutateThis]
-// 	)
+	useEffect(() => {
+		setIsLoading(isValidating)
+	}, [isValidating])
 
-// 	const updateFreeAgent = useCallback(
-// 		async (body: UpdateFreeAgentInput) => {
-// 			try {
-// 				await apiInstance.freeAgent.update(body)
-// 				mutateThis((draft: FreeAgent) => {
-// 					if (![null, undefined].includes(body.name)) draft.name = body.name
-// 					if (![null, undefined].includes(body.surname)) draft.surname = body.surname
-// 				})
-// 			} catch (error) {
-// 				openSnackbar({
-// 					variant: 'error',
-// 					message: get(ServerMessage, error, ServerMessage.generic)
-// 				})
-// 			}
-// 		},
-// 		[openSnackbar, mutateThis]
-// 	)
+	const triggerThis = useCallback(
+		(shouldRevalidate: boolean = true) => {
+			return trigger([SwrKey.PLAYER, _id], shouldRevalidate)
+		}, [trigger])
 
-// 	const deleteFreeAgent = useCallback(
-// 		async (_id: string, isMe?: boolean) => {
-// 			try {
-// 				await apiInstance.player.delete(_id)
-// 				cache.delete([SwrKey.FREE_AGENT, _id])
-// 			} catch (error) {
-// 				openSnackbar({
-// 					variant: 'error',
-// 					message: get(ServerMessage, error, ServerMessage.generic)
-// 				})
-// 			}
-// 		},
-// 		[openSnackbar]
-// 	)
+	const mutateThis = useCallback(
+		(data: DirectMutationImmer<FreeAgent>, shouldRevalidate: boolean = false) => {
+			return mutate(produce(data), shouldRevalidate)
+		}, [mutate])
 
-// 	return {
-// 		item: data || ({} as FreeAgent),
-// 		mutate: mutateThis,
-// 		trigger: triggerThis,
-// 		createFreeAgent,
-// 		updateFreeAgent,
-// 		deleteFreeAgent
-// 	}
-// }
+	return {
+		item: (data as FreeAgent) || ({} as FreeAgent),
+		mutate: mutateThis,
+		trigger: triggerThis
+	}
+}

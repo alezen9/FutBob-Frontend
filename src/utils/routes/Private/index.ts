@@ -52,6 +52,16 @@ export const privateRoutes: ZenRoute[] = [
       title: 'Free agents',
       path: '/free-agents'
    },
+   {
+      _id: ZenRouteID.FREE_AGENT_REGISTER_PLAYER,
+      section: ZenSection.FREE_AGENTS,
+      isPrivate: true,
+      displayBack: true,
+      backRouteID: ZenRouteID.FREE_AGENTS,
+      title: 'Register free agent',
+      path: '/free-agents/register-player/:_id',
+      as: ({ _id }) => `/free-agents/register-player/${_id}`
+   },
     // ============================ //
    {
       _id: ZenRouteID.FIELDS,

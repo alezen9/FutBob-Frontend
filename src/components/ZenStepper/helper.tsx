@@ -29,10 +29,6 @@ export type StepperFlowConfig = {
    setActiveStepRef: MutableRefObject<(step: number) => void>
 }
 
-/**
- * 
- * Only for linear steppers
- */
 export const useStepperFlow = <T extends string>(config: Config<T>) => {
    const { steps } = config
    const [status, setStatus] = useState<Record<T, SingleStepStatus>>(() => getInitVals(steps))
