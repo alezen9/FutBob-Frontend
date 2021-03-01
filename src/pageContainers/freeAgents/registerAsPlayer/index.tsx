@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Grid } from '@material-ui/core'
 import ZenStepper, { ZenStep } from '@_components/ZenStepper'
 import { useStepperFlow } from '@_components/ZenStepper/helper'
@@ -36,6 +36,7 @@ const RegisterFreeAgentAsPlayerContainer = () => {
    const { status, flowConfig, backOneFromFinal, resetStatus } = useStepperFlow<StepType>(stepperConfig)
    const { openSnackbar, setIsLoading } = useConfigStore(stateSelector)
    const [playerID, setPlayerID] = useState(null)
+   const [initialErrors, setInitialErrors] = useState({})
 
    const formik = useFormik({
       initialValues: {
@@ -49,14 +50,21 @@ const RegisterFreeAgentAsPlayerContainer = () => {
          }
       },
       validationSchema: schema,
+      validateOnMount: true,
+      isInitialValid: false,
       enableReinitialize: true,
       onSubmit: createPlayer({ openSnackbar, setIsLoading, setPlayerID })
    })
 
+   useEffect(() => {
+      if(isEmpty(initialErrors) && !isEmpty(formik.errors.user)) setInitialErrors(formik.errors)
+   }, [JSON.stringify(formik.errors), isEmpty(initialErrors)])
+
    const onReset = useCallback(() => {
     resetStatus()
     formik.resetForm()
-  }, [resetStatus, formik.resetForm])
+    formik.setErrors(initialErrors)
+  }, [resetStatus, formik.resetForm, isEmpty(initialErrors)])
 
    const { disablePrev, disableNext } = useMemo(() => {
       const { registry, skills } = status
