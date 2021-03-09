@@ -84,18 +84,18 @@ export default class MyDocument extends Document {
 								display: none;
 							}
 
-							body::-webkit-scrollbar {
+							::-webkit-scrollbar {
 								width: 4px;
 								height: 4px;
 							}
 
-							body::-webkit-scrollbar-track {
+							::-webkit-scrollbar-track {
 								background-color: transparent;
 								-webkit-border-radius: 10px;
 								border-radius: 10px;
 							}
 
-							body::-webkit-scrollbar-thumb {
+							::-webkit-scrollbar-thumb {
 								-webkit-border-radius: 10px;
 								border-radius: 10px;
 								background: rgba(158, 158, 158, 0.5);
