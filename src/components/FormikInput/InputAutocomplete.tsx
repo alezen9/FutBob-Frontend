@@ -7,16 +7,6 @@ import { ZenPalette } from '@_palette'
 import { VariableSizeList } from 'react-window'
 import { OptionType } from '.'
 import { matchSorter } from 'match-sorter'
-// import VisibilityOffOutlinedIcon from '@material-ui/icons/VisibilityOffOutlined'
-
-// const IGNORE_OPTION: OptionType = {
-//   value: '_ignoreField',
-//   label: 'Ignora campo',
-//   component: <span style={{ display: 'flex', alignItems: 'center', color: 'darkred' }}>
-//     <VisibilityOffOutlinedIcon style={{ marginRight: '1em' }} />
-//     Ignora campo
-//   </span>
-// }
 
 const useStyles = makeStyles(theme => ({
   listbox: (props: any) => ({
@@ -53,9 +43,7 @@ const useStyles = makeStyles(theme => ({
   groupLabel: {
     color: theme.palette.primary.main,
     fontWeight: 'bold',
-    backgroundColor: theme.type === 'light'
-      ? '#d3d3d3'
-      : '#111'
+    backgroundColor: ZenPalette.backgroundColorStandOut
   },
   noOptions: {
     color: ZenPalette.typographyGrey

@@ -17,50 +17,50 @@ import '@_components/AnimatedSuccess/Success.css'
 
 
 setLocale({
-	mixed: {
-		notType: ({ path, type, value, originalValue }) => {
-			if (['string', 'number'].includes(type)) return 'Invalid input'
-		},
+   mixed: {
+      notType: ({ path, type, value, originalValue }) => {
+         if (['string', 'number'].includes(type)) return 'Invalid input'
+      },
       required: 'Required field',
-	}
+   }
 })
 
 const stateSelector = (state: ConfigStore) => ({
-	isLoading: state.isLoading,
-	openSnackbar: state.openSnackbar
+   isLoading: state.isLoading,
+   openSnackbar: state.openSnackbar
 })
 
 const MyApp = (props: AppProps) => {
-	const { Component, pageProps } = props
-	const { isLoading, openSnackbar } = useConfigStore(stateSelector)
+   const { Component, pageProps } = props
+   const { isLoading, openSnackbar } = useConfigStore(stateSelector)
 
-	const { item, trigger } = useSWRMe({ revalidateOnMount: false })
+   const { item, trigger } = useSWRMe({ revalidateOnMount: false })
 
-	useEffect(() => {
-		if (apiInstance.auth.hasToken() && !get(item, '_id', null) && !isLoading) trigger()
-	}, [apiInstance.auth.hasToken(), get(item, '_id', null), isLoading])
+   useEffect(() => {
+      if (apiInstance.auth.hasToken() && !get(item, '_id', null) && !isLoading) trigger()
+   }, [apiInstance.auth.hasToken(), get(item, '_id', null), isLoading])
 
-	const onError = useCallback(
-		(error, key, config) => {
-			openSnackbar({
-				variant: 'error',
-				message: ServerMessage[error] || get(error, 'message', error)
-			})
-		},
-		[openSnackbar]
-	)
+   const onError = useCallback(
+      (error, key, config) => {
+         openSnackbar({
+            variant: 'error',
+            message: ServerMessage[error] || get(error, 'message', error)
+         })
+      },
+      [openSnackbar]
+   )
 
-	return (
-		<>
-			<ZenApp
-				title='FutBob'
-				LSVariables={{ AS_PATH, LSTheme, LSToken }}
-				swrConfig={{ onError }}
-				SplashscreenIcon={<FutBobLogo style={{ fontSize: '6em' }} />}>
-				<Component {...pageProps} />
-			</ZenApp>
-		</>
-	)
+   return (
+      <>
+         <ZenApp
+            title='FutBob'
+            LSVariables={{ AS_PATH, LSTheme, LSToken }}
+            swrConfig={{ onError }}
+            SplashscreenIcon={<FutBobLogo style={{ fontSize: '6em' }} />}>
+            <Component {...pageProps} />
+         </ZenApp>
+      </>
+   )
 }
 
 export default React.memo(MyApp)

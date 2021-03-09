@@ -19,7 +19,7 @@ export const useSWRMe = <T extends MoreOptions>(options?: T) => {
 
 	const { setIsLoading, openSnackbar } = useConfigStore(stateSelector)
 
-	const { data, mutate, isValidating } = useSWR(SwrKey.ME, swrMeFetchers.me, {
+	const { data, mutate, error, isValidating } = useSWR(SwrKey.ME, swrMeFetchers.me, {
 		initialData,
 		revalidateOnMount,
 		shouldRetryOnError: false,
@@ -31,23 +31,19 @@ export const useSWRMe = <T extends MoreOptions>(options?: T) => {
 		if (get(data, '_id', null) && !revalidateOnMount) setRevalidateOnMount(hasToken)
 	}, [get(data, '_id', null), revalidateOnMount, hasToken])
 
-	useEffect(() => {
-		setIsLoading(isValidating)
-	}, [isValidating])
+   useEffect(() => {
+		if(!error) setIsLoading(isValidating)
+	}, [isValidating, error])
 
 	const triggerThis = useCallback(
 		(shouldRevalidate: boolean = true) => {
 			return trigger(SwrKey.ME, shouldRevalidate)
-		},
-		[trigger]
-	)
+		}, [trigger])
 
 	const mutateThis = useCallback(
 		(data: DirectMutationImmer<User>, shouldRevalidate: boolean = false): Promise<User> => {
 			return mutate(produce(data), shouldRevalidate)
-		},
-		[mutate]
-	)
+		}, [mutate])
 
 	const updateMyPassword = useCallback(
 		async (body: ChangePasswordInput) => {
@@ -65,7 +61,7 @@ export const useSWRMe = <T extends MoreOptions>(options?: T) => {
 				})
             return false
 			}
-		},[openSnackbar])
+		}, [openSnackbar])
 
    const updateMyEmail = useCallback(
 		async (newEmail: string) => {
@@ -83,7 +79,7 @@ export const useSWRMe = <T extends MoreOptions>(options?: T) => {
 				})
             return false
 			}
-		},[openSnackbar])
+		}, [openSnackbar])
 
 	const updateMyRegistry = useCallback(
 		async (body: UpdateRegistryInput) => {
@@ -107,7 +103,7 @@ export const useSWRMe = <T extends MoreOptions>(options?: T) => {
 				})
             return false
 			}
-		},[openSnackbar])
+		}, [openSnackbar])
 
 	const createMyPlayer = useCallback(
 		async (body: CreatePlayerInput) => {
@@ -134,7 +130,7 @@ export const useSWRMe = <T extends MoreOptions>(options?: T) => {
 				})
             return false
 			}
-		},[openSnackbar, mutateThis])
+		}, [openSnackbar, mutateThis])
 
 	const updateMyPlayer = useCallback(
 		async (body: UpdatePlayerInput) => {
@@ -157,7 +153,7 @@ export const useSWRMe = <T extends MoreOptions>(options?: T) => {
 				})
             return false
 			}
-		},[openSnackbar, mutateThis])
+		}, [openSnackbar, mutateThis])
 
 	const deleteMyPlayer = useCallback(
 		async (_id: string) => {
@@ -178,7 +174,7 @@ export const useSWRMe = <T extends MoreOptions>(options?: T) => {
 				})
             return false
 			}
-		},[openSnackbar])
+		}, [openSnackbar])
 
 	return {
 		item: (data || {}) as User,

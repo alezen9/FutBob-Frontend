@@ -43,6 +43,10 @@ export default class MyDocument extends Document {
 
           <style global jsx>
             {`
+                     #__next {
+                        overflow-x: hidden;
+                     }
+                     
 							@font-face {
 								font-family: Poppins;
 								src: url('/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
@@ -80,23 +84,23 @@ export default class MyDocument extends Document {
 								display: none;
 							}
 
-							::-webkit-scrollbar {
-								/* width: 4px; */
-								width: 0;
+							body::-webkit-scrollbar {
+								width: 4px;
 								height: 4px;
 							}
 
-							::-webkit-scrollbar-track {
+							body::-webkit-scrollbar-track {
 								background-color: transparent;
 								-webkit-border-radius: 10px;
 								border-radius: 10px;
 							}
 
-							::-webkit-scrollbar-thumb {
+							body::-webkit-scrollbar-thumb {
 								-webkit-border-radius: 10px;
 								border-radius: 10px;
 								background: rgba(158, 158, 158, 0.5);
 							}
+
 							::-webkit-calendar-picker-indicator {
 								filter: invert(50%);
 							}
