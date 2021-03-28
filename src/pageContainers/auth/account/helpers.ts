@@ -44,7 +44,7 @@ export const schemaRequestAccount = yup.object().shape({
       (val: string) => dayjs(val).isValid()
    ).required(),
 	sex: yup.number().required(),
-	country: yup.string().required(),
+	country: yup.mixed().required(),
 	phone: yup.string().required()
 })
 

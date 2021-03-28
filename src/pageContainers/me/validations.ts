@@ -7,7 +7,7 @@ export const generalInfoSchema = yup.object().shape({
   sex: yup.string().required(),
   phone: yup.string().required(),
   email: yup.string().email().nullable(),
-  country: yup.string().required()
+  country: yup.mixed().required()
 })
 
 export const privateInfoSchema = yup.object().shape({

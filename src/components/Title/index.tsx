@@ -24,7 +24,7 @@ const Title = () => {
   }, [JSON.stringify(activeRoute), JSON.stringify(prevRoute)])
 
   return (
-    <Typography component='h2' variant='h6' color='primary' gutterBottom>
+    <Typography component='h2' variant='h4' color='primary' gutterBottom>
       {activeRoute.displayBack && <Button
         style={{ color: ZenPalette.typographyGrey, minWidth: 30, marginRight: '.5em' }}
         variant='text'
