@@ -8,13 +8,13 @@ import RadarChart from '@_components/Charts/Radar'
 import { OverallScore } from '@_icons'
 import PlayerScoreInputs from '@_components/FormikInput/PlayerScoreInputs'
 import { TabProps } from '..'
-import { ZenPalette } from '@_palette'
+import { ZenPalette } from '@_MUITheme'
 import ZenDialog from '@_components/ZenDialog'
 import { PhysicalStateOpts } from '@_utils/constants/PhysicalStatusOpt'
 import { initialScoreValues } from '@_utils/constants/InitValuesPlayerScore'
 import { getPlayerOverall } from '@_utils/playerOverall'
 import { onSubmit, schema } from './helpers'
-import { zenHooksInstance } from '@_utils/hooks'
+import zenHooks from '@_utils/hooks'
 
 const Player: React.FC<TabProps> = props => {
    const { item, setIsLoading, createMyPlayer, updateMyPlayer, deleteMyPlayer } = props
@@ -22,7 +22,7 @@ const Player: React.FC<TabProps> = props => {
    const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
    const theme = useTheme()
    const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'))
-   const isMounted = zenHooksInstance.useIsMounted()
+   const isMounted = zenHooks.utils.useIsMounted()
 
    const onDelete = useCallback(async () => {
       setIsLoading(true)

@@ -4,7 +4,7 @@ import { PlayerPosition } from '@_SDK_Player/types'
 import { Avatar, makeStyles } from '@material-ui/core'
 import { ShortName_Position } from '@_utils/constants/ShortNamePlayerProps'
 import { uniqueId } from 'lodash'
-import { ZenPalette } from '@_palette'
+import { ZenPalette } from '@_MUITheme'
 
 const useStyles = makeStyles(theme => ({
    group: {

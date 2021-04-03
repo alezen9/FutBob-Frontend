@@ -98,7 +98,7 @@ export const useSWRField = <T extends MoreOptions>(_id: string | null | undefine
 		(shouldRevalidate: boolean = true) => {
 			return trigger([SwrKey.FIELD, _id], shouldRevalidate)
 		},
-		[trigger]
+		[trigger, _id]
 	)
 
 	const mutateThis = useCallback(

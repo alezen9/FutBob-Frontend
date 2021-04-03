@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import DetailPlayerContainer from '@_page-containers/players/detail'
 import PageTransition from '@_components/PageTransition'
-import { zenHooksInstance } from '@_utils/hooks'
+import zenHooks from '@_utils/hooks'
 import { ZenRouteID } from '@_utils/routes/types'
 import { useConfigStore } from '@_zustand/config'
 import { useSWRMe } from '@_swr/Me'
@@ -31,11 +31,11 @@ const DetailPlayer = () => {
    const { item } = useSWRPlayer(_id as string)
    const { item: me } = useSWRMe()
    const classes = useStyles({ sex: get(me, 'registry.sex', Sex.Male) })
-   zenHooksInstance.useSetActivePage(ZenRouteID.PLAYER_DETAIL)
+   zenHooks.app.useSetActivePage(ZenRouteID.PLAYER_DETAIL)
    const setPageTitle = useConfigStore(state => state.setPageTitle)
 
    useEffect(() => {
-      if(item._id && me._id) {
+      if (item._id && me._id) {
          const isMe = get(item, 'user._id', null) === me._id
          const playerName = `${get(item, 'user.registry.surname', '')} ${get(item, 'user.registry.name', '')}`.trim()
          const pageTitle = <span>
@@ -48,11 +48,11 @@ const DetailPlayer = () => {
 
 
 
-  return (
-    <PageTransition>
-      <DetailPlayerContainer />
-    </PageTransition>
-  )
+   return (
+      <PageTransition>
+         <DetailPlayerContainer />
+      </PageTransition>
+   )
 }
 
 export default DetailPlayer

@@ -16,7 +16,8 @@
       "@_SDK_FreeAgent/*": ["src/SDK/Modules/FreeAgent/*"],
       // end modules
       "@_icons": ["src/assets/CustomIcon"],
-      "@_palette": ["palette"]
+      "@_palette": ["palette"],
+      "@_MUITheme": ["src/MUITheme/index"]
     },
     "lib": [
       "dom",

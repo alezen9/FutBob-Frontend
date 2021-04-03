@@ -1,28 +1,15 @@
-import { useConfigStore } from "@_zustand/config"
-import { MutableRefObject, useEffect, useRef, useState } from "react"
-import { ZenMainHooks } from './main'
+import { ZenAppFlowHooks } from "./appFlow"
+import { UtilsHooks } from "./utils"
 
-class ZenHooks extends ZenMainHooks {
+class ZenHooks {
+   app: ZenAppFlowHooks
+   utils: UtilsHooks
 
-   usePrevious = <T>(value: T): T => {
-      const ref = useRef<T>(null)
-      useEffect(() => {
-         ref.current = value
-      }, [value])
-      return ref.current
+   constructor () {
+      this.app = new ZenAppFlowHooks()
+      this.utils = new UtilsHooks()
    }
-
-   useIsMounted = (): MutableRefObject<boolean> => {
-      const isMounted = useRef<boolean>(false)
-      useEffect(() => {
-         isMounted.current = true
-         return () => {
-            isMounted.current = false
-         }
-      }, [])
-      return isMounted
-   }
-
 }
 
-export const zenHooksInstance = new ZenHooks()
+const zenHooks = new ZenHooks()
+export default zenHooks

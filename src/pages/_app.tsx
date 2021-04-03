@@ -3,7 +3,7 @@ import { useConfigStore } from '@_zustand/config'
 import { get } from 'lodash'
 import { ServerMessage } from '@_utils/serverMessages'
 import { ConfigStore } from '@_zustand/config/helpers'
-import { AS_PATH, LSTheme, LSToken } from '@_utils/LSVariables'
+import { LSTheme, LSToken } from '@_utils/LSVariables'
 import ZenApp from '@_components/_ZenApp'
 import { AppProps } from 'next/app'
 import { useSWRMe } from '@_swr/Me'
@@ -54,7 +54,7 @@ const MyApp = (props: AppProps) => {
       <>
          <ZenApp
             title='FutBob'
-            LSVariables={{ AS_PATH, LSTheme, LSToken }}
+            LSVariables={{ LSTheme, LSToken }}
             swrConfig={{ onError }}
             SplashscreenIcon={<FutBobLogo style={{ fontSize: '6em' }} />}>
             <Component {...pageProps} />

@@ -1,6 +1,6 @@
 import { createMuiTheme } from '@material-ui/core/styles'
 import createBreakpoints from '@material-ui/core/styles/createBreakpoints'
-import { ThemeType, configColors } from './palette'
+import { configColors, ThemeType } from '../palette'
 
 const subtitleGrey = '#686868'
 const lightGrey = '#c1c1c1'
@@ -9,7 +9,7 @@ const borderRadius = 7
 
 const breakpoints = createBreakpoints({})
 
-const darkTheme = createMuiTheme({
+const DarkTheme = createMuiTheme({
   // @ts-ignore
   type: ThemeType.dark,
   palette: {
@@ -205,6 +205,7 @@ const darkTheme = createMuiTheme({
     },
     MuiButton: {
       root: {
+        fontWeight: 300,
         minWidth: 120,
         textTransform: 'none',
         boxShadow: 'none !important',
@@ -358,13 +359,14 @@ const darkTheme = createMuiTheme({
     },
     MuiTableCell: {
       head: {
-        fontWeight: 600,
+        fontWeight: 500,
         color: configColors.typographyColor.dark,
         borderBottom: 'none',
         minWidth: 100
       },
       body: {
         fontSize: '.9em',
+        fontWeight: 300,
         color: 'rgba(255,255,255,.5)',
         borderBottom: 'none'
       }
@@ -401,4 +403,4 @@ const darkTheme = createMuiTheme({
   }
 })
 
-export default darkTheme
+export default DarkTheme

@@ -1,6 +1,6 @@
 import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react'
 import { IconButton, makeStyles, TableCell, useMediaQuery, useTheme } from '@material-ui/core'
-import { ZenPalette } from '@_palette'
+import { ZenPalette } from '@_MUITheme'
 import { get } from 'lodash'
 import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
 
@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
             ...props.isHeader ? {
                backdropFilter: 'blur(25px)'
             } : {
-               background: ZenPalette.tableCellBackground
+               background: ZenPalette.tableBackgroundColor
             }
          },
          ...props.isLastStickyColumn && {

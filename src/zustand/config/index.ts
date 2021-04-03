@@ -1,4 +1,4 @@
-import { ZenPalette, ThemeType } from '@_palette'
+import { ZenPalette, ThemeType } from '@_MUITheme'
 import create, { UseStore } from 'zustand'
 import { ConfigStore, PrevRoute } from './helpers'
 import { LSTheme } from '@_utils/LSVariables'

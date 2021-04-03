@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react'
 import { Grid, Typography, makeStyles } from '@material-ui/core'
 import { get, reduce } from 'lodash'
-import { ZenPalette } from '@_palette'
+import { ZenPalette } from '@_MUITheme'
 import { SlidersDialogContent, SlidersDialogActions } from './helpers'
 import { getScoreColor } from '@_utils/helpers'
 import { DefenseIcon, PhysicalIcon } from '@_icons'
@@ -15,19 +15,19 @@ import { Defense, Pace, Passing, Physical, Shooting, Technique } from '@_SDK_Pla
 import { getKeyMean } from '@_utils/playerOverall'
 
 const iconProps = {
-  style: {
-    fontSize: '1.1em',
-    marginRight: '.5em'
-  }
+   style: {
+      fontSize: '1.1em',
+      marginRight: '.5em'
+   }
 }
 
 const ScoreValuesIconMap = {
-  Pace: <FlashOnIcon {...iconProps} />,
-  Passing: <TimelineOutlinedIcon {...iconProps} />,
-  Shooting: <GpsFixedOutlinedIcon {...iconProps} />,
-  Defense: <DefenseIcon {...iconProps} />,
-  Physical: <PhysicalIcon {...iconProps} />,
-  Technique: <AllInclusiveIcon {...iconProps} />
+   Pace: <FlashOnIcon {...iconProps} />,
+   Passing: <TimelineOutlinedIcon {...iconProps} />,
+   Shooting: <GpsFixedOutlinedIcon {...iconProps} />,
+   Defense: <DefenseIcon {...iconProps} />,
+   Physical: <PhysicalIcon {...iconProps} />,
+   Technique: <AllInclusiveIcon {...iconProps} />
 }
 
 const useStyles = makeStyles(theme => ({
@@ -58,23 +58,23 @@ const useStyles = makeStyles(theme => ({
 }))
 
 type Props = {
-  title?: string
-  name: string
-  formikName: string
-  values: Pace|Shooting|Passing|Technique|Defense|Physical
-  formik: FormikEssentials
+   title?: string
+   name: string
+   formikName: string
+   values: Pace | Shooting | Passing | Technique | Defense | Physical
+   formik: FormikEssentials
 }
 
 const SingleScore = (props: Props) => {
-  const { title = '-', name, formikName, values, formik } = props
-  const classes = useStyles()
-  const [openSliders, setOpenSliders] = useState(false)
-  const [initialVals, setInitialVals] = useState(values)
+   const { title = '-', name, formikName, values, formik } = props
+   const classes = useStyles()
+   const [openSliders, setOpenSliders] = useState(false)
+   const [initialVals, setInitialVals] = useState(values)
 
-  const toggleSliders = useCallback(
-   () => {
-      setOpenSliders(state => !state)
-   }, [])
+   const toggleSliders = useCallback(
+      () => {
+         setOpenSliders(state => !state)
+      }, [])
 
    const cancelChanges = useCallback(() => {
       formik.setFieldValue(`${formikName}.${name}`, initialVals, false)
@@ -87,41 +87,41 @@ const SingleScore = (props: Props) => {
       setOpenSliders(false)
    }, [JSON.stringify(get(formik, `values.${formikName}.${name}`, {})), name, formikName])
 
-  const { keyMean, color } = useMemo(() => {
-    const keyMean = getKeyMean(values, name, true)
-    return {
-      keyMean,
-      color: getScoreColor(keyMean)
-    }
-  }, [JSON.stringify(values), name])
+   const { keyMean, color } = useMemo(() => {
+      const keyMean = getKeyMean(values, name, true)
+      return {
+         keyMean,
+         color: getScoreColor(keyMean)
+      }
+   }, [JSON.stringify(values), name])
 
-  return (
+   return (
       <>
-        <Grid onClick={toggleSliders} className={classes.mainWrapper} container item xs={6} sm={4}>
-          <Grid className={classes.main} item container xs={12}>
-            <Grid item xs={12} className={classes.titleContainer}>
-              {ScoreValuesIconMap[title] || 'A'}
-              <Typography variant='caption' className={classes.title}>
-                {title}
-              </Typography>
+         <Grid onClick={toggleSliders} className={classes.mainWrapper} container item xs={6} sm={4}>
+            <Grid className={classes.main} item container xs={12}>
+               <Grid item xs={12} className={classes.titleContainer}>
+                  {ScoreValuesIconMap[title] || 'A'}
+                  <Typography variant='caption' className={classes.title}>
+                     {title}
+                  </Typography>
+               </Grid>
+               <Grid item xs={12}>
+                  <Typography variant='h3' align='right' style={{ color }}>
+                     {keyMean}
+                  </Typography>
+               </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <Typography variant='h3' align='right' style={{ color }}>
-                {keyMean}
-              </Typography>
-            </Grid>
-          </Grid>
-        </Grid>
-        <ZenDialog
-          open={openSliders}
-          onClose={cancelChanges}
-          title={title}
-          fullScreen={false}
-          content={<SlidersDialogContent formik={formik} name={name} formikName={formikName} />}
-          actions={<SlidersDialogActions cancelChanges={cancelChanges} confirmChanges={confirmChanges} />}
-        />
-    </>
-  )
+         </Grid>
+         <ZenDialog
+            open={openSliders}
+            onClose={cancelChanges}
+            title={title}
+            fullScreen={false}
+            content={<SlidersDialogContent formik={formik} name={name} formikName={formikName} />}
+            actions={<SlidersDialogActions cancelChanges={cancelChanges} confirmChanges={confirmChanges} />}
+         />
+      </>
+   )
 }
 
 export default React.memo(SingleScore)

@@ -5,7 +5,8 @@ const getApiUrl = (config = '') => {
   console.log(`Listening on port ${process.env.PORT || 3000}`)
   switch (process.env.ENV || 'test') {
     case 'test':
-      return 'http://localhost:7000'
+      return 'https://futbob.xyz/'
+      // return 'http://localhost:7000'
     case 'production':
       return 'https://futbob.xyz/'
     default:
@@ -14,6 +15,9 @@ const getApiUrl = (config = '') => {
 }
 
 module.exports = withPWA({
+  future: {
+    webpack5: true
+  },
   serverRuntimeConfig: {
     API_URL: getApiUrl('server')
   },

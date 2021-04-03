@@ -1,17 +1,17 @@
 import React from 'react'
 import PageTransition from '@_components/PageTransition'
 import LoginContainer from '@_page-containers/auth/login'
-import { zenHooksInstance } from '@_utils/hooks'
+import zenHooks from '@_utils/hooks'
 import { ZenRouteID } from '@_utils/routes/types'
 
 const Login = () => {
-  zenHooksInstance.useSetActivePage(ZenRouteID.LOGIN)
+   zenHooks.app.useSetActivePage(ZenRouteID.LOGIN)
 
-  return (
-    <PageTransition>
-      <LoginContainer />
-    </PageTransition>
-  )
+   return (
+      <PageTransition>
+         <LoginContainer />
+      </PageTransition>
+   )
 }
 
 export default React.memo(Login)

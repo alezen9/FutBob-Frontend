@@ -1,16 +1,6 @@
 import { createMuiTheme } from '@material-ui/core/styles'
 import createBreakpoints from '@material-ui/core/styles/createBreakpoints'
-import { ThemeType, configColors } from './palette'
-
-declare module '@material-ui/core/styles/createMuiTheme' {
-  interface Theme {
-    type: ThemeType
-  }
-  // allow configuration using `createMuiTheme`
-  interface ThemeOptions {
-    type: ThemeType
-  }
-}
+import { configColors, ThemeType } from '../palette'
 
 const breakpoints = createBreakpoints({})
 
@@ -20,7 +10,7 @@ const backgroundColor = '#fafafa'
 const borderColor = 'rgba(0, 0, 0, 0.23)'
 const borderRadius = 7
 
-const lightTheme = createMuiTheme({
+const LightTheme = createMuiTheme({
   // @ts-ignore
   type: ThemeType.light,
   palette: {
@@ -161,7 +151,8 @@ const lightTheme = createMuiTheme({
     },
     MuiButton: {
       root: {
-         minWidth: 120,
+        fontWeight: 300,
+        minWidth: 120,
         textTransform: 'none',
         boxShadow: 'none !important',
         fontSize: '17px !important',
@@ -190,9 +181,9 @@ const lightTheme = createMuiTheme({
       }
     },
     MuiBackdrop: {
-       root: {
-          backdropFilter: 'blur(12px)'
-       }
+      root: {
+        backdropFilter: 'blur(12px)'
+      }
     },
     MuiIconButton: {
       root: {
@@ -260,12 +251,15 @@ const lightTheme = createMuiTheme({
     },
     MuiTableCell: {
       head: {
-        fontWeight: 600,
+        fontWeight: 500,
         borderBottom: 'none',
         minWidth: 100
       },
       body: {
+        paddingTop: 12,
+        paddingBottom: 12,
         fontSize: '.9em',
+        fontWeight: 300,
         borderBottom: 'none'
       }
     },
@@ -308,4 +302,4 @@ const lightTheme = createMuiTheme({
   }
 })
 
-export default lightTheme
+export default LightTheme

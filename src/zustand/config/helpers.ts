@@ -1,4 +1,4 @@
-import { ThemeType } from '@_palette'
+import { ThemeType } from '@_MUITheme'
 import { ZenRoute, ZenRouteID } from '@_utils/routes/types'
 import { setSnackbarData } from '@_zustand/helpers'
 

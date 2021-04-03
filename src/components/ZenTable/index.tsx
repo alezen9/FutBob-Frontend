@@ -11,11 +11,12 @@ import { get, uniqueId } from 'lodash'
 import { setData, MobileRowCell, TableHeaderData, TableRowData, SetDataOut, getLastStickyIndex, ZenTableSort } from './helpers'
 import ZenLoadingMask from '../ContentLoader/LoadingMask'
 import { Typography, useTheme, useMediaQuery } from '@material-ui/core'
-import { ZenPalette } from '@_palette'
+import { ZenPalette } from '@_MUITheme'
 import { zenToolboxInstance } from '@_utils/Toolbox'
 
 const useStyles = makeStyles(theme => ({
    table: {
+      backgroundColor: ZenPalette.tableBackgroundColor,
       transition: 'background-color .1s ease'
    },
    tableContainer: {

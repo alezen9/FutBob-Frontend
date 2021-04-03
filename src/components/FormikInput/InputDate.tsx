@@ -3,7 +3,7 @@ import DateFnsUtils from '@date-io/dayjs'
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers'
 import { get } from 'lodash'
 import { FormHelperText, makeStyles, useMediaQuery, useTheme } from '@material-ui/core'
-import { ThemeType, ZenPalette } from '@_palette'
+import { ThemeType, ZenPalette } from '@_MUITheme'
 import dayjs, { Dayjs } from 'dayjs'
 
 const useStyles = makeStyles(theme => ({

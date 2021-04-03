@@ -1,81 +1,78 @@
+import { green, lime, pink, red, teal } from "@material-ui/core/colors"
+
 export enum ThemeType {
   light = 'light',
   dark = 'dark'
 }
 
+export const INITIAL_THEME_TYPE = ThemeType.light
+
 type MaterialColor = {
    light: string
    main: string
    dark: string
-   contrastText: string
+   contrastText?: string
 }
 
 type Config = {
-   primary: Record<'dark'|'light', MaterialColor>
-   secondary: Record<'dark'|'light', MaterialColor>
-   error: Record<'dark'|'light', MaterialColor>
-   typographyColor: Record<'dark'|'light', string>
+   primary: Record<ThemeType, MaterialColor>
+   secondary: Record<ThemeType, MaterialColor>
+   error: Record<ThemeType, MaterialColor>
+   typographyColor: Record<ThemeType, string>
 }
 
-const lightGreen = 'rgb(52,199,89)'
-const darkGreen = 'rgb(42, 156, 71)'
-const lightRed = 'rgb(255,59,48)'
-const darkRed = 'rgb(255,69,58)'
-
 export const configColors: Config = {
-   primary: {
-      dark: {
-         light: lightGreen,
-         main: darkGreen,
-         dark: darkGreen,
-         contrastText: '#fff'
-      },
-      light: {
-         light: lightGreen,
-         main: darkGreen,
-         dark: darkGreen,
-         contrastText: '#fff'
-      }
-   },
-   secondary: {
-      dark: {
-         light: lightGreen,
-         main: darkGreen,
-         dark: darkGreen,
-         contrastText: '#fff'
-      },
-      light: {
-         light: lightGreen,
-         main: darkGreen,
-         dark: darkGreen,
-         contrastText: '#fff'
-      }
-   },
-   error: {
-      dark: {
-         light: lightRed,
-         main: darkRed,
-         dark: darkRed,
-         contrastText: '#fff'
-      },
-      light: {
-         light: lightRed,
-         main: darkRed,
-         dark: darkRed,
-         contrastText: '#fff'
-      }
-   },
-   typographyColor: {
-      dark: '#b3b3b3',
-      light: '#717171'
-   }
+  primary: {
+    [ThemeType.light]: {
+      light: teal[400],
+      main: teal[800],
+      dark: teal[900],
+      contrastText: '#fff'
+    },
+    [ThemeType.dark]: {
+      light: teal[400],
+      main: teal[800],
+      dark: teal[900],
+      contrastText: '#fff'
+    }
+  },
+  secondary: {
+    [ThemeType.light]: {
+      light: lime[700],
+      main: lime[800],
+      dark: lime[900],
+    },
+    [ThemeType.dark]: {
+      light: lime[700],
+      main: lime[800],
+      dark: lime[900],
+    }
+  },
+  error: {
+    [ThemeType.light]: {
+      light: red[500],
+      main: red.A400,
+      dark: red[600],
+      contrastText: '#fff'
+    },
+    [ThemeType.dark]: {
+      light: red[600],
+      main: red.A700,
+      dark: red[900],
+      contrastText: '#fff'
+    }
+  },
+  typographyColor: {
+    [ThemeType.light]: '#717171',
+    [ThemeType.dark]: '#b3b3b3'
+  }
 }
 
 class ColorPalette {
-   private _primary: Record<'dark'|'light', MaterialColor>
-   private _secondary: Record<'dark'|'light', MaterialColor>
-   private _error: Record<'dark'|'light', MaterialColor>
-   private _typographyColor: Record<'dark'|'light', string>
+   #_primary: Record<ThemeType, MaterialColor>
+   #_secondary: Record<ThemeType, MaterialColor>
+   #_error: Record<ThemeType, MaterialColor>
+   #_typographyColor: Record<ThemeType, string>
    themeType: ThemeType
    primary: MaterialColor
    secondary: MaterialColor
@@ -105,18 +102,19 @@ class ColorPalette {
    tableCellBackground: string
    tableHeaderCellBackground: string
    shineBackgroundImage: string
+   tableBackgroundColor: string
 
 
-  constructor (themeType: ThemeType = ThemeType.light) {
+  constructor (themeType: ThemeType = INITIAL_THEME_TYPE) {
     this.themeType = themeType
     this.lightGreen = 'rgb(52,199,89)'
     this.darkGreen = 'rgb(42, 156, 71)'
     this.lightRed = 'rgb(255,59,48)'
     this.darkRed = 'rgb(255,69,58)'
-    this._primary = configColors.primary
-    this._secondary = configColors.secondary
-    this._error = configColors.error
-    this._typographyColor = configColors.typographyColor
+    this.#_primary = configColors.primary
+    this.#_secondary = configColors.secondary
+    this.#_error = configColors.error
+    this.#_typographyColor = configColors.typographyColor
     this.updatePalette()
   }
 
@@ -126,14 +124,14 @@ class ColorPalette {
   }
   updatePalette () {
     this.primary = this.themeType === ThemeType.dark
-      ? this._primary.dark
-      : this._primary.light
+      ? this.#_primary.dark
+      : this.#_primary.light
     this.secondary = this.themeType === ThemeType.dark
-      ? this._secondary.dark
-      : this._secondary.light
+      ? this.#_secondary.dark
+      : this.#_secondary.light
     this.error = this.themeType === ThemeType.dark
-      ? this._error.dark.main
-      : this._error.light.main
+      ? this.#_error.dark.main
+      : this.#_error.light.main
     this.backgroundColor = this.themeType === ThemeType.dark
       ? '#111'
       : '#fafafa'
@@ -141,8 +139,8 @@ class ColorPalette {
       ? '#222'
       : '#fafafa'
     this.typographyGrey = this.themeType === ThemeType.dark
-      ? this._typographyColor.dark
-      : this._typographyColor.light
+      ? this.#_typographyColor.dark
+      : this.#_typographyColor.light
     this.borderColor = this.themeType === ThemeType.dark
       ? '#b3b3b3'
       : 'rgba(0, 0, 0, 0.23)'
@@ -191,6 +189,9 @@ class ColorPalette {
    this.shineBackgroundImage = this.themeType === ThemeType.dark
       ? 'linear-gradient(110deg, transparent 33%, rgba(255,255,255,0.7) 50%, transparent 66%)'
       : 'linear-gradient(110deg, transparent 33%, rgba(255,255,255,0.7) 50%, transparent 66%)'
+    this.tableBackgroundColor = this.themeType === ThemeType.dark
+      ? '#131313'
+      : '#f7f7f7'
   }
 }
 

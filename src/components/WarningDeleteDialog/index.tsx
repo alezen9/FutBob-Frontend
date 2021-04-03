@@ -1,7 +1,7 @@
 import React from 'react'
 import ZenDialog from '@_components/ZenDialog'
 import { Button, Typography } from '@material-ui/core'
-import { ZenPalette } from '@_palette'
+import { ZenPalette } from '@_MUITheme'
 
 type Props = {
    open: boolean
@@ -20,11 +20,11 @@ const WarningDeleteDialog = (props: Props) => {
          fullScreen={false}
          content={<Typography >{text}</Typography>}
          actions={
-         <Button
-            style={{ minWidth: 150, backgroundColor: ZenPalette.error }}
-            onClick={onDelete}
-            variant='contained'>
-            Delete
+            <Button
+               style={{ minWidth: 150, backgroundColor: ZenPalette.error }}
+               onClick={onDelete}
+               variant='contained'>
+               Delete
          </Button>
          }
          onClose={onClose}

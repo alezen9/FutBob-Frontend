@@ -1,5 +1,5 @@
 import { makeStyles, Theme } from '@material-ui/core'
-import { ZenPalette } from '@_palette'
+import { ZenPalette } from '@_MUITheme'
 import { ConfigStore } from '@_zustand/config/helpers'
 
 export const useSharedStyles = makeStyles((theme: Theme) => ({

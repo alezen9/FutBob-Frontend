@@ -1,4 +1,4 @@
-import { ThemeType } from '@_palette'
+import { INITIAL_THEME_TYPE, ThemeType } from '@_MUITheme'
 import { routesPaths } from '@_utils/routes'
 import { publicRoutes } from '@_utils/routes/Public'
 import { ZenRouteID } from '@_utils/routes/types'
@@ -7,23 +7,24 @@ import { ConfigStoreSelector } from '@_zustand/config/helpers'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { apiInstance } from 'src/SDK'
-import { zenHooksInstance } from '.'
+import zenHooks from '.'
 
 type ThemeConfig = {
-	lightColor?: string
-	darkColor?: string
+   bodyBgColor?: {
+      [ThemeType.light]?: string
+      [ThemeType.dark]?: string
+   }
 	LSTheme: string
 }
 
 type AuthConfig = {
-	AS_PATH: string
 	LSToken: string
 }
 
 type ZenRouteAuthIDS = ZenRouteID.DASHBOARD|ZenRouteID.LOGIN|ZenRouteID.REQUEST_ACCOUNT
 const publicRoutesIDS: ZenRouteID[] = publicRoutes.map(({ _id }) => _id)
 
-export class ZenMainHooks {
+export class ZenAppFlowHooks {
    private stateSelectorTheme: ConfigStoreSelector
    private stateSelectorAuth: ConfigStoreSelector
    private stateSelectorSetActiveRoute: ConfigStoreSelector
@@ -77,14 +78,14 @@ export class ZenMainHooks {
    }
 
    useWithThemeSwitch = (config: ThemeConfig) => {
-      const { lightColor = '#fafafa', darkColor = '#111', LSTheme } = config
+      const { bodyBgColor, LSTheme } = config
       const { themeType, setTheme } = useConfigStore(this.stateSelectorTheme)
 
       useEffect(() => {
          const _themeType: ThemeType =
             window && window.localStorage && window.localStorage.getItem(LSTheme)
                ? (window.localStorage.getItem(LSTheme) as ThemeType)
-               : ThemeType.light
+               : INITIAL_THEME_TYPE
          setTheme(_themeType)
       }, [setTheme, LSTheme])
 
@@ -94,19 +95,19 @@ export class ZenMainHooks {
                document.body.style.transition = 'background-color .1s ease'
             }
             document.body.style.backgroundColor = themeType === ThemeType.light 
-               ? lightColor 
-               : darkColor
+               ? bodyBgColor[ThemeType.light] || '#fafafa' 
+               : bodyBgColor[ThemeType.light] || '#111' 
          }
-      }, [themeType, lightColor, darkColor])
+      }, [themeType, JSON.stringify(bodyBgColor || {})])
    }
 
    useInitWithAuthentication = (config: AuthConfig) => {
-      const { AS_PATH, LSToken } = config
+      const { LSToken } = config
       const [isFirstRun, setFirstRun] = useState(true)
       const [isCheckingToken, setIsCheckingToken] = useState(true)
       const router = useRouter()
       const { setIsLogged, isLogged, activeRoute } = useConfigStore(this.stateSelectorAuth)
-      const isMounted = zenHooksInstance.useIsMounted()
+      const isMounted = zenHooks.utils.useIsMounted()
       const isTokenValid = useRef(false)
 
       useEffect(() => {
@@ -177,7 +178,7 @@ export class ZenMainHooks {
                   }
                })
          }
-      }, [LSToken, AS_PATH])
+      }, [LSToken])
 
       return {
          isFirstRun,
