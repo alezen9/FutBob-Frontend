@@ -31,17 +31,17 @@ const useStyles = makeStyles(theme => ({
       height: '100vh',
       padding: '0 1em',
       boxSizing: 'border-box',
-      '&:before': {
-         position: 'absolute',
-         content: '""',
-         top: '50%',
-         transform: 'translateY(-50%)',
-         height: '85vh',
-         width: '100%',
-         borderRight: theme.type === 'light'
-            ? '1px solid rgba(0,0,0,.1)'
-            : '1px solid rgba(255,255,255,.1)'
-      }
+      // '&:before': {
+      //    position: 'absolute',
+      //    content: '""',
+      //    top: '50%',
+      //    transform: 'translateY(-50%)',
+      //    height: '85vh',
+      //    width: '100%',
+      //    borderRight: theme.type === 'light'
+      //       ? '1px solid rgba(0,0,0,.1)'
+      //       : '1px solid rgba(255,255,255,.1)'
+      // }
    },
    toggleMenu: {
       position: 'absolute',

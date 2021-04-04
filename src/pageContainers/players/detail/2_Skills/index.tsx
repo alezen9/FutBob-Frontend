@@ -19,6 +19,7 @@ import { ZenRouteID } from '@_utils/routes/types'
 import { routesPaths } from '@_utils/routes'
 import zenHooks from '@_utils/hooks'
 import WarningDeleteDialog from '@_components/WarningDeleteDialog'
+import Overall from '@_components/Overall'
 
 const _Skills: React.FC<TabProps> = props => {
    const { item, setIsLoading, isMe, updatePlayerSkills, deletePlayer } = props
@@ -59,7 +60,7 @@ const _Skills: React.FC<TabProps> = props => {
 
    return (
       <Grid container spacing={3}>
-         <OverallScore style={{ margin: 'auto' }} value={overall} size={4} />
+         <Overall style={{ margin: 'auto', fontSize: '5em' }} overall={overall} />
          <Grid item container xs={12} justify='center'>
             <FormikInput
                sm={4}

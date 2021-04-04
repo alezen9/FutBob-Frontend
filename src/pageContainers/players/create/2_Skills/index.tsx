@@ -3,10 +3,10 @@ import { Grid } from '@material-ui/core'
 import FutsalField from '@_components/FutsalField'
 import FormikInput, { FormikEssentials } from '@_components/FormikInput'
 import RadarChart from '@_components/Charts/Radar'
-import { OverallScore } from '@_icons'
 import PlayerScoreInputs from '@_components/FormikInput/PlayerScoreInputs'
 import { PhysicalStateOpts } from '@_utils/constants/PhysicalStatusOpt'
 import { getPlayerOverall } from '@_utils/playerOverall'
+import Overall from '@_components/Overall'
 
 type Props = {
    formik: FormikEssentials
@@ -23,7 +23,7 @@ const _Skills: React.FC<Props> = props => {
 
    return (
       <Grid container spacing={3}>
-         <OverallScore style={{ margin: 'auto' }} value={overall} />
+         <Overall style={{ margin: 'auto', fontSize: '5em' }} overall={overall} />
          <Grid item container xs={12} justify='center'>
             <FormikInput
                sm={4}

@@ -36,7 +36,8 @@ const useStyles = makeStyles(theme => ({
             ...props.isHeader ? {
                backdropFilter: 'blur(25px)'
             } : {
-               background: ZenPalette.tableBackgroundColor
+               background: ZenPalette.tableBackgroundColor,
+               transition: 'background .1s ease'
             }
          },
          ...props.isLastStickyColumn && {
@@ -58,7 +59,8 @@ const useStyles = makeStyles(theme => ({
    bgCellHeader: (props: any) => ({
       background: props.isHeader
          ? ZenPalette.tableHeaderCellBackground
-         : ZenPalette.tableCellBackground
+         : ZenPalette.tableBackgroundColor,
+      transition: 'background .1s ease'
    }),
    sortButton: (props: any) => ({
       marginRight: '.5em',

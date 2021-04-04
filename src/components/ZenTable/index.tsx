@@ -29,9 +29,13 @@ const useStyles = makeStyles(theme => ({
          overflowX: 'hidden'
       }
    },
-   userRow: {
-      backgroundColor: ZenPalette.userTableRowBackgroundColor
-   }
+   userRow: (props: { lastStickyIndex: number }) => ({
+      background: ZenPalette.userTableRowBackgroundColor,
+      transition: 'background .1s ease',
+      [`& > td:nth-child(-n+${props.lastStickyIndex + 1})`]: {
+         background: `${ZenPalette.userTableRowBackgroundColor} !important`,
+      }
+   })
 }))
 
 type TableProps = {
@@ -47,9 +51,9 @@ const CustomTable = React.memo((props: TableProps) => {
    const { headers = [], data = [], withActions = false, pagination, forceMobile = false, sort } = props
    const theme = useTheme()
    const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'))
-   const classes = useStyles()
    const [tableId] = useState(uniqueId('table-'))
    const [lastStickyIndex, setLastStickyIndex] = useState(0)
+   const classes = useStyles({ lastStickyIndex })
    const [activeSort, setActiveSort] = useState(get(sort, 'initialValue.colID', null))
 
    const handleSortToggle = useCallback((id: string) => (isASC: boolean) => {

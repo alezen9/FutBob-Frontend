@@ -1,6 +1,5 @@
 import React from 'react'
 import { get } from 'lodash'
-import { OverallScore } from '@_icons'
 import NavigateNextRoundedIcon from '@material-ui/icons/NavigateNextRounded'
 import DeleteForeverRoundedIcon from '@material-ui/icons/DeleteForeverRounded'
 import { Filter } from '@_components/Filters/Inputs'
@@ -12,9 +11,10 @@ import { PhysicalStateOpts } from '@_utils/constants/PhysicalStatusOpt'
 import zenToolbox from '@_utils/toolbox'
 import { TableHeaderData } from '@_components/ZenTable/helpers'
 import GroupedPositions from '@_components/GroupedPositions'
+import Overall from '@_components/Overall'
 
 export const headers: TableHeaderData[] = [
-   { id: 'name', name: 'Name', style: { minWidth: 230 } },
+   { id: 'name', name: 'Name', style: { minWidth: 280 }, sticky: true },
    { name: 'Physical state', style: { minWidth: 180, textAlign: 'left' } },
    { name: 'Positions', style: { minWidth: 190, textAlign: 'center' } },
    { id: 'country', name: 'Country', style: { minWidth: 280, textAlign: 'left' } },
@@ -27,7 +27,7 @@ export const getPlayerDataRow = ({ openDialog, goToDetails, userConnectedId }) =
    return {
       _isUser: userConnectedId === playerData.user._id,
       name: <span style={{ display: 'flex', alignItems: 'center' }}>
-         <OverallScore value={overall} style={{ transform: 'scale(.75)' }} />
+         <Overall overall={overall} style={{ marginRight: '1em' }} />
          {`${playerData.user.registry.surname} ${playerData.user.registry.name}`}
       </span>,
       fullName: `${playerData.user.registry.surname} ${playerData.user.registry.name}`,

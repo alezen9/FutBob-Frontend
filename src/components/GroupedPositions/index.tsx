@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
       color: ZenPalette.typographyGrey,
       boxShadow: ZenPalette.boxShadow,
       margin: 'auto -.4em !important',
-      transition: 'margin .2s ease-in-out',
+      transition: 'margin .2s ease-in-out, background-color .1s ease',
       [theme.breakpoints.down('xs')]: {
          margin: 'auto -.1em !important'
       }

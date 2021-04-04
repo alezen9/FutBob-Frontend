@@ -5,7 +5,6 @@ import FutsalField from '@_components/FutsalField'
 import { useFormik } from 'formik'
 import FormikInput from '@_components/FormikInput'
 import RadarChart from '@_components/Charts/Radar'
-import { OverallScore } from '@_icons'
 import PlayerScoreInputs from '@_components/FormikInput/PlayerScoreInputs'
 import { TabProps } from '..'
 import { ZenPalette } from '@_MUITheme'
@@ -15,6 +14,7 @@ import { initialScoreValues } from '@_utils/constants/InitValuesPlayerScore'
 import { getPlayerOverall } from '@_utils/playerOverall'
 import { onSubmit, schema } from './helpers'
 import zenHooks from '@_utils/hooks'
+import Overall from '@_components/Overall'
 
 const Player: React.FC<TabProps> = props => {
    const { item, setIsLoading, createMyPlayer, updateMyPlayer, deleteMyPlayer } = props
@@ -52,7 +52,7 @@ const Player: React.FC<TabProps> = props => {
 
    return (
       <Grid container spacing={3}>
-         <OverallScore style={{ margin: 'auto' }} value={overall} size={4} />
+         <Overall style={{ margin: 'auto', fontSize: '5em' }} overall={overall} />
          <Grid item container xs={12} justify='center'>
             <FormikInput
                sm={4}

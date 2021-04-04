@@ -190,11 +190,11 @@ class ZenToolbox {
    }
 
    getScoreColor = (value: number) => {
-      if (value < 40) return 'crimson'
-      if (value < 65) return 'orange'
-      if (value < 85) return ZenPalette.darkGreen
-      if (value <= 100) return '#B29600'
-      return ZenPalette.typographyGrey
+      if (value === 0) return ZenPalette.typographyGrey
+      if (value < 50) return 'crimson'
+      if (value < 70) return '#cd6532' // bronze
+      if (value < 85) return '#037d5a' // green
+      return 'gold'
    }
 
    getScoreColorFillGradient = (value: number) => {
