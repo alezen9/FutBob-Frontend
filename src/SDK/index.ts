@@ -68,7 +68,7 @@ export class ZenServer {
 				console.error('RequestedFields: \n', fields)
 				console.error('Response: \n', response)
 			} else {
-				console.group(`%cAPI: ${name}`, 'color: rgb(42, 156, 71);')
+				console.groupCollapsed(`%cAPI: ${name}`, 'color: rgb(42, 156, 71);')
 				params && console.log(`Params: \n`, params)
 				fields && console.log(`RequestedFields: \n`, fields)
 				console.log(`Response: \n`, response)

@@ -64,16 +64,9 @@ export default class MyDocument extends Document {
                }
 
 
-
                @font-face {
                   font-family: Poppins;
                   src: url('/fonts/Poppins/Poppins-ExtraLight.ttf') format('truetype');
-                  font-display: swap;
-               }
-
-               @font-face {
-                  font-family: Poppins;
-                  src: url('/fonts/Poppins/Poppins-Light.ttf') format('truetype');
                   font-weight: 100;
                   font-display: swap;
                }
@@ -87,6 +80,13 @@ export default class MyDocument extends Document {
 
                @font-face {
                   font-family: Poppins;
+                  src: url('/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+                  font-weight: 400;
+                  font-display: swap;
+               }
+
+               @font-face {
+                  font-family: Poppins;
                   src: url('/fonts/Poppins/Poppins-Medium.ttf') format('truetype');
                   font-weight: 500;
                   font-display: swap;
@@ -95,7 +95,7 @@ export default class MyDocument extends Document {
                @font-face {
                   font-family: Poppins;
                   src: url('/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
-                  font-weight: bold;
+                  font-weight: 600;
                   font-display: swap;
                }
 

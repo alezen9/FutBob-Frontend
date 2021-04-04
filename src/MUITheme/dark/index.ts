@@ -85,6 +85,9 @@ const DarkTheme = createMuiTheme({
       root: {
         borderRadius,
         backgroundColor: '#222'
+      },
+      elevation1: {
+        boxShadow: '0 7px 20px black'
       }
     },
     MuiInputBase: {
@@ -365,6 +368,8 @@ const DarkTheme = createMuiTheme({
         minWidth: 100
       },
       body: {
+        paddingTop: 12,
+        paddingBottom: 12,
         fontSize: '.9em',
         fontWeight: 300,
         color: 'rgba(255,255,255,.5)',

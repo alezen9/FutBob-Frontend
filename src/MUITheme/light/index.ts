@@ -87,6 +87,9 @@ const LightTheme = createMuiTheme({
       root: {
         borderRadius,
         backgroundColor
+      },
+      elevation1: {
+        boxShadow: '0 7px 20px rgba(0,0,0,.1)'
       }
     },
     MuiInputBase: {
@@ -105,7 +108,7 @@ const LightTheme = createMuiTheme({
           backgroundColor: 'transparent'
         },
         '&$disabled': {
-          color: lightGrey,
+          color: 'rgba(0,0,0,.7)',
           opacity: 0.7
         }
       }

@@ -50,7 +50,6 @@ const PlayersContainer = () => {
 
    useEffect(() => {
       if (!router.query.page) {
-         console.log(router.query)
          router.replace({
             pathname: routesPaths[ZenRouteID.PLAYERS].path,
             query: { page: 1 }

@@ -7,29 +7,17 @@ const useStyles = makeStyles(theme => ({
    main: {
       width: '100%',
       height: '100%',
+      [theme.breakpoints.down('xs')]: {
+         width: '100vw',
+         marginLeft: -theme.spacing(4)
+      },
       '& svg': {
          '& g > g > g': {
-            '& > circle': { // opacity on grid
-               opacity: theme.type === ThemeType.dark
-                  ? '.3 !important'
-                  : '.6 !important'
-            },
             '& > g > text': {
                [theme.breakpoints.down('xs')]: { // hide label on mobile
-                  display: 'none'
+                  visibility: 'hidden'
                }
             }
-         },
-         '& + div': {
-            '& > div': {
-               color: `${ZenPalette.typographyGrey} !important`,
-               backgroundColor: `${ZenPalette.backgroundColorStandOut} !important`,
-               borderRadius: '5px !important',
-               boxShadow: `0 10px 15px rgba(0,0,0,.2) !important`
-            }
-         },
-         '& text': {
-            fill: `${ZenPalette.typographyGrey} !important`
          }
       }
    }
@@ -48,11 +36,11 @@ const RadarChart = ({ data = [] }: Props) => {
    const classes = useStyles()
    const theme = useTheme()
    const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'))
-   const blendMode = useMemo(() => theme.type === 'dark' ? 'normal' : 'multiply', [theme.type])
+   const blendMode = useMemo(() => theme.type === ThemeType.dark ? 'normal' : 'multiply', [theme.type])
    const margin = useMemo(() => {
       return isSmallScreen
          ? { top: 0, right: 0, bottom: 0, left: 0 }
-         : { top: 70, right: 80, bottom: 40, left: 80 }
+         : { top: 50, right: 60, bottom: 20, left: 60 }
    }, [isSmallScreen])
 
    return (
@@ -60,6 +48,25 @@ const RadarChart = ({ data = [] }: Props) => {
          <ResponsiveRadar
             data={data}
             keys={['value']}
+            theme={{
+               textColor: ZenPalette.typographyGrey,
+               grid: {
+                  line: {
+                     stroke: ZenPalette.dividerColor,
+                     opacity: ZenPalette.themeType === ThemeType.dark
+                        ? .3
+                        : .6
+                  }
+               },
+               tooltip: {
+                  container: {
+                     color: ZenPalette.typographyGrey,
+                     backgroundColor: ZenPalette.backgroundColorStandOut,
+                     borderRadius: 5,
+                     boxShadow: ZenPalette.boxShadow
+                  }
+               }
+            }}
             indexBy='prop'
             maxValue={100}
             margin={margin}
@@ -68,7 +75,7 @@ const RadarChart = ({ data = [] }: Props) => {
             borderColor={{ theme: 'background' }}
             gridLevels={5}
             gridShape='circular'
-            gridLabelOffset={30}
+            gridLabelOffset={10}
             enableDots
             dotSize={10}
             dotColor={{ from: 'color' }}
