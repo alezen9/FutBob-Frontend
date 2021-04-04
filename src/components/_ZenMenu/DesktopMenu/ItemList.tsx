@@ -46,7 +46,7 @@ const motionVariants = {
 const LOGOUT_ITEM: RouteItem = {
    ...routesPaths[ZenRouteID.LOGIN],
    title: 'Logout',
-   icon: <ExitToAppRoundedIcon style={{ color: ZenPalette.lightRed, opacity: 0.7 }} />
+   icon: <ExitToAppRoundedIcon color='error' style={{ opacity: 0.7 }} />
 }
 
 type Props = {
@@ -99,6 +99,7 @@ const ItemList = (props: Props) => {
                item={LOGOUT_ITEM}
                handleRoute={_logout}
                ignoreActiveProps
+               isLogout
             />
          </div>
       </>

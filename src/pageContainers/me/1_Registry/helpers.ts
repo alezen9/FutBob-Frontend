@@ -6,7 +6,7 @@ import { OptionType } from '@_components/FormikInput'
 import cleanDeep from 'clean-deep'
 import dayjs from 'dayjs'
 import { WithInitialValues } from '@_utils/types'
-import { zenToolboxInstance } from '@_utils/Toolbox'
+import zenToolbox from '@_utils/toolbox'
 
 export const onUpdateMyRegistry = ({ setIsLoading, updateMyRegistry, updateMyEmail }) => async (
 	values: WithInitialValues<UpdateRegistryInput & { email: string, country: OptionType }>,
@@ -19,7 +19,7 @@ export const onUpdateMyRegistry = ({ setIsLoading, updateMyRegistry, updateMyEma
       ...values.country && { country: get(values, 'country.value', 'IT') }
    })
    const { initialValues, ...rest } = body
-   const diff = zenToolboxInstance.v2_deepDiff(initialValues, rest) as UpdateRegistryInput & { email: string }
+   const diff = zenToolbox.v2_deepDiff(initialValues, rest) as UpdateRegistryInput & { email: string }
    let done = true
    if(!isEmpty(diff)) {
       const { email, ...rest } = diff

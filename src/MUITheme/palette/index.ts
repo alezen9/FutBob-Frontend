@@ -27,13 +27,11 @@ export const configColors: Config = {
       light: teal[400],
       main: teal[800],
       dark: teal[900],
-      contrastText: '#fff'
     },
     [ThemeType.dark]: {
       light: teal[400],
-      main: teal[800],
-      dark: teal[900],
-      contrastText: '#fff'
+      main: teal[600],
+      dark: teal[800],
     }
   },
   secondary: {

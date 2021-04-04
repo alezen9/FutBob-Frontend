@@ -1,7 +1,7 @@
 import { Defense, Pace, Passing, Physical, PlayerPosition, PlayerScore, Shooting, Technique } from '@_SDK_Player/types'
 import { reduce } from 'lodash'
 import { RadarChartData } from '@_components/Charts/Radar'
-import { zenToolboxInstance } from './Toolbox'
+import zenToolbox from '@_utils/toolbox'
 
 export const getPlayerOverall = (score: PlayerScore, positions: PlayerPosition[]): { overall: number, chartData: RadarChartData[] } => {
    const { chartData, ...zoneOverall } = reduce(
@@ -10,7 +10,7 @@ export const getPlayerOverall = (score: PlayerScore, positions: PlayerPosition[]
 			// calcolo media ponderata della categoria corrente
          const keyMean = getKeyMean(val, key)
          // aggiungo a chartData i valori che poi andrò a visualizzare nel grafico in dettaglio player
-         acc.chartData.push({ prop: zenToolboxInstance.capitalize(key), value: Math.trunc(keyMean) })
+         acc.chartData.push({ prop: zenToolbox.capitalize(key), value: Math.trunc(keyMean) })
 			// calcolo media ponderata della categoria corrente secondo le zone del campo
 			acc[Zone.Back] += keyMean * lvl2Coeff[key][Zone.Back]
 			acc[Zone.Center] += keyMean * lvl2Coeff[key][Zone.Center]

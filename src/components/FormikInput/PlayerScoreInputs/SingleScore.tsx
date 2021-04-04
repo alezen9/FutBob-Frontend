@@ -3,7 +3,7 @@ import { Grid, Typography, makeStyles } from '@material-ui/core'
 import { get, reduce } from 'lodash'
 import { ZenPalette } from '@_MUITheme'
 import { SlidersDialogContent, SlidersDialogActions } from './helpers'
-import { getScoreColor } from '@_utils/helpers'
+import zenToolbox from '@_utils/toolbox'
 import { DefenseIcon, PhysicalIcon } from '@_icons'
 import FlashOnIcon from '@material-ui/icons/FlashOn'
 import TimelineOutlinedIcon from '@material-ui/icons/TimelineOutlined'
@@ -91,7 +91,7 @@ const SingleScore = (props: Props) => {
       const keyMean = getKeyMean(values, name, true)
       return {
          keyMean,
-         color: getScoreColor(keyMean)
+         color: zenToolbox.getScoreColor(keyMean)
       }
    }, [JSON.stringify(values), name])
 

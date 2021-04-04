@@ -101,6 +101,7 @@
  .header ul.menu li.menu-item {
   cursor: pointer;
   margin-top: 10px;
+  font-weight: 100;
   -webkit-transform: scale(1.15) translateY(-30px);
           transform: scale(1.15) translateY(-30px);
   opacity: 0;
@@ -147,7 +148,6 @@
   text-decoration: none;
   font-size: 22px;
   line-height: 2.35;
-  font-weight: 200;
   width: 100%;
 }
 

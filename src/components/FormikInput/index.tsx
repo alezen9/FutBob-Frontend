@@ -15,6 +15,7 @@ import dayjs, { Dayjs } from 'dayjs'
 import InputAutocomplete from './InputAutocomplete'
 import InputSlider from './InputSlider'
 import InputDate from './InputDate'
+import { FormikProps } from 'formik'
 
 const useStyles = makeStyles<Theme, { fullWidthChip?: boolean }>(theme => ({
    gridWrapper: {
@@ -68,18 +69,19 @@ export type OptionType = {
    [field: string]: any
 }
 
-export type FormikEssentials = {
-   values: any
-   errors: any
-   setFieldTouched: any
-   setFieldValue: any
-   setFieldError: any
-   setValues?: any
-   handleSubmit?: any
-   setTouched?: any
-   resetForm?: any
-   isSubmitting?: boolean
-}
+export type FormikEssentials = FormikProps<any>
+// {
+//    values: any
+//    errors: any
+//    setFieldTouched: any
+//    setFieldValue: any
+//    setFieldError: any
+//    setValues?: any
+//    handleSubmit?: any
+//    setTouched?: any
+//    resetForm?: any
+//    isSubmitting?: boolean
+// }
 
 
 type Props = FormikEssentials & GridWrapperProps & {
@@ -154,12 +156,12 @@ const FormikInput = (props: Props) => {
 
    const defaultProps = { ...props, id, type, values, handleChange, helperText, errors, variant, disabled, xs, multiline, rows, required, label }
 
-
    const toggleShowMemoized = useCallback((e: any) => toggleShow(state => !state), [])
 
    const _setFieldValueTouched = useCallback((name: string, value: any) => {
       props.setFieldValue(name, value, true)
-         .then(() => props.setFieldTouched(name, true, false))
+         // @ts-ignore
+         .then(() => { props.setFieldTouched(name, true, false) })
    }, [props.setFieldValue, props.setFieldTouched])
 
    const PasswordAdornment = () => <InputAdornment position='end' >

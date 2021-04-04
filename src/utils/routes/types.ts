@@ -43,5 +43,6 @@ export type ZenRoute = {
    backRouteID?: ZenRouteID
    isPrivate: boolean
    section?: ZenSection
+   isSectionEntryPoint?: boolean
    subpaths?: ZenSubRoute[]
 }

@@ -11,7 +11,6 @@ export const onSubmit = ({ setIsLoading, createMyPlayer, updateMyPlayer }) => as
    const { user, _id, ...body } = values
    if(_id) await updateMyPlayer({ ...body, _id })
    else await createMyPlayer({ ...body, user })
-   console.log(values)
    helpers.setSubmitting(false)
    setIsLoading(false)
 }

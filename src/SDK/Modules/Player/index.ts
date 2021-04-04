@@ -1,5 +1,5 @@
 import { ListOf } from '@_swr/helpers'
-import { zenToolboxInstance } from '@_utils/Toolbox'
+import zenToolbox from '@_utils/toolbox'
 import { get } from 'lodash'
 import { Pagination } from 'src/SDK/types'
 import { ZenServer } from '../../'
@@ -17,7 +17,7 @@ class PlayerServer {
       const revisedBody = { ...body, user: String(body.user) }
 		const query = `
       mutation {
-         Player_create(body: ${zenToolboxInstance.paramsToString(revisedBody)})
+         Player_create(body: ${zenToolbox.paramsToString(revisedBody)})
       }`
 		return this._server.API({ query, name: 'Player_create', params: revisedBody })
 	}
@@ -26,7 +26,7 @@ class PlayerServer {
       const revisedBody = { ...body, _id: String(body._id) }
 		const query = `
       mutation {
-         Player_update(body: ${zenToolboxInstance.paramsToString(revisedBody)})
+         Player_update(body: ${zenToolbox.paramsToString(revisedBody)})
       }`
 		return this._server.API({ query, name: 'Player_update', params: revisedBody })
 	}
@@ -43,7 +43,7 @@ class PlayerServer {
       const revisedFilters = { ...filters, ids: (get(filters, 'ids', []) || []).map((_id: string|number) => String(_id)) }
 		const query = `
       query {
-         Player_getList(filters: ${zenToolboxInstance.paramsToString(revisedFilters)}, pagination: ${zenToolboxInstance.paramsToString(pagination)}, sort: ${zenToolboxInstance.paramsToString(sort)}) ${fields}
+         Player_getList(filters: ${zenToolbox.paramsToString(revisedFilters)}, pagination: ${zenToolbox.paramsToString(pagination)}, sort: ${zenToolbox.paramsToString(sort)}) ${fields}
       }`
 		return this._server.API({ query, name: 'Player_getList', params: { filters: revisedFilters, pagination, sort }, fields })
 	}

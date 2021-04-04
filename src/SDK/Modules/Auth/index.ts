@@ -2,7 +2,7 @@ import { get } from 'lodash'
 import { ZenServer } from '../../'
 import { AuthData } from './types'
 import { FinalizeRegistrationInput, LoginInput, RegisterInput, RequestResendInput } from './inputs'
-import { zenToolboxInstance } from '@_utils/Toolbox'
+import zenToolbox from '@_utils/toolbox'
 
 class AuthServer {
 	private _server: ZenServer
@@ -38,7 +38,7 @@ class AuthServer {
 	async login(body: LoginInput): Promise<AuthData> {
 		const query = `
       query {
-         Auth_login(body: ${zenToolboxInstance.paramsToString(body)}) { token }
+         Auth_login(body: ${zenToolbox.paramsToString(body)}) { token }
       }`
 		return this._server.API({ query, name: 'Auth_login', params: body })
    }
@@ -47,7 +47,7 @@ class AuthServer {
    async requestRegistration(body: RegisterInput): Promise<boolean> {
       const query = `
       mutation {
-         Auth_requestRegistration(body: ${zenToolboxInstance.paramsToString(body)})
+         Auth_requestRegistration(body: ${zenToolbox.paramsToString(body)})
       }`
       return this._server.API({ query, name: 'Auth_requestRegistration', params: body })
    }
@@ -63,7 +63,7 @@ class AuthServer {
    async finalizeRegistration(body: FinalizeRegistrationInput): Promise<AuthData> {
       const query = `
       mutation {
-         Auth_finalizeRegistration(body: ${zenToolboxInstance.paramsToString(body)}) { token }
+         Auth_finalizeRegistration(body: ${zenToolbox.paramsToString(body)}) { token }
       }`
       return this._server.API({ query, name: 'Auth_finalizeRegistration', params: body, fields: '{ token }' })
    }
@@ -91,7 +91,7 @@ class AuthServer {
    async finalizeResetPassword(body: FinalizeRegistrationInput): Promise<AuthData> {
       const query = `
       mutation {
-         Auth_finalizeResetPassword(body: ${zenToolboxInstance.paramsToString(body)}) { token }
+         Auth_finalizeResetPassword(body: ${zenToolbox.paramsToString(body)}) { token }
       }`
       return this._server.API({ query, name: 'Auth_finalizeResetPassword', params: body, fields: '{ token }' })
    }

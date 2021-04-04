@@ -1,4 +1,4 @@
-import { zenToolboxInstance } from '@_utils/Toolbox'
+import zenToolbox from '@_utils/toolbox'
 import { ZenServer } from '../../'
 import { ChangePasswordInput, CreateUserInput, UpdateRegistryInput } from './inputs'
 import { User } from './types'
@@ -13,7 +13,7 @@ class UserServer {
 	async create(body: CreateUserInput): Promise<string> {
 		const query = `
       mutation {
-         User_create(body: ${zenToolboxInstance.paramsToString(body)})
+         User_create(body: ${zenToolbox.paramsToString(body)})
       }`
 		return this._server.API({ query, name: 'User_create', params: body })
 	}
@@ -22,7 +22,7 @@ class UserServer {
       const revisedBody = { ...body, _id: String(body._id) }
 		const query = `
       mutation {
-         User_update(body: ${zenToolboxInstance.paramsToString(revisedBody)})
+         User_update(body: ${zenToolbox.paramsToString(revisedBody)})
       }`
 		return this._server.API({ query, name: 'User_update', params: revisedBody })
 	}
@@ -38,7 +38,7 @@ class UserServer {
 	async changeMyPassword(body: ChangePasswordInput): Promise<boolean> {
 		const query = `
       mutation {
-         User_changeMyPassword(body: ${zenToolboxInstance.paramsToString(body)})
+         User_changeMyPassword(body: ${zenToolbox.paramsToString(body)})
       }`
 		return this._server.API({ query, name: 'User_changeMyPassword', params: body })
 	}

@@ -43,101 +43,125 @@ export default class MyDocument extends Document {
 
           <style global jsx>
             {`
-                     #__next {
-                        overflow-x: hidden;
-                     }
-                     
-							@font-face {
-								font-family: Poppins;
-								src: url('/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
-								font-display: swap;
-							}
+               #__next {
+                  overflow-x: hidden;
+               }
+               
+               /* Change Autocomplete styles in Chrome*/
+               input:-webkit-autofill,
+               input:-webkit-autofill:hover,
+               input:-webkit-autofill:focus,
+               textarea:-webkit-autofill,
+               textarea:-webkit-autofill:hover,
+               textarea:-webkit-autofill:focus,
+               select:-webkit-autofill,
+               select:-webkit-autofill:hover,
+               select:-webkit-autofill:focus {
+                  -webkit-box-shadow: 0 0 0px 1000px rgba(0,0,0,.01) inset;
+                  transition: background-color 5000s ease-in-out 0s;
+                  -webkit-text-fill-color: white !important;
+                  mix-blend-mode: exclusion;
+               }
 
-							@font-face {
-								font-family: Poppins;
-								src: url('/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
-								font-weight: bold;
-								font-display: swap;
-							}
 
-							@font-face {
-								font-family: Poppins;
-								src: url('/fonts/Poppins/Poppins-Italic.ttf') format('truetype');
-								font-style: italic;
-								font-display: swap;
-							}
 
-							@font-face {
-								font-family: Poppins;
-								src: url('/fonts/Poppins/Poppins-BoldItalic.ttf') format('truetype');
-								font-style: italic;
-								font-weight: bold;
-								font-display: swap;
-							}
+               @font-face {
+                  font-family: Poppins;
+                  src: url('/fonts/Poppins/Poppins-ExtraLight.ttf') format('truetype');
+                  font-display: swap;
+               }
 
-							#nprogress .bar {
-								background: rgb(42, 156, 71) !important;
-								background-color: rgb(42, 156, 71) !important;
-							}
+               @font-face {
+                  font-family: Poppins;
+                  src: url('/fonts/Poppins/Poppins-Light.ttf') format('truetype');
+                  font-weight: 100;
+                  font-display: swap;
+               }
 
-							#nprogress .spinner {
-								display: none;
-							}
+               @font-face {
+                  font-family: Poppins;
+                  src: url('/fonts/Poppins/Poppins-Light.ttf') format('truetype');
+                  font-weight: 300;
+                  font-display: swap;
+               }
 
-							::-webkit-scrollbar {
-								width: 4px;
-								height: 4px;
-							}
+               @font-face {
+                  font-family: Poppins;
+                  src: url('/fonts/Poppins/Poppins-Medium.ttf') format('truetype');
+                  font-weight: 500;
+                  font-display: swap;
+               }
 
-							::-webkit-scrollbar-track {
-								background-color: transparent;
-								-webkit-border-radius: 10px;
-								border-radius: 10px;
-							}
+               @font-face {
+                  font-family: Poppins;
+                  src: url('/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
+                  font-weight: bold;
+                  font-display: swap;
+               }
 
-							::-webkit-scrollbar-thumb {
-								-webkit-border-radius: 10px;
-								border-radius: 10px;
-								background: rgba(158, 158, 158, 0.5);
-							}
+               #nprogress .bar {
+                  background: #00695c !important;
+                  background-color: #00695c !important;
+               }
 
-							::-webkit-calendar-picker-indicator {
-								filter: invert(50%);
-							}
-							@media all and (display-mode: standalone) {
-								body::after {
-									position: fixed;
-									top: -80px;
-									left: 0;
-									width: 100vw;
-									height: 80px;
-									content: ' ';
-									backdrop-filter: blur(20px);
-									background-color: rgba(0, 0, 0, 0.3);
-								}
-								::-webkit-scrollbar {
-									display: none;
-								}
-								::-webkit-scrollbar-track {
-									display: none;
-								}
-								::-webkit-scrollbar-thumb {
-									display: none;
-								}
-							}
+               #nprogress .spinner {
+                  display: none;
+               }
 
-							@media all and (max-width: 450px) {
-								::-webkit-scrollbar {
-									display: none;
-								}
-								::-webkit-scrollbar-track {
-									display: none;
-								}
-								::-webkit-scrollbar-thumb {
-									display: none;
-								}
-							}
-						`}
+               ::-webkit-scrollbar {
+                  width: 4px;
+                  height: 4px;
+               }
+
+               ::-webkit-scrollbar-track {
+                  background-color: transparent;
+                  -webkit-border-radius: 10px;
+                  border-radius: 10px;
+               }
+
+               ::-webkit-scrollbar-thumb {
+                  -webkit-border-radius: 10px;
+                  border-radius: 10px;
+                  background: rgba(158, 158, 158, 0.5);
+               }
+
+               ::-webkit-calendar-picker-indicator {
+                  filter: invert(50%);
+               }
+               @media all and (display-mode: standalone) {
+                  body::after {
+                     position: fixed;
+                     top: -80px;
+                     left: 0;
+                     width: 100vw;
+                     height: 80px;
+                     content: ' ';
+                     backdrop-filter: blur(20px);
+                     background-color: rgba(0, 0, 0, 0.3);
+                  }
+                  ::-webkit-scrollbar {
+                     display: none;
+                  }
+                  ::-webkit-scrollbar-track {
+                     display: none;
+                  }
+                  ::-webkit-scrollbar-thumb {
+                     display: none;
+                  }
+               }
+
+               @media all and (max-width: 450px) {
+                  ::-webkit-scrollbar {
+                     display: none;
+                  }
+                  ::-webkit-scrollbar-track {
+                     display: none;
+                  }
+                  ::-webkit-scrollbar-thumb {
+                     display: none;
+                  }
+               }
+            `}
           </style>
         </Head>
         <body>

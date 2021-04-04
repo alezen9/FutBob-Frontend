@@ -11,8 +11,8 @@ import { get, uniqueId } from 'lodash'
 import { setData, MobileRowCell, TableHeaderData, TableRowData, SetDataOut, getLastStickyIndex, ZenTableSort } from './helpers'
 import ZenLoadingMask from '../ContentLoader/LoadingMask'
 import { Typography, useTheme, useMediaQuery } from '@material-ui/core'
-import { ZenPalette } from '@_MUITheme'
-import { zenToolboxInstance } from '@_utils/Toolbox'
+import { ThemeType, ZenPalette } from '@_MUITheme'
+import zenToolbox from '@_utils/toolbox'
 
 const useStyles = makeStyles(theme => ({
    table: {
@@ -20,6 +20,9 @@ const useStyles = makeStyles(theme => ({
       transition: 'background-color .1s ease'
    },
    tableContainer: {
+      boxShadow: theme.type === ThemeType.light
+         ? '0 15px 15px rgb(0 0 0 / 5%)'
+         : '0 15px 15px rgb(0 0 0 / 15%)',
       [theme.breakpoints.down('xs')]: {
          width: '100vw',
          margin: '0 -1em',
@@ -128,7 +131,7 @@ const CustomTable = React.memo((props: TableProps) => {
                               {Object.entries(row).map(([key, value], j) => {
                                  const found = key === 'actions'
                                     ? undefined
-                                    : headers.find(({ name, id }) => zenToolboxInstance.camelize(id || name) === zenToolboxInstance.camelize(key))
+                                    : headers.find(({ name, id }) => zenToolbox.camelize(id || name) === zenToolbox.camelize(key))
                                  return <ZenTableCell
                                     {...found && found.style && {
                                        headerStyles: found.style,

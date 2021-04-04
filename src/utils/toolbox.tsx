@@ -1,12 +1,14 @@
 import { OptionType } from "@_components/FormikInput"
+import { ZenPalette } from "@_MUITheme"
 import cleanDeep from "clean-deep"
-import { compact, isObject, map, isUndefined, keys, has, get, entries, isObjectLike, isEqual } from "lodash"
+import { compact, isObject, map, isUndefined, keys, has, get, entries, isObjectLike, isEqual, reduce, uniqueId } from "lodash"
+import { routes } from "./routes"
 
 class ZenToolbox {
-   private formatter: Intl.NumberFormat
+   #formatter: Intl.NumberFormat
 
-   constructor(){
-      this.formatter = new Intl.NumberFormat('it-IT', {
+   constructor() {
+      this.#formatter = new Intl.NumberFormat('it-IT', {
          style: 'currency',
          currency: 'EUR',
          minimumFractionDigits: 2,
@@ -68,14 +70,14 @@ class ZenToolbox {
    }
 
    eurosToCents = (euros: number) => Math.trunc(euros * 100)
-   
+
    centsToEuros = (cents: number) => {
-      const formatted = this.formatter.format(cents / 100)
+      const formatted = this.#formatter.format(cents / 100)
       const res = formatted.replace(',', '.').replace('€', '').trim()
       return Number(res)
    }
 
-   centsToEurosFormatted = (cents: number) => this.formatter.format(cents / 100)
+   centsToEurosFormatted = (cents: number) => this.#formatter.format(cents / 100)
 
    /**
     * 
@@ -90,23 +92,23 @@ class ZenToolbox {
          for (const key of keys(fromObject)) {
             const currentPath = buildPath(path, fromObject, key)
             if (!has(toObject, key)) {
-            changes[currentPath] = get(toObject, key, null)
+               changes[currentPath] = get(toObject, key, null)
             }
          }
 
          for (const [key, to] of entries(toObject)) {
             const currentPath = buildPath(path, toObject, key)
             if (!has(fromObject, key)) {
-            changes[currentPath] = to
+               changes[currentPath] = to
             } else {
-            const from = get(fromObject, key)
-            if (!isEqual(from, to)) {
-               if (isObjectLike(to) && isObjectLike(from)) {
-                  walk(from, to, currentPath)
-               } else {
-                  changes[currentPath] = to
+               const from = get(fromObject, key)
+               if (!isEqual(from, to)) {
+                  if (isObjectLike(to) && isObjectLike(from)) {
+                     walk(from, to, currentPath)
+                  } else {
+                     changes[currentPath] = to
+                  }
                }
-            }
             }
          }
       }
@@ -116,6 +118,10 @@ class ZenToolbox {
       return changes
    }
 
+   /**
+    * @description Similar to v2 but this one returns an object for the fields that has been changed { from: 'aleks', to: 'messi' }
+    * @deprecated use v2_deepDiff instead
+   */
    deepDiff = (fromObject: Object, toObject: Object) => {
       const changes = {}
 
@@ -125,23 +131,23 @@ class ZenToolbox {
          for (const key of keys(fromObject)) {
             const currentPath = buildPath(path, fromObject, key)
             if (!has(toObject, key)) {
-            changes[currentPath] = { from: get(fromObject, key) }
+               changes[currentPath] = { from: get(fromObject, key) }
             }
          }
 
          for (const [key, to] of entries(toObject)) {
             const currentPath = buildPath(path, toObject, key)
             if (!has(fromObject, key)) {
-            changes[currentPath] = { to }
+               changes[currentPath] = { to }
             } else {
-            const from = get(fromObject, key)
-            if (!isEqual(from, to)) {
-               if (isObjectLike(to) && isObjectLike(from)) {
-                  walk(from, to, currentPath)
-               } else {
-                  changes[currentPath] = { from, to }
+               const from = get(fromObject, key)
+               if (!isEqual(from, to)) {
+                  if (isObjectLike(to) && isObjectLike(from)) {
+                     walk(from, to, currentPath)
+                  } else {
+                     changes[currentPath] = { from, to }
+                  }
                }
-            }
             }
          }
       }
@@ -150,6 +156,55 @@ class ZenToolbox {
 
       return changes
    }
+
+
+
+   cleanPathname = (path: string = '') => path.split('?')[0]
+
+   getTitleFromPathname = (pathname: string) => {
+      const routeInfo: any = routes.find(({ path }) => this.cleanPathname(path) === pathname)
+      if (!routeInfo) return 'Dashboard'
+      return routeInfo.title
+   }
+
+   getLabelsByValues = ({ values = [], options = [], list = false, separator = ', ' }) => {
+      const labels = options.reduce((acc, { value, label }) => {
+         if (values.includes(value)) return [...acc, label]
+         return acc
+      }, [])
+      return list ? labels.map(label => <div key={uniqueId()}>• {label}</div>) : labels.join(separator)
+   }
+
+   cleanQueryParams = query => {
+      return reduce(
+         query,
+         (acc, value, key) => {
+            if (/^\[+[a-zA-Z0-9]+\]/gim.test(value)) return acc
+            return {
+               ...acc,
+               [key]: value
+            }
+         },
+         {}
+      )
+   }
+
+   getScoreColor = (value: number) => {
+      if (value < 40) return 'crimson'
+      if (value < 65) return 'orange'
+      if (value < 85) return ZenPalette.darkGreen
+      if (value <= 100) return '#B29600'
+      return ZenPalette.typographyGrey
+   }
+
+   getScoreColorFillGradient = (value: number) => {
+      if (value < 40) return 'url(#red)'
+      if (value < 65) return 'url(#orange)'
+      if (value < 85) return 'url(#green)'
+      if (value <= 100) return 'url(#gold)'
+      return ZenPalette.typographyGrey
+   }
 }
 
-export const zenToolboxInstance = new ZenToolbox()
+const zenToolbox = new ZenToolbox()
+export default zenToolbox

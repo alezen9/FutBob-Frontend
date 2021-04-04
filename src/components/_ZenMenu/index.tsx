@@ -10,19 +10,18 @@ import MobileMenu from './MobileMenu'
 import { useRouter } from 'next/router'
 import { useConfigStore } from '@_zustand/config'
 import { apiInstance } from 'src/SDK'
-import { ZenRoute, ZenRouteID } from '@_utils/routes/types'
+import { ZenRoute, ZenRouteID, ZenSection } from '@_utils/routes/types'
 import { routes, routesPaths } from '@_utils/routes'
-// import DesktopMenuNew from './DesktopMenuNew'
 
 
 const iconMap = {
-  [ZenRouteID.DASHBOARD]: <DashboardRoundedIcon />,
-  [ZenRouteID.ME]: <FaceDynamicIcon />,
-  [ZenRouteID.PLAYERS]: <JerseyIcon />,
-  [ZenRouteID.FREE_AGENTS]: <FreeAgentIcon />,
-  [ZenRouteID.FIELDS]: <FieldIcon />,
-//   [ZenRouteID.APPOINTMENTS]: <SportsSoccerRoundedIcon />,
-//   [ZenRouteID.STATISTICS]: <BarChartRoundedIcon />
+   [ZenSection.DASHBOARD]: <DashboardRoundedIcon />,
+   [ZenSection.ME]: <FaceDynamicIcon />,
+   [ZenSection.PLAYERS]: <JerseyIcon />,
+   [ZenSection.FREE_AGENTS]: <FreeAgentIcon />,
+   [ZenSection.FIELDS]: <FieldIcon />
+   // [ZenSection.APPOINTMENTS]: <SportsSoccerRoundedIcon />,
+   // [ZenSection.STATISTICS]: <BarChartRoundedIcon />
 }
 
 export type RouteItem = ZenRoute & {
@@ -30,13 +29,13 @@ export type RouteItem = ZenRoute & {
 }
 
 const items: RouteItem[] = routes.reduce((acc, route) => {
-  if(route.section && route.isPrivate && iconMap[route._id]){
-     acc.push({
+   if (route.section && route.isPrivate && route.isSectionEntryPoint && iconMap[route.section]) {
+      acc.push({
          ...route,
-         icon: iconMap[route._id]
-     })
-  }
-  return acc
+         icon: iconMap[route.section]
+      })
+   }
+   return acc
 }, [])
 
 type voidFn = (e: any) => void
@@ -56,7 +55,7 @@ const ZenMenu = () => {
       setIsLogged(false)
       setIsLoading(false)
       router.push(routesPaths[ZenRouteID.LOGIN].path)
-   },[])
+   }, [])
 
    const logout = useCallback(
       (open: boolean, toggleMenu: VoidFunction) => (e: any) => {
@@ -68,7 +67,6 @@ const ZenMenu = () => {
    return isSmallScreen
       ? <MobileMenu items={items} logout={logout} />
       : <DesktopMenu items={items} logout={logout} />
-      // : <DesktopMenuNew items={items} logout={logout} />
 }
 
 export default React.memo(ZenMenu)

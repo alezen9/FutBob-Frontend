@@ -1,5 +1,5 @@
 :root {
-   --primary: rgb(42, 156, 71);
+   --primary: #00897b;
 }
 
 @-webkit-keyframes scaleAnimation {

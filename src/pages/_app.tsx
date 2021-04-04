@@ -22,6 +22,9 @@ setLocale({
          if (['string', 'number'].includes(type)) return 'Invalid input'
       },
       required: 'Required field',
+   },
+   string: {
+      email: 'Invalid input'
    }
 })
 

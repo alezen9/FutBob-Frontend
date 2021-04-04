@@ -6,7 +6,7 @@ import ExitToAppRoundedIcon from '@material-ui/icons/ExitToAppRounded'
 import ThemeSwitch from '@_components/ThemeModeSwitch'
 import { ZenPalette } from '@_MUITheme'
 import { logoutFn, RouteItem } from '@_components/_ZenMenu'
-import { zenToolboxInstance } from '@_utils/Toolbox'
+import zenToolbox from '@_utils/toolbox'
 
 const useStyles = makeStyles(theme => ({
    themeSwitchColor: {
@@ -72,7 +72,7 @@ const Navbar = (props: Props) => {
 
    useLayoutEffect(() => {
       const setBodyPosition = async (): Promise<void> => {
-         if (open) await zenToolboxInstance.asyncTimeout(600)
+         if (open) await zenToolbox.asyncTimeout(600)
          document.body.style.overflow = open ? 'hidden' : 'auto'
       }
       setBodyPosition()

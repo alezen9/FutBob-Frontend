@@ -4,7 +4,7 @@ import { uniqueId, get, map, compact } from 'lodash'
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
 import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
 import TypographyLabel from '../TypographyLabel'
-import { zenToolboxInstance } from '@_utils/Toolbox'
+import zenToolbox from '@_utils/toolbox'
 
 const useStyles = makeStyles(theme => ({
    menu: {
@@ -73,7 +73,7 @@ export interface SetDataOut {
 }
 
 export const setData = <T extends SetDataIn>({ headers, data, withActions }: T): SetDataOut => {
-   const headerKeys = headers.map(({ name, id }) => id || zenToolboxInstance.camelize(name))
+   const headerKeys = headers.map(({ name, id }) => id || zenToolbox.camelize(name))
    const res = data.reduce((acc: SetDataOut, _row: TableRowData, i: number) => {
       const { _isUser, ...row } = _row
       acc._data = [
@@ -268,7 +268,7 @@ export const MobileRowCell = React.memo((props: MobileRowCellProps) => {
 
    const { mainRow, mainName } = useMemo((): { mainRow: mainRowType[], mainName: string } => {
       const first = mainHeaders[0]
-      const mainName = zenToolboxInstance.camelize(first.id || first.name)
+      const mainName = zenToolbox.camelize(first.id || first.name)
       return {
          mainRow: [
             { name: row[mainName] },
@@ -332,7 +332,7 @@ const CollapsableCell = React.memo((props: CollapsableCellProps) => {
    const data = useMemo(() => {
       const res = map(row, (val, key) => {
          if (['actions', mainName].includes(key) || ['-', '', ' '].includes(val)) return null
-         const found = _headers.find(({ name, id }) => (id || name) && zenToolboxInstance.camelize(id || name) === key)
+         const found = _headers.find(({ name, id }) => (id || name) && zenToolbox.camelize(id || name) === key)
          return <TypographyLabel
             key={`el-${key}-${uniqueId()}`}
             label={found.name}

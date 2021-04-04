@@ -4,6 +4,7 @@ import { publicRoutes } from '@_utils/routes/Public'
 import { ZenRouteID } from '@_utils/routes/types'
 import { useConfigStore } from '@_zustand/config'
 import { ConfigStoreSelector } from '@_zustand/config/helpers'
+import { get } from 'lodash'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { apiInstance } from 'src/SDK'
@@ -95,8 +96,8 @@ export class ZenAppFlowHooks {
                document.body.style.transition = 'background-color .1s ease'
             }
             document.body.style.backgroundColor = themeType === ThemeType.light 
-               ? bodyBgColor[ThemeType.light] || '#fafafa' 
-               : bodyBgColor[ThemeType.light] || '#111' 
+               ? get(bodyBgColor, ThemeType.light, '#fafafa')
+               : get(bodyBgColor, ThemeType.light, '#111')
          }
       }, [themeType, JSON.stringify(bodyBgColor || {})])
    }

@@ -15,7 +15,7 @@ import { useConfigStore } from '@_zustand/config'
 import { routesPaths } from '@_utils/routes'
 import { ZenRouteID } from '@_utils/routes/types'
 import { FieldState, FieldType } from '@_SDK_Field/types'
-import { zenToolboxInstance } from '@_utils/Toolbox'
+import zenToolbox from '@_utils/toolbox'
 import { FieldTurfTypeOpts } from '@_utils/constants/FieldTurfTypeOpts'
 import zenHooks from '@_utils/hooks'
 
@@ -52,7 +52,7 @@ const FieldDetail = () => {
             }
          },
          ...rest,
-         ...item._id && { price: zenToolboxInstance.centsToEuros(item.price) }
+         ...item._id && { price: zenToolbox.centsToEuros(item.price) }
       },
       enableReinitialize: true,
       validationSchema: schema,

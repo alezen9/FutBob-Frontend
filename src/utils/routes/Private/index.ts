@@ -5,22 +5,25 @@ export const privateRoutes: ZenRoute[] = [
    {
       _id: ZenRouteID.DASHBOARD,
       section: ZenSection.DASHBOARD,
+      isSectionEntryPoint: true,
       isPrivate: true,
       title: 'Dashboard',
       path: '/'
    },
-    // ============================ //
+   // ============================ //
    {
       _id: ZenRouteID.ME,
       section: ZenSection.ME,
+      isSectionEntryPoint: true,
       isPrivate: true,
       title: 'Me',
       path: '/me'
    },
-    // ============================ //
+   // ============================ //
    {
       _id: ZenRouteID.PLAYERS,
       section: ZenSection.PLAYERS,
+      isSectionEntryPoint: true,
       isPrivate: true,
       title: 'Players',
       path: '/players'
@@ -44,10 +47,11 @@ export const privateRoutes: ZenRoute[] = [
       path: '/players/detail/:_id',
       as: ({ _id }) => `/players/detail/${_id}`
    },
-    // ============================ //
+   // ============================ //
    {
       _id: ZenRouteID.FREE_AGENTS,
       section: ZenSection.FREE_AGENTS,
+      isSectionEntryPoint: true,
       isPrivate: true,
       title: 'Free agents',
       path: '/free-agents'
@@ -62,10 +66,11 @@ export const privateRoutes: ZenRoute[] = [
       path: '/free-agents/register-player/:_id',
       as: ({ _id }) => `/free-agents/register-player/${_id}`
    },
-    // ============================ //
+   // ============================ //
    {
       _id: ZenRouteID.FIELDS,
       section: ZenSection.FIELDS,
+      isSectionEntryPoint: true,
       isPrivate: true,
       title: 'Fields',
       path: '/fields'

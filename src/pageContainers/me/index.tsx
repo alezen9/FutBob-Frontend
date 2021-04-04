@@ -1,15 +1,13 @@
 import React, { useMemo } from 'react'
 import ZenTabs, { ZenTab } from '@_components/ZenTabs'
-import General from './1_Registry'
-import Private from './2_Private'
-import Player from './3_Player'
+import _Registry from './1_Registry'
+import _Private from './2_Private'
+import _Player from './3_Player'
 import { useSWRMe } from '@_swr/Me'
 import { useConfigStore } from '@_zustand/config'
 import { User } from '@_SDK_User/types'
-import { setSnackbarData } from '@_zustand/helpers'
 import { ChangePasswordInput, UpdateRegistryInput } from '@_SDK_User/inputs'
 import { CreatePlayerInput, UpdatePlayerInput } from '@_SDK_Player/inputs'
-import _Registry from './1_Registry'
 
 export type TabProps = {
    item: User
@@ -23,37 +21,37 @@ export type TabProps = {
 }
 
 const MeContainer = () => {
-  const setIsLoading = useConfigStore(state => state.setIsLoading)
+   const setIsLoading = useConfigStore(state => state.setIsLoading)
 
-  const { item, updateMyRegistry, updateMyPassword, updateMyEmail, createMyPlayer, updateMyPlayer, deleteMyPlayer } = useSWRMe()
+   const { item, updateMyRegistry, updateMyPassword, updateMyEmail, createMyPlayer, updateMyPlayer, deleteMyPlayer } = useSWRMe()
 
-  const tabProps = useMemo(() => ({
-    item,
-    setIsLoading,
-    updateMyRegistry,
-    updateMyPassword,
-    updateMyEmail,
-    createMyPlayer,
-    updateMyPlayer,
-    deleteMyPlayer
-  }), [JSON.stringify(item), setIsLoading, updateMyRegistry, updateMyPassword, updateMyEmail, createMyPlayer, updateMyPlayer, deleteMyPlayer])
+   const tabProps = useMemo(() => ({
+      item,
+      setIsLoading,
+      updateMyRegistry,
+      updateMyPassword,
+      updateMyEmail,
+      createMyPlayer,
+      updateMyPlayer,
+      deleteMyPlayer
+   }), [JSON.stringify(item), setIsLoading, updateMyRegistry, updateMyPassword, updateMyEmail, createMyPlayer, updateMyPlayer, deleteMyPlayer])
 
-  return (
-    <ZenTabs>
-      <ZenTab
-        title='Registry'
-        component={<_Registry {...tabProps} />}
-      />
-      <ZenTab
-        title='Private'
-        component={<Private {...tabProps} />}
-      />
-      <ZenTab
-        title='Player'
-        component={<Player {...tabProps} />}
-      />
-    </ZenTabs>
-  )
+   return (
+      <ZenTabs>
+         <ZenTab
+            title='Registry'
+            component={<_Registry {...tabProps} />}
+         />
+         <ZenTab
+            title='Private'
+            component={<_Private {...tabProps} />}
+         />
+         <ZenTab
+            title='Player'
+            component={<_Player {...tabProps} />}
+         />
+      </ZenTabs>
+   )
 }
 
 export default React.memo(MeContainer)

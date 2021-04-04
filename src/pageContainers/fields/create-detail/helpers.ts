@@ -1,5 +1,5 @@
 import { UpdateFieldInput } from '@_SDK_Field/inputs'
-import { zenToolboxInstance } from '@_utils/Toolbox'
+import zenToolbox from '@_utils/toolbox'
 import { FormikHelpers } from 'formik'
 import { get } from 'lodash'
 import * as yup from 'yup'
@@ -13,7 +13,7 @@ export const onSubmit = ({ setIsLoading, createField, updateField, replaceRouteW
    const { _id, price, location, ...rest } = values
    const minBody = {
       ...rest,
-      price: zenToolboxInstance.eurosToCents(price),
+      price: zenToolbox.eurosToCents(price),
       location: {
          type: 'Point',
          coordinates: [get(location, 'coordinates.lat', null), get(location, 'coordinates.long', null)]

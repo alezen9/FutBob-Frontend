@@ -3,10 +3,10 @@ import SvgIcon from '@material-ui/core/SvgIcon'
 import { makeStyles, Theme } from '@material-ui/core'
 import ExpandLessRoundedIcon from '@material-ui/icons/ExpandLessRounded'
 import CancelRoundedIcon from '@material-ui/icons/CancelRounded'
-import { ThemeType, ZenPalette } from '@_MUITheme'
-import { getScoreColor, getScoreColorFillGradient } from '@_utils/helpers'
+import { ZenPalette } from '@_MUITheme'
+import zenToolbox from '@_utils/toolbox'
 import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded'
-import { mdiFaceWoman, mdiShield } from '@mdi/js'
+import { mdiFaceWoman } from '@mdi/js'
 import Icon from '@mdi/react'
 import { useSWRMe } from '@_swr/Me'
 import { get } from 'lodash'
@@ -171,7 +171,7 @@ export const OverallScore = props => {
    const { value = 0, autoColor = true, size = 2, ...rest } = props
    const color = useMemo(() => {
       if (!autoColor) return ZenPalette.typographyGrey
-      return getScoreColorFillGradient(value)
+      return zenToolbox.getScoreColorFillGradient(value)
    }, [value, autoColor])
 
    const { overallScore } = useStyles({ color, size })
