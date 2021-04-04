@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react'
 import { Grid, Typography, makeStyles } from '@material-ui/core'
 import { get, reduce } from 'lodash'
-import { ZenPalette } from '@_MUITheme'
+import { ThemeType, ZenPalette } from '@_MUITheme'
 import { SlidersDialogContent, SlidersDialogActions } from './helpers'
 import zenToolbox from '@_utils/toolbox'
 import { DefenseIcon, PhysicalIcon } from '@_icons'
@@ -36,11 +36,18 @@ const useStyles = makeStyles(theme => ({
       maxWidth: '50%'
    },
    main: {
-      borderRadius: 10,
+      borderRadius: 5,
       padding: theme.spacing(2),
       boxShadow: ZenPalette.boxShadow,
       cursor: 'pointer',
-      backgroundColor: ZenPalette.paperBackgroundColor
+      backgroundColor: ZenPalette.paperBackgroundColor,
+      transition: 'all .2s ease-in-out',
+      '&:hover': {
+         filter: theme.type === ThemeType.light
+            ? 'brightness(.97)'
+            : 'brightness(1.15)',
+         transform: 'scale(1.02)'
+      }
    },
    title: {
       fontSize: '1em',

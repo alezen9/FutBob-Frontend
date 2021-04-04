@@ -72,10 +72,10 @@ const _Skills: React.FC<TabProps> = props => {
                {...formik}
             />
          </Grid>
-         <Grid item xs={12} sm={7} style={{ height: 500 }}>
+         <Grid item xs={12} md={7} style={{ height: 500 }}>
             <RadarChart data={chartData} />
          </Grid>
-         <PlayerScoreInputs formik={formik} name='score' gridProps={{ sm: 5 }} />
+         <PlayerScoreInputs formik={formik} name='score' gridProps={{ sm: 12, md: 5 }} />
          <Grid item xs={12}>
             <FutsalField
                type='outdoor'

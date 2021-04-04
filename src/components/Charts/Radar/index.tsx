@@ -1,18 +1,30 @@
 import React, { useMemo } from 'react'
 import { ResponsiveRadar } from '@nivo/radar'
 import { useTheme, makeStyles, useMediaQuery } from '@material-ui/core'
-import { ZenPalette } from '@_MUITheme'
+import { ThemeType, ZenPalette } from '@_MUITheme'
 
 const useStyles = makeStyles(theme => ({
    main: {
       width: '100%',
       height: '100%',
       '& svg': {
+         '& g > g > g': {
+            '& > circle': { // opacity on grid
+               opacity: theme.type === ThemeType.dark
+                  ? '.3 !important'
+                  : '.6 !important'
+            },
+            '& > g > text': {
+               [theme.breakpoints.down('xs')]: { // hide label on mobile
+                  display: 'none'
+               }
+            }
+         },
          '& + div': {
             '& > div': {
                color: `${ZenPalette.typographyGrey} !important`,
-               backgroundColor: `${ZenPalette.backgroundColor} !important`,
-               borderRadius: '10px !important',
+               backgroundColor: `${ZenPalette.backgroundColorStandOut} !important`,
+               borderRadius: '5px !important',
                boxShadow: `0 10px 15px rgba(0,0,0,.2) !important`
             }
          },
@@ -73,30 +85,6 @@ const RadarChart = ({ data = [] }: Props) => {
             motionDamping={15}
             isInteractive
             legends={[]}
-            {...isSmallScreen && { // hide labels on mobile
-               gridLabel: props => <>{' '}</>
-            }}
-         //   legends={[
-         //     {
-         //       anchor: 'top-left',
-         //       direction: 'column',
-         //       translateX: -50,
-         //       translateY: -40,
-         //       itemWidth: 80,
-         //       itemHeight: 20,
-         //       itemTextColor: '#999',
-         //       symbolSize: 12,
-         //       symbolShape: 'circle',
-         //       effects: [
-         //         {
-         //           on: 'hover',
-         //           style: {
-         //             itemTextColor: '#000'
-         //           }
-         //         }
-         //       ]
-         //     }
-         //   ]}
          />
       </div>
    )
