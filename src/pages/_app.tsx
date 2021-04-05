@@ -12,6 +12,7 @@ import { FutBobLogo } from '@_icons'
 import { setLocale } from 'yup'
 // css
 import 'nprogress/nprogress.css'
+import 'leaflet/dist/leaflet.css'
 import '@_components/_ZenMenu/MobileMenu/Navbar/Navbar.css'
 import '@_components/AnimatedSuccess/Success.css'
 

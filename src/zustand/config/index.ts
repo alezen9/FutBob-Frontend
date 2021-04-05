@@ -1,6 +1,6 @@
 import { ZenPalette, ThemeType } from '@_MUITheme'
 import create, { UseStore } from 'zustand'
-import { ConfigStore, PrevRoute } from './helpers'
+import { ConfigStore, MapLayer, PrevRoute } from './helpers'
 import { LSTheme } from '@_utils/LSVariables'
 import { routesPaths } from '@_utils/routes'
 import { setSnackbarData, _immer } from '@_zustand/helpers'
@@ -16,6 +16,12 @@ export const useConfigStore: UseStore<ConfigStore> = create(
       snackbar: { open: false },
       activeRoute: {} as ZenRoute,
       prevRoute: {} as PrevRoute,
+      activeMapLayer: MapLayer.Satellite,
+      setActiveMapLayer: (layer: MapLayer) => {
+         set((state: ConfigStore) => {
+            state.activeMapLayer = layer
+         })
+      },
       setActiveRoute: (routeID: ZenRouteID) => {
          set((state: ConfigStore) => {
             state.prevRoute = {
