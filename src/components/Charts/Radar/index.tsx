@@ -39,7 +39,7 @@ const RadarChart = ({ data = [] }: Props) => {
    const blendMode = useMemo(() => theme.type === ThemeType.dark ? 'normal' : 'multiply', [theme.type])
    const margin = useMemo(() => {
       return isSmallScreen
-         ? { top: 0, right: 0, bottom: 0, left: 0 }
+         ? { top: 0, right: 10, bottom: 0, left: 10 }
          : { top: 50, right: 60, bottom: 20, left: 60 }
    }, [isSmallScreen])
 
