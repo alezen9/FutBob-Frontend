@@ -3,7 +3,6 @@ import { ListItem, ListItemIcon, ListItemText, makeStyles } from '@material-ui/c
 import { useRouter } from 'next/router'
 import { checkActivePage } from './helpers'
 import { RouteItem } from '..'
-import { ZenPalette } from '@_MUITheme'
 
 const useStyles = makeStyles(theme => ({
    listItem: {
