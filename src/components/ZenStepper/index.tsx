@@ -13,6 +13,11 @@ const useStyles = makeStyles(theme => ({
    },
    stepper: {
       padding: '8px 0 24px 0'
+   },
+   stepperGridContent: {
+      position: 'relative',
+      padding: theme.spacing(2),
+      paddingBottom: 90
    }
 })
 )
@@ -87,7 +92,7 @@ const ZenStepper: React.FC<Props> = props => {
                </Step>
             ))}
          </Stepper>
-         <Grid style={{ position: 'relative', paddingBottom: 90 }} justify='center' container spacing={3}>
+         <Grid className={classes.stepperGridContent} justify='center' container spacing={3}>
             {activeStep === children.length
                ? OnCompleteStep || <>Fine</>
                : get(children, `${activeStep}.props.component`, <>Unknown component</>)}

@@ -22,7 +22,7 @@ const _Skills: React.FC<Props> = props => {
    }, [JSON.stringify(formik.values.player.score), JSON.stringify(formik.values.player.positions)])
 
    return (
-      <Grid container spacing={3}>
+      <Grid container spacing={3} style={{ padding: 12 }} justify='center'>
          <Overall style={{ margin: 'auto', fontSize: '5em' }} overall={overall} />
          <Grid item container xs={12} justify='center'>
             <FormikInput

@@ -15,15 +15,15 @@ import FinalActions from './FinalActions'
 import { useConfigStore } from '@_zustand/config'
 import { ConfigStore } from '@_zustand/config/helpers'
 
-type StepType = 'registry'|'skills'
+type StepType = 'registry' | 'skills'
 
 const steps: StepType[] = ['registry', 'skills']
 
 const stepperConfig = { steps }
 
 const stateSelector = (state: ConfigStore) => ({
-	openSnackbar: state.openSnackbar,
-	setIsLoading: state.setIsLoading
+   openSnackbar: state.openSnackbar,
+   setIsLoading: state.setIsLoading
 })
 
 const CreatePlayerContainer = () => {
@@ -43,30 +43,30 @@ const CreatePlayerContainer = () => {
    })
 
    const onReset = useCallback(() => {
-    resetStatus()
-    formik.resetForm()
-  }, [resetStatus, formik.resetForm])
+      resetStatus()
+      formik.resetForm()
+   }, [resetStatus, formik.resetForm])
 
    const { disablePrev, disableNext } = useMemo(() => {
       const { registry, skills } = status
       const { user, player } = formik.errors
-      if(registry.active) {
-         return { 
-         disablePrev: false,
-         disableNext: !isEmpty(user) || isEmpty(formik.values.user)
+      if (registry.active) {
+         return {
+            disablePrev: false,
+            disableNext: !isEmpty(user) || isEmpty(formik.values.user)
          }
       }
-      if(skills.active) {
-         return { 
-         disablePrev: false,
-         disableNext: !isEmpty(player) || isEmpty(formik.values.player)
+      if (skills.active) {
+         return {
+            disablePrev: false,
+            disableNext: !isEmpty(player) || isEmpty(formik.values.player)
          }
       }
-      return { 
+      return {
          disablePrev: false,
          disableNext: true
       }
-  }, [JSON.stringify(status), JSON.stringify(formik.errors), isEmpty(formik.values.user), isEmpty(formik.values.player)])
+   }, [JSON.stringify(status), JSON.stringify(formik.errors), isEmpty(formik.values.user), isEmpty(formik.values.player)])
 
    return (
       <Grid container justify='center'>

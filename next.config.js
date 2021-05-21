@@ -1,8 +1,13 @@
 const withPWA = require('next-pwa')
 
+const RESET_COLOR = '\x1b[0m'
+const GREEN_TEXT = '\x1b[32m'
+
+const enablePWA = process.env.NEXT_PUBLIC_ENABLE_PWA === 'true'
+
 const getApiUrl = (config = '') => {
-  console.log(`${config} config env: `, process.env.ENV)
-  console.log(`Listening on port ${process.env.PORT || 3000}`)
+  console.log(`${GREEN_TEXT}[CXB] ${config} config env: ${process.env.ENV}${RESET_COLOR}`)
+  console.log(`${GREEN_TEXT}[CXB] Listening on port ${process.env.PORT || 3000}${RESET_COLOR}`)
   switch (process.env.ENV || 'test') {
     case 'test':
       return 'https://futbob.xyz/'
@@ -30,10 +35,12 @@ module.exports = withPWA({
     autoPrerender: false
   },
   pwa: {
-    disable: process.env.ENV !== 'production',
-    register: process.env.ENV !== 'production',
+    disable: !enablePWA,
+    register: enablePWA,
+    scope: '/',
     dest: 'public',
     maximumFileSizeToCacheInBytes: 10000000, // 10MB
-    sourcemap: process.env.ENV === 'test'
+    sourcemap: false,
+    dynamicStartUrlRedirect: '/auth/login'
   }
 })
