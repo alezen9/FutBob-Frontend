@@ -38,9 +38,10 @@ export default class MyDocument extends Document {
           <meta name='msapplication-TileColor' content='#00aba9' />
           <meta name='theme-color' content='#222' />
           {/* Fonts */}
-          <link href='https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;700&display=swap' rel='stylesheet' />
-          <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap' />
-
+          {/* <link href='https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;700&display=swap' rel='stylesheet' />
+          <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap' /> */}
+          <link rel='preconnect' href='https://fonts.gstatic.com' />
+          <link href='https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600&display=swap' rel='stylesheet' />
           <style global jsx>
             {`
                #__next {
@@ -61,42 +62,6 @@ export default class MyDocument extends Document {
                   transition: background-color 5000s ease-in-out 0s;
                   -webkit-text-fill-color: white !important;
                   mix-blend-mode: exclusion;
-               }
-
-
-               @font-face {
-                  font-family: Poppins;
-                  src: url('/fonts/Poppins/Poppins-ExtraLight.ttf') format('truetype');
-                  font-weight: 100;
-                  font-display: swap;
-               }
-
-               @font-face {
-                  font-family: Poppins;
-                  src: url('/fonts/Poppins/Poppins-Light.ttf') format('truetype');
-                  font-weight: 300;
-                  font-display: swap;
-               }
-
-               @font-face {
-                  font-family: Poppins;
-                  src: url('/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
-                  font-weight: 400;
-                  font-display: swap;
-               }
-
-               @font-face {
-                  font-family: Poppins;
-                  src: url('/fonts/Poppins/Poppins-Medium.ttf') format('truetype');
-                  font-weight: 500;
-                  font-display: swap;
-               }
-
-               @font-face {
-                  font-family: Poppins;
-                  src: url('/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
-                  font-weight: 600;
-                  font-display: swap;
                }
 
                #nprogress .bar {
