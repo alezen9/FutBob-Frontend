@@ -93,5 +93,34 @@ export const privateRoutes: ZenRoute[] = [
       title: 'Detail field',
       path: '/fields/detail/[_id]',
       as: ({ _id }) => `/fields/detail/${_id}`
-   }
+   },
+      // ============================ //
+   {
+      _id: ZenRouteID.APPOINTMENTS,
+      section: ZenSection.APPOINTMENTS,
+      isSectionEntryPoint: true,
+      isPrivate: true,
+      title: 'Appointments',
+      path: '/appointments'
+   },
+   {
+      _id: ZenRouteID.APPOINTMENT_CREATE,
+      section: ZenSection.APPOINTMENTS,
+      isPrivate: true,
+      displayBack: true,
+      backRouteID: ZenRouteID.APPOINTMENTS,
+      title: 'Create Appointment',
+      path: '/appointments/create'
+   },
+   {
+      _id: ZenRouteID.APPOINTMENT_DETAIL,
+      section: ZenSection.APPOINTMENTS,
+      isPrivate: true,
+      displayBack: true,
+      backRouteID: ZenRouteID.APPOINTMENTS,
+      title: 'Detail Appointment',
+      path: '/appointments/detail/[_id]',
+      as: ({ _id }) => `/appointments/detail/${_id}`
+   },
+   // ============================ //
 ]

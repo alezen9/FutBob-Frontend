@@ -2,7 +2,7 @@ import React, { ReactElement, useCallback } from 'react'
 import { useMediaQuery, useTheme } from '@material-ui/core'
 // icons
 import DashboardRoundedIcon from '@material-ui/icons/DashboardRounded'
-// import SportsSoccerRoundedIcon from '@material-ui/icons/SportsSoccerRounded'
+import SportsSoccerRoundedIcon from '@material-ui/icons/SportsSoccerRounded'
 // import BarChartRoundedIcon from '@material-ui/icons/BarChartRounded'
 import { FieldIcon, FreeAgentIcon, JerseyIcon, FaceDynamicIcon } from '@_icons'
 import DesktopMenu from './DesktopMenu'
@@ -19,8 +19,8 @@ const iconMap = {
    [ZenSection.ME]: <FaceDynamicIcon />,
    [ZenSection.PLAYERS]: <JerseyIcon />,
    [ZenSection.FREE_AGENTS]: <FreeAgentIcon />,
-   [ZenSection.FIELDS]: <FieldIcon />
-   // [ZenSection.APPOINTMENTS]: <SportsSoccerRoundedIcon />,
+   [ZenSection.FIELDS]: <FieldIcon />,
+   [ZenSection.APPOINTMENTS]: <SportsSoccerRoundedIcon />,
    // [ZenSection.STATISTICS]: <BarChartRoundedIcon />
 }
 
