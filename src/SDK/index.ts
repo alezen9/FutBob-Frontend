@@ -9,6 +9,7 @@ import FreeAgentServer from './Modules/FreeAgent'
 // end modules
 import getConfig from 'next/config'
 import { zenAxiosInstance } from './helpers/ZenAxios'
+import AppointmentServer from './Modules/Appointment'
 const { publicRuntimeConfig } = getConfig()
 
 export class ZenServer {
@@ -21,6 +22,7 @@ export class ZenServer {
 	player: PlayerServer
 	field: FieldServer
 	freeAgent: FreeAgentServer
+   appointment: AppointmentServer
 	/** end modules */
 
 	constructor() {
@@ -34,6 +36,7 @@ export class ZenServer {
 		this.player = new PlayerServer(this)
 		this.field = new FieldServer(this)
 		this.freeAgent = new FreeAgentServer(this)
+      this.appointment = new AppointmentServer(this)
 	}
 
 	async API({ query, name, params, fields }: { query: string; name: string; params?: any; fields?: string }) {

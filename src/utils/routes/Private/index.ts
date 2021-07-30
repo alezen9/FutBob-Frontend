@@ -44,7 +44,7 @@ export const privateRoutes: ZenRoute[] = [
       displayBack: true,
       backRouteID: ZenRouteID.PLAYERS,
       title: 'Detail player',
-      path: '/players/detail/:_id',
+      path: '/players/detail/[_id]',
       as: ({ _id }) => `/players/detail/${_id}`
    },
    // ============================ //
@@ -63,7 +63,7 @@ export const privateRoutes: ZenRoute[] = [
       displayBack: true,
       backRouteID: ZenRouteID.FREE_AGENTS,
       title: 'Register free agent',
-      path: '/free-agents/register-player/:_id',
+      path: '/free-agents/register-player/[_id]',
       as: ({ _id }) => `/free-agents/register-player/${_id}`
    },
    // ============================ //
@@ -91,7 +91,7 @@ export const privateRoutes: ZenRoute[] = [
       displayBack: true,
       backRouteID: ZenRouteID.FIELDS,
       title: 'Detail field',
-      path: '/fields/detail/:_id',
+      path: '/fields/detail/[_id]',
       as: ({ _id }) => `/fields/detail/${_id}`
    }
 ]

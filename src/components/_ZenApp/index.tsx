@@ -1,8 +1,6 @@
 import React, { ReactChild, ReactChildren, ReactNode, useCallback, useMemo } from 'react'
 import { CssBaseline, ThemeProvider, Snackbar, makeStyles, useTheme, useMediaQuery } from '@material-ui/core'
 import MuiAlert from '@material-ui/lab/Alert'
-import { Offline, Online } from 'react-detect-offline'
-import OfflinePage from '@_components/Offline'
 import Head from 'next/head'
 import Title from '@_components/Title'
 import ProgressBar from '@_components/ProgressBar'
@@ -124,41 +122,36 @@ const ZenApp = (props: Props) => {
             <title>{title}</title>
          </Head>
          <ThemeProvider theme={theme}>
-            <Online>
-               <CssBaseline />
-               {isFirstRun
-                  ? <SplashScreen icon={SplashscreenIcon} />
-                  : <div className={classes.wrapper}>
-                     {isLoading && !isSmallScreen ? <ProgressBar /> : <NProgress />}
-                     {isLogged && isPrivateRoute && <ZenMenu />}
-                     <div {...isLogged && { className: classes.content }}>
-                        {isLogged && isPrivateRoute && <Title />}
-                        {swrConfig
-                           ? <SWRConfig value={swrConfig} >
-                              {children}
-                           </SWRConfig>
-                           : children}
-                     </div>
-                  </div>}
-               <Snackbar
-                  className={classes.snackbar}
-                  anchorOrigin={{
-                     vertical: 'bottom',
-                     horizontal: 'left'
-                  }}
+            <CssBaseline />
+            {isFirstRun
+               ? <SplashScreen icon={SplashscreenIcon} />
+               : <div className={classes.wrapper}>
+                  {isLoading && !isSmallScreen ? <ProgressBar /> : <NProgress />}
+                  {isLogged && isPrivateRoute && <ZenMenu />}
+                  <div {...isLogged && { className: classes.content }}>
+                     {isLogged && isPrivateRoute && <Title />}
+                     {swrConfig
+                        ? <SWRConfig value={swrConfig} >
+                           {children}
+                        </SWRConfig>
+                        : children}
+                  </div>
+               </div>}
+            <Snackbar
+               className={classes.snackbar}
+               anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left'
+               }}
+               onClose={handleClose}
+               autoHideDuration={3000}
+               open={snackbar.open}>
+               <Alert
                   onClose={handleClose}
-                  autoHideDuration={3000}
-                  open={snackbar.open}>
-                  <Alert
-                     onClose={handleClose}
-                     severity={snackbar.variant}>
-                     {snackbar.message}
-                  </Alert>
-               </Snackbar>
-            </Online>
-            <Offline>
-               <OfflinePage />
-            </Offline>
+                  severity={snackbar.variant}>
+                  {snackbar.message}
+               </Alert>
+            </Snackbar>
          </ThemeProvider>
       </>
    )

@@ -20,9 +20,6 @@ const getApiUrl = (config = '') => {
 }
 
 module.exports = withPWA({
-  future: {
-    webpack5: true
-  },
   serverRuntimeConfig: {
     API_URL: getApiUrl('server')
   },

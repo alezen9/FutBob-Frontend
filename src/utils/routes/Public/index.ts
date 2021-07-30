@@ -26,7 +26,7 @@ export const publicRoutes: ZenRoute[] = [
       _id: ZenRouteID.FINALIZE_ACCOUNT,
       isPrivate: false,
       title: 'Finalize account registration',
-      path: '/auth/account/finalize/:code'
+      path: '/auth/account/finalize/[code]'
    },
    // ============================ //
    {
@@ -39,6 +39,6 @@ export const publicRoutes: ZenRoute[] = [
       _id: ZenRouteID.FINALIZE_RESET_PASSWORD,
       isPrivate: false,
       title: 'Finalize reset password',
-      path: '/auth/password/reset/:code'
+      path: '/auth/password/reset/[code]'
    }
 ]
