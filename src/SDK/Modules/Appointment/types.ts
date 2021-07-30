@@ -1,3 +1,4 @@
+import { Field } from "@_SDK_Field/types"
 import { FreeAgent } from "@_SDK_FreeAgent/types"
 import { Player } from "@_SDK_Player/types"
 
@@ -119,13 +120,9 @@ export class AppointmentDate {
 
 
 export class Appointment {
-    
     _id: string
-    createdBy: string
-    createdAt: string
-    updatedAt: string
     date: AppointmentDate
-    field: string
+    field: Field
     state: AppointmentState
     invites: AppointmentInvites
     pricePerPlayer: number

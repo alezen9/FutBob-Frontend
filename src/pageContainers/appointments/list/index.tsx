@@ -83,9 +83,9 @@ const AppointmentContainer = () => {
    ], [goToCreate])
 
    const sortTable: ZenTableSort = useMemo(() => ({
-      colIDS: ['name', 'country', 'age'],
+      colIDS: ['date'],
       initialValue: {
-         colID: 'name',
+         colID: 'date',
          isASC: true
       },
       disableAll: isValidating,
@@ -105,7 +105,6 @@ const AppointmentContainer = () => {
    return (
       <>
          <Filters
-            withSearch
             actions={actions}
             filters={_FiltersAppointment}
             formikConfig={{
@@ -123,7 +122,7 @@ const AppointmentContainer = () => {
                currentPage={currentPage}
                onChangePage={handleChangePage}
             />}
-            sort={sortTable}
+         // sort={sortTable}
          />
       </>
    )

@@ -12,6 +12,7 @@ export const allItem = `{
       },
       price,
    },
+   state,
    pricePerPlayer,
    notes,
       stats {
