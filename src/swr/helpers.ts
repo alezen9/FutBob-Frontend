@@ -8,7 +8,9 @@ export enum SwrKey {
 	FIELDS = 'FIELDS',
 	FIELD = 'FIELD',
 	FREE_AGENTS = 'FREE_AGENTS',
-	FREE_AGENT = 'FREE_AGENT'
+	FREE_AGENT = 'FREE_AGENT',
+   APPOINTMENTS = 'APPOINTMENTS',
+   APPOINTMENT = 'APPOINTMENT'
 }
 
 export const stateSelector = (state: ConfigStore) => ({

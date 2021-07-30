@@ -31,7 +31,7 @@ export const getPlayerDataRow = ({ openDialog, goToDetails, userConnectedId }) =
          {`${playerData.user.registry.surname} ${playerData.user.registry.name}`}
       </span>,
       fullName: `${playerData.user.registry.surname} ${playerData.user.registry.name}`,
-      physicalState: PhysicalStateOpts.find(({ value }) => value === get(playerData, 'state', 0)).component,
+      physicalState: PhysicalStateOpts.find(({ value }) => value === get(playerData, 'state', 0))?.component,
       age: dayjs().diff(playerData.user.registry.dateOfBirth, 'years'),
       phone: playerData.user.registry.phone,
       country: CountriesOpts.find(({ value }) => value === playerData.user.registry.country).component,

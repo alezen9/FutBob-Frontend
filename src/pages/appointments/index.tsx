@@ -1,5 +1,5 @@
 import React from 'react'
-import PlayersContainer from '@_page-containers/players/list'
+import AppointmentsContainer from '@_page-containers/appointments/list'
 import PageTransition from '@_components/PageTransition'
 import zenHooks from '@_utils/hooks'
 import { ZenRouteID } from '@_utils/routes/types'
@@ -9,7 +9,7 @@ const Appointments = () => {
 
    return (
       <PageTransition>
-         hello world appointments
+         <AppointmentsContainer />
       </PageTransition>
    )
 }
