@@ -5,6 +5,7 @@ import { Field } from './types'
 import { CreateFieldInput, FiltersField, UpdateFieldInput } from './inputs'
 import zenToolbox from '@_utils/toolbox'
 import { get } from 'lodash'
+import { AxiosRequestConfig } from 'axios'
 
 class FieldServer {
 	private _server: ZenServer
@@ -38,13 +39,13 @@ class FieldServer {
 		return this._server.API({ query, name: 'Field_delete', params: String(_id) })
 	}
 
-	async getList(filters: FiltersField, pagination: Pagination, fields: string): Promise<ListOf<Field>> {
+	async getList(filters: FiltersField, pagination: Pagination, fields: string, axiosParams: AxiosRequestConfig = {}): Promise<ListOf<Field>> {
       const revisedFilters = { ...filters, ids: (get(filters, 'ids', []) || []).map((_id: string|number) => String(_id)) }
 		const query = `
       query {
          Field_getList(filters: ${zenToolbox.paramsToString(revisedFilters)}, pagination: ${zenToolbox.paramsToString(pagination)}) ${fields}
       }`
-		return this._server.API({ query, name: 'Field_getList', params: { filters: revisedFilters, pagination }, fields })
+		return this._server.API({ query, name: 'Field_getList', params: { filters: revisedFilters, pagination }, fields, axiosParams })
 	}
 }
 

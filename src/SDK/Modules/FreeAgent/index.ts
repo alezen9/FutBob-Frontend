@@ -6,6 +6,7 @@ import { CreateFreeAgentInput, FiltersFreeAgent, UpdateFreeAgentInput } from './
 import zenToolbox from '@_utils/toolbox'
 import { get } from 'lodash'
 import { CreatePlayerInput } from '@_SDK_Player/inputs'
+import { AxiosRequestConfig } from 'axios'
 
 class FreeAgentServer {
 	private _server: ZenServer
@@ -47,13 +48,13 @@ class FreeAgentServer {
 		return this._server.API({ query, name: 'FreeAgent_registerAsPlayer', params: String(_id) })
 	}
 
-	async getList(filters: FiltersFreeAgent, pagination: Pagination, fields: string): Promise<ListOf<FreeAgent>> {
+	async getList(filters: FiltersFreeAgent, pagination: Pagination, fields: string, axiosParams: AxiosRequestConfig = {}): Promise<ListOf<FreeAgent>> {
       const revisedFilters = { ...filters, ids: (get(filters, 'ids', []) || []).map((_id: string|number) => String(_id)) }
 		const query = `
          query {
             FreeAgent_getList(filters: ${zenToolbox.paramsToString(revisedFilters)}, pagination: ${zenToolbox.paramsToString(pagination)}) ${fields}
          }`
-		return this._server.API({ query, name: 'FreeAgent_getList', params: { filters: revisedFilters, pagination }, fields })
+		return this._server.API({ query, name: 'FreeAgent_getList', params: { filters: revisedFilters, pagination }, fields, axiosParams })
 	}
 }
 

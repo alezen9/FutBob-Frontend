@@ -1,5 +1,6 @@
 import { ListOf } from '@_swr/helpers'
 import zenToolbox from '@_utils/toolbox'
+import { AxiosRequestConfig } from 'axios'
 import { get } from 'lodash'
 import { Pagination } from 'src/SDK/types'
 import { ZenServer } from '../../'
@@ -39,13 +40,13 @@ class PlayerServer {
 		return this._server.API({ query, name: 'Player_delete', params: String(_id) })
 	}
 
-	async getList(filters: FiltersPlayer, pagination: Pagination, sort: SortPlayer, fields: string): Promise<ListOf<Player>> {
+	async getList(filters: FiltersPlayer, pagination: Pagination, sort: SortPlayer, fields: string, axiosParams: AxiosRequestConfig = {}): Promise<ListOf<Player>> {
       const revisedFilters = { ...filters, ids: (get(filters, 'ids', []) || []).map((_id: string|number) => String(_id)) }
 		const query = `
       query {
          Player_getList(filters: ${zenToolbox.paramsToString(revisedFilters)}, pagination: ${zenToolbox.paramsToString(pagination)}, sort: ${zenToolbox.paramsToString(sort)}) ${fields}
       }`
-		return this._server.API({ query, name: 'Player_getList', params: { filters: revisedFilters, pagination, sort }, fields })
+		return this._server.API({ query, name: 'Player_getList', params: { filters: revisedFilters, pagination, sort }, fields, axiosParams })
 	}
 }
 

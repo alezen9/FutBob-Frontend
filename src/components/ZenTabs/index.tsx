@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
       color: theme.type === 'light'
          ? '#333'
          : '#fafafa',
-      fontWeight: 18,
+      fontWeight: 300,
       textTransform: 'none'
    },
    tabSelected: {

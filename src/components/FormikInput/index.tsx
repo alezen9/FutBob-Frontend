@@ -16,6 +16,7 @@ import InputAutocomplete from './InputAutocomplete'
 import InputSlider from './InputSlider'
 import InputDate from './InputDate'
 import { FormikProps } from 'formik'
+import InputTime from './InputTime'
 
 const useStyles = makeStyles<Theme, { fullWidthChip?: boolean }>(theme => ({
    gridWrapper: {
@@ -88,7 +89,7 @@ type Props = FormikEssentials & GridWrapperProps & {
    id?: any
    name: string
    label: any
-   type?: 'text' | 'password' | 'phone' | 'checkbox' | 'switch' | 'select' | 'autocomplete' | 'asyncAutocomplete' | 'date' | 'address' | 'slider'
+   type?: 'text' | 'password' | 'phone' | 'checkbox' | 'switch' | 'select' | 'autocomplete' | 'asyncAutocomplete' | 'date' | 'time' | 'address' | 'slider'
    handleChange?: any
    helperText?: string
    variant?: 'outlined'
@@ -373,6 +374,20 @@ const FormikInput = (props: Props) => {
             <GridWrapper {...props}>
                <FormControl variant={variant} className={formControl} {...{ style }}>
                   <InputDate {...defaultProps} onChange={onDateChange} />
+               </FormControl>
+            </GridWrapper>
+         )
+      case 'time':
+         const onTimeChange = (date: Dayjs) => {
+            const isoDateTime = dayjs(date).isValid()
+               ? dayjs(date).toISOString()
+               : null
+            _setFieldValueTouched(name, isoDateTime)
+         }
+         return (
+            <GridWrapper {...props}>
+               <FormControl variant={variant} className={formControl} {...{ style }}>
+                  <InputTime {...defaultProps} onChange={onTimeChange} />
                </FormControl>
             </GridWrapper>
          )

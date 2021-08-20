@@ -1,5 +1,5 @@
 import { LSToken } from '@_utils/LSVariables'
-import { AxiosInstance } from 'axios'
+import { AxiosInstance, AxiosRequestConfig } from 'axios'
 // start modules
 import AuthServer from './Modules/Auth'
 import FieldServer from './Modules/Field'
@@ -39,8 +39,8 @@ export class ZenServer {
       this.appointment = new AppointmentServer(this)
 	}
 
-	async API({ query, name, params, fields }: { query: string; name: string; params?: any; fields?: string }) {
-		return this._self.post('/graphql', { query }).then((res: any) => {
+	async API({ query, name, params, fields, axiosParams = {} }: { query: string; name: string; params?: any; fields?: string, axiosParams?: AxiosRequestConfig }) {
+		return this._self.post('/graphql', { query }, axiosParams).then((res: any) => {
 			const { data, errors } = res
 			if (errors && errors.length) {
 				this.LogRequest({

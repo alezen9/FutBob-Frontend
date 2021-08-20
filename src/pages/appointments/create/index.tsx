@@ -1,17 +1,17 @@
 import React from 'react'
-import CreatePlayerContainer from '@_page-containers/players/create'
+import CreateAppointmentContainer from '@_page-containers/appointments/create-detail'
 import PageTransition from '@_components/PageTransition'
 import zenHooks from '@_utils/hooks'
 import { ZenRouteID } from '@_utils/routes/types'
 
-const CreatePlayer = () => {
+const CreateAppointment = () => {
    zenHooks.app.useSetActivePage(ZenRouteID.APPOINTMENT_CREATE)
 
    return (
       <PageTransition>
-         hello world appointment create
+         <CreateAppointmentContainer />
       </PageTransition>
    )
 }
 
-export default CreatePlayer
+export default CreateAppointment
