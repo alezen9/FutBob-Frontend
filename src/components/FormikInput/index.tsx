@@ -17,8 +17,9 @@ import InputSlider from './InputSlider'
 import InputDate from './InputDate'
 import { FormikProps } from 'formik'
 import InputTime from './InputTime'
+import InputDateTime from './InputDateTime'
 
-const useStyles = makeStyles<Theme, { fullWidthChip?: boolean }>(theme => ({
+const useStyles = makeStyles<Theme, { fullWidthChip?: boolean, halfWidthChip?: boolean }>(theme => ({
    gridWrapper: {
       '& textarea': {
          overflow: 'auto'
@@ -41,6 +42,10 @@ const useStyles = makeStyles<Theme, { fullWidthChip?: boolean }>(theme => ({
       opacity: .9,
       ...props.fullWidthChip && {
          width: '100%',
+         justifyContent: 'space-between'
+      },
+      ...props.halfWidthChip && {
+         width: '47%',
          justifyContent: 'space-between'
       }
    })
@@ -89,7 +94,7 @@ type Props = FormikEssentials & GridWrapperProps & {
    id?: any
    name: string
    label: any
-   type?: 'text' | 'password' | 'phone' | 'checkbox' | 'switch' | 'select' | 'autocomplete' | 'asyncAutocomplete' | 'date' | 'time' | 'address' | 'slider'
+   type?: 'text' | 'password' | 'phone' | 'checkbox' | 'switch' | 'select' | 'autocomplete' | 'asyncAutocomplete' | 'date' | 'time' | 'dateTime' | 'address' | 'slider'
    handleChange?: any
    helperText?: string
    variant?: 'outlined'
@@ -98,7 +103,7 @@ type Props = FormikEssentials & GridWrapperProps & {
    rows?: number
    grouped?: boolean
    required?: boolean
-   supplementaryOnChange?: (e: any, v?: any) => void
+   supplementaryOnChange?: (v?: any) => void
    style?: any
    labelPlacement?: 'bottom' | 'top' | 'end' | 'start'
    inputProps?: any
@@ -113,6 +118,7 @@ type Props = FormikEssentials & GridWrapperProps & {
    icon?: React.ReactNode
    checkedIcon?: React.ReactNode
    fullWidthChip?: boolean
+   halfWidthChip?: boolean
    valuesToexcludeFromOptions?: string[]
    placeholder?: string
    minDate?: Dayjs
@@ -122,7 +128,7 @@ type Props = FormikEssentials & GridWrapperProps & {
 export type FormikInputProps = Props
 
 const FormikInput = (props: Props) => {
-   const { formControl, textField, chipClass, checkSwitchLabel } = useStyles({ fullWidthChip: !!props.fullWidthChip })
+   const { formControl, textField, chipClass, checkSwitchLabel } = useStyles({ fullWidthChip: !!props.fullWidthChip, halfWidthChip: !!props.halfWidthChip })
    const [show, toggleShow] = useState(false)
    const {
       id = `${props.name}_${Math.round(Math.random() * 100)}`,
@@ -163,7 +169,8 @@ const FormikInput = (props: Props) => {
       props.setFieldValue(name, value, true)
          // @ts-ignore
          .then(() => { props.setFieldTouched(name, true, false) })
-   }, [props.setFieldValue, props.setFieldTouched])
+      if (supplementaryOnChange) supplementaryOnChange(value)
+   }, [props.setFieldValue, props.setFieldTouched, supplementaryOnChange])
 
    const PasswordAdornment = () => <InputAdornment position='end' >
       <IconButton aria-label='Show/Hide password' onClick={toggleShowMemoized}>
@@ -214,7 +221,6 @@ const FormikInput = (props: Props) => {
       case 'checkbox':
          const onChangeCheckbox = (e, d: boolean) => {
             _setFieldValueTouched(name, d)
-            if (supplementaryOnChange) supplementaryOnChange(e, e.target.checked)
          }
          return (
             <GridWrapper {...props}>
@@ -391,6 +397,20 @@ const FormikInput = (props: Props) => {
                </FormControl>
             </GridWrapper>
          )
+      case 'dateTime':
+         const onDateTimeChange = (date: Dayjs) => {
+            const isoDateTime = dayjs(date).isValid()
+               ? dayjs(date).toISOString()
+               : null
+            _setFieldValueTouched(name, isoDateTime)
+         }
+         return (
+            <GridWrapper {...props}>
+               <FormControl variant={variant} className={formControl} {...{ style }}>
+                  <InputDateTime {...defaultProps} onChange={onDateTimeChange} />
+               </FormControl>
+            </GridWrapper>
+         )
       default:
          inputProps = { ...props.inputProps || {} }
          break
@@ -409,7 +429,6 @@ const FormikInput = (props: Props) => {
                value={[null, undefined].includes(get(values, name, '')) ? '' : get(values, name, '')}
                onChange={e => {
                   _setFieldValueTouched(name, e.target.value)
-                  if (supplementaryOnChange) supplementaryOnChange(e.target.value)
                }}
                margin='normal'
                disabled={disabled}

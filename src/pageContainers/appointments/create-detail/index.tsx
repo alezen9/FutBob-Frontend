@@ -55,16 +55,25 @@ const CreateAppointmentContainer = () => {
    console.log(item)
 
    const { tabMainInfo, tabInvites, tabMatches, tabStats } = useMemo(() => {
+      const { _id, invites, stats, matches, ...restMainInfo } = item
       return {
-         tabMainInfo: {},
-         tabInvites: {},
-         tabMatches: {},
-         tabStats: {}
+         tabMainInfo: { _id, mainInfo: restMainInfo },
+         tabInvites: { _id, invites },
+         tabMatches: { _id, matches },
+         tabStats: { _id, stats }
       }
-   }, [])
+   }, [JSON.stringify(item)])
 
    return (
       <Grid container justify='center' style={{ marginTop: '2em' }}>
+         {!!item._id && <Grid container justify='space-between' alignItems='center' style={{ margin: '1em 0' }}>
+            <Grid item>
+               Currently {zenToolbox.displayAppointmentState(item).toLowerCase()}
+            </Grid>
+            <Grid item>
+               <Button variant='contained' color='primary'>Next state</Button>
+            </Grid>
+         </Grid>}
          <ZenTabs>
             <ZenTab
                title='Main info'

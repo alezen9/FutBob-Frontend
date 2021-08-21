@@ -2,6 +2,7 @@ import { OptionType } from "@_components/FormikInput"
 import { ZenPalette } from "@_MUITheme"
 import cleanDeep from "clean-deep"
 import { compact, isObject, map, isUndefined, keys, has, get, entries, isObjectLike, isEqual, reduce, uniqueId } from "lodash"
+import { Appointment, AppointmentPlayerType, AppointmentState, AppointmentTypePlayer } from "src/SDK/Modules/Appointment/types"
 import { routes } from "./routes"
 
 class ZenToolbox {
@@ -215,6 +216,38 @@ class ZenToolbox {
       if (value < 85) return 'url(#green)'
       if (value <= 100) return 'url(#gold)'
       return ZenPalette.typographyGrey
+   }
+
+   displayAppointmentState = (appointment: Appointment): string => {
+      switch (appointment.state) {
+         case AppointmentState.Scheduled:
+            return 'Scheduled'
+         case AppointmentState.Confirmed:
+            return 'Confirmed'
+         case AppointmentState.Canceled:
+            return 'Canceled'
+         case AppointmentState.Interrupted:
+            return 'Interrupted'
+         case AppointmentState.Completed:
+            return 'Completed'
+         default:
+            return 'Unknown'
+      }
+   }
+
+   appointmentTypePlayerListToOptionList = (list: AppointmentTypePlayer[]): OptionType[] => {
+      return list.map(el => {
+         const surname = get(el, 'player.user.registry.surname', get(el, 'player.surname', '-'))
+         const name = get(el, 'player.user.registry.name', get(el, 'player.name', '-'))
+         const prefix = el.type === AppointmentPlayerType.Registered
+            ? 'Registered'
+            : 'Free agent'
+         return {
+            label: `[${prefix}] ${surname} ${name}`,
+            value: el.player._id,
+            type: el.type
+         }
+      })
    }
 }
 

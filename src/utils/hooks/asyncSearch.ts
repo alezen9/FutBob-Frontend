@@ -42,7 +42,7 @@ export class AsyncSearchHooks {
       return { searchFieldsOnType }
    }
 
-    usePlayersAsyncSearch = () => {
+   usePlayersAndFreeAgentsAsyncSearch = () => {
       const requestSource = useRef<CancelTokenSource>(null)
       const [mounted, setIsMounted] = useState(true)
 
@@ -53,7 +53,7 @@ export class AsyncSearchHooks {
          }
       }, [])
 
-      const searchPlayersAndFreeAgentOnType = useCallback(
+      const searchPlayersAndFreeAgentsOnType = useCallback(
          async (value?: string): Promise<OptionType[]> => {
          if (requestSource.current) requestSource.current.cancel('User input changed.')
          const CancelToken = axios.CancelToken
@@ -97,6 +97,47 @@ export class AsyncSearchHooks {
          return Promise.all(promises).then(flatten)
       }, [])
 
-      return { searchPlayersAndFreeAgentOnType }
+      return { searchPlayersAndFreeAgentsOnType }
+   }
+
+   usePlayersAsyncSearch = () => {
+      const requestSource = useRef<CancelTokenSource>(null)
+      const [mounted, setIsMounted] = useState(true)
+
+      useEffect(() => {
+         setIsMounted(true)
+         return () => {
+         setIsMounted(false)
+         }
+      }, [])
+
+      const searchPlayersOnType = useCallback(
+         async (value?: string): Promise<OptionType[]> => {
+         if (requestSource.current) requestSource.current.cancel('User input changed.')
+         const CancelToken = axios.CancelToken
+         const source = CancelToken.source()
+         if (mounted) requestSource.current = source
+         const cancelToken = source.token
+         return apiInstance.player.getList({ searchText: value }, { skip: 0, limit: 100 }, {}, `{
+               result {
+                  _id,
+                  user {
+                     registry {
+                        surname,
+                        name
+                     }
+                  }
+               }
+            }`, { cancelToken })
+               .then(res => {
+                  return (get(res, 'result', []) as Player[]).map(player => ({
+                     label: `${player.user.registry.surname} ${player.user.registry.name}`,
+                     value: player._id,
+                     type: AppointmentPlayerType.Registered
+                  }))
+               })
+      }, [])
+
+      return { searchPlayersOnType }
    }
 }

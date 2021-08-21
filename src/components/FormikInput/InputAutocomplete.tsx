@@ -71,6 +71,7 @@ type Props = {
    multiple?: boolean
    grouped?: boolean
    values: any
+   valuesToexcludeFromOptions?: string[]
 }
 
 const filterOptions = (options: OptionType[], { inputValue }) => matchSorter(options, inputValue, { keys: ['label'] })
@@ -89,7 +90,8 @@ const InputAutocomplete = (props: Props) => {
       onChange,
       sortByLabel = true,
       multiple = false,
-      large = false
+      large = false,
+      valuesToexcludeFromOptions = []
    } = props
    const classes = useStyles({ error: !!get(errors, name, false), large })
 
@@ -97,10 +99,11 @@ const InputAutocomplete = (props: Props) => {
       const valuesKeys = multiple
          ? (get(values, name, []) || []).map(({ value }) => value)
          : [get(values, `${name}.value`, null)]
+      const opts = options.filter(({ value }) => !valuesKeys.includes(value) && !valuesToexcludeFromOptions.includes(value))
       return sortByLabel
-         ? sortBy(options.filter(({ value }) => !valuesKeys.includes(value)), ['label'])
-         : options.filter(({ value }) => !valuesKeys.includes(value))
-   }, [JSON.stringify(get(values, name, null)), JSON.stringify(options), multiple, sortByLabel])
+         ? sortBy(opts, ['label'])
+         : opts
+   }, [JSON.stringify(get(values, name, null)), JSON.stringify(options), multiple, sortByLabel, JSON.stringify(valuesToexcludeFromOptions)])
 
    return (
       <>

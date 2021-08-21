@@ -32,7 +32,6 @@ type SearchBoxProps = {
 
 export const SearchBox = React.memo((props: SearchBoxProps) => {
    const { formik, onSearchChange, onSearchSubmit, excludeSearchBoxFromFilters = false } = props
-   const [val, setVal] = useState('')
    const formikPrevVal = zenHooks.utils.usePrevious(get(formik, 'values.searchText', null))
 
    const handleChange = useCallback(v => {

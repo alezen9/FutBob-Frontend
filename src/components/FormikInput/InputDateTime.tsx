@@ -1,11 +1,10 @@
 import React from 'react'
 import DateFnsUtils from '@date-io/dayjs'
-import { MuiPickersUtilsProvider, KeyboardTimePicker } from '@material-ui/pickers'
+import { MuiPickersUtilsProvider, KeyboardDateTimePicker } from '@material-ui/pickers'
 import { get } from 'lodash'
 import { FormHelperText, makeStyles, useMediaQuery, useTheme } from '@material-ui/core'
 import { ThemeType, ZenPalette } from '@_MUITheme'
 import dayjs from 'dayjs'
-import ScheduleRoundedIcon from '@material-ui/icons/ScheduleRounded'
 
 const useStyles = makeStyles(theme => ({
    textField: {
@@ -49,7 +48,7 @@ type Props = {
    errors: any
 }
 
-const InputTime: React.FC<Props> = props => {
+const InputDateTime: React.FC<Props> = props => {
    const { id, label, onChange, values, name, disabled = false, errors } = props
    const classes = useStyles({ error: !!get(errors, name, null) })
    const theme = useTheme()
@@ -58,18 +57,19 @@ const InputTime: React.FC<Props> = props => {
    return (
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
          <>
-            <KeyboardTimePicker
+            <KeyboardDateTimePicker
                DialogProps={{
                   className: classes.popover
                }}
                ampm={false}
+               animateYearScrolling
                disabled={disabled}
                margin='normal'
+               format='DD/MM/YYYY    HH:mm'
                label={label}
                clearable
                inputVariant='outlined'
-               keyboardIcon={<ScheduleRoundedIcon />}
-               orientation={isSmallScreen ? 'portrait' : 'landscape'}
+               // orientation={isSmallScreen ? 'portrait' : 'landscape'}
                autoOk
                value={get(values, name, null) && dayjs(get(values, name, null))}
                onChange={onChange}
@@ -84,4 +84,4 @@ const InputTime: React.FC<Props> = props => {
    )
 }
 
-export default React.memo(InputTime)
+export default React.memo(InputDateTime)
