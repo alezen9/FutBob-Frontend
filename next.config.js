@@ -10,10 +10,10 @@ const getApiUrl = (config = '') => {
   console.log(`${GREEN_TEXT}[CXB] Listening on port ${process.env.PORT || 3000}${RESET_COLOR}`)
   switch (process.env.ENV || 'test') {
     case 'test':
-      return 'https://futbob.xyz/'
+      return 'https://calcetto.xyz/'
       // return 'http://localhost:7000'
     case 'production':
-      return 'https://futbob.xyz/'
+      return 'https://calcetto.xyz/'
     default:
       return 'http://localhost:7000'
   }
