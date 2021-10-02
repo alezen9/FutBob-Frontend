@@ -1,7 +1,7 @@
 import React from 'react'
-import { makeStyles, Switch, Theme } from '@material-ui/core'
+import { makeStyles, Switch, Theme } from '@mui/material'
 import { useConfigStore } from '@_zustand/config'
-import Brightness2RoundedIcon from '@material-ui/icons/Brightness2Rounded'
+import Brightness2RoundedIcon from '@mui/icons-material/Brightness2Rounded'
 import { ConfigStore } from '@_zustand/config/helpers'
 
 const useStyles = makeStyles((theme: Theme) => ({

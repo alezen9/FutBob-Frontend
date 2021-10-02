@@ -1,8 +1,8 @@
 import React from 'react'
 import DateFnsUtils from '@date-io/dayjs'
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers'
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@mui/pickers'
 import { get } from 'lodash'
-import { FormHelperText, makeStyles, useMediaQuery, useTheme } from '@material-ui/core'
+import { FormHelperText, makeStyles, useMediaQuery, useTheme } from '@mui/material'
 import { ThemeType, ZenPalette } from '@_MUITheme'
 import dayjs, { Dayjs } from 'dayjs'
 

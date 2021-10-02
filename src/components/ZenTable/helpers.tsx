@@ -1,8 +1,8 @@
 import React, { useState, useMemo, Fragment, useCallback, ReactNode, ReactElement } from 'react'
-import { Button, Grid, Tooltip, IconButton, Menu, MenuItem, makeStyles, TableCell, Collapse, TableRow, useTheme, useMediaQuery } from '@material-ui/core'
+import { Button, Grid, Tooltip, IconButton, Menu, MenuItem, makeStyles, TableCell, Collapse, TableRow, useTheme, useMediaQuery } from '@mui/material'
 import { uniqueId, get, map, compact } from 'lodash'
-import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
-import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
+import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined'
+import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded'
 import TypographyLabel from '../TypographyLabel'
 import zenToolbox from '@_utils/toolbox'
 

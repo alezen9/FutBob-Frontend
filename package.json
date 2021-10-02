@@ -2,14 +2,15 @@
    "name": "futbob-frontend",
    "version": "4.0.0",
    "private": true,
+   "engines": {
+      "node": "14.x.x"
+   },
    "dependencies": {
-      "@date-io/dayjs": "1.x",
-      "@material-ui/core": "4.11.4",
-      "@material-ui/icons": "4.11.2",
-      "@material-ui/lab": "^4.0.0-alpha.58",
-      "@material-ui/pickers": "^3.3.10",
       "@mdi/js": "^5.9.55",
       "@mdi/react": "^1.5.0",
+      "@mui/icons-material": "^5.0.1",
+      "@mui/lab": "^5.0.0-alpha.49",
+      "@mui/material": "^5.0.2",
       "@nivo/core": "^0.64.0",
       "@nivo/radar": "^0.64.0",
       "axios": "0.21.1",

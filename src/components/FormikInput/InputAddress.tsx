@@ -4,14 +4,14 @@ import PlacesAutocomplete, {
    geocodeByPlaceId,
    getLatLng
 } from 'react-places-autocomplete'
-import { TextField, Grid, makeStyles, IconButton, Popover, Typography, Divider, FormHelperText, Collapse } from '@material-ui/core'
-import Autocomplete from '@material-ui/lab/Autocomplete'
+import { TextField, Grid, makeStyles, IconButton, Popover, Typography, Divider, FormHelperText, Collapse } from '@mui/material'
+import Autocomplete from '@mui/lab/Autocomplete'
 import { get, isEqual, uniqueId, isEmpty } from 'lodash'
 import FormikInput from '.'
-import RoomRoundedIcon from '@material-ui/icons/RoomRounded'
-import InfoRoundedIcon from '@material-ui/icons/InfoRounded'
-import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
-import ExpandLessRoundedIcon from '@material-ui/icons/ExpandLessRounded'
+import RoomRoundedIcon from '@mui/icons-material/RoomRounded'
+import InfoRoundedIcon from '@mui/icons-material/InfoRounded'
+import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded'
+import ExpandLessRoundedIcon from '@mui/icons-material/ExpandLessRounded'
 import { ZenPalette } from '@_MUITheme'
 
 /**
@@ -185,19 +185,19 @@ const InfoPopover = React.memo((props: InfoPopoverProps) => {
    >
       <Typography variant='body2' style={{ fontSize: '.8em' }}>
          Per una migliore ricerca separare i dati con una virgola.
-    </Typography>
+      </Typography>
       <Divider light style={{ margin: '.5em 0' }} />
       <Typography variant='caption' style={{ fontSize: '.7em' }}>
          Esempio:
-    </Typography>
+      </Typography>
       <br />
       <Typography variant='caption' style={{ fontSize: '.7em' }}>
          Via..., civico, comune, provincia, CAP
-    </Typography>
+      </Typography>
       <br />
       <Typography variant='caption' style={{ fontSize: '.7em', fontWeight: 'bold', letterSpacing: '.07em' }}>
          Via..., 11, Roma, RM, 00123
-    </Typography>
+      </Typography>
    </Popover>
 })
 

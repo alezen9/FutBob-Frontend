@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Grid, Button, useMediaQuery, useTheme } from '@material-ui/core'
+import { Grid, Button, useMediaQuery, useTheme } from '@mui/material'
 import FormikInput from '@_components/FormikInput'
 import { useFormik } from 'formik'
 import { isEmpty, get } from 'lodash'
@@ -7,7 +7,7 @@ import { ZenPalette } from '@_MUITheme'
 import { useRouter } from 'next/router'
 import { useSWRField } from '@_swr/Fields'
 import WarningDeleteDialog from '@_components/WarningDeleteDialog'
-import ExploreOutlinedIcon from '@material-ui/icons/ExploreOutlined'
+import ExploreOutlinedIcon from '@mui/icons-material/ExploreOutlined'
 import FutsalField from '@_components/FutsalField'
 import { schema, onSubmit } from './helpers'
 import { ConfigStore } from '@_zustand/config/helpers'
@@ -160,7 +160,7 @@ const FieldDetail = () => {
                      onClick={() => setOpenConfirmDelete(true)}
                      variant='outlined'>
                      Delete
-            </Button>
+                  </Button>
                </Grid>}
                <Grid item>
                   <Button

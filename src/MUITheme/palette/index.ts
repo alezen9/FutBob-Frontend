@@ -1,4 +1,4 @@
-import { green, lime, pink, red, teal } from "@material-ui/core/colors"
+import { green, lime, pink, red, teal } from "@mui/material/colors"
 
 export enum ThemeType {
   light = 'light',

@@ -1,9 +1,9 @@
 import React, { ReactElement, useCallback } from 'react'
-import { useMediaQuery, useTheme } from '@material-ui/core'
+import { useMediaQuery, useTheme } from '@mui/material'
 // icons
-import DashboardRoundedIcon from '@material-ui/icons/DashboardRounded'
-// import SportsSoccerRoundedIcon from '@material-ui/icons/SportsSoccerRounded'
-// import BarChartRoundedIcon from '@material-ui/icons/BarChartRounded'
+import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded'
+// import SportsSoccerRoundedIcon from '@mui/icons-material/SportsSoccerRounded'
+// import BarChartRoundedIcon from '@mui/icons-material/BarChartRounded'
 import { FieldIcon, FreeAgentIcon, JerseyIcon, FaceDynamicIcon } from '@_icons'
 import DesktopMenu from './DesktopMenu'
 import MobileMenu from './MobileMenu'

@@ -1,15 +1,15 @@
 import React, { useCallback, useState } from 'react'
-import { Collapse, List, ListItem, ListItemIcon, ListItemText, makeStyles } from '@material-ui/core'
+import { Collapse, List, ListItem, ListItemIcon, ListItemText, makeStyles } from '@mui/material'
 import { RouteItem } from '..'
-import ArrowDropDownRoundedIcon from '@material-ui/icons/ArrowDropDownRounded'
-import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded'
-import KeyboardArrowRightRoundedIcon from '@material-ui/icons/KeyboardArrowRightRounded'
+import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded'
+import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded'
+import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded'
 
 const useStyles = makeStyles({
-  nested: {},
-  listItem: {
-    height: '4rem'
-  }
+   nested: {},
+   listItem: {
+      height: '4rem'
+   }
 })
 
 export type Props = {
@@ -32,21 +32,21 @@ const ExpandableItemList = (props: Props) => {
    return <>
       <ListItem className={classes.listItem} button onClick={handleClick}>
          <ListItemIcon>
-         {item.icon}
+            {item.icon}
          </ListItemIcon>
          <ListItemText primary={item.title} />
          {openMore ? <ArrowDropUpRoundedIcon /> : <ArrowDropDownRoundedIcon />}
       </ListItem>
       <Collapse in={openMore} timeout='auto' unmountOnExit>
          <List component='div' disablePadding>
-         {item.subpaths.map((subpath, i) => {
-            return <ListItem key={`subpath-${i}`} button className={classes.nested} onClick={handleRoute(subpath.path)}>
-               <ListItemIcon>
-               <KeyboardArrowRightRoundedIcon />
-               </ListItemIcon>
-               <ListItemText primary={subpath.title} />
-            </ListItem>
-         })}
+            {item.subpaths.map((subpath, i) => {
+               return <ListItem key={`subpath-${i}`} button className={classes.nested} onClick={handleRoute(subpath.path)}>
+                  <ListItemIcon>
+                     <KeyboardArrowRightRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={subpath.title} />
+               </ListItem>
+            })}
          </List>
       </Collapse>
    </>

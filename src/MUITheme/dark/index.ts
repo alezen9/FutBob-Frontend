@@ -1,5 +1,5 @@
-import { createMuiTheme } from '@material-ui/core/styles'
-import createBreakpoints from '@material-ui/core/styles/createBreakpoints'
+import { createMuiTheme } from '@mui/material/styles'
+import createBreakpoints from '@mui/material/styles/createBreakpoints'
 import { configColors, ThemeType } from '../palette'
 
 const subtitleGrey = '#686868'

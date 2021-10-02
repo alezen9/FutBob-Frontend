@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, makeStyles, Typography } from '@material-ui/core'
+import { Grid, makeStyles, Typography } from '@mui/material'
 import { ZenPalette } from '@_MUITheme'
 
 const useStyles = makeStyles(({
@@ -39,10 +39,10 @@ const OfflinePage = () => {
             <Grid item>
                <Typography variant='body1'>
                   Oops!
-          </Typography>
+               </Typography>
                <Typography variant='body1'>
                   No internet access
-          </Typography>
+               </Typography>
             </Grid>
          </div>
       </Grid>

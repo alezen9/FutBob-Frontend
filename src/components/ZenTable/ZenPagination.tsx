@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import Pagination from '@material-ui/lab/Pagination'
-import { Typography } from '@material-ui/core'
+import { makeStyles } from '@mui/material/styles'
+import Pagination from '@mui/lab/Pagination'
+import { Typography } from '@mui/material'
 
 const useStyles = makeStyles(theme => ({
    root: {

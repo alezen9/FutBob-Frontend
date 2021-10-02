@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@mui/material'
 
 const useStyles = makeStyles(({
    motionDiv: {
@@ -20,16 +20,16 @@ const SplashScreen = (props: Props) => {
    const { icon } = props
    const classes = useStyles()
    return (
-   <AnimatePresence>
-      <motion.div
-         initial={{ opacity: 0 }}
-         animate={{ opacity: 1 }}
-         exit={{ opacity: 0 }}
-         className={classes.motionDiv}
-      >
-         {icon}
-      </motion.div>
-   </AnimatePresence>
+      <AnimatePresence>
+         <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className={classes.motionDiv}
+         >
+            {icon}
+         </motion.div>
+      </AnimatePresence>
    )
 }
 

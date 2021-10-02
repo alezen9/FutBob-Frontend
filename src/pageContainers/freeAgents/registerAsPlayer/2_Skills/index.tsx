@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { Grid } from '@material-ui/core'
+import { Grid } from '@mui/material'
 import FutsalField from '@_components/FutsalField'
 import FormikInput, { FormikEssentials } from '@_components/FormikInput'
 import RadarChart from '@_components/Charts/Radar'

@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@mui/material/styles'
 import Players from './Players'
 import { get } from 'lodash'
-import { Switch, Typography } from '@material-ui/core'
+import { Switch, Typography } from '@mui/material'
 import { FormikEssentials } from '@_components/FormikInput'
 
 const useStyles = makeStyles(theme => {

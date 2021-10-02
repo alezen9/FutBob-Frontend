@@ -1,8 +1,8 @@
 import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react'
-import { IconButton, makeStyles, TableCell, useMediaQuery, useTheme } from '@material-ui/core'
+import { IconButton, makeStyles, TableCell, useMediaQuery, useTheme } from '@mui/material'
 import { ZenPalette } from '@_MUITheme'
 import { get } from 'lodash'
-import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
+import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded'
 
 type CellSort = {
    show: boolean

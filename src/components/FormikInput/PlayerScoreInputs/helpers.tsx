@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, Button } from '@material-ui/core'
+import { Grid, Button } from '@mui/material'
 import FormikInput, { FormikEssentials } from '..'
 import { get } from 'lodash'
 import zenToolbox from '@_utils/toolbox'
@@ -73,7 +73,7 @@ export const SlidersDialogActions = React.memo((props: ActionsProps) => {
             color='primary'
             onClick={cancelChanges}>
             Cancel
-      </Button>
+         </Button>
       </Grid>
       <Grid item>
          <Button
@@ -81,7 +81,7 @@ export const SlidersDialogActions = React.memo((props: ActionsProps) => {
             color='primary'
             onClick={confirmChanges}>
             Confirm
-      </Button>
+         </Button>
       </Grid>
    </Grid>
 })

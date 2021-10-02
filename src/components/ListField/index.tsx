@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { makeStyles, IconButton, Typography, Popover } from '@material-ui/core'
+import { makeStyles, IconButton, Typography, Popover } from '@mui/material'
 import { ZenPalette } from '@_MUITheme'
-import DetailsRoundedIcon from '@material-ui/icons/DetailsRounded'
+import DetailsRoundedIcon from '@mui/icons-material/DetailsRounded'
 import { uniqueId } from 'lodash'
 
 const useStyles = makeStyles(theme => ({

@@ -1,6 +1,6 @@
 import React from 'react'
 import Flags from 'country-flag-icons/react/1x1'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@mui/material'
 import { ZenPalette } from '@_MUITheme'
 
 type PropsFlags = {

@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react'
-import Typography from '@material-ui/core/Typography'
+import Typography from '@mui/material/Typography'
 import { useConfigStore } from '@_zustand/config'
-import { Button } from '@material-ui/core'
+import { Button } from '@mui/material'
 import { useRouter } from 'next/router'
-import NavigateBeforeRoundedIcon from '@material-ui/icons/NavigateBeforeRounded'
+import NavigateBeforeRoundedIcon from '@mui/icons-material/NavigateBeforeRounded'
 import { ZenPalette } from '@_MUITheme'
 import { routesPaths } from '@_utils/routes'
 

@@ -1,4 +1,4 @@
-import { makeStyles, Theme } from '@material-ui/core'
+import { makeStyles, Theme } from '@mui/material'
 import { ZenPalette } from '@_MUITheme'
 import { ConfigStore } from '@_zustand/config/helpers'
 

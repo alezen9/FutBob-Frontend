@@ -1,8 +1,8 @@
 import React, { ReactElement } from 'react'
-import { Button, Grid, IconButton, makeStyles, MobileStepper, useMediaQuery } from '@material-ui/core'
-import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded'
-import ArrowForwardIosRoundedIcon from '@material-ui/icons/ArrowForwardIosRounded'
-import DoneAllRoundedIcon from '@material-ui/icons/DoneAllRounded'
+import { Button, Grid, IconButton, makeStyles, MobileStepper, useMediaQuery } from '@mui/material'
+import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded'
+import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded'
+import DoneAllRoundedIcon from '@mui/icons-material/DoneAllRounded'
 import { useConfigStore } from '@_zustand/config'
 import { ConfigStore } from '@_zustand/config/helpers'
 import { ZenPalette } from '@_MUITheme'
@@ -84,8 +84,8 @@ const Controls = (props: Props) => {
                   </IconButton>
                   : <Button color='primary' variant='outlined' disabled={activeStep === 0 || disablePrev} onClick={handleBack}>
                      <ArrowBackIosRoundedIcon style={{ marginRight: '.5em', fontSize: '.85em' }} />
-                  Back
-               </Button>
+                     Back
+                  </Button>
             }
             nextButton={
                isSmallScreen

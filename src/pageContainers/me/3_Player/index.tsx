@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { Grid, Button, Typography, useTheme, useMediaQuery } from '@material-ui/core'
+import { Grid, Button, Typography, useTheme, useMediaQuery } from '@mui/material'
 import { get, isEmpty } from 'lodash'
 import FutsalField from '@_components/FutsalField'
 import { useFormik } from 'formik'
@@ -84,7 +84,7 @@ const Player: React.FC<TabProps> = props => {
                   onClick={() => setOpenConfirmDialog(true)}
                   variant='outlined'>
                   Delete
-          </Button>
+               </Button>
             </Grid>}
             <Grid item>
                <Button
@@ -108,7 +108,7 @@ const Player: React.FC<TabProps> = props => {
                   onClick={onDelete}
                   variant='contained'>
                   Delete
-          </Button>
+               </Button>
             }
             onClose={() => setOpenConfirmDialog(false)}
          />

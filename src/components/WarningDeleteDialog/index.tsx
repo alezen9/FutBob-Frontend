@@ -1,6 +1,6 @@
 import React from 'react'
 import ZenDialog from '@_components/ZenDialog'
-import { Button, Typography } from '@material-ui/core'
+import { Button, Typography } from '@mui/material'
 import { ZenPalette } from '@_MUITheme'
 
 type Props = {
@@ -25,7 +25,7 @@ const WarningDeleteDialog = (props: Props) => {
                onClick={onDelete}
                variant='contained'>
                Delete
-         </Button>
+            </Button>
          }
          onClose={onClose}
       />

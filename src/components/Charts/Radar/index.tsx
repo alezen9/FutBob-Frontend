@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { ResponsiveRadar } from '@nivo/radar'
-import { useTheme, makeStyles, useMediaQuery } from '@material-ui/core'
+import { useTheme, makeStyles, useMediaQuery } from '@mui/material'
 import { ThemeType, ZenPalette } from '@_MUITheme'
 
 const useStyles = makeStyles(theme => ({

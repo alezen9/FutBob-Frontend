@@ -1,5 +1,5 @@
 import React from 'react'
-import { makeStyles, Switch } from '@material-ui/core'
+import { makeStyles, Switch } from '@mui/material'
 import { ZenPalette } from '@_MUITheme'
 import { get } from 'lodash'
 

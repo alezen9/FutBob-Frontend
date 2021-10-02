@@ -1,5 +1,5 @@
 import React, { CSSProperties, useMemo } from 'react'
-import { ListItem, ListItemIcon, ListItemText, makeStyles } from '@material-ui/core'
+import { ListItem, ListItemIcon, ListItemText, makeStyles } from '@mui/material'
 import { useRouter } from 'next/router'
 import { checkActivePage } from './helpers'
 import { RouteItem } from '..'

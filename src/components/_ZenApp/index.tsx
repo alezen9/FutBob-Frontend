@@ -1,5 +1,5 @@
 import React, { ReactChild, ReactChildren, ReactNode, useCallback, useMemo } from 'react'
-import { CssBaseline, ThemeProvider, Snackbar, makeStyles, useTheme, useMediaQuery } from '@material-ui/core'
+import { CssBaseline, ThemeProvider, Snackbar, makeStyles, useTheme, useMediaQuery } from '@mui/material'
 import MuiAlert from '@material-ui/lab/Alert'
 import { Offline, Online } from 'react-detect-offline'
 import OfflinePage from '@_components/Offline'

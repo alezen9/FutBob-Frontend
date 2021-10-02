@@ -1,7 +1,7 @@
 import React, { useState, ReactNode, ReactElement } from 'react'
 // MUI
-import { makeStyles } from '@material-ui/core/styles'
-import { AppBar, Tabs, Tab, useMediaQuery, Box } from '@material-ui/core'
+import { makeStyles } from '@mui/material/styles'
+import { AppBar, Tabs, Tab, useMediaQuery, Box } from '@mui/material'
 // utils
 import { compact, get } from 'lodash'
 

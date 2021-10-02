@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@mui/material'
 import { ZenPalette } from '@_MUITheme'
 import Flags from 'country-flag-icons/react/1x1'
 import { PlayerPosition, PlayerScore } from '@_SDK_Player/types'

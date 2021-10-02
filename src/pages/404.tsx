@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react'
-import { Button, Grid, makeStyles, Theme, Typography } from '@material-ui/core'
+import { Button, Grid, makeStyles, Theme, Typography } from '@mui/material'
 import { ZenPalette } from '@_MUITheme'
 import { useConfigStore } from '@_zustand/config'
 import { ZenRouteID } from '@_utils/routes/types'

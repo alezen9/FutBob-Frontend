@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { Button, Grid } from '@material-ui/core'
+import { Button, Grid } from '@mui/material'
 import FormikInput, { FormikEssentials } from '@_components/FormikInput'
 import ZenDialog from '@_components/ZenDialog'
 import { CreateFreeAgentInput, UpdateFreeAgentInput } from '@_SDK_FreeAgent/inputs'
@@ -10,7 +10,7 @@ import { Formik, FormikHelpers, useFormik } from 'formik'
 import * as yup from 'yup'
 
 const stateSelector = (state: ConfigStore) => ({
-  setIsLoading: state.setIsLoading
+   setIsLoading: state.setIsLoading
 })
 
 type Props = {
@@ -24,7 +24,7 @@ type Props = {
 const CreateEditDialog: React.FC<Props> = props => {
    const { open = false, item, onClose, createFreeAgent, updateFreeAgent } = props
    const { _id, name, surname } = (item || {}) as FreeAgent
-  const { setIsLoading } = useConfigStore(stateSelector)
+   const { setIsLoading } = useConfigStore(stateSelector)
 
    const formik = useFormik({
       initialValues: {
@@ -88,7 +88,7 @@ type _ActionsProps = {
 }
 
 const _Actions: React.FC<_ActionsProps> = React.memo(props => {
-   const { disabled= false, onSubmit, _id } = props
+   const { disabled = false, onSubmit, _id } = props
    return (
       <Grid container justify='flex-end'>
          <Grid item>
@@ -102,23 +102,23 @@ const _Actions: React.FC<_ActionsProps> = React.memo(props => {
 
 
 export const createUpdatePlayer = ({ setIsLoading, createFreeAgent, updateFreeAgent, onClose }) => async (
-	values: UpdateFreeAgentInput,
-	helpers: FormikHelpers<any>
+   values: UpdateFreeAgentInput,
+   helpers: FormikHelpers<any>
 ) => {
    setIsLoading(true)
-	helpers.setSubmitting(true)
+   helpers.setSubmitting(true)
    const { _id, ...createBody } = values
    let done = false
-   if(values._id) {
+   if (values._id) {
       done = await updateFreeAgent(values)
    } else {
       done = await createFreeAgent(createBody)
    }
-   if(done) {
+   if (done) {
       helpers.resetForm()
       onClose()
    }
-	helpers.setSubmitting(false)
+   helpers.setSubmitting(false)
    setIsLoading(false)
 }
 

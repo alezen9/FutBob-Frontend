@@ -1,11 +1,11 @@
-import React, { ReactElement, ReactNode, useCallback, useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { get, uniqueId } from 'lodash';
-import Controls from './Controls';
-import { Grid, Step, Stepper, StepLabel, Typography, useMediaQuery, useTheme, StepIconProps } from '@material-ui/core'
-import { StepperFlowConfig } from './helper';
-import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded'
-import { ZenPalette } from '@_MUITheme';
+import React, { ReactElement, ReactNode, useCallback, useEffect, useState } from 'react'
+import { makeStyles } from '@mui/material/styles'
+import { get, uniqueId } from 'lodash'
+import Controls from './Controls'
+import { Grid, Step, Stepper, StepLabel, Typography, useMediaQuery, useTheme, StepIconProps } from '@mui/material'
+import { StepperFlowConfig } from './helper'
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded'
+import { ZenPalette } from '@_MUITheme'
 
 const useStyles = makeStyles(theme => ({
    root: {

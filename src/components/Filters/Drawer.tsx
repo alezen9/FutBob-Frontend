@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import { Button, Divider, Grid, IconButton, SwipeableDrawer, Typography, useMediaQuery, useTheme } from '@material-ui/core'
+import { makeStyles } from '@mui/material/styles'
+import { Button, Divider, Grid, IconButton, SwipeableDrawer, Typography, useMediaQuery, useTheme } from '@mui/material'
 import { FormikEssentials } from '@_components/FormikInput'
 import { ZenPalette } from '@_MUITheme'
 import Inputs, { Filter } from './Inputs'
-import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
-import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
-import BackspaceRoundedIcon from '@material-ui/icons/BackspaceRounded'
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload'
+import BackspaceRoundedIcon from '@mui/icons-material/BackspaceRounded'
 
 const borderRadius = 10
 
@@ -50,7 +50,7 @@ const useStyles = makeStyles(theme => ({
    }
 }))
 
-const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
+const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
 
 type Props = {
    open: boolean
@@ -62,7 +62,7 @@ type Props = {
 
 const FiltersDrawer = (props: Props) => {
    const { open, toggleDrawer, formik, filters = [], excludeSearchBoxFromFilters } = props
-   const classes = useStyles();
+   const classes = useStyles()
    const theme = useTheme()
    const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
@@ -124,7 +124,7 @@ const FiltersDrawer = (props: Props) => {
             </Grid>
          </>
       </SwipeableDrawer>
-   );
+   )
 }
 
 export default React.memo(FiltersDrawer)

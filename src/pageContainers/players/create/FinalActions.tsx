@@ -1,11 +1,11 @@
-import { Button, Grid, Typography } from '@material-ui/core'
+import { Button, Grid, Typography } from '@mui/material'
 import { FormikEssentials } from '@_components/FormikInput'
 import ZenDialog from '@_components/ZenDialog'
 import React, { useCallback, useState } from 'react'
-import KeyboardBackspaceRoundedIcon from '@material-ui/icons/KeyboardBackspaceRounded'
+import KeyboardBackspaceRoundedIcon from '@mui/icons-material/KeyboardBackspaceRounded'
 import { ZenPalette } from '@_MUITheme'
-import ClearRoundedIcon from '@material-ui/icons/ClearRounded'
-import DetailsRoundedIcon from '@material-ui/icons/DetailsRounded'
+import ClearRoundedIcon from '@mui/icons-material/ClearRounded'
+import DetailsRoundedIcon from '@mui/icons-material/DetailsRounded'
 import { routesPaths } from '@_utils/routes'
 import { ZenRouteID } from '@_utils/routes/types'
 import { useRouter } from 'next/router'
@@ -45,10 +45,10 @@ const ResetStepperBtn: React.FC<ResetStepperBtnProps> = props => {
       <>
          {onBack && !playerID && <Button disabled={formik.isSubmitting} onClick={onBack} startIcon={<KeyboardBackspaceRoundedIcon />} variant='outlined' >
             Back
-    </Button>}
+         </Button>}
          {playerID && <Button onClick={goToPlayerDetail} startIcon={<DetailsRoundedIcon />} variant='contained' color='primary' >
             Detail
-    </Button>}
+         </Button>}
          <Button disabled={formik.isSubmitting} onClick={handleClick()} startIcon={<ClearRoundedIcon />} variant='outlined' style={{ marginLeft: '1em', ...onBack && !playerID && resetStyle }} >
             {playerID ? 'New player' : 'Cancel'}
          </Button>

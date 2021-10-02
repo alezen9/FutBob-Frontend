@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { makeStyles, Theme } from '@material-ui/core'
+import { makeStyles, Theme } from '@mui/material'
 import { get } from 'lodash'
 
 const useStyles = makeStyles<Theme, { active?: boolean, cssPosition?: CSSPosition }>((theme) => ({

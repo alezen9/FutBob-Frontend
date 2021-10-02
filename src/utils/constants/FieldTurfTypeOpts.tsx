@@ -1,8 +1,8 @@
 import React from 'react'
 import { OptionType } from '@_components/FormikInput'
 import { FieldState } from '@_SDK_Field/types'
-import ThumbUpRoundedIcon from '@material-ui/icons/ThumbUpRounded'
-import ThumbDownRoundedIcon from '@material-ui/icons/ThumbDownRounded'
+import ThumbUpRoundedIcon from '@mui/icons-material/ThumbUpRounded'
+import ThumbDownRoundedIcon from '@mui/icons-material/ThumbDownRounded'
 import { RadiationIcon } from '@_icons'
 
 export const FieldTurfTypeOpts: OptionType[] = [
