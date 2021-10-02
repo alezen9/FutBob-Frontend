@@ -102,7 +102,7 @@ const FiltersDrawer = (props: Props) => {
                   </Grid>}
                   <Inputs filters={filters} formik={formik} />
                </Grid>
-               <Grid item xs={12} container justify='space-around' alignItems='center' className={classes.actions}>
+               <Grid item xs={12} container justifyContent='space-around' alignItems='center' className={classes.actions}>
                   {/* <Grid item>
                         <IconButton color='primary'>
                            <CloudDownloadIcon />

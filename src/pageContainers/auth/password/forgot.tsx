@@ -31,7 +31,7 @@ const ForgotPasswordContainter = () => {
    const classes = useSharedStyles({ isSubmitting: formik.isSubmitting })
 
    return (
-      <Grid container justify='space-between' alignItems='center' direction='column' className={classes.main}>
+      <Grid container justifyContent='space-between' alignItems='center' direction='column' className={classes.main}>
          <div className={classes.themeToggleClass}>
             <ThemeModeSwitch />
          </div>
@@ -64,7 +64,7 @@ const ForgotPasswordContainter = () => {
                            className={classes.submit}>
                            Proceed
                         </Button>
-                        <Grid container justify='center' style={{ marginTop: '2em' }} item xs={12}>
+                        <Grid container justifyContent='center' style={{ marginTop: '2em' }} item xs={12}>
                            <Link passHref href={routesPaths[ZenRouteID.LOGIN].path}>
                               <a className={classes.link}>Back to login</a>
                            </Link>

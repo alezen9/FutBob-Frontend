@@ -4,38 +4,35 @@ import {
    mdiGenderMale,
    mdiGenderFemale
 } from '@mdi/js'
-import { makeStyles } from '@mui/material'
+import { styled } from '@mui/material/styles'
 
-const useStyles = makeStyles({
-   center: {
-      display: 'flex',
-      alignItems: 'center',
-      '& > svg': {
-         marginRight: '.5em'
-      }
+const Span = styled('span')({
+   display: 'flex',
+   alignItems: 'center',
+   '& > svg': {
+      marginRight: '.5em'
    }
 })
 
 const SexIcon = props => {
    const { sex = Sex.Male } = props
-   const classes = useStyles()
    return <>
-      {sex === Sex.Male && <span className={classes.center}>
+      {sex === Sex.Male && <Span>
          <Icon path={mdiGenderMale}
             title='Male'
             size={0.8}
             horizontal
             vertical
             color='#1DA1F2' />
-         Male</span>}
-      {sex === Sex.Female && <span className={classes.center}>
+         Male</Span>}
+      {sex === Sex.Female && <Span>
          <Icon path={mdiGenderFemale}
             title='Female'
             size={0.8}
             horizontal
             vertical
             color='#ff8da1' />
-         Female</span>}
+         Female</Span>}
    </>
 }
 

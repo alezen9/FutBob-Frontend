@@ -34,7 +34,7 @@ const LoginContainer = () => {
    const classes = useSharedStyles({ isSubmitting: formik.isSubmitting })
 
    return (
-      <Grid container justify='space-between' alignItems='center' direction='column' className={classes.main}>
+      <Grid container justifyContent='space-between' alignItems='center' direction='column' className={classes.main}>
          <div className={classes.themeToggleClass}>
             <ThemeModeSwitch />
          </div>
@@ -62,12 +62,12 @@ const LoginContainer = () => {
                   className={classes.submit}>
                   Login
                </Button>
-               <Grid container justify='center' style={{ marginTop: '2em' }} item xs={12}>
+               <Grid container justifyContent='center' style={{ marginTop: '2em' }} item xs={12}>
                   <Link passHref href={routesPaths[ZenRouteID.REQUEST_RESET_PASSWORD].path}>
                      <a className={classes.link}>Forgot password?</a>
                   </Link>
                </Grid>
-               <Grid container justify='center' style={{ marginTop: '2em' }} item xs={12}>
+               <Grid container justifyContent='center' style={{ marginTop: '2em' }} item xs={12}>
                   <Link passHref href={routesPaths[ZenRouteID.REQUEST_ACCOUNT].path}>
                      <a className={classes.link}>Create an account</a>
                   </Link>

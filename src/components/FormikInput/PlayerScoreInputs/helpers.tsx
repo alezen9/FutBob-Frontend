@@ -65,7 +65,7 @@ type ActionsProps = {
 export const SlidersDialogActions = React.memo((props: ActionsProps) => {
    const { cancelChanges, confirmChanges } = props
 
-   return <Grid container justify='flex-end'>
+   return <Grid container justifyContent='flex-end'>
       <Grid item>
          <Button
             style={{ marginRight: '1em' }}

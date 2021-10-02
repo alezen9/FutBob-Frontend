@@ -92,7 +92,7 @@ const ZenStepper: React.FC<Props> = props => {
                </Step>
             ))}
          </Stepper>
-         <Grid className={classes.stepperGridContent} justify='center' container spacing={3}>
+         <Grid className={classes.stepperGridContent} justifyContent='center' container spacing={3}>
             {activeStep === children.length
                ? OnCompleteStep || <>Fine</>
                : get(children, `${activeStep}.props.component`, <>Unknown component</>)}

@@ -40,7 +40,7 @@ const FinalizeAccountContainer = () => {
    const classes = useSharedStyles({ isSubmitting: formik.isSubmitting })
 
    return (
-      <Grid container justify='space-between' alignItems='center' direction='column' className={classes.main}>
+      <Grid container justifyContent='space-between' alignItems='center' direction='column' className={classes.main}>
          <div className={classes.themeToggleClass}>
             <ThemeModeSwitch />
          </div>
@@ -92,7 +92,7 @@ const FinalizeAccountContainer = () => {
                      </form>
                   </motion.div>}
             </AnimatePresence>
-            <Grid container justify='center' style={{ margin: '2em auto' }} item xs={12}>
+            <Grid container justifyContent='center' style={{ margin: '2em auto' }} item xs={12}>
                <Link passHref href={routesPaths[ZenRouteID.LOGIN].path}>
                   <a className={classes.link}>Back to login</a>
                </Link>

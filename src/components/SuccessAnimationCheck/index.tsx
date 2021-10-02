@@ -15,7 +15,7 @@ const SuccessAnimationCheck: React.FC<Props> = props => {
          initial={{ opacity: 0 }}
          animate={{ opacity: 1 }}
          exit={{ opacity: 0 }}>
-         <Grid container item xs={12} justify='center' style={{ margin: '4em auto' }}>
+         <Grid container item xs={12} justifyContent='center' style={{ margin: '4em auto' }}>
             <Grid item style={{ margin: '1em auto' }}>
                <SuccessAnimated style={{ width: '7em', height: '7em' }} />
             </Grid>

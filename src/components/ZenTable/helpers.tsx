@@ -136,7 +136,7 @@ const Actions = React.memo((props: ActionProps) => {
 const ActionButtons = React.memo((props: ActionProps) => {
    const { actions } = props
    return (
-      <Grid container spacing={3} justify='flex-end'>
+      <Grid container spacing={3} justifyContent='flex-end'>
          {actions.map(action => {
             const { onClick, label, icon } = action
             return (
@@ -159,7 +159,7 @@ const ActionButtons = React.memo((props: ActionProps) => {
 const ActionTooltips = React.memo((props: ActionProps) => {
    const { actions } = props
    return (
-      <Grid container spacing={3} justify='flex-end'>
+      <Grid container spacing={3} justifyContent='flex-end'>
          {actions.map(action => {
             const { onClick, label, icon } = action
             const handleClick = e => {

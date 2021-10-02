@@ -66,7 +66,7 @@ type _FormProps = {
 const _Form: React.FC<_FormProps> = React.memo(props => {
    const { formik } = props
    return (
-      <Grid container justify='center'>
+      <Grid container justifyContent='center'>
          <FormikInput
             name='name'
             label='Name'
@@ -90,7 +90,7 @@ type _ActionsProps = {
 const _Actions: React.FC<_ActionsProps> = React.memo(props => {
    const { disabled = false, onSubmit, _id } = props
    return (
-      <Grid container justify='flex-end'>
+      <Grid container justifyContent='flex-end'>
          <Grid item>
             <Button disabled={disabled} onClick={onSubmit} variant='contained' color='primary'>
                {_id ? 'Update' : 'Create'}

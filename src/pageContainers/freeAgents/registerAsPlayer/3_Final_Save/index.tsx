@@ -19,7 +19,7 @@ const _Final_Save: React.FC<Props> = props => {
    const { country, surname } = get(formik, 'values.user', {})
 
    return (
-      <Grid container justify='center'>
+      <Grid container justifyContent='center'>
          <AnimatePresence exitBeforeEnter>
             {!playerID
                ? <>
@@ -32,7 +32,7 @@ const _Final_Save: React.FC<Props> = props => {
                         <PlayerCard {...{ score, positions, country: get(country, 'value', null), surname }} />
                      </motion.div>
                   </Grid>
-                  <Grid item container xs={12} justify='center'>
+                  <Grid item container xs={12} justifyContent='center'>
                      <Grid item>
                         <Fab color='primary' onClick={() => formik.handleSubmit()} disabled={formik.isSubmitting}>
                            <SaveRoundedIcon />

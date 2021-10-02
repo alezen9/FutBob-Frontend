@@ -1,5 +1,4 @@
-import { createMuiTheme } from '@mui/material/styles'
-import createBreakpoints from '@mui/material/styles/createBreakpoints'
+import { createTheme } from '@mui/material'
 import { configColors, ThemeType } from '../palette'
 
 const subtitleGrey = '#686868'
@@ -7,10 +6,7 @@ const lightGrey = '#c1c1c1'
 const borderColor = '#b3b3b3'
 const borderRadius = 7
 
-const breakpoints = createBreakpoints({})
-
-const DarkTheme = createMuiTheme({
-  // @ts-ignore
+const DarkTheme = createTheme({
   type: ThemeType.dark,
   palette: {
     primary: configColors.primary.dark,

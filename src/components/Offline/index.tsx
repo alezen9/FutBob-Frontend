@@ -32,7 +32,7 @@ const useStyles = makeStyles(({
 const OfflinePage = () => {
    const classes = useStyles()
    return (
-      <Grid className={classes.container} container justify='center' alignContent='center'>
+      <Grid className={classes.container} container justifyContent='center' alignContent='center'>
          <div className={classes.item}>
             <Typography variant='h1'>503</Typography>
             <div className={classes.verticalDivider} />

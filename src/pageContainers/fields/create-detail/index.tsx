@@ -77,14 +77,14 @@ const FieldDetail = () => {
 
    return (
       <>
-         <Grid container spacing={3} justify='center' style={{ marginTop: '2em' }}>
-            <Grid item container xs={12} md={6} justify='center'>
+         <Grid container spacing={3} justifyContent='center' style={{ marginTop: '2em' }}>
+            <Grid item container xs={12} md={6} justifyContent='center'>
                <FutsalField
                   onTypeChange={onTypeChange}
                   withPlayers={false}
                   type={get(item, 'type', FieldType.Outdoor) === FieldType.Outdoor ? 'outdoor' : 'indoor'} />
             </Grid>
-            <Grid item container xs={12} md={6} spacing={3} justify='center'>
+            <Grid item container xs={12} md={6} spacing={3} justifyContent='center'>
                <FormikInput
                   sm={6}
                   name='name'
@@ -152,7 +152,7 @@ const FieldDetail = () => {
                   {...formik}
                />
             </Grid>
-            <Grid item container xs={12} justify={isSmallScreen ? 'space-evenly' : 'flex-end'}>
+            <Grid item container xs={12} justifyContent={isSmallScreen ? 'space-evenly' : 'flex-end'}>
                {item._id && <Grid item>
                   <Button
                      style={{ minWidth: 150, color: ZenPalette.error, marginRight: '1.5em', borderColor: ZenPalette.error }}

@@ -69,7 +69,7 @@ const CreatePlayerContainer = () => {
    }, [JSON.stringify(status), JSON.stringify(formik.errors), isEmpty(formik.values.user), isEmpty(formik.values.player)])
 
    return (
-      <Grid container justify='center'>
+      <Grid container justifyContent='center'>
          <ZenStepper
             flowConfig={flowConfig}
             OnCompleteStep={<_Final_Save {...{ formik, playerID }} />}

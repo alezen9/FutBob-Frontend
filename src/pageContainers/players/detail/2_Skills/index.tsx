@@ -61,7 +61,7 @@ const _Skills: React.FC<TabProps> = props => {
    return (
       <Grid container spacing={3}>
          <Overall style={{ margin: 'auto', fontSize: '5em' }} overall={overall} />
-         <Grid item container xs={12} justify='center'>
+         <Grid item container xs={12} justifyContent='center'>
             <FormikInput
                sm={4}
                type='select'
@@ -84,7 +84,7 @@ const _Skills: React.FC<TabProps> = props => {
                hideSwitch
                {...formik} />
          </Grid>
-         <Grid item container xs={12} justify={isSmallScreen ? 'space-evenly' : 'flex-end'}>
+         <Grid item container xs={12} justifyContent={isSmallScreen ? 'space-evenly' : 'flex-end'}>
             {get(player, '_id', null) && <Grid item>
                <Button
                   style={{ minWidth: 130, color: ZenPalette.error, marginRight: '1.5em', borderColor: ZenPalette.error }}

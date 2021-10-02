@@ -74,14 +74,14 @@ const Filters = (props: Props) => {
 
    return (
       <>
-         <Grid container spacing={3} justify='space-between' alignItems='center' className={classes.mainContainer} >
+         <Grid container spacing={3} justifyContent='space-between' alignItems='center' className={classes.mainContainer} >
             {withSearch && <SearchBox
                formik={formik}
                onSearchChange={onSearchChange}
                onSearchSubmit={onSearchSubmit}
                excludeSearchBoxFromFilters={excludeSearchBoxFromFilters}
             />}
-            <Grid container item xs={12} sm={withSearch ? 6 : 12} lg={withSearch ? 8 : 12} className={`${classes.attachedToLeft}`} justify='flex-end' alignItems='center' spacing={1}>
+            <Grid container item xs={12} sm={withSearch ? 6 : 12} lg={withSearch ? 8 : 12} className={`${classes.attachedToLeft}`} justifyContent='flex-end' alignItems='center' spacing={1}>
                <Actions actions={actions} showDivider={!!filters.length} />
                {filters.length
                   ? <Grid item>

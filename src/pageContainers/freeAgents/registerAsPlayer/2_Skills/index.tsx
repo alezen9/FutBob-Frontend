@@ -24,7 +24,7 @@ const _Skills: React.FC<Props> = props => {
    return (
       <Grid container spacing={3}>
          <Overall style={{ margin: 'auto', fontSize: '5em' }} overall={overall} />
-         <Grid item container xs={12} justify='center'>
+         <Grid item container xs={12} justifyContent='center'>
             <FormikInput
                sm={4}
                type='select'

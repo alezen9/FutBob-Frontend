@@ -58,7 +58,7 @@ const ResetStepperBtn: React.FC<ResetStepperBtnProps> = props => {
             title='Attention!'
             content={<Typography>If you continue this player will not be created, proceed and cancel?</Typography>}
             onClose={() => setOpenDialog(false)}
-            actions={<Grid container justify='flex-end'>
+            actions={<Grid container justifyContent='flex-end'>
                <Grid item>
                   <Button onClick={handleClick(true)} variant='outlined' style={{ color: ZenPalette.error, borderColor: ZenPalette.error }}>Proceed</Button>
                </Grid>

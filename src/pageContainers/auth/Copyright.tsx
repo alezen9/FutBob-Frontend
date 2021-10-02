@@ -3,7 +3,7 @@ import React from 'react'
 
 const Copyright = () => {
    return (
-      <Grid container item xs={12} justify='center'>
+      <Grid container item xs={12} justifyContent='center'>
          <Typography variant='caption' align='center'>
             {`Copyright © FutBob ${new Date().getFullYear()}`}
          </Typography>

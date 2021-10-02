@@ -31,7 +31,7 @@ const PlayerScoreInputs = (props: Props) => {
    }, [name, JSON.stringify(get(formik, `values.${name}`, {}))])
 
    return (
-      <Grid style={{ margin: 'auto' }} container spacing={3} item xs={12} sm={6} justify='center' {...gridProps}>
+      <Grid style={{ margin: 'auto' }} container spacing={3} item xs={12} sm={6} justifyContent='center' {...gridProps}>
          {items.map((elProps, i) => <SingleScore {...elProps} key={`${elProps.key}-${i}`} formik={formik} />)}
       </Grid>
    )

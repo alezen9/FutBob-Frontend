@@ -72,7 +72,7 @@ const ZenDialog = (props: Props) => {
          aria-describedby='details'
       >
          {title && <DialogTitle id='alert-dialog-slide-title' >
-            <Grid container spacing={3} justify='space-between'>
+            <Grid container spacing={3} justifyContent='space-between'>
                <Grid item xs={10}>
                   <Typography align='left' variant='h4'>{title}</Typography>
                </Grid>

@@ -49,7 +49,7 @@ const Custom404 = () => {
    }, [router.push])
 
    return (
-      <Grid className={classes.container} container direction='column' justify='center' alignContent='center'>
+      <Grid className={classes.container} container direction='column' justifyContent='center' alignContent='center'>
          <div className={classes.item}>
             <Typography variant='h1'>404</Typography>
             <div className={classes.verticalDivider} />
