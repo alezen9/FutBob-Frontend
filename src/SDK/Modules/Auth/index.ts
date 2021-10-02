@@ -37,7 +37,7 @@ class AuthServer {
 
 	async login(body: LoginInput): Promise<AuthData> {
 		const query = `
-      query {
+      mutation {
          Auth_login(body: ${zenToolbox.paramsToString(body)}) { token }
       }`
 		return this._server.API({ query, name: 'Auth_login', params: body })
