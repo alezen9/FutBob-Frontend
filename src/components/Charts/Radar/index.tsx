@@ -49,7 +49,9 @@ const RadarChart = ({ data = [] }: Props) => {
             data={data}
             keys={['value']}
             theme={{
-               textColor: ZenPalette.typographyGrey,
+               text: {
+                  color: ZenPalette.typographyGrey
+               },
                grid: {
                   line: {
                      stroke: ZenPalette.dividerColor,
@@ -88,8 +90,11 @@ const RadarChart = ({ data = [] }: Props) => {
             fillOpacity={0.25}
             blendMode={blendMode}
             animate
-            motionStiffness={90}
-            motionDamping={15}
+            motionConfig={{
+               damping: 15,
+               tension: 90
+               
+            }}
             isInteractive
             legends={[]}
          />

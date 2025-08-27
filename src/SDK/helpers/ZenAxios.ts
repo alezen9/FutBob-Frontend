@@ -2,12 +2,11 @@ import { ZenServer } from '..'
 import axios, { AxiosInstance } from 'axios'
 import { get } from 'lodash'
 import getConfig from 'next/config'
-const { publicRuntimeConfig } = getConfig()
 
 class ZenAxios {
 	create(server: ZenServer): AxiosInstance {
 		const _self: AxiosInstance = axios.create({
-			baseURL: `${publicRuntimeConfig.API_URL}`,
+			baseURL: `${process.env.NEXT_PUBLIC_API_URL}`,
 			timeout: 100000,
 			headers: {
 				Accept: 'application/json',

@@ -2,6 +2,7 @@
    "name": "futbob-frontend",
    "version": "4.0.0",
    "private": true,
+   "engines": { "node": ">=18 <21" },
    "dependencies": {
       "@date-io/dayjs": "1.x",
       "@material-ui/core": "4.11.4",
@@ -10,8 +11,9 @@
       "@material-ui/pickers": "^3.3.10",
       "@mdi/js": "^5.9.55",
       "@mdi/react": "^1.5.0",
-      "@nivo/core": "^0.64.0",
-      "@nivo/radar": "^0.64.0",
+      "@nivo/core": "0.70.0",
+      "@nivo/radar": "0.70.0",
+      "@nivo/tooltip": "0.70.0",
       "axios": "0.21.1",
       "clean-deep": "3.4.0",
       "country-flag-icons": "^1.2.10",
@@ -21,8 +23,8 @@
       "immer": "^9.0.2",
       "match-sorter": "^6.3.0",
       "material-ui-phone-number": "2.2.6",
-      "next": "10.2.2",
-      "next-pwa": "5.2.21",
+      "next": "^12.3.0",
+      "next-pwa": "^5.6.0",
       "nprogress": "^0.2.0",
       "react": "17.0.2",
       "react-content-loader": "^6.0.3",
@@ -50,6 +52,6 @@
       "@types/react": "^17.0.6",
       "@types/react-window": "^1.8.3",
       "@types/yup": "^0.29.11",
-      "typescript": "^4.2.4"
+      "typescript": "^4.3.2"
    }
 }

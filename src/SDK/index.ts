@@ -9,7 +9,6 @@ import FreeAgentServer from './Modules/FreeAgent'
 // end modules
 import getConfig from 'next/config'
 import { zenAxiosInstance } from './helpers/ZenAxios'
-const { publicRuntimeConfig } = getConfig()
 
 export class ZenServer {
 	_LSToken: string
@@ -61,7 +60,7 @@ export class ZenServer {
 	}
 
 	private LogRequest = ({ name, response, params, fields, isError = false }) => {
-		if (publicRuntimeConfig.ENV === 'test') {
+		if (process.env.ENV === 'test') {
 			if (isError) {
 				console.error('API: ', name)
 				console.error('Params: \n', params)

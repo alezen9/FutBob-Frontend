@@ -2,22 +2,48 @@
   "compilerOptions": {
     "target": "es6",
     "baseUrl": ".",
-     "paths": {
-      "@_components/*": ["src/components/*"],
-      "@_page-containers/*": ["src/pageContainers/*"],
-      "@_swr/*": ["src/swr/*"],
-      "@_utils/*": ["src/utils/*"],
-      "@_zustand/*": ["src/zustand/*"],
+    "paths": {
+      "@_components/*": [
+        "src/components/*"
+      ],
+      "@_page-containers/*": [
+        "src/pageContainers/*"
+      ],
+      "@_swr/*": [
+        "src/swr/*"
+      ],
+      "@_utils/*": [
+        "src/utils/*"
+      ],
+      "@_zustand/*": [
+        "src/zustand/*"
+      ],
       // start modules
-      "@_SDK_Auth/*": ["src/SDK/Modules/Auth/*"],
-      "@_SDK_User/*": ["src/SDK/Modules/User/*"],
-      "@_SDK_Player/*": ["src/SDK/Modules/Player/*"],
-      "@_SDK_Field/*": ["src/SDK/Modules/Field/*"],
-      "@_SDK_FreeAgent/*": ["src/SDK/Modules/FreeAgent/*"],
+      "@_SDK_Auth/*": [
+        "src/SDK/Modules/Auth/*"
+      ],
+      "@_SDK_User/*": [
+        "src/SDK/Modules/User/*"
+      ],
+      "@_SDK_Player/*": [
+        "src/SDK/Modules/Player/*"
+      ],
+      "@_SDK_Field/*": [
+        "src/SDK/Modules/Field/*"
+      ],
+      "@_SDK_FreeAgent/*": [
+        "src/SDK/Modules/FreeAgent/*"
+      ],
       // end modules
-      "@_icons": ["src/assets/CustomIcon"],
-      "@_palette": ["palette"],
-      "@_MUITheme": ["src/MUITheme/index"]
+      "@_icons": [
+        "src/assets/CustomIcon"
+      ],
+      "@_palette": [
+        "palette"
+      ],
+      "@_MUITheme": [
+        "src/MUITheme/index"
+      ]
     },
     "lib": [
       "dom",
@@ -36,12 +62,14 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "incremental": true
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx", "next.config.js"
+    "**/*.tsx",
+    "next.config.js"
   ],
   "exclude": [
     "node_modules"

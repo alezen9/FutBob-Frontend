@@ -1,46 +1,46 @@
-const withPWA = require('next-pwa')
+// next.config.js
+const withPWA = require('next-pwa')({
+  dest: 'public',
+  disable: process.env.NEXT_PUBLIC_ENABLE_PWA !== 'true', // keep PWA off unless you opt in
+  register: process.env.NEXT_PUBLIC_ENABLE_PWA === 'true',
+  scope: '/',
+  maximumFileSizeToCacheInBytes: 10_000_000, // 10MB
+  sourcemap: false,
+})
 
 const RESET_COLOR = '\x1b[0m'
 const GREEN_TEXT = '\x1b[32m'
-
-const enablePWA = process.env.NEXT_PUBLIC_ENABLE_PWA === 'true'
 
 const getApiUrl = (config = '') => {
   console.log(`${GREEN_TEXT}[CXB] ${config} config env: ${process.env.ENV}${RESET_COLOR}`)
   console.log(`${GREEN_TEXT}[CXB] Listening on port ${process.env.PORT || 3000}${RESET_COLOR}`)
   switch (process.env.ENV || 'test') {
     case 'test':
-      return 'https://calcetto.xyz/'
-      // return 'http://localhost:7000'
     case 'production':
-      return 'https://calcetto.xyz/'
     default:
-      return 'http://localhost:7000'
+      return 'http://localhost:7001'
   }
 }
 
-module.exports = withPWA({
-  future: {
-    webpack5: true
+const nextConfig = {
+  reactStrictMode: true,
+  swcMinify: true, // good on Node 18/20
+
+  // Prefer env vars over runtimeConfig (which is deprecated)
+  env: {
+    NEXT_PUBLIC_API_URL: getApiUrl('public'),
+    ENV: process.env.ENV,
   },
-  serverRuntimeConfig: {
-    API_URL: getApiUrl('server')
+
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/auth/login',
+        permanent: false,
+      },
+    ]
   },
-  publicRuntimeConfig: {
-    API_URL: getApiUrl('public'),
-    NODE_ENV: process.env.NODE_ENV,
-    ENV: process.env.ENV
-  },
-  devIndicators: {
-    autoPrerender: false
-  },
-  pwa: {
-    disable: !enablePWA,
-    register: enablePWA,
-    scope: '/',
-    dest: 'public',
-    maximumFileSizeToCacheInBytes: 10000000, // 10MB
-    sourcemap: false,
-    dynamicStartUrlRedirect: '/auth/login'
-  }
-})
+}
+
+module.exports = withPWA(nextConfig)
