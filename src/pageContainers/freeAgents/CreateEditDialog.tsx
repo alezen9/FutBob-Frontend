@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { Button, Grid } from '@material-ui/core'
+import { Button, Grid } from '@mui/material'
 import FormikInput, { FormikEssentials } from '@_components/FormikInput'
 import ZenDialog from '@_components/ZenDialog'
 import { CreateFreeAgentInput, UpdateFreeAgentInput } from '@_SDK_FreeAgent/inputs'

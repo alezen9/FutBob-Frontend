@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Button, Grid } from '@material-ui/core'
+import { Button, Grid } from '@mui/material'
 import FormikInput from '@_components/FormikInput'
 import ThemeModeSwitch from '@_components/ThemeModeSwitch'
 import { FutBobLogo } from '@_icons'
@@ -93,8 +93,8 @@ const ResetPasswordContainer = () => {
             </motion.div>}
         </AnimatePresence>
         <Grid container justify='center' style={{ marginTop: '2em' }} item xs={12}>
-          <Link passHref href={routesPaths[ZenRouteID.LOGIN].path}>
-            <a className={classes.link}>Back to login</a>
+          <Link passHref href={routesPaths[ZenRouteID.LOGIN].path} className={classes.link}>
+            Back to login
           </Link>
         </Grid>
       </Grid>

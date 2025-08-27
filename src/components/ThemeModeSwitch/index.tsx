@@ -1,8 +1,10 @@
 import React from 'react'
-import { makeStyles, Switch, Theme } from '@material-ui/core'
+import { createTheme, Switch, Theme } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import { useConfigStore } from '@_zustand/config'
-import Brightness2RoundedIcon from '@material-ui/icons/Brightness2Rounded'
+import Brightness2RoundedIcon from '@mui/icons-material/Brightness2Rounded'
 import { ConfigStore } from '@_zustand/config/helpers'
+const defaultTheme = createTheme()
 
 const useStyles = makeStyles((theme: Theme) => ({
    moon: {
@@ -12,7 +14,7 @@ const useStyles = makeStyles((theme: Theme) => ({
          transform: 'rotateZ(145deg) translateY(0.1em)',
       }
    }
-}))
+}), {defaultTheme})
 
 const stateSelector = (state: ConfigStore) => ({
    themeType: state.themeType,

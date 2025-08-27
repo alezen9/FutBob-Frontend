@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react'
-import { Button, Grid } from '@material-ui/core'
+import { Button, Grid } from '@mui/material'
 import FormikInput from '@_components/FormikInput'
 import ThemeModeSwitch from '@_components/ThemeModeSwitch'
 import { FutBobLogo } from '@_icons'
@@ -63,13 +63,13 @@ const LoginContainer = () => {
                Login
           </Button>
           <Grid container justify='center' style={{ marginTop: '2em' }} item xs={12}>
-            <Link passHref href={routesPaths[ZenRouteID.REQUEST_RESET_PASSWORD].path}>
-              <a className={classes.link}>Forgot password?</a>
+            <Link passHref href={routesPaths[ZenRouteID.REQUEST_RESET_PASSWORD].path} className={classes.link}>
+              Forgot password?
             </Link>
           </Grid>
           <Grid container justify='center' style={{ marginTop: '2em' }} item xs={12}>
-            <Link passHref href={routesPaths[ZenRouteID.REQUEST_ACCOUNT].path}>
-              <a className={classes.link}>Create an account</a>
+            <Link passHref href={routesPaths[ZenRouteID.REQUEST_ACCOUNT].path} className={classes.link}>
+              Create an account
             </Link>
           </Grid>
         </form>

@@ -1,18 +1,19 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react'
-import { Grid, Typography, makeStyles } from '@material-ui/core'
+import { createTheme, Grid, Typography } from '@mui/material'
 import { get, reduce } from 'lodash'
 import { ThemeType, ZenPalette } from '@_MUITheme'
 import { SlidersDialogContent, SlidersDialogActions } from './helpers'
 import zenToolbox from '@_utils/toolbox'
 import { DefenseIcon, PhysicalIcon } from '@_icons'
-import FlashOnIcon from '@material-ui/icons/FlashOn'
-import TimelineOutlinedIcon from '@material-ui/icons/TimelineOutlined'
-import GpsFixedOutlinedIcon from '@material-ui/icons/GpsFixedOutlined'
-import AllInclusiveIcon from '@material-ui/icons/AllInclusive'
+import FlashOnIcon from '@mui/icons-material/FlashOn'
+import TimelineOutlinedIcon from '@mui/icons-material/TimelineOutlined'
+import GpsFixedOutlinedIcon from '@mui/icons-material/GpsFixedOutlined'
+import AllInclusiveIcon from '@mui/icons-material/AllInclusive'
 import { FormikEssentials } from '..'
 import ZenDialog from '@_components/ZenDialog'
 import { Defense, Pace, Passing, Physical, Shooting, Technique } from '@_SDK_Player/types'
 import { getKeyMean } from '@_utils/playerOverall'
+import { makeStyles } from '@mui/styles'
 
 const iconProps = {
    style: {
@@ -29,6 +30,8 @@ const ScoreValuesIconMap = {
    Physical: <PhysicalIcon {...iconProps} />,
    Technique: <AllInclusiveIcon {...iconProps} />
 }
+
+const defaultTheme = createTheme()
 
 const useStyles = makeStyles(theme => ({
    mainWrapper: {
@@ -62,7 +65,7 @@ const useStyles = makeStyles(theme => ({
          marginBottom: '1em'
       }
    }
-}))
+}), {defaultTheme})
 
 type Props = {
    title?: string

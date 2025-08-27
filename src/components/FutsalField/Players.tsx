@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react'
-import { makeStyles, Theme } from '@material-ui/core'
+import { createTheme, Theme } from '@mui/material'
 import { get } from 'lodash'
+import { makeStyles } from '@mui/styles'
+const defaultTheme = createTheme()
 
 const useStyles = makeStyles<Theme, { active?: boolean, cssPosition?: CSSPosition }>((theme) => ({
    main: {
@@ -38,7 +40,7 @@ const useStyles = makeStyles<Theme, { active?: boolean, cssPosition?: CSSPositio
          }
       }
    })
-}))
+}), {defaultTheme})
 
 type PlayerProps = {
    position?: number

@@ -1,6 +1,8 @@
-import { makeStyles, Theme } from '@material-ui/core'
+import { createTheme, Theme } from '@mui/material'
 import { ZenPalette } from '@_MUITheme'
 import { ConfigStore } from '@_zustand/config/helpers'
+import { makeStyles } from '@mui/styles'
+const defaultTheme = createTheme()
 
 export const useSharedStyles = makeStyles((theme: Theme) => ({
 	main: {
@@ -55,7 +57,7 @@ export const useSharedStyles = makeStyles((theme: Theme) => ({
 		top: '1.5em',
 		right: '1.5em'
 	}
-}))
+}), {defaultTheme})
 
 export const stateSelector = (state: ConfigStore) => ({
 	isLogged: state.isLogged,

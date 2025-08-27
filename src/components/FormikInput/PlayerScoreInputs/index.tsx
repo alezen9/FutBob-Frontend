@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { Grid, GridProps } from '@material-ui/core'
+import { Grid, GridProps } from '@mui/material'
 import { get, reduce } from 'lodash'
 import SingleScore from './SingleScore'
 import { FormikEssentials } from '..'

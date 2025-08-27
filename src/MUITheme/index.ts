@@ -1,10 +1,9 @@
 import { ThemeType } from './palette'
 
-declare module '@material-ui/core/styles/createMuiTheme' {
+declare module '@mui/material/styles' {
   interface Theme {
     type: ThemeType
   }
-  // allow configuration using `createMuiTheme`
   interface ThemeOptions {
     type: ThemeType
   }

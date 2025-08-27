@@ -1,12 +1,13 @@
 import React, { useState, useLayoutEffect, useCallback, Fragment } from 'react'
 import Link from 'next/link'
-import { Typography, makeStyles, IconButton } from '@material-ui/core'
+import { Typography, IconButton } from '@mui/material'
 import Spinner from '@_components/Loaders/Spinner'
-import ExitToAppRoundedIcon from '@material-ui/icons/ExitToAppRounded'
+import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded'
 import ThemeSwitch from '@_components/ThemeModeSwitch'
 import { ZenPalette } from '@_MUITheme'
 import { logoutFn, RouteItem } from '@_components/_ZenMenu'
 import zenToolbox from '@_utils/toolbox'
+import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles(theme => ({
    themeSwitchColor: {

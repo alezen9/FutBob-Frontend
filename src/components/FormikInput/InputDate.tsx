@@ -1,91 +1,111 @@
 import React from 'react'
-import DateFnsUtils from '@date-io/dayjs'
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers'
-import { get } from 'lodash'
-import { FormHelperText, makeStyles, useMediaQuery, useTheme } from '@material-ui/core'
-import { ThemeType, ZenPalette } from '@_MUITheme'
+import { FormHelperText, useMediaQuery } from '@mui/material'
+import { createTheme, Theme, useTheme } from '@mui/material/styles'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import dayjs, { Dayjs } from 'dayjs'
+import { get } from 'lodash'
+import { makeStyles } from '@mui/styles'
+import { ZenPalette } from '@_MUITheme'
 
-const useStyles = makeStyles(theme => ({
-   textField: {
-      width: '100%',
-      '& fieldset': {
-         borderColor: (props: any) => props.error
-            ? '#ff443a'
-            : ZenPalette.borderColor
-      },
-      '& label': {
-         color: (props: any) => props.error
-            ? '#ff443a'
-            : ZenPalette.typographyGrey
-      }
-   },
-   popover: theme.type === ThemeType.dark
+const defaultTheme = createTheme()
+
+const useStyles = makeStyles<Theme, { error: boolean }>((theme) => ({
+  textField: {
+    width: '100%',
+    '& .MuiOutlinedInput-notchedOutline': {
+      borderColor: (props) => (props.error ? '#ff443a' : ZenPalette.borderColor),
+    },
+    '& .MuiInputLabel-root': {
+      color: (props) => (props.error ? '#ff443a' : ZenPalette.typographyGrey),
+    },
+  },
+  // optional: tweak the picker paper in dark mode
+  popover:
+    theme.palette.mode === 'dark'
       ? {
-         '& .MuiPickersBasePicker-pickerView *:not(.MuiPickersYear-yearSelected)': {
+          '& .MuiPickersLayout-root': {
             color: ZenPalette.typographyGrey,
-            '& .MuiPickersDay-daySelected *': {
-               color: '#fff'
-            }
-         },
-         '& .MuiPickersBasePicker-pickerView *': {
-            '& .MuiPickersCalendarHeader-switchHeader button': {
-               backgroundColor: ZenPalette.paperBackgroundColor
-            }
-         }
-      }
-      : {}
-}))
-
+          },
+          '& .MuiPickersCalendarHeader-root .MuiIconButton-root': {
+            backgroundColor: ZenPalette.paperBackgroundColor,
+          },
+        }
+      : {},
+}), {defaultTheme})
 
 type Props = {
-   id: string
-   label: string
-   onChange: (e: any) => void
-   values: any
-   name: string
-   disabled?: boolean
-   errors: any
-   minDate?: Dayjs
-   maxDate?: Dayjs
+  id: string
+  label: string
+  onChange: (value: Dayjs | null) => void
+  values: any
+  name: string
+  disabled?: boolean
+  errors: any
+  minDate?: Dayjs
+  maxDate?: Dayjs
 }
 
-const InputDate: React.FC<Props> = props => {
-   const { id, label, onChange, values, name, disabled = false, errors, minDate, maxDate } = props
-   const classes = useStyles({ error: !!get(errors, name, null) })
-   const theme = useTheme()
-   const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'))
+const InputDate: React.FC<Props> = ({
+  id,
+  label,
+  onChange,
+  values,
+  name,
+  disabled = false,
+  errors,
+  minDate,
+  maxDate,
+}) => {
+  const theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
+  const error = !!get(errors, name, null)
+  const classes = useStyles({ error })
 
-   return (
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-         <>
-            <KeyboardDatePicker
-               DialogProps={{
-                  className: classes.popover
-               }}
-               disabled={disabled}
-               margin='normal'
-               label={label}
-               clearable
-               animateYearScrolling
-               inputVariant='outlined'
-               format="DD/MM/YYYY"
-               orientation={isSmallScreen ? 'portrait' : 'landscape'}
-               autoOk
-               value={get(values, name, null) && dayjs(get(values, name, null))}
-               onChange={onChange}
-               {...minDate && { minDate }}
-               {...maxDate && { maxDate }}
-               invalidDateMessage=''
-               KeyboardButtonProps={{
-                  'aria-label': 'change date',
-               }}
-               className={classes.textField}
-            />
-            {get(errors, name, false) && <FormHelperText margin='dense' style={{ color: 'red' }} id={`${id}_error`}>{get(errors, name, '')}</FormHelperText>}
-         </>
-      </MuiPickersUtilsProvider>
-   )
+  const value = get(values, name, null) ? dayjs(get(values, name)) : null
+
+  return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <>
+        <DatePicker
+          label={label}
+          value={value}
+          onChange={onChange}
+          disabled={disabled}
+          minDate={minDate}
+          maxDate={maxDate}
+          format="DD/MM/YYYY"
+          // orientation is not needed; picker chooses mobile/desktop automatically.
+          slotProps={{
+            // pass props to the internal TextField
+            textField: {
+              id,
+              className: classes.textField,
+              variant: 'outlined',
+              margin: 'normal',
+              fullWidth: true,
+              // if you prefer the helper below, keep these off:
+              // error,
+              // helperText: error ? get(errors, name, '') : undefined,
+            },
+            // paper props for the dialog/popover (class for custom dark tweaks)
+            desktopPaper: { className: classes.popover },
+            mobilePaper: { className: classes.popover },
+          }}
+        />
+        {error && (
+          <FormHelperText
+            margin="dense"
+            style={{ color: 'red' }}
+            id={`${id}_error`}
+          >
+            {get(errors, name, '')}
+          </FormHelperText>
+        )}
+      </>
+    </LocalizationProvider>
+  )
 }
 
 export default React.memo(InputDate)

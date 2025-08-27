@@ -1,9 +1,10 @@
 import React, { CSSProperties, useMemo } from 'react'
-import { ListItem, ListItemIcon, ListItemText, makeStyles } from '@material-ui/core'
+import { createTheme, ListItem, ListItemIcon, ListItemText } from '@mui/material'
 import { useRouter } from 'next/router'
 import { checkActivePage } from './helpers'
 import { RouteItem } from '..'
-import { ZenPalette } from '@_MUITheme'
+import { makeStyles } from '@mui/styles'
+const defaultTheme = createTheme()
 
 const useStyles = makeStyles(theme => ({
    listItem: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles(theme => ({
          transition: 'opacity .1s ease-in-out'
       }
    }
-}))
+}), {defaultTheme})
 
 export type Props = {
    item: RouteItem
@@ -43,7 +44,7 @@ const SingleItemList = (props: Props) => {
 
    const classes = useStyles({ showBorder: activeProps.color === 'primary' })
 
-   return <ListItem className={classes.listItem} button onClick={handleRoute(item.path)}>
+   return <ListItem className={classes.listItem} onClick={handleRoute(item.path)}>
       <ListItemIcon {...iconStaticProps}>
          {React.cloneElement(item.icon, activeProps)}
       </ListItemIcon>

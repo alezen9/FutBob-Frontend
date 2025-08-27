@@ -1,7 +1,7 @@
-import { Button, Divider, Grid, IconButton } from '@material-ui/core'
+import { Button, Divider, Grid, IconButton } from '@mui/material'
 import { get, uniqueId } from 'lodash'
 import React, { ReactNode } from 'react'
-import HelpOutlineOutlinedIcon from '@material-ui/icons/HelpOutlineOutlined'
+import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined'
 
 export type Action = {
     type?: 'button'|'iconButton'

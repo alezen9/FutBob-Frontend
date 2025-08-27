@@ -1,6 +1,6 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react'
-import { Badge, Button, Grid, IconButton, makeStyles } from '@material-ui/core'
-import FilterListRoundedIcon from '@material-ui/icons/FilterListRounded'
+import { Badge, Button, Grid, IconButton } from '@mui/material'
+import FilterListRoundedIcon from '@mui/icons-material/FilterListRounded'
 import { SearchBox } from './Search'
 import FiltersDrawer from './Drawer'
 import { FormikConfig, FormikValues, useFormik } from 'formik'
@@ -9,6 +9,7 @@ import { ZenPalette } from '@_MUITheme'
 import { Filter } from './Inputs'
 import cleanDeep from 'clean-deep'
 import { formatValuesFormikFilters } from './helpers'
+import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles(theme => ({
    mainContainer: {

@@ -1,7 +1,7 @@
 import React, { useState, ReactNode, ReactElement } from 'react'
 // MUI
-import { makeStyles } from '@material-ui/core/styles'
-import { AppBar, Tabs, Tab, useMediaQuery, Box } from '@material-ui/core'
+import { makeStyles } from '@mui/styles'
+import { AppBar, Tabs, Tab, useMediaQuery, Box, createTheme } from '@mui/material'
 // utils
 import { compact, get } from 'lodash'
 
@@ -9,6 +9,8 @@ type Props = {
    children?: ReactElement<TabProps>[]
    safeGuard?: (newTabIndex: number) => boolean
 }
+
+const defaultTheme = createTheme()
 
 const useStyles = makeStyles(theme => ({
    wrapper: {
@@ -64,7 +66,7 @@ const useStyles = makeStyles(theme => ({
       paddingLeft: theme.spacing(2),
       marginBottom: theme.spacing(4)
    }
-}))
+}), {defaultTheme})
 
 const tabProps: any = (index: number) => {
    const { tab, tabSelected } = useStyles()

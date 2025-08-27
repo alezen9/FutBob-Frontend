@@ -1,9 +1,10 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@mui/styles'
 import Players from './Players'
 import { get } from 'lodash'
-import { Switch, Typography } from '@material-ui/core'
+import { createTheme, Switch, Typography } from '@mui/material'
 import { FormikEssentials } from '@_components/FormikInput'
+const defaultTheme = createTheme()
 
 const useStyles = makeStyles(theme => {
    const indoorLineColor: string = 'rgb(0, 0, 138, 1)'
@@ -140,7 +141,7 @@ const useStyles = makeStyles(theme => {
          }
       }
    }
-})
+}, {defaultTheme})
 
 type Props = Partial<FormikEssentials> & {
    withPlayers?: boolean

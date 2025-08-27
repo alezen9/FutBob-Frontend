@@ -1,7 +1,7 @@
 import React, { useRef, useCallback } from 'react'
 import { get, sortBy, last, find } from 'lodash'
-import { Select, MenuItem, InputLabel, FormHelperText, Typography } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+import { Select, MenuItem, InputLabel, FormHelperText, Typography } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import { ZenPalette } from '@_MUITheme'
 import { OptionType } from '.'
 
@@ -132,7 +132,6 @@ const InputSelect = (props: Props) => {
             className={inputRoot}
             multiple={multiple}
             autoWidth={autoWidth}
-            labelWidth={labelWidth}
             disabled={disabled}
             value={get(values, name, multiple ? [] : '')}
             onChange={onChange}

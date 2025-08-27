@@ -1,7 +1,8 @@
 import React from 'react'
-import { Checkbox, makeStyles } from '@material-ui/core'
+import { Checkbox } from '@mui/material'
 import { ZenPalette } from '@_MUITheme'
 import { get } from 'lodash'
+import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles(theme => ({
    wrapper: {

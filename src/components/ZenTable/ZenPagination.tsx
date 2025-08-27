@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import Pagination from '@material-ui/lab/Pagination'
-import { Typography } from '@material-ui/core'
+import { makeStyles } from '@mui/styles'
+import Pagination from '@mui/material/Pagination'
+import { createTheme, Typography } from '@mui/material'
+const defaultTheme = createTheme()
 
 const useStyles = makeStyles(theme => ({
    root: {
@@ -23,7 +24,7 @@ const useStyles = makeStyles(theme => ({
          marginRight: 'unset'
       }
    }
-}))
+}), {defaultTheme})
 
 type Props = {
    limit?: number,

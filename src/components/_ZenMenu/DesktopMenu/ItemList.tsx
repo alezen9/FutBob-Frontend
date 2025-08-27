@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react'
-import { makeStyles, List } from '@material-ui/core'
+import { List } from '@mui/material'
 import { useRouter } from 'next/router'
-import ExitToAppRoundedIcon from '@material-ui/icons/ExitToAppRounded'
+import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded'
 import { ZenPalette } from '@_MUITheme'
 import { RouteItem } from '..'
 import SingleItem from './SingleItem'
@@ -9,6 +9,7 @@ import ExpandableItem from './ExpandableItem'
 import { routesPaths } from '@_utils/routes'
 import { ZenRouteID } from '@_utils/routes/types'
 import { motion } from 'framer-motion'
+import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles({
    root: {},

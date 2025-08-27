@@ -4,15 +4,15 @@ import PlacesAutocomplete, {
    geocodeByPlaceId,
    getLatLng
 } from 'react-places-autocomplete'
-import { TextField, Grid, makeStyles, IconButton, Popover, Typography, Divider, FormHelperText, Collapse } from '@material-ui/core'
-import Autocomplete from '@material-ui/lab/Autocomplete'
+import { TextField, Grid, IconButton, Popover, Typography, Divider, FormHelperText, Collapse, Autocomplete } from '@mui/material'
 import { get, isEqual, uniqueId, isEmpty } from 'lodash'
 import FormikInput from '.'
-import RoomRoundedIcon from '@material-ui/icons/RoomRounded'
-import InfoRoundedIcon from '@material-ui/icons/InfoRounded'
-import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
-import ExpandLessRoundedIcon from '@material-ui/icons/ExpandLessRounded'
+import RoomRoundedIcon from '@mui/icons-material/RoomRounded'
+import InfoRoundedIcon from '@mui/icons-material/InfoRounded'
+import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded'
+import ExpandLessRoundedIcon from '@mui/icons-material/ExpandLessRounded'
 import { ZenPalette } from '@_MUITheme'
+import { makeStyles } from '@mui/styles'
 
 /**
  * ADDRESS

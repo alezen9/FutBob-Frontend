@@ -1,18 +1,20 @@
 import React, { useState, useMemo, useEffect, ReactNode, useCallback } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableContainer from '@material-ui/core/TableContainer'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import Paper from '@material-ui/core/Paper'
+import { makeStyles } from '@mui/styles'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableContainer from '@mui/material/TableContainer'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
+import Paper from '@mui/material/Paper'
 import ZenTableCell from './Cell'
 import { get, uniqueId } from 'lodash'
 import { setData, MobileRowCell, TableHeaderData, TableRowData, SetDataOut, getLastStickyIndex, ZenTableSort } from './helpers'
 import ZenLoadingMask from '../ContentLoader/LoadingMask'
-import { Typography, useTheme, useMediaQuery } from '@material-ui/core'
+import { Typography, useTheme, useMediaQuery, createTheme } from '@mui/material'
 import { ThemeType, ZenPalette } from '@_MUITheme'
 import zenToolbox from '@_utils/toolbox'
+
+const defaultTheme = createTheme()
 
 const useStyles = makeStyles(theme => ({
    table: {
@@ -36,7 +38,7 @@ const useStyles = makeStyles(theme => ({
          background: `${ZenPalette.userTableRowBackgroundColor} !important`,
       }
    })
-}))
+}), {defaultTheme})
 
 type TableProps = {
    headers: TableHeaderData[],

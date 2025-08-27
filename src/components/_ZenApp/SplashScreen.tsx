@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles(({
    motionDiv: {

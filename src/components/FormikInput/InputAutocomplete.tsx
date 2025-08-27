@@ -1,12 +1,15 @@
 import React, { useMemo } from 'react'
-import TextField from '@material-ui/core/TextField'
-import Autocomplete from '@material-ui/lab/Autocomplete'
+import TextField from '@mui/material/TextField'
+import Autocomplete from '@mui/material/Autocomplete';
 import { sortBy, get } from 'lodash'
-import { makeStyles, FormHelperText, ListSubheader } from '@material-ui/core'
+import { createTheme, FormHelperText, ListSubheader } from '@mui/material'
 import { ZenPalette } from '@_MUITheme'
 import { VariableSizeList } from 'react-window'
 import { OptionType } from '.'
 import { matchSorter } from 'match-sorter'
+import { makeStyles } from '@mui/styles'
+
+const defaultTheme = createTheme()
 
 const useStyles = makeStyles(theme => ({
    listbox: (props: any) => ({
@@ -55,7 +58,7 @@ const useStyles = makeStyles(theme => ({
             : ZenPalette.borderColor
       }
    }
-}))
+}), {defaultTheme})
 
 type Props = {
    options?: OptionType[]

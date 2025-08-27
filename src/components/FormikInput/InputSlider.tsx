@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import Slider from '@material-ui/core/Slider'
-import Typography from '@material-ui/core/Typography'
+import { makeStyles } from '@mui/styles'
+import Slider from '@mui/material/Slider'
+import Typography from '@mui/material/Typography'
 import { get } from 'lodash'
 import { ZenPalette } from '@_MUITheme'
 

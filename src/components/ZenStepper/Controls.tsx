@@ -1,11 +1,12 @@
 import React, { ReactElement } from 'react'
-import { Button, Grid, IconButton, makeStyles, MobileStepper, useMediaQuery } from '@material-ui/core'
-import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded'
-import ArrowForwardIosRoundedIcon from '@material-ui/icons/ArrowForwardIosRounded'
-import DoneAllRoundedIcon from '@material-ui/icons/DoneAllRounded'
+import { Button, Grid, IconButton, MobileStepper, useMediaQuery } from '@mui/material'
+import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded'
+import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded'
+import DoneAllRoundedIcon from '@mui/icons-material/DoneAllRounded'
 import { useConfigStore } from '@_zustand/config'
 import { ConfigStore } from '@_zustand/config/helpers'
 import { ZenPalette } from '@_MUITheme'
+import { makeStyles } from '@mui/styles'
 
 type Props = {
    handleBack: VoidFunction

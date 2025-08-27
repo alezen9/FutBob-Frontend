@@ -1,11 +1,13 @@
 import React, { ReactElement, ReactNode, useCallback, useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 import { get, uniqueId } from 'lodash';
 import Controls from './Controls';
-import { Grid, Step, Stepper, StepLabel, Typography, useMediaQuery, useTheme, StepIconProps } from '@material-ui/core'
+import { Grid, Step, Stepper, StepLabel, Typography, useMediaQuery, useTheme, StepIconProps, createTheme } from '@mui/material'
 import { StepperFlowConfig } from './helper';
-import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded'
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded'
 import { ZenPalette } from '@_MUITheme';
+
+const defaultTheme = createTheme()
 
 const useStyles = makeStyles(theme => ({
    root: {
@@ -19,8 +21,7 @@ const useStyles = makeStyles(theme => ({
       padding: theme.spacing(2),
       paddingBottom: 90
    }
-})
-)
+}), {defaultTheme})
 
 type Props = {
    children: ReactElement<ZenStepProps>[]

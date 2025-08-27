@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Grid } from '@material-ui/core'
+import { Button, Grid } from '@mui/material'
 import FormikInput from '@_components/FormikInput'
 import ThemeModeSwitch from '@_components/ThemeModeSwitch'
 import { FutBobLogo } from '@_icons'
@@ -115,8 +115,8 @@ const RequestAccountContainer = () => {
             </motion.div>}
         </AnimatePresence>
         <Grid container justify='center' style={{ margin: '2em auto' }} item xs={12} sm={6}>
-          <Link passHref href={routesPaths[ZenRouteID.LOGIN].path}>
-            <a className={classes.link}>Already have an account</a>
+          <Link passHref href={routesPaths[ZenRouteID.LOGIN].path} className={classes.link}>
+            Already have an account
           </Link>
         </Grid>
       </Grid>

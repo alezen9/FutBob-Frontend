@@ -1,13 +1,14 @@
 import React, { useCallback } from 'react'
-import { makeStyles, IconButton } from '@material-ui/core'
+import { IconButton } from '@mui/material'
 import ItemList from './ItemList'
-import MenuRoundedIcon from '@material-ui/icons/MenuRounded'
-import CloseRoundedIcon from '@material-ui/icons/CloseRounded'
+import MenuRoundedIcon from '@mui/icons-material/MenuRounded'
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
 import ThemeSwitch from '@_components/ThemeModeSwitch'
 import { useConfigStore } from '@_zustand/config'
 import { logoutFn, RouteItem } from '..'
 import { ConfigStore } from '@_zustand/config/helpers'
 import { ZenPalette } from '@_MUITheme'
+import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles(theme => ({
    relativeWrapper: {

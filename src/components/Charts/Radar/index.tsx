@@ -1,7 +1,9 @@
 import React, { useMemo } from 'react'
 import { ResponsiveRadar } from '@nivo/radar'
-import { useTheme, makeStyles, useMediaQuery } from '@material-ui/core'
+import { useTheme, useMediaQuery, createTheme } from '@mui/material'
 import { ThemeType, ZenPalette } from '@_MUITheme'
+import { makeStyles } from '@mui/styles'
+const defaultTheme = createTheme()
 
 const useStyles = makeStyles(theme => ({
    main: {
@@ -21,7 +23,7 @@ const useStyles = makeStyles(theme => ({
          }
       }
    }
-}))
+}), {defaultTheme})
 
 export type RadarChartData = {
    prop: string

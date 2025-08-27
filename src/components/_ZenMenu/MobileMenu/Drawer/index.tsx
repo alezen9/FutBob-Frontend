@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { Button, Drawer, Grid, makeStyles } from '@material-ui/core'
+import { Button, Drawer, Grid, makeStyles } from '@mui/material'
 import ThemeSwitch from '@_components/ThemeModeSwitch'
 import TopComponent from './TopComponent'
 import Content from './Content'

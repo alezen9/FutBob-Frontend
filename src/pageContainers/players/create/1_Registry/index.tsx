@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, Hidden } from '@material-ui/core'
+import { Grid, Hidden } from '@mui/material'
 import FormikInput, { FormikEssentials } from '@_components/FormikInput'
 import { CountriesOpts } from '@_utils/constants/CountriesOpts'
 import { SexOpts } from '@_utils/constants/SexOpts'

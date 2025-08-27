@@ -1,13 +1,12 @@
 import { ZenServer } from '..'
 import axios, { AxiosInstance } from 'axios'
 import { get } from 'lodash'
-import getConfig from 'next/config'
-const { publicRuntimeConfig } = getConfig()
+
 
 class ZenAxios {
 	create(server: ZenServer): AxiosInstance {
 		const _self: AxiosInstance = axios.create({
-			baseURL: `${publicRuntimeConfig.API_URL}`,
+			baseURL: `${process.env.NEXT_PUBLIC_API_URL}`,
 			timeout: 100000,
 			headers: {
 				Accept: 'application/json',
@@ -27,11 +26,11 @@ class ZenAxios {
 	private setRequestInterceptor(_self: AxiosInstance, tokenName): void {
 		_self.interceptors.request.use(
 			config => {
-				if (process.browser && !config.headers.common['Authorization'] && window.localStorage.getItem(tokenName)) {
+				if (typeof window && !config.headers.get("Authorization") && window.localStorage.getItem(tokenName)) {
 					const _token = window.localStorage.getItem(tokenName)
 					const authorization = `Bearer ${_token}`
-					config.headers.common['Authorization'] = authorization
-					_self.defaults.headers.common['Authorization'] = `Bearer ${_token}`
+               config.headers.set("Authorization", authorization)
+					_self.defaults.headers.common['Authorization'] = authorization
 				}
 				return config
 			},

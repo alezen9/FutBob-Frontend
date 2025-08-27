@@ -1,14 +1,16 @@
 import React, { useCallback } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import { Button, Divider, Grid, IconButton, SwipeableDrawer, Typography, useMediaQuery, useTheme } from '@material-ui/core'
+import { makeStyles } from '@mui/styles'
+import { Button, createTheme, Divider, Grid, IconButton, SwipeableDrawer, Typography, useMediaQuery, useTheme } from '@mui/material'
 import { FormikEssentials } from '@_components/FormikInput'
 import { ZenPalette } from '@_MUITheme'
 import Inputs, { Filter } from './Inputs'
-import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
-import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
-import BackspaceRoundedIcon from '@material-ui/icons/BackspaceRounded'
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload'
+import BackspaceRoundedIcon from '@mui/icons-material/BackspaceRounded'
 
 const borderRadius = 10
+
+const defaultTheme = createTheme()
 
 const useStyles = makeStyles(theme => ({
    paper: {
@@ -48,7 +50,7 @@ const useStyles = makeStyles(theme => ({
          maxHeight: 'calc(90vh - 100px)',
       }
    }
-}))
+}), {defaultTheme})
 
 const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
 

@@ -1,10 +1,11 @@
 import React, { useState, useMemo, Fragment, useCallback, ReactNode, ReactElement } from 'react'
-import { Button, Grid, Tooltip, IconButton, Menu, MenuItem, makeStyles, TableCell, Collapse, TableRow, useTheme, useMediaQuery } from '@material-ui/core'
+import { Button, Grid, Tooltip, IconButton, Menu, MenuItem, TableCell, Collapse, TableRow, useTheme, useMediaQuery } from '@mui/material'
 import { uniqueId, get, map, compact } from 'lodash'
-import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
-import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
+import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined'
+import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded'
 import TypographyLabel from '../TypographyLabel'
 import zenToolbox from '@_utils/toolbox'
+import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles(theme => ({
    menu: {
@@ -127,10 +128,6 @@ const Actions = React.memo((props: ActionProps) => {
    const { actions } = props
    const theme = useTheme()
    const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'))
-   return <ActionTooltips actions={actions} />
-   return isSmallScreen
-      ? <ActionTooltips actions={actions} />
-      : <ActionButtons actions={actions} />
 })
 
 const ActionButtons = React.memo((props: ActionProps) => {

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { Button, Grid, Hidden } from '@material-ui/core'
+import { Box, Button, Grid } from '@mui/material'
 import FormikInput from '@_components/FormikInput'
 import { CountriesOpts } from '@_utils/constants/CountriesOpts'
 import { SexOpts } from '@_utils/constants/SexOpts'
@@ -82,9 +82,9 @@ const _Registry: React.FC<TabProps> = props => {
           label='Email'
           {...formik}
         />
-        <Hidden only='xs'>
-          <Grid item xs={4} />
-        </Hidden>
+         <Box display={{ xs: 'none', sm: 'block' }}>
+            <Grid item xs={4} />
+        </Box>
         <FormikInput
           sm={4}
           name='country'
@@ -94,9 +94,9 @@ const _Registry: React.FC<TabProps> = props => {
           required
           {...formik}
         />
-        <Hidden only='xs'>
-          <Grid item xs={4} />
-        </Hidden>
+         <Box display={{ xs: 'none', sm: 'block' }}>
+            <Grid item xs={4} />
+        </Box>
         <Grid item xs={12} style={{display: 'flex', justifyContent: 'flex-end'}}>
           <Button
             style={{ minWidth: 150 }}

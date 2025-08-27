@@ -1,12 +1,13 @@
 import React, { useLayoutEffect, ReactNode } from 'react'
-import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import Slide from '@material-ui/core/Slide'
-import { IconButton, Typography, Grid, makeStyles, useTheme, useMediaQuery } from '@material-ui/core'
-import CloseRoundedIcon from '@material-ui/icons/CloseRounded'
-import { TransitionProps } from '@material-ui/core/transitions/transition'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogTitle from '@mui/material/DialogTitle'
+import Slide from '@mui/material/Slide'
+import { IconButton, Typography, Grid, useTheme, useMediaQuery } from '@mui/material'
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
+import { TransitionProps } from '@mui/material/transitions/transition'
+import { makeStyles } from '@mui/styles'
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & { children?: React.ReactElement<any, any> },

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, Button } from '@material-ui/core'
+import { Grid, Button } from '@mui/material'
 import FormikInput from '@_components/FormikInput'
 import { useFormik } from 'formik'
 import { isEmpty } from 'lodash'

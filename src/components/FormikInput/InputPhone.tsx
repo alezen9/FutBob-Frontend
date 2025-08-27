@@ -1,9 +1,11 @@
 import React, { useMemo } from 'react'
-import dynamic from 'next/dynamic'
-const MuiPhoneNumber = dynamic(() => import('material-ui-phone-number'), { ssr: false })
-import { makeStyles, FormHelperText } from '@material-ui/core'
+import {MuiTelInput, MuiTelInputInfo} from 'mui-tel-input'
+import { createTheme, FormHelperText } from '@mui/material'
 import { uniqueId, get, isEmpty } from 'lodash'
 import { ZenPalette } from '@_MUITheme'
+import { makeStyles } from '@mui/styles'
+
+const defaultTheme = createTheme()
 
 const useStyles = makeStyles(theme => ({
    textField: {
@@ -20,7 +22,7 @@ const useStyles = makeStyles(theme => ({
             : ZenPalette.typographyGrey
       }
    }
-}))
+}), {defaultTheme})
 
 const formatPhoneNumber = (val: string): string => {
    const res = [...(val || '').replace(/\s+/g, '')].map((el, i) => {
@@ -68,20 +70,20 @@ const InputPhone = (props: Props) => {
 
    return (
       <>
-         <MuiPhoneNumber
-            //@ts-ignore
-            value={v || ''}
-            label={label}
-            defaultCountry='it'
-            countryCodeEditable={false}
-            onlyCountries={['it']}
-            variant='outlined'
-            onChange={onChange}
-            onPaste={onPaste}
-            inputClass={classes.textField}
-            disabled={disabled}
-            name={name}
-         />
+         <MuiTelInput
+  value={v ?? ''}
+  label={label}
+  defaultCountry="IT"
+  onlyCountries={['IT']}
+  forceCallingCode       // replaces countryCodeEditable={false}
+  disableDropdown        // (optional) lock country selection
+  variant="outlined"
+  onChange={(val: string, _info: MuiTelInputInfo) => onChange(val)}
+  onPaste={onPaste}
+  className={classes.textField}
+  disabled={disabled}
+  name={name}
+/>
          {!isEmpty(get(errors, name, false)) && <FormHelperText margin='dense' style={{ color: 'red', margin: '12px 14px 0 14px' }} id={`${uniqueId('phone-')}_error`}>{get(errors, name, '')}</FormHelperText>}
       </>
    )

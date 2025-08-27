@@ -1,7 +1,7 @@
 import React from 'react'
 import { TopFormIcon, InjuredIcon, RecoveryIcon } from '@_icons'
-import ExpandLessRoundedIcon from '@material-ui/icons/ExpandLessRounded'
-import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
+import ExpandLessRoundedIcon from '@mui/icons-material/ExpandLessRounded'
+import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded'
 import { OptionType } from '@_components/FormikInput'
 import { PhysicalState } from '@_SDK_Player/types'
 

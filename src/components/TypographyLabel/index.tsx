@@ -1,5 +1,6 @@
 import React, { CSSProperties } from 'react'
-import { Grid, Typography, makeStyles } from '@material-ui/core'
+import { Grid, Typography } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 
 type Props = {
    label?: any

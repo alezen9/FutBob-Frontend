@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { FormikEssentials } from '@_components/FormikInput'
 import PlayerCard from '@_components/PlayerCard'
-import { Fab, Grid } from '@material-ui/core'
+import { Fab, Grid } from '@mui/material'
 import { initialScoreValues } from '@_utils/constants/InitValuesPlayerScore'
 import { get } from 'lodash'
-import SaveRoundedIcon from '@material-ui/icons/SaveRounded'
+import SaveRoundedIcon from '@mui/icons-material/SaveRounded'
 import { AnimatePresence, motion } from 'framer-motion'
 import SuccessAnimationCheck from '@_components/SuccessAnimationCheck'
 

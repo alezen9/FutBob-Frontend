@@ -9,7 +9,7 @@ import { useSWRPlayer } from '@_swr/Players'
 import { useRouter } from 'next/router'
 import { get } from 'lodash'
 import { FaceDynamicIcon } from '@_icons'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@mui/styles'
 import { Sex } from '@_SDK_User/types'
 
 const useStyles = makeStyles({

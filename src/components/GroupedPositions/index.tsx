@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { AvatarGroup } from '@material-ui/lab'
 import { PlayerPosition } from '@_SDK_Player/types'
-import { Avatar, makeStyles } from '@material-ui/core'
+import { Avatar, AvatarGroup, createTheme } from '@mui/material'
 import { ShortName_Position } from '@_utils/constants/ShortNamePlayerProps'
 import { uniqueId } from 'lodash'
 import { ZenPalette } from '@_MUITheme'
+import { makeStyles } from '@mui/styles'
+const defaultTheme = createTheme()
 
 const useStyles = makeStyles(theme => ({
    group: {
@@ -35,7 +36,7 @@ const useStyles = makeStyles(theme => ({
          margin: 'auto -.1em !important'
       }
    }
-}))
+}), {defaultTheme})
 
 type Props = {
    positions: PlayerPosition[]

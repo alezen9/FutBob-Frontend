@@ -1,6 +1,5 @@
-import React, { ReactChildren, ReactChild } from 'react'
-import PropTypes from 'prop-types'
-import { makeStyles } from '@material-ui/core'
+import React from 'react'
+import { makeStyles } from '@mui/styles'
 import { AnimatePresence, motion } from 'framer-motion'
 
 const useStyles = makeStyles({
@@ -14,7 +13,7 @@ const useStyles = makeStyles({
 
 type Props = {
   isLoading: boolean
-  children?: ReactChildren | ReactChild
+  children?: JSX.Element
 }
 
 const CondexoLoadingMask = (props: Props) => {

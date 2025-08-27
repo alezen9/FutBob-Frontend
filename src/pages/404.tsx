@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect } from 'react'
-import { Button, Grid, makeStyles, Theme, Typography } from '@material-ui/core'
+import { Button, Grid, Theme, Typography } from '@mui/material'
 import { ZenPalette } from '@_MUITheme'
 import { useConfigStore } from '@_zustand/config'
 import { ZenRouteID } from '@_utils/routes/types'
 import { useRouter } from 'next/router'
 import { routesPaths } from '@_utils/routes'
+import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles((theme: Theme) => ({
    container: {

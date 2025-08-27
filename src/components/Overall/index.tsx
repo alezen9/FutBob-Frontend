@@ -1,5 +1,5 @@
 import React, { CSSProperties, useMemo } from 'react'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@mui/styles'
 import { ThemeType } from '@_MUITheme'
 import zenToolbox from '@_utils/toolbox'
 
